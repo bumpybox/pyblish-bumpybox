@@ -1,2 +1,2 @@
-pyblish-plugins
+pyblish-bumpybox
 ===============
