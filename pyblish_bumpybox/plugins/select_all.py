@@ -5,7 +5,7 @@ class SelectAll(pyblish.api.Selector):
     """
     """
 
-    hosts = ['maya']
+    hosts = ['maya', 'modo']
     version = (0, 1, 0)
 
     def process_context(self, context):

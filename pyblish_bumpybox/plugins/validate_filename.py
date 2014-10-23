@@ -8,7 +8,7 @@ class ValidateFilename(pyblish.api.Validator):
     """
 
     families = ['filename']
-    hosts = ['maya']
+    hosts = ['maya', 'modo']
     version = (0, 1, 0)
 
     pattern = re.compile('(.+)\.([a-z]+)\.([v])([0-9]{3})\.([a-z]+)')
