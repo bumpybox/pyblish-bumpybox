@@ -20,7 +20,7 @@ class ExtractAll(pyblish.api.Extractor):
         filename = os.path.basename(instance.context.data('current_file'))
         filename = os.path.splitext(filename)[0]
         filename = filename + ".nk"
-        
+
         temp_dir = tempfile.mkdtemp()
         temp_file = os.path.join(
             temp_dir, filename)
@@ -28,7 +28,7 @@ class ExtractAll(pyblish.api.Extractor):
         self.log.info("Extracting {0} locally..".format(instance))
 
         instance.set_data('filename', value=filename)
-        nuke.scriptSaveAs(temp_file) 
+        nuke.scriptSaveAs(temp_file)
 
         self.commit(path=temp_dir, instance=instance)
 
