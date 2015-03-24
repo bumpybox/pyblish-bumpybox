@@ -12,7 +12,7 @@ class SelectWriteNodes(pyblish.api.Selector):
     def process_context(self, context):
 
         for node in nuke.allNodes():
-            if node.Class() == 'Write':
+            if node.Class() == 'Write' and not node['disable'].getValue():
                 instance = context.create_instance(name=node.name())
                 instance.set_data('family', value='writeNode')
                 instance.add(node)
