@@ -24,10 +24,11 @@ class SelectDeadlineData(pyblish.api.Selector):
                 instance = context.create_instance(name=name)
                 instance.set_data('family', value='deadline')
 
-                [job_path, plugin_path] = self.SubmitDeadlineJob(node)
+                [job_path, plugin_path, scene_file] = self.SubmitDeadlineJob(node)
 
                 instance.set_data('job_path', value=job_path)
                 instance.set_data('plugin_path', value=plugin_path)
+                instance.set_data('scene_file', value=scene_file)
 
     def SubmitDeadlineJob(self, write_node):
 
@@ -51,8 +52,10 @@ class SelectDeadlineData(pyblish.api.Selector):
         project_name = task.getProject().getName()
         project_id = task.getProject().getId()
 
+        asset_name = None
+        asset_id = None
         for asset in task.getAssets():
-            if asset.getType().getShort() == 'img':
+            if asset.getType().getShort() == 'comp':
                 asset_name = asset.getName()
                 asset_id = asset.getId()
 
@@ -103,8 +106,8 @@ class SelectDeadlineData(pyblish.api.Selector):
         scene_file = nuke.root().name()
         nukex = nuke.env['nukex']
 
-        data = 'SceneFile=%s\n' % scene_file
-        data += 'Version=9.0\n'
+        #data = 'SceneFile=%s\n' % scene_file
+        data = 'Version=9.0\n'
         data += 'Threads=0\n'
         data += 'RamUse=0\n'
         data += 'BatchMode=False\n'
@@ -125,4 +128,4 @@ class SelectDeadlineData(pyblish.api.Selector):
         plugin_file.write(data)
         plugin_file.close()
 
-        return [job_path, plugin_path]
+        return [job_path, plugin_path, scene_file]

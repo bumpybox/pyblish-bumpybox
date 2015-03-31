@@ -22,5 +22,5 @@ class SelectFileName(pyblish.api.Selector):
         instance.set_data('path', value=current_file)
 
         for node in nuke.allNodes():
-            if node.Class() == 'Write':
+            if node.Class() == 'Write' and not node['disable'].getValue():
                 instance.add(node)

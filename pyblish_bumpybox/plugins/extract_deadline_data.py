@@ -23,6 +23,7 @@ class SubmitDeadline(pyblish.api.Extractor):
         args = []
         args.append(instance.data('job_path'))
         args.append(instance.data('plugin_path'))
+        args.append(instance.data('scene_file'))
 
         self.log.info(self.CallDeadlineCommand(args))
 
