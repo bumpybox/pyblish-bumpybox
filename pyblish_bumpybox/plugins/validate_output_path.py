@@ -10,7 +10,6 @@ class ValidateOutputPath(pyblish.api.Validator):
     families = ['writeNode']
     hosts = ['nuke']
     version = (0, 1, 0)
-    optional = True
 
     def process_instance(self, instance):
         path = os.path.dirname(instance[0]['file'].value())
@@ -18,6 +17,7 @@ class ValidateOutputPath(pyblish.api.Validator):
         if not os.path.exists(path):
             name = instance[0].name()
             msg = 'Output directory for %s doesn\'t exists' % name
+
             raise ValueError(msg)
 
     def repair_instance(self, instance):

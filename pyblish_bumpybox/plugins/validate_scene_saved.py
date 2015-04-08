@@ -19,5 +19,6 @@ class ValidateSceneSaved(pyblish.api.Validator):
             raise ValueError(msg)
 
     def repair_instance(self, instance):
-        """"""
-        pass
+        """Saves the script
+        """
+        nuke.scriptSave()
