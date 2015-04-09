@@ -11,14 +11,31 @@ class ValidateVersionNumber(pyblish.api.Validator):
     """Validates the version number of write nodes compared to the file name
     """
 
-    families = ['writeNodes']
+    families = ['writeNode']
     hosts = ['nuke']
     version = (0, 1, 0)
 
     def process_instance(self, instance):
-        log.info(instance.context)
+        path = nuke.root().name()
+        version_number = eval(nukescripts.version_get(path, 'v')[1])
+
+        path = instance[0]['file'].value()
+        v = eval(nukescripts.version_get(path, 'v')[1])
+
+        if version_number != v:
+            msg = 'Version number %s is not the same as ' % v
+            msg += 'file version number %s' % version_number
+            raise Exception(msg)
 
     def repair_instance(self, instance):
         """Sets the version number of the output to the same as the file name
         """
-        pass
+        path = nuke.root().name()
+        version_number = eval(nukescripts.version_get(path, 'v')[1])
+
+        node = nuke.toNode("Write1")
+        path = node['file'].value()
+        v = eval(nukescripts.version_get(path, 'v')[1])
+
+        new_path = nukescripts.version_set(path, 'v', v, version_number)
+        node['file'].setValue(new_path)
