@@ -33,9 +33,8 @@ class ValidateVersionNumber(pyblish.api.Validator):
         path = nuke.root().name()
         version_number = eval(nukescripts.version_get(path, 'v')[1])
 
-        node = nuke.toNode("Write1")
-        path = node['file'].value()
+        path = instance[0]['file'].value()
         v = eval(nukescripts.version_get(path, 'v')[1])
 
         new_path = nukescripts.version_set(path, 'v', v, version_number)
-        node['file'].setValue(new_path)
+        instance[0]['file'].setValue(new_path)
