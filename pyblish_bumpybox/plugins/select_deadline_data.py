@@ -59,7 +59,7 @@ class SelectDeadlineData(pyblish.api.Selector):
                 asset_name = asset.getName()
                 asset_id = asset.getId()
 
-        version_number = eval(nukescripts.version_get(output_path, 'v')[1])
+        version_number = int(nukescripts.version_get(output_path, 'v')[1])
 
         template = r'K:/tools/Deadline/draft-templates/quicktime_MPEG4_and_DNxHD.py'
 

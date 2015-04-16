@@ -17,10 +17,10 @@ class ValidateVersionNumber(pyblish.api.Validator):
 
     def process_instance(self, instance):
         path = nuke.root().name()
-        version_number = eval(nukescripts.version_get(path, 'v')[1])
+        version_number = int(nukescripts.version_get(path, 'v')[1])
 
         path = instance[0]['file'].value()
-        v = eval(nukescripts.version_get(path, 'v')[1])
+        v = int(nukescripts.version_get(path, 'v')[1])
 
         if version_number != v:
             msg = 'Version number %s is not the same as ' % v
@@ -31,10 +31,10 @@ class ValidateVersionNumber(pyblish.api.Validator):
         """Sets the version number of the output to the same as the file name
         """
         path = nuke.root().name()
-        version_number = eval(nukescripts.version_get(path, 'v')[1])
+        version_number = int(nukescripts.version_get(path, 'v')[1])
 
         path = instance[0]['file'].value()
-        v = eval(nukescripts.version_get(path, 'v')[1])
+        v = int(nukescripts.version_get(path, 'v')[1])
 
         new_path = nukescripts.version_set(path, 'v', v, version_number)
         instance[0]['file'].setValue(new_path)
