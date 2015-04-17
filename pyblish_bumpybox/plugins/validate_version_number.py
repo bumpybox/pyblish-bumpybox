@@ -11,7 +11,7 @@ class ValidateVersionNumber(pyblish.api.Validator):
     """Validates the version number of write nodes compared to the file name
     """
 
-    families = ['writeNode']
+    families = ['writeNode', 'prerenders']
     hosts = ['nuke']
     version = (0, 1, 0)
 

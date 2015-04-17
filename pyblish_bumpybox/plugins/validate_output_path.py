@@ -7,7 +7,7 @@ import pyblish.api
 class ValidateOutputPath(pyblish.api.Validator):
     """Validates that the output directory for the write nodes exists"""
 
-    families = ['writeNode']
+    families = ['writeNode', 'prerenders']
     hosts = ['nuke']
     version = (0, 1, 0)
 

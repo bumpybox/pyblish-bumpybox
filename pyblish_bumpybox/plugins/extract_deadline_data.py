@@ -12,7 +12,7 @@ import pyblish.api
 class SubmitDeadline(pyblish.api.Extractor):
     """Submits the scene to Deadline"""
 
-    families = ['deadline']
+    families = ['writeNode']
     hosts = ['nuke']
     version = (0, 1, 0)
     optional = True
