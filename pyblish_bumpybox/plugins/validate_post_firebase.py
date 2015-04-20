@@ -6,9 +6,11 @@ import pyblish.api
 
 @pyblish.api.log
 class PostValidatorFirebase(pyblish.api.Validator):
+
     order = pyblish.api.Validator.order + 0.5
     families = ['*']
     hosts = ['nuke']
+    optional = True
 
     def process_context(self, context):
         """TODO:
