@@ -11,7 +11,7 @@ class ValidateVersionNumber(pyblish.api.Validator):
     """Validates the version number of write nodes compared to the file name
     """
 
-    families = ['writeNode', 'prerenders']
+    families = ['deadline.render']
     hosts = ['nuke']
     version = (0, 1, 0)
 
@@ -19,7 +19,7 @@ class ValidateVersionNumber(pyblish.api.Validator):
         path = nuke.root().name()
         version_number = int(nukescripts.version_get(path, 'v')[1])
 
-        path = instance[0]['file'].value()
+        path = instance.data('deadlineOutput')
         v = int(nukescripts.version_get(path, 'v')[1])
 
         if version_number != v:
