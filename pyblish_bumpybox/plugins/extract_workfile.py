@@ -30,9 +30,11 @@ class ExtractWorkfile(pyblish.api.Extractor):
         instance.context.set_data('deadlineInput', value=publish_file)
 
         # ftrack data
-        instance.set_data('ftrackComponent', value=current_file)
+        components = [{'value': publish_file, 'name': 'publish_file'}]
 
         if pyblish.api.current_host() == 'nuke':
-            instance.set_data('ftrackComponentName', value='nukescript')
+            components.append({'value': current_file, 'name': 'nukescript'})
         else:
-            instance.set_data('ftrackComponentName', value='work_file')
+            components.append({'value': current_file, 'name': 'work_file'})
+
+        instance.set_data('ftrackComponents', value=components)
