@@ -5,7 +5,7 @@ import pyblish.api
 
 
 @pyblish.api.log
-class SelectWorkfile(pyblish.api.Selector):
+class SelectScene(pyblish.api.Selector):
     """"""
 
     order = pyblish.api.Selector.order + 0.1
@@ -22,7 +22,7 @@ class SelectWorkfile(pyblish.api.Selector):
         # create instance
         instance = context.create_instance(name=os.path.basename(current_file))
 
-        instance.set_data('family', value='workFile')
+        instance.set_data('family', value='scene')
         instance.set_data('workPath', value=current_file)
         instance.set_data('publishPath', value=publish_file)
 

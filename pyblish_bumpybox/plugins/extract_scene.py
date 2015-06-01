@@ -5,11 +5,11 @@ import pyblish.api
 
 
 @pyblish.api.log
-class ExtractWorkFile(pyblish.api.Extractor):
+class ExtractScene(pyblish.api.Extractor):
     """ Extract work file to 'publish' directory next to work file
     """
 
-    families = ['workFile']
+    families = ['scene']
     hosts = ['*']
     version = (0, 1, 0)
 
