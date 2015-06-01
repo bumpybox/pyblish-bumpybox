@@ -15,8 +15,8 @@ class ValidateNukeRenderOutput(pyblish.api.Validator):
 
     def get_path(self, instance):
         ftrack_data = instance.context.data('ftrackData')
-        shot_name = ftrack_data['shot']['name']
-        project = ftrack.Project(id=ftrack_data['project']['id'])
+        shot_name = ftrack_data['Shot']['name']
+        project = ftrack.Project(id=ftrack_data['Project']['id'])
         root = project.getRoot()
         file_name = os.path.basename(instance.context.data('currentFile'))
         file_name = os.path.splitext(file_name)[0]
@@ -31,7 +31,7 @@ class ValidateNukeRenderOutput(pyblish.api.Validator):
 
         # on going project specific exception
         ftrack_data = instance.context.data('ftrackData')
-        if ftrack_data['project']['code'] == 'the_call_up':
+        if ftrack_data['Project']['code'] == 'the_call_up':
             return
 
         output = self.get_path(instance).replace('\\', '/')

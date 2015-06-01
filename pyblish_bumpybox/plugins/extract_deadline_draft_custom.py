@@ -24,7 +24,7 @@ class ExtractDeadlineDraftCustom(pyblish.api.Extractor):
             extra_info_key_value = job_data['ExtraInfoKeyValue']
 
         t = ''
-        if context.data('ftrackData')['project']['code'] == 'the_call_up':
+        if context.data('ftrackData')['Project']['code'] == 'the_call_up':
             t = r'K:/tools/Deadline/draft-templates/quicktime_MPEG4_and_DNxHD.py'
         extra_info_key_value['DraftTemplate'] = t
 
