@@ -35,5 +35,7 @@ class ValidateRenderVersion(pyblish.api.Validator):
 
         if version_number != v:
             msg = 'Version number %s is not the same as ' % v
-            msg += 'file version number %s' % version_number
+            msg += 'file version number %s.' % version_number
+            msg += "Please change %s's output to the same version" % instance
+            msg += " number as the scene file."
             raise Exception(msg)
