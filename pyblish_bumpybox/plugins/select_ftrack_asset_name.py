@@ -14,4 +14,9 @@ class SelectFtrackAssetName(pyblish.api.Selector):
     def process_context(self, context):
 
         task = ftrack.Task(id=os.environ['FTRACK_TASKID'])
-        context.set_data('ftrackAssetName', value=task.getName())
+
+        # skipping the call up project
+        project = task.getParents()[-1]
+        if not project.getName() == 'the_call_up':
+            self.log.info('setting ftrackAssetName')
+            context.set_data('ftrackAssetName', value=task.getName())
