@@ -23,7 +23,7 @@ class ExtractDeadlineMaya(pyblish.api.Extractor):
         job_data['Pool'] = 'medium'
 
         drg = pymel.core.PyNode('defaultRenderGlobals')
-        if drg.currentRenderer.get() == 'arnold'
+        if drg.currentRenderer.get() == 'arnold':
             job_data['LimitGroups'] = 'arnold'
 
         job_data['Group'] = 'maya_%s' % pymel.versions.flavor()
