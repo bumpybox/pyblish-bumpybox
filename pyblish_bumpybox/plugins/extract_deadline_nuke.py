@@ -12,7 +12,7 @@ class ExtractDeadlineNuke(pyblish.api.Extractor):
     hosts = ['nuke']
     version = (0, 1, 0)
 
-    def process_context(self, context):
+    def process(self, context):
 
         # getting job data
         job_data = {}

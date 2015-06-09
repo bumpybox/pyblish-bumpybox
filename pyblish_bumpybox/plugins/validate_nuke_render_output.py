@@ -27,7 +27,7 @@ class ValidateNukeRenderOutput(pyblish.api.Validator):
 
         return publish_output
 
-    def process_instance(self, instance):
+    def process(self, instance):
 
         # on going project specific exception
         ftrack_data = instance.context.data('ftrackData')
@@ -39,7 +39,7 @@ class ValidateNukeRenderOutput(pyblish.api.Validator):
             msg = 'Output path is incorrect on: %s' % str(instance)
             raise ValueError(msg)
 
-    def repair_instance(self, instance):
+    def repair(self, instance):
         node = nuke.toNode(str(instance))
 
         file_name = os.path.basename(node['file'].value())

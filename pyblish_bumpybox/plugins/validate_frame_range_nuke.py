@@ -14,7 +14,7 @@ class ValidateFrameRangeNuke(pyblish.api.Validator):
     version = (0, 1, 0)
     optional = True
 
-    def process_instance(self, instance):
+    def process(self, instance):
 
         # skipping the call up project
         ftrack_data = instance.context.data('ftrackData')

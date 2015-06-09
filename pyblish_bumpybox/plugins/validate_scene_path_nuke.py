@@ -36,7 +36,7 @@ class ValidateScenePathNuke(pyblish.api.Validator):
 
         return file_path
 
-    def process_instance(self, instance):
+    def process(self, instance):
 
         # skipping the call up project
         ftrack_data = instance.context.data('ftrackData')
@@ -51,7 +51,7 @@ class ValidateScenePathNuke(pyblish.api.Validator):
         assert file_path == instance.data('workPath'), msg
 
 
-    def repair_instance(self, instance):
+    def repair(self, instance):
         """ Saves the nuke script to the correct path.
         If existing nuke script is found, opens that file.
         """

@@ -13,7 +13,7 @@ class ExtractScene(pyblish.api.Extractor):
     hosts = ['*']
     version = (0, 1, 0)
 
-    def process_instance(self, instance):
+    def process(self, instance):
 
         current_file = instance.data('workPath')
         publish_file = instance.data('publishPath')

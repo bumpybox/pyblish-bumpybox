@@ -15,7 +15,7 @@ class ExtractAll(pyblish.api.Extractor):
     hosts = ['maya']
     version = (0, 1, 0)
 
-    def process_instance(self, instance):
+    def process(self, instance):
         """
         """
         filename = os.path.basename(instance.context.data('current_file'))

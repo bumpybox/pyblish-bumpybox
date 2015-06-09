@@ -32,7 +32,7 @@ class ConformAll(pyblish.api.Extractor):
             self.log.info('Removing empty folder: {0}'.format(path))
             os.rmdir(path)
 
-    def process_instance(self, instance):
+    def process(self, instance):
         """
         """
         commit_dir = instance.data('commit_dir')

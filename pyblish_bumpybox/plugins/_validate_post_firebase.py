@@ -12,7 +12,7 @@ class PostValidatorFirebase(pyblish.api.Validator):
     hosts = ['nuke']
     optional = True
 
-    def process_context(self, context):
+    def process(self, context):
         """TODO:
         - Add nuke node data"""
         results = context.data("results")

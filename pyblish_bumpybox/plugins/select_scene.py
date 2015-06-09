@@ -12,7 +12,7 @@ class SelectScene(pyblish.api.Selector):
     hosts = ['*']
     version = (0, 1, 0)
 
-    def process_context(self, context):
+    def process(self, context):
 
         current_file = context.data('currentFile')
         current_dir = os.path.dirname(current_file)

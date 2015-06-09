@@ -12,7 +12,7 @@ class ValidateNeatVideo(pyblish.api.Validator):
     hosts = ['nuke']
     version = (0, 1, 0)
 
-    def process_context(self, context):
+    def process(self, context):
         for node in nuke.allNodes():
             if node.Class() == 'OFXcom.absoft.neatvideo_v2':
                 if not node['disable'].getValue():

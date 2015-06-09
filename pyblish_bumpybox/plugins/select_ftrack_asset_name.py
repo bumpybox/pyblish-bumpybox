@@ -11,7 +11,7 @@ class SelectFtrackAssetName(pyblish.api.Selector):
     hosts = ['*']
     version = (0, 1, 0)
 
-    def process_context(self, context):
+    def process(self, context):
 
         task = ftrack.Task(id=os.environ['FTRACK_TASKID'])
 

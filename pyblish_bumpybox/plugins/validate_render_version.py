@@ -26,7 +26,7 @@ class ValidateRenderVersion(pyblish.api.Validator):
             raise ValueError, msg
         return (matches[-1:][0][1], re.search("\d+", matches[-1:][0]).group())
 
-    def process_instance(self, instance):
+    def process(self, instance):
         path = instance.context.data('currentFile')
         version_number = int(self.version_get(path, 'v')[1])
 

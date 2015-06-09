@@ -26,7 +26,7 @@ class ValidateSceneVersion(pyblish.api.Validator):
             raise ValueError, msg
         return (matches[-1:][0][1], re.search("\d+", matches[-1:][0]).group())
 
-    def process_instance(self, instance):
+    def process(self, instance):
 
         self.version_get(instance.data('workPath'), 'v')
         self.version_get(instance.data('publishPath'), 'v')
