@@ -2,7 +2,7 @@ import pyblish.api
 
 
 @pyblish.api.log
-class ExtractDeadlineDraftCustom(pyblish.api.Extractor):
+class ExtractDeadlineDraft(pyblish.api.Extractor):
     """ Gathers optional Draft related data for Deadline
     """
 
@@ -10,13 +10,14 @@ class ExtractDeadlineDraftCustom(pyblish.api.Extractor):
     families = ['deadline.render']
     hosts = ['*']
     version = (0, 1, 0)
+    label = 'Deadline Draft'
 
-    def process(self, context):
+    def process(self, instance):
 
         # getting job data
         job_data = {}
-        if context.has_data('deadlineJobData'):
-            job_data = context.data('deadlineJobData').copy()
+        if instance.has_data('deadlineJobData'):
+            job_data = instance.data('deadlineJobData').copy()
 
         # setting extra info key values
         extra_info_key_value = {}
@@ -24,8 +25,8 @@ class ExtractDeadlineDraftCustom(pyblish.api.Extractor):
             extra_info_key_value = job_data['ExtraInfoKeyValue']
 
         t = ''
-        if context.data('ftrackData')['Project']['code'] == 'the_call_up':
+        if instance.data('ftrackData')['Project']['code'] == 'the_call_up':
             t = r'K:/tools/Deadline/draft-templates/quicktime_MPEG4_and_DNxHD.py'
         extra_info_key_value['DraftTemplate'] = t
 
-        context.set_data('deadlineJobData', value=job_data)
+        instance.set_data('deadlineJobData', value=job_data)

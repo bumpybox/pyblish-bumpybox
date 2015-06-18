@@ -12,6 +12,7 @@ class ValidateNukeRenderOutput(pyblish.api.Validator):
     families = ['deadline.render']
     hosts = ['nuke']
     version = (0, 1, 0)
+    label = 'Render Output'
 
     def get_path(self, instance):
         ftrack_data = instance.context.data('ftrackData')
@@ -35,7 +36,8 @@ class ValidateNukeRenderOutput(pyblish.api.Validator):
             return
 
         output = self.get_path(instance).replace('\\', '/')
-        if instance.data('deadlineOutput') != output:
+        path = instance.data('deadlineJobData')['OutputFilename0']
+        if os.path.dirname(path) != output:
             msg = 'Output path is incorrect on: %s' % str(instance)
             raise ValueError(msg)
 

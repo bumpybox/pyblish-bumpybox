@@ -12,6 +12,7 @@ class ExtractScene(pyblish.api.Extractor):
     families = ['scene']
     hosts = ['*']
     version = (0, 1, 0)
+    label = 'Scene'
 
     def process(self, instance):
 

@@ -17,6 +17,9 @@ class SelectFtrackAssetName(pyblish.api.Selector):
 
         # skipping the call up project
         project = task.getParents()[-1]
-        if not project.getName() == 'the_call_up':
-            self.log.info('setting ftrackAssetName')
-            context.set_data('ftrackAssetName', value=task.getName())
+        if project.getName() == 'the_call_up':
+            return
+
+        # setting ftrackAssetName
+        self.log.info('setting ftrackAssetName')
+        context.set_data('ftrackAssetName', value=task.getName())

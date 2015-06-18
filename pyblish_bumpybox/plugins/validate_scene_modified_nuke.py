@@ -11,6 +11,7 @@ class ValidateSceneModifiedNuke(pyblish.api.Validator):
     families = ['scene']
     hosts = ['nuke']
     version = (0, 1, 0)
+    label = 'Scene Saved'
 
     def process(self, instance):
 

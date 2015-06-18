@@ -1,4 +1,5 @@
 import re
+import os
 
 import pyblish.api
 
@@ -11,6 +12,7 @@ class ValidateRenderVersion(pyblish.api.Validator):
     families = ['deadline.render']
     hosts = ['*']
     version = (0, 1, 0)
+    label = 'Render Version'
 
     def version_get(self, string, prefix, suffix = None):
         """Extract version information from filenames.  Code from Foundry's nukescripts.version_get()"""
@@ -30,7 +32,8 @@ class ValidateRenderVersion(pyblish.api.Validator):
         path = instance.context.data('currentFile')
         version_number = int(self.version_get(path, 'v')[1])
 
-        path = instance.data('deadlineOutput')
+        path = instance.data('deadlineJobData')['OutputFilename0']
+        path = os.path.dirname(path)
         v = int(self.version_get(path, 'v')[1])
 
         if version_number != v:

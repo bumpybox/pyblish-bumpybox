@@ -11,13 +11,14 @@ class ExtractDeadlineNuke(pyblish.api.Extractor):
     families = ['deadline.render']
     hosts = ['nuke']
     version = (0, 1, 0)
+    label = 'Nuke to Deadline'
 
-    def process(self, context):
+    def process(self, instance):
 
         # getting job data
         job_data = {}
-        if context.has_data('deadlineJobData'):
-            job_data = context.data('deadlineJobData').copy()
+        if instance.has_data('deadlineJobData'):
+            job_data = instance.data('deadlineJobData').copy()
 
         # setting optional data
         job_data['Pool'] = 'medium'
@@ -27,4 +28,4 @@ class ExtractDeadlineNuke(pyblish.api.Extractor):
         group = 'nuke_%s' % nuke.NUKE_VERSION_STRING.replace('.', '')
         job_data['Group'] = group
 
-        context.set_data('deadlineJobData', value=job_data)
+        instance.set_data('deadlineJobData', value=job_data)

@@ -5,12 +5,13 @@ import pyblish.api
 
 @pyblish.api.log
 class ValidateSceneVersion(pyblish.api.Validator):
-    """Validates the existence of version number on the workFile
+    """Validates the existence of version number on the scene
     """
 
     families = ['scene']
     hosts = ['*']
     version = (0, 1, 0)
+    label = 'Scene Version'
 
     def version_get(self, string, prefix, suffix = None):
         """Extract version information from filenames.  Code from Foundry's nukescripts.version_get()"""

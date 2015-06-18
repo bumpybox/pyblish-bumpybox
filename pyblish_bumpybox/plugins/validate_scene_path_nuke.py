@@ -12,6 +12,7 @@ class ValidateScenePathNuke(pyblish.api.Validator):
     families = ['scene']
     hosts = ['nuke']
     version = (0, 1, 0)
+    label = 'Scene Path'
 
     def get_path(self, instance):
         # get ftrack data
