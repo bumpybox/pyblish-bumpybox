@@ -42,8 +42,12 @@ class ValidateNukeRenderOutput(pyblish.api.Validator):
             raise ValueError(msg)
 
     def repair(self, instance):
-        node = nuke.toNode(str(instance))
 
+        # repairing the path string
+        node = nuke.toNode(str(instance))
         file_name = os.path.basename(node['file'].value())
         output = os.path.join(self.get_path(instance), file_name)
         node['file'].setValue(output.replace('\\', '/'))
+
+        # making directories
+        os.makedirs(os.path.dirname(output))

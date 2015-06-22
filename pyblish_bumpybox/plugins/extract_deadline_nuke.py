@@ -29,3 +29,28 @@ class ExtractDeadlineNuke(pyblish.api.Extractor):
         job_data['Group'] = group
 
         instance.set_data('deadlineJobData', value=job_data)
+
+        # skipping instance if ftrackData isn't present
+        if not instance.context.has_data('ftrackData'):
+            self.log.info('No ftrackData present.')
+            return
+
+        ftrack_data = instance.context.data('ftrackData')
+
+        # setting extra info key values
+        extra_info_key_value = {}
+        if 'ExtraInfoKeyValue' in job_data:
+            extra_info_key_value = job_data['ExtraInfoKeyValue']
+
+        # ethel and ernest project
+        if ftrack_data['Project']['code'] == 'ethel_and_ernest':
+            extra_info_key_value['DraftTemplates0'] = r'K:/tools/Deadline/draft-templates/MJPEG_full_linearTo2.2.py'
+
+        # only for the call up project
+        if ftrack_data['Project']['code'] == 'the_call_up':
+            extra_info_key_value['DraftTemplates0'] = r'K:/tools/Deadline/draft-templates/MPEG4_full_alexaToSRGB.py'
+            extra_info_key_value['DraftTemplates1'] = r'K:/tools/Deadline/draft-templates/DNXHD_1080_alexaToSRGB_32mb.py'
+
+        job_data['ExtraInfoKeyValue'] = extra_info_key_value
+
+        instance.set_data('deadlineJobData', value=job_data)

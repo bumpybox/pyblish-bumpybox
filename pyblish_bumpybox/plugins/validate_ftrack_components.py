@@ -20,17 +20,21 @@ class ValidateFtrackComponents(pyblish.api.Validator):
             self.log.info('No ftrackData present. Skipping this instance')
             return
 
-        # skipping the call up project
         ftrack_data = instance.context.data('ftrackData')
+
+        # skipping the call up project
         if ftrack_data['Project']['code'] == 'the_call_up':
+            return
+
+        # skipping instance if asset version isn't present
+        if 'AssetVersion' not in ftrack_data:
+            self.log.info('No AssetVersion present. Skipping this instance')
             return
 
         # skipping instance if ftrackComponents isn't present
         if not instance.has_data('ftrackComponents'):
             self.log.info('No ftrackComponents present. Skipping this instance')
             return
-
-        ftrack_data = instance.context.data('ftrackData')
 
         version_id = ftrack_data['AssetVersion']['id']
         asset_version = ftrack.AssetVersion(id=version_id)
