@@ -6,13 +6,13 @@ import nuke
 
 
 @pyblish.api.log
-class ValidateNukeRenderOutput(pyblish.api.Validator):
+class ValidateNukeRenderDirectory(pyblish.api.Validator):
     """ Validates the output path for nuke renders """
 
     families = ['deadline.render']
     hosts = ['nuke']
     version = (0, 1, 0)
-    label = 'Render Output'
+    label = 'Render Directory'
 
     def get_path(self, instance):
         ftrack_data = instance.context.data('ftrackData')
@@ -35,9 +35,16 @@ class ValidateNukeRenderOutput(pyblish.api.Validator):
         if ftrack_data['Project']['code'] == 'the_call_up':
             return
 
-        output = self.get_path(instance).replace('\\', '/')
         path = instance.data('deadlineJobData')['OutputFilename0']
-        if os.path.dirname(path) != output:
+
+        # get output path
+        basename = os.path.basename(path)
+        output = self.get_path(instance)
+        output = os.path.join(output, os.path.splitext(basename)[0] + '.exr')
+        output = output.replace('\\', '/')
+
+        # validate path
+        if path != output:
             msg = 'Output path is incorrect on: %s' % str(instance)
             raise ValueError(msg)
 
@@ -45,9 +52,14 @@ class ValidateNukeRenderOutput(pyblish.api.Validator):
 
         # repairing the path string
         node = nuke.toNode(str(instance))
-        file_name = os.path.basename(node['file'].value())
-        output = os.path.join(self.get_path(instance), file_name)
-        node['file'].setValue(output.replace('\\', '/'))
+        path = node['file'].value()
+        basename = os.path.basename(path)
+        output = self.get_path(instance)
+        output = os.path.join(output, basename)
+        output = output.replace('\\', '/')
+
+        node['file'].setValue(output)
 
         # making directories
-        os.makedirs(os.path.dirname(output))
+        if not os.path.exists(os.path.dirname(output)):
+            os.makedirs(os.path.dirname(output))
