@@ -30,29 +30,39 @@ class ValidateNukeRenderDirectory(pyblish.api.Validator):
 
     def process(self, instance):
 
+        path = instance.data('deadlineJobData')['OutputFilename0']
+
         # on going project specific exception
         ftrack_data = instance.context.data('ftrackData')
         if ftrack_data['Project']['code'] == 'the_call_up':
+            msg = "Output directory doesn't exist on: %s" % str(instance)
+            assert os.path.exists(os.path.dirname(path)), msg
             return
-
-        path = instance.data('deadlineJobData')['OutputFilename0']
 
         # get output path
         basename = os.path.basename(path)
         output = self.get_path(instance)
-        output = os.path.join(output, os.path.splitext(basename)[0] + '.exr')
-        output = output.replace('\\', '/')
+        #output = os.path.join(output, os.path.splitext(basename)[0] + '.exr')
+        self.log.info(output)
+        self.log.info(os.path.dirname(path))
 
         # validate path
-        if path != output:
-            msg = 'Output path is incorrect on: %s' % str(instance)
-            raise ValueError(msg)
+        msg = 'Output directory is incorrect on: %s' % str(instance)
+        assert os.path.dirname(path) == output.replace('\\', '/'), msg
 
     def repair(self, instance):
 
-        # repairing the path string
         node = nuke.toNode(str(instance))
         path = node['file'].value()
+
+        # on going project specific exception
+        ftrack_data = instance.context.data('ftrackData')
+        if ftrack_data['Project']['code'] == 'the_call_up':
+            if not os.path.exists(os.path.dirname(path)):
+                os.makedirs(os.path.dirname(path))
+            return
+
+        # repairing the path string
         basename = os.path.basename(path)
         output = self.get_path(instance)
         output = os.path.join(output, basename)
