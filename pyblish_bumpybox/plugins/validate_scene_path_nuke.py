@@ -54,7 +54,6 @@ class ValidateScenePathNuke(pyblish.api.Validator):
 
     def repair(self, instance):
         """ Saves the nuke script to the correct path.
-        If existing nuke script is found, opens that file.
         """
         # saving nuke script
         file_path = self.get_path(instance)
@@ -63,10 +62,4 @@ class ValidateScenePathNuke(pyblish.api.Validator):
         if not os.path.exists(file_dir):
             os.makedirs(file_dir)
 
-        if os.path.exists(file_path):
-            self.log.info('Existing work scene found.')
-            nuke.scriptOpen(file_path)
-        else:
-            nuke.scriptSaveAs(file_path)
-
-        # opening existing nuke script
+        nuke.scriptSaveAs(file_path)
