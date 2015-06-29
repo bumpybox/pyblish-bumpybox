@@ -21,12 +21,13 @@ class ValidateNukeRenderDirectory(pyblish.api.Validator):
         root = project.getRoot()
         file_name = os.path.basename(instance.context.data('currentFile'))
         file_name = os.path.splitext(file_name)[0]
-        publish_output = os.path.join(root, 'renders', 'img_sequences',
-                                      shot_name,
-                                      file_name,
-                                      str(instance))
+        task_name = ftrack_data['Task']['name'].replace(' ', '_')
+        version_number = instance.context.data('version')
+        version_name = 'v%s' % (str(version_number).zfill(3))
 
-        return publish_output
+        output = os.path.join(root, 'renders', 'img_sequences', shot_name,
+                                task_name, version_name, str(instance))
+        return output
 
     def process(self, instance):
 
@@ -42,7 +43,6 @@ class ValidateNukeRenderDirectory(pyblish.api.Validator):
         # get output path
         basename = os.path.basename(path)
         output = self.get_path(instance)
-        #output = os.path.join(output, os.path.splitext(basename)[0] + '.exr')
         self.log.info(output)
         self.log.info(os.path.dirname(path))
 
