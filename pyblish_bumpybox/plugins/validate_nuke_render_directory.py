@@ -21,7 +21,7 @@ class ValidateNukeRenderDirectory(pyblish.api.Validator):
         root = project.getRoot()
         file_name = os.path.basename(instance.context.data('currentFile'))
         file_name = os.path.splitext(file_name)[0]
-        task_name = ftrack_data['Task']['name'].replace(' ', '_')
+        task_name = ftrack_data['Task']['name'].replace(' ', '_').lower()
         version_number = instance.context.data('version')
         version_name = 'v%s' % (str(version_number).zfill(3))
 
