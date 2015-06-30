@@ -4,11 +4,11 @@ import pyblish.api
 
 
 @pyblish.api.log
-class SelectScene(pyblish.api.Selector):
+class SelectSceneOld(pyblish.api.Selector):
     """"""
 
     order = pyblish.api.Selector.order + 0.2
-    hosts = ['*']
+    hosts = ['nuke']
     version = (0, 1, 0)
 
     def process(self, context):
@@ -25,10 +25,10 @@ class SelectScene(pyblish.api.Selector):
         publish_file = os.path.join(publish_dir, os.path.basename(current_file))
 
         # create instance
-        name = os.path.basename(current_file)
+        name = os.path.basename(current_file) + '_old'
         instance = context.create_instance(name=name)
 
-        instance.set_data('family', value='scene')
+        instance.set_data('family', value='scene.old')
         instance.set_data('workPath', value=current_file)
         instance.set_data('publishPath', value=publish_file)
 
@@ -36,9 +36,8 @@ class SelectScene(pyblish.api.Selector):
         instance.context.set_data('deadlineInput', value=publish_file)
 
         # ftrack data
-        host = pyblish.api.current_host()
-        components = {'%s_publish' % host: {'path': publish_file}}
-        components['%s_work' % host] = {'path': current_file}
+        components = {'publish_file': {'path': publish_file}}
+        components['nukescript'] = {'path': current_file}
 
         # transition code
         if ftrack_data['Project']['code'] != 'the_call_up':
@@ -46,4 +45,4 @@ class SelectScene(pyblish.api.Selector):
             instance.set_data('ftrackAssetName', value=task_name)
 
         instance.set_data('ftrackComponents', value=components)
-        instance.set_data('ftrackAssetType', value='scene')
+        instance.set_data('ftrackAssetType', value='compositing')

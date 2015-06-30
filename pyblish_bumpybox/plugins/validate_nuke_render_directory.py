@@ -43,12 +43,14 @@ class ValidateNukeRenderDirectory(pyblish.api.Validator):
         # get output path
         basename = os.path.basename(path)
         output = self.get_path(instance)
-        self.log.info(output)
-        self.log.info(os.path.dirname(path))
 
         # validate path
         msg = 'Output directory is incorrect on: %s' % str(instance)
         assert os.path.dirname(path) == output.replace('\\', '/'), msg
+
+        # validate existence
+        msg = "Output directory doesn't exist on: %s" % str(instance)
+        assert os.path.exists(os.path.dirname(output)), msg
 
     def repair(self, instance):
 

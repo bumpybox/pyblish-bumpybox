@@ -6,10 +6,10 @@ import ftrack
 
 
 @pyblish.api.log
-class ValidateSettingsNuke(pyblish.api.Validator):
+class ValidateNukeSettings(pyblish.api.Validator):
     """ Validates settings """
 
-    families = ['scene']
+    families = ['scene', 'scene.old']
     hosts = ['nuke']
     version = (0, 1, 0)
     optional = True

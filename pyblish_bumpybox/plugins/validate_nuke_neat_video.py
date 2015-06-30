@@ -5,7 +5,7 @@ import nuke
 
 
 @pyblish.api.log
-class ValidateNeatVideo(pyblish.api.Validator):
+class ValidateNukeNeatVideo(pyblish.api.Validator):
     """Fails publish if Neat Video node is present in scene"""
 
     families = ['deadline.render']

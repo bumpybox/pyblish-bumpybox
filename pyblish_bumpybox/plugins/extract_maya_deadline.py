@@ -4,7 +4,7 @@ import pymel
 
 
 @pyblish.api.log
-class ExtractDeadlineMaya(pyblish.api.Extractor):
+class ExtractMayaDeadline(pyblish.api.Extractor):
     """ Gathers optional Maya related data for Deadline
     """
 
@@ -12,12 +12,12 @@ class ExtractDeadlineMaya(pyblish.api.Extractor):
     hosts = ['maya']
     version = (0, 1, 0)
 
-    def process(self, context):
+    def process(self, instance):
 
         # getting job data
         job_data = {}
-        if context.has_data('deadlineJobData'):
-            job_data = context.data('deadlineJobData').copy()
+        if instance.has_data('deadlineJobData'):
+            job_data = instance.data('deadlineJobData').copy()
 
         # setting optional data
         job_data['Pool'] = 'medium'
@@ -28,4 +28,4 @@ class ExtractDeadlineMaya(pyblish.api.Extractor):
 
         job_data['Group'] = 'maya_%s' % pymel.versions.flavor()
 
-        context.set_data('deadlineJobData', value=job_data)
+        instance.set_data('deadlineJobData', value=job_data)
