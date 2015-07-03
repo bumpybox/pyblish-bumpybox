@@ -7,7 +7,7 @@ class ValidateMayaSceneModified(pyblish.api.Validator):
     """ Validates whether the scene has been saved since modifying
     """
 
-    families = ['scene', 'scene.old']
+    families = ['scene']
     hosts = ['maya']
     version = (0, 1, 0)
     label = 'Scene Saved'

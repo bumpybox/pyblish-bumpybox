@@ -95,9 +95,33 @@ class ValidateMayaRenderOutput(pyblish.api.Validator):
         msg = 'Project path is incorrect. Expected: %s' % project_path
         assert project_path == scene_project, msg
 
+        # validate frame range
+        task = ftrack.Task(ftrack_data['Task']['id'])
+        project = task.getParents()[-1]
+        shot = task.getParent()
+
+        local_first_frame = render_globals.startFrame.get()
+
+        online_first_frame = shot.getFrameStart()
+
+        msg = 'First frame is incorrect.'
+        msg += '\n\nLocal last frame: %s' % local_first_frame
+        msg += '\n\nOnline last frame: %s' % online_first_frame
+        assert local_first_frame == online_first_frame, msg
+
+        local_last_frame = render_globals.endFrame.get()
+
+        online_last_frame = shot.getFrameEnd()
+
+        msg = 'Last frame is incorrect.'
+        msg += '\n\nLocal last frame: %s' % local_last_frame
+        msg += '\n\nOnline last frame: %s' % online_last_frame
+        assert local_last_frame == online_last_frame, msg
+
     def repair(self, instance):
 
         render_globals = pymel.core.PyNode('defaultRenderGlobals')
+        ftrack_data = instance.context.data('ftrackData')
 
         # repairing frame/animation ext
         render_globals.animation.set(1)
@@ -115,7 +139,16 @@ class ValidateMayaRenderOutput(pyblish.api.Validator):
         # repairing image path
         output = self.get_path(instance).replace('\\', '/')
         pymel.core.system.Workspace.fileRules['images'] = output
+        pymel.core.system.Workspace.save()
 
         # repairing project directory
         project_path = self.get_project_path(instance).replace('\\', '/')
         pymel.core.mel.eval(' setProject "%s"' % project_path)
+
+        # repairing frame range
+        task = ftrack.Task(ftrack_data['Task']['id'])
+        project = task.getParents()[-1]
+        shot = task.getParent()
+
+        render_globals.startFrame.set(shot.getFrameStart())
+        render_globals.endFrame.set(shot.getFrameEnd())

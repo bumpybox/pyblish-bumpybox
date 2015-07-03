@@ -9,7 +9,7 @@ import ftrack
 class ValidateNukeScenePath(pyblish.api.Validator):
     """ Validates the path of the nuke script """
 
-    families = ['scene', 'scene.old']
+    families = ['scene']
     hosts = ['nuke']
     version = (0, 1, 0)
     label = 'Scene Path'

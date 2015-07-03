@@ -29,3 +29,6 @@ class ExtractMayaDeadline(pyblish.api.Extractor):
         job_data['Group'] = 'maya_%s' % pymel.versions.flavor()
 
         instance.set_data('deadlineJobData', value=job_data)
+
+        components = {str(instance): {}}
+        instance.set_data('ftrackComponents', value=components)

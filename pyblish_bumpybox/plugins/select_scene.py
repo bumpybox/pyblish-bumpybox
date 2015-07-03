@@ -8,7 +8,6 @@ class SelectScene(pyblish.api.Selector):
     """"""
 
     order = pyblish.api.Selector.order + 0.2
-    hosts = ['*']
     version = (0, 1, 0)
 
     def process(self, context):
@@ -40,10 +39,9 @@ class SelectScene(pyblish.api.Selector):
         components = {'%s_publish' % host: {'path': publish_file}}
         components['%s_work' % host] = {'path': current_file}
 
-        # transition code
-        if ftrack_data['Project']['code'] != 'the_call_up':
-            task_name = ftrack_data['Task']['name']
-            instance.set_data('ftrackAssetName', value=task_name)
-
         instance.set_data('ftrackComponents', value=components)
         instance.set_data('ftrackAssetType', value='scene')
+
+        asset_name = ftrack_data['Task']['name']
+        self.log.info(asset_name)
+        instance.set_data('ftrackAssetName', value=asset_name)

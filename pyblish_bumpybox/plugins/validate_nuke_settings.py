@@ -75,3 +75,25 @@ class ValidateNukeSettings(pyblish.api.Validator):
         msg += '\n\nLocal height: %s' % local_height
         msg += '\n\nOnline height: %s' % online_height
         assert local_height == online_height, msg
+
+    def repair(self, instance):
+
+        # skipping the call up project
+        ftrack_data = instance.context.data('ftrackData')
+        if ftrack_data['Project']['code'] == 'the_call_up':
+            return
+
+        task = ftrack.Task(ftrack_data['Task']['id'])
+        project = task.getParents()[-1]
+        shot = task.getParent()
+
+        nuke.root()['fps'].setValue(project.get('fps'))
+        nuke.root()['first_frame'].setValue(shot.getFrameStart())
+        nuke.root()['last_frame'].setValue(shot.getFrameEnd())
+
+        width = int(project.get('resolution_width'))
+        height = int(project.get('resolution_height'))
+        name = project.getName()
+        format_cmd = '%s %s 1.0 %s' % (width, height, name)
+        new_format = nuke.addFormat(format_cmd)
+        nuke.Root()['format'].setValue(new_format)

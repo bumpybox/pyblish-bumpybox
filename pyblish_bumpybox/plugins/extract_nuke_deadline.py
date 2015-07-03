@@ -54,3 +54,6 @@ class ExtractDeadlineNuke(pyblish.api.Extractor):
         job_data['ExtraInfoKeyValue'] = extra_info_key_value
 
         instance.set_data('deadlineJobData', value=job_data)
+
+        components = {str(instance): {}}
+        instance.set_data('ftrackComponents', value=components)
