@@ -4,7 +4,7 @@ import pymel
 
 
 @pyblish.api.log
-class ExtractMayaDeadline(pyblish.api.Extractor):
+class ExtractDeadline(pyblish.api.Extractor):
     """ Gathers optional Maya related data for Deadline
     """
 

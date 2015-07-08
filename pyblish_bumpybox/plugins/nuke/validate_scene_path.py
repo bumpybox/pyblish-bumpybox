@@ -6,7 +6,7 @@ import ftrack
 
 
 @pyblish.api.log
-class ValidateNukeScenePath(pyblish.api.Validator):
+class ValidateScenePath(pyblish.api.Validator):
     """ Validates the path of the nuke script """
 
     families = ['scene']

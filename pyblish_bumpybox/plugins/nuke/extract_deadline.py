@@ -4,7 +4,7 @@ import nuke
 
 
 @pyblish.api.log
-class ExtractDeadlineNuke(pyblish.api.Extractor):
+class ExtractDeadline(pyblish.api.Extractor):
     """ Gathers optional Nuke related data for Deadline
     """
 

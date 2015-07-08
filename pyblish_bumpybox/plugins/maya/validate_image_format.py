@@ -6,7 +6,7 @@ import ftrack
 
 
 @pyblish.api.log
-class ValidateMayaImageFormat(pyblish.api.Validator):
+class ValidateImageFormat(pyblish.api.Validator):
     """ Validates settings """
 
     families = ['deadline.render']

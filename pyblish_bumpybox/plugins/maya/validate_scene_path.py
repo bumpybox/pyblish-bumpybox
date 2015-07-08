@@ -6,7 +6,7 @@ import pymel
 
 
 @pyblish.api.log
-class ValidateMayaScenePath(pyblish.api.Validator):
+class ValidateScenePath(pyblish.api.Validator):
     """ Validates the path of the maya scene """
 
     families = ['scene']

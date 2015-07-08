@@ -2,7 +2,7 @@ import pyblish.api
 
 
 @pyblish.api.log
-class SelectMayaRemoveDefaulrenderlayer(pyblish.api.Selector):
+class SelectRemoveDefaulrenderlayer(pyblish.api.Selector):
     """ Removes default renderlayer from context"""
 
     order = pyblish.api.Selector.order + 0.1

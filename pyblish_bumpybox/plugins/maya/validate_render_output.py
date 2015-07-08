@@ -6,7 +6,7 @@ import ftrack
 
 
 @pyblish.api.log
-class ValidateMayaRenderOutput(pyblish.api.Validator):
+class ValidateRenderOutput(pyblish.api.Validator):
     """ Validates settings """
 
     families = ['deadline.render']

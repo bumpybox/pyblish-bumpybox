@@ -43,5 +43,4 @@ class SelectScene(pyblish.api.Selector):
         instance.set_data('ftrackAssetType', value='scene')
 
         asset_name = ftrack_data['Task']['name']
-        self.log.info(asset_name)
         instance.set_data('ftrackAssetName', value=asset_name)

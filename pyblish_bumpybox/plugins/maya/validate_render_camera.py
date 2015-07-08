@@ -6,7 +6,7 @@ import ftrack
 
 
 @pyblish.api.log
-class ValidateMayaRenderCamera(pyblish.api.Validator):
+class ValidateRenderCamera(pyblish.api.Validator):
     """ Validates settings """
 
     families = ['deadline.render']
@@ -22,11 +22,18 @@ class ValidateMayaRenderCamera(pyblish.api.Validator):
             return
 
         # validate non native camera active
-        check = True
+        render_cameras = []
         for c in pymel.core.ls(type='camera'):
+            if c.renderable.get():
+                render_cameras.append(c)
+
+        msg = 'No renderable camera selected.'
+        assert render_cameras, msg
+
+        check = True
+        for c in render_cameras:
             if c.getParent().name() in ['persp', 'top', 'side', 'front']:
-                if c.renderable.get():
-                    check = False
+                check = False
 
         msg = 'Renderable Cameras is incorrect. Expected non default camera.'
         assert check, msg

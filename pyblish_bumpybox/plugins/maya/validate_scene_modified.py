@@ -3,7 +3,7 @@ import pyblish.api
 
 
 @pyblish.api.log
-class ValidateMayaSceneModified(pyblish.api.Validator):
+class ValidateSceneModified(pyblish.api.Validator):
     """ Validates whether the scene has been saved since modifying
     """
 

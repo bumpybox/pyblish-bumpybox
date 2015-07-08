@@ -2,7 +2,7 @@ import nuke
 import pyblish.api
 
 @pyblish.api.log
-class ValidateNukeCrop(pyblish.api.Validator):
+class ValidateCrop(pyblish.api.Validator):
     """Validates the existence of crop node before write node
     """
 

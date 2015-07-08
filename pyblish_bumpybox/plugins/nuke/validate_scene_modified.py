@@ -4,11 +4,11 @@ import pyblish.api
 
 
 @pyblish.api.log
-class ValidateNukeSceneModified(pyblish.api.Validator):
+class ValidateSceneModified(pyblish.api.Validator):
     """ Validates whether the scene has been saved since modifying
     """
 
-    families = ['scene', 'scene.old']
+    families = ['scene']
     hosts = ['nuke']
     version = (0, 1, 0)
     label = 'Scene Saved'

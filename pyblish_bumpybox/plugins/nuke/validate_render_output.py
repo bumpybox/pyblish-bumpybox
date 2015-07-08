@@ -6,7 +6,7 @@ import nuke
 
 
 @pyblish.api.log
-class ValidateNukeRenderOutput(pyblish.api.Validator):
+class ValidateRenderOutput(pyblish.api.Validator):
     """ Validates the output path for nuke renders """
 
     families = ['deadline.render']
