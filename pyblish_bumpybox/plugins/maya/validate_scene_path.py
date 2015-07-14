@@ -10,8 +10,6 @@ class ValidateScenePath(pyblish.api.Validator):
     """ Validates the path of the maya scene """
 
     families = ['scene']
-    hosts = ['maya']
-    version = (0, 1, 0)
     label = 'Scene Path'
 
     def get_path(self, instance):

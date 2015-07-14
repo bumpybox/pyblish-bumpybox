@@ -7,7 +7,7 @@ import ftrack
 
 
 @pyblish.api.log
-class SelectPNGS(pyblish.api.Selector):
+class SelectPNG(pyblish.api.Selector):
     """"""
 
     order = pyblish.api.Selector.order + 0.2
@@ -31,7 +31,7 @@ class SelectPNGS(pyblish.api.Selector):
 
             instance = context.create_instance(name=name)
             instance.set_data('family', value='png')
-            instance.set_data('path', value=seq.path())
+            instance.set_data('path', value=seq.format())
 
             path = os.path.join(seq.dirname, seq.format('%h%p%t %R'))
             components = {name: {'path': path}}

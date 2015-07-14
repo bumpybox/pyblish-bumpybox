@@ -8,8 +8,6 @@ import pyblish.api
 class PostValidatorFirebase(pyblish.api.Validator):
 
     order = pyblish.api.Validator.order + 0.5
-    families = ['*']
-    hosts = ['nuke']
     optional = True
 
     def process(self, context):

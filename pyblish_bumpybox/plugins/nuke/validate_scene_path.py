@@ -10,8 +10,6 @@ class ValidateScenePath(pyblish.api.Validator):
     """ Validates the path of the nuke script """
 
     families = ['scene']
-    hosts = ['nuke']
-    version = (0, 1, 0)
     label = 'Scene Path'
 
     def get_path(self, instance):

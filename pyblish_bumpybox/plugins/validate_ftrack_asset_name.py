@@ -9,8 +9,6 @@ class ValidateFtrackAssetName(pyblish.api.Validator):
     """ Modifies ftrack asset name """
 
     families = ['deadline.render']
-    hosts = ['*']
-    version = (0, 1, 0)
     label = 'Ftrack Asset Name'
 
     def process(self, context, instance):

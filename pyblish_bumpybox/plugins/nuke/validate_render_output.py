@@ -10,8 +10,6 @@ class ValidateRenderOutput(pyblish.api.Validator):
     """ Validates the output path for nuke renders """
 
     families = ['deadline.render']
-    hosts = ['nuke']
-    version = (0, 1, 0)
     label = 'Render Output'
     optional = True
 
@@ -25,7 +23,7 @@ class ValidateRenderOutput(pyblish.api.Validator):
         task_name = ftrack_data['Task']['name'].replace(' ', '_').lower()
         version_number = instance.context.data('version')
         version_name = 'v%s' % (str(version_number).zfill(3))
-        filename = '.'.join([shot_name, task_name, version_name, str(instance),
+        filename = '.'.join([shot_name, task_name, version_name,
                             '%04d'])
 
         output = os.path.join(root, 'renders', 'img_sequences', shot_name,
@@ -105,6 +103,7 @@ class ValidateRenderOutput(pyblish.api.Validator):
         if ext == '.exr' or not ext:
             output = os.path.splitext(node['file'].value())[0]
             node['file'].setValue(output + '.exr')
+            nuke.updateUI()
             node['compression'].setValue('none')
             node['colorspace'].setValue('default (linear)')
 

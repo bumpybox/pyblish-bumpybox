@@ -7,8 +7,6 @@ class ValidateSceneVersion(pyblish.api.Validator):
     """
 
     families = ['scene']
-    hosts = ['*']
-    version = (0, 1, 0)
     label = 'Scene Version'
 
     def process(self, instance):

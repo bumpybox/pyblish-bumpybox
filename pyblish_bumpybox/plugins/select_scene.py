@@ -8,7 +8,6 @@ class SelectScene(pyblish.api.Selector):
     """"""
 
     order = pyblish.api.Selector.order + 0.2
-    version = (0, 1, 0)
 
     def process(self, context):
 

@@ -9,8 +9,6 @@ class ValidateNeatVideo(pyblish.api.Validator):
     """Fails publish if Neat Video node is present in scene"""
 
     families = ['deadline.render']
-    hosts = ['nuke']
-    version = (0, 1, 0)
     label = 'Neat Video'
 
     def process(self, instance):

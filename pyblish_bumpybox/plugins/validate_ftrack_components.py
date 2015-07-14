@@ -9,7 +9,6 @@ class ValidateFtrackComponents(pyblish.api.Validator):
     """ Validates the components submitted to Ftrack """
 
     order = pyblish.api.Validator.order + 0.1
-    version = (0, 1, 0)
     optional = True
     label = 'Ftrack Components'
 

@@ -1,6 +1,11 @@
-import pyblish.api
+import os
 
-import nuke
+#import pyblish.api
+#import nuke
+
+drafts_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+drafts_path = os.path.dirname(os.path.dirname(os.path.dirname(drafts_path)))
+drafts_path = os.path.join(drafts_path, 'deadline', 'draft-templates')
 
 
 @pyblish.api.log
@@ -9,8 +14,6 @@ class ExtractDeadline(pyblish.api.Extractor):
     """
 
     families = ['deadline.render']
-    hosts = ['nuke']
-    version = (0, 1, 0)
     label = 'Nuke to Deadline'
 
     def process(self, instance):
@@ -44,12 +47,15 @@ class ExtractDeadline(pyblish.api.Extractor):
 
         # ethel and ernest project
         if ftrack_data['Project']['code'] == 'ethel_and_ernest':
-            extra_info_key_value['DraftTemplates0'] = r'K:/tools/Deadline/draft-templates/MJPEG_full_linearTo2.2.py'
+            path = os.path.join(drafts_path, 'MJPEG_full_linearTo2.2.py')
+            extra_info_key_value['DraftTemplates0'] = path
 
         # only for the call up project
         if ftrack_data['Project']['code'] == 'the_call_up':
-            extra_info_key_value['DraftTemplates0'] = r'K:/tools/Deadline/draft-templates/MPEG4_full_alexaToSRGB.py'
-            extra_info_key_value['DraftTemplates1'] = r'K:/tools/Deadline/draft-templates/DNXHD_1080_alexaToSRGB_32mb.py'
+            path = os.path.join(drafts_path, 'MPEG4_full_alexaToSRGB.py')
+            extra_info_key_value['DraftTemplates0'] = path
+            path = os.path.join(drafts_path, 'DNXHD_1080_alexaToSRGB_32mb.py')
+            extra_info_key_value['DraftTemplates1'] = path
 
         job_data['ExtraInfoKeyValue'] = extra_info_key_value
 

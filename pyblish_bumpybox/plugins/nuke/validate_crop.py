@@ -7,8 +7,6 @@ class ValidateCrop(pyblish.api.Validator):
     """
 
     families = ['deadline.render']
-    hosts = ['nuke']
-    version = (0, 1, 0)
     label = 'Crop Output'
     optional = True
 

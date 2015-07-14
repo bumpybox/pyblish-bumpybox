@@ -8,8 +8,6 @@ class ValidateFtrackStatus(pyblish.api.Validator):
     """
 
     families = ['scene']
-    hosts = ['*']
-    version = (0, 1, 0)
     label = 'Update FTrack Status'
 
     def GetStatusByName(self, name):

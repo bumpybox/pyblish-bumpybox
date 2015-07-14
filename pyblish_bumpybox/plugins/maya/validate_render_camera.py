@@ -10,7 +10,6 @@ class ValidateRenderCamera(pyblish.api.Validator):
     """ Validates settings """
 
     families = ['deadline.render']
-    hosts = ['maya']
     optional = True
     label = 'Render Camera'
 

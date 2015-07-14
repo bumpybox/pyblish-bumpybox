@@ -7,8 +7,6 @@ class ValidateDeadlineFramePadding(pyblish.api.Validator):
     """
 
     families = ['deadline.render']
-    hosts = ['*']
-    version = (0, 1, 0)
     label = 'Frame Padding'
     optional = True
 

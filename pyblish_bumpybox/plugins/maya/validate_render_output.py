@@ -10,8 +10,6 @@ class ValidateRenderOutput(pyblish.api.Validator):
     """ Validates settings """
 
     families = ['deadline.render']
-    hosts = ['maya']
-    version = (0, 1, 0)
     optional = True
     label = 'Render Output'
 

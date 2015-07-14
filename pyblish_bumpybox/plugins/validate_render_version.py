@@ -10,8 +10,6 @@ class ValidateRenderVersion(pyblish.api.Validator):
     """
 
     families = ['deadline.render']
-    hosts = ['*']
-    version = (0, 1, 0)
     label = 'Render Version'
 
     def version_get(self, string, prefix, suffix = None):

@@ -9,8 +9,6 @@ class ExtractDeadline(pyblish.api.Extractor):
     """
 
     families = ['deadline.render']
-    hosts = ['maya']
-    version = (0, 1, 0)
 
     def process(self, instance):
 

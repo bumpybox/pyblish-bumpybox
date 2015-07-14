@@ -10,8 +10,6 @@ class ValidateSettings(pyblish.api.Validator):
     """ Validates settings """
 
     families = ['scene']
-    hosts = ['nuke']
-    version = (0, 1, 0)
     optional = True
     label = 'Settings'
 
