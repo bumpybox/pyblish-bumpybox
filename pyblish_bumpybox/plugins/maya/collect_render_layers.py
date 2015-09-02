@@ -55,7 +55,7 @@ class CollectRenderlayers(pyblish.api.Collector):
                 continue
 
             # skipping defaultRenderLayers
-            if 'defaultRenderLayer' in layer.name():
+            if layer.name().endswith('defaultRenderLayer'):
                 continue
 
             layer_data = {}
