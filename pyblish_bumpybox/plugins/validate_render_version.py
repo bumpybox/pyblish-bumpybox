@@ -30,7 +30,7 @@ class ValidateRenderVersion(pyblish.api.Validator):
         path = instance.context.data('currentFile')
         version_number = int(self.version_get(path, 'v')[1])
 
-        path = instance.data('deadlineJobData')['OutputFilename0']
+        path = instance.data('deadlineData')['job']['OutputFilename0']
         path = os.path.dirname(path)
         v = int(self.version_get(path, 'v')[1])
 

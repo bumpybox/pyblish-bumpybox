@@ -13,4 +13,5 @@ class ExtractSceneSave(pyblish.api.Extractor):
 
     def process(self, instance):
 
+        self.log.info('saving scene')
         maya.cmds.file(s=True)

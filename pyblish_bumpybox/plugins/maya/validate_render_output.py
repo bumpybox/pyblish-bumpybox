@@ -18,40 +18,51 @@ class ValidateRenderOutput(pyblish.api.Validator):
         ftrack_data = instance.context.data('ftrackData')
         project = ftrack.Project(id=ftrack_data['Project']['id'])
         root_dir = ftrack_data['Project']['root']
-        seq_name = ftrack_data['Sequence']['name']
-        shot_name = ftrack_data['Shot']['name']
         task_name = ftrack_data['Task']['name']
-        task_name_convert = task_name.replace(' ', '_').lower()
+        task_name = task_name.replace(' ', '_').lower()
 
-        # get version data
         version = 1
         if instance.context.has_data('version'):
             version = instance.context.data('version')
         version_string = 'v%s' % str(version).zfill(3)
 
-        file_name = '.'.join([shot_name, task_name_convert,
-                             version_string, 'mb'])
-        file_path = os.path.join(root_dir, 'sequences', seq_name, shot_name,
-                                 task_name_convert)
+        file_path = ''
+        if 'Sequence' in ftrack_data:
+            seq_name = ftrack_data['Sequence']['name']
+            shot_name = ftrack_data['Shot']['name'].replace(' ', '_')
+            shot_name = shot_name.lower()
+            file_path = os.path.join(root_dir, 'sequences', seq_name, shot_name,
+                                     task_name)
+        else:
+            asset_type = ftrack_data['Asset_Build']['type'].replace(' ', '_')
+            asset_type = asset_type.lower()
+            asset_name = ftrack_data['Asset_Build']['name'].replace(' ', '_')
+            asset_name = asset_name.lower()
+            file_path = os.path.join(root_dir, 'library', asset_type,
+                                    asset_name, task_name)
 
         return file_path
 
     def get_path(self, instance):
         ftrack_data = instance.context.data('ftrackData')
-        shot_name = ftrack_data['Shot']['name']
+
+        parent_name = None
+        try:
+            parent_name = ftrack_data['Shot']['name']
+        except:
+            parent_name = ftrack_data['Asset_Build']['name'].replace(' ', '_')
+
         project = ftrack.Project(id=ftrack_data['Project']['id'])
         root = project.getRoot()
-        file_name = os.path.basename(instance.context.data('currentFile'))
-        file_name = os.path.splitext(file_name)[0]
         task_name = ftrack_data['Task']['name'].replace(' ', '_').lower()
         version_number = instance.context.data('version')
         version_name = 'v%s' % (str(version_number).zfill(3))
 
-        output = os.path.join(root, 'renders', 'img_sequences', shot_name,
+        output = os.path.join(root, 'renders', 'img_sequences', parent_name,
                                 task_name, version_name)
         return output
 
-    def process(self, instance):
+    def process(self, instance, context):
 
         # skipping the call up project
         ftrack_data = instance.context.data('ftrackData')
@@ -73,8 +84,12 @@ class ValidateRenderOutput(pyblish.api.Validator):
         assert render_globals.extensionPadding.get() == 4, msg
 
         # validate file name prefix
-        msg = 'File name prefix is incorrect. Expected no modification.'
-        assert render_globals.imageFilePrefix.get() == '', msg
+        msg = 'File name prefix is incorrect.'
+        prefix = render_globals.imageFilePrefix.get()
+        filename = os.path.basename(context.data('currentFile'))
+        filename = os.path.splitext(filename)[0]
+        expected_prefix = '<RenderLayer>/%s' % filename
+        assert prefix == expected_prefix, msg
 
         # validate image path
         expected_output = self.get_path(instance).replace('\\', '/')
@@ -93,33 +108,28 @@ class ValidateRenderOutput(pyblish.api.Validator):
         msg = 'Project path is incorrect. Expected: %s' % project_path
         assert project_path == scene_project, msg
 
-        # validate frame range
-        task = ftrack.Task(ftrack_data['Task']['id'])
-        project = task.getParents()[-1]
-        shot = task.getParent()
+        # validate renderpass naming
+        msg = 'Renderpass naming is incorrect:'
+        msg += '\n\n"Frame Buffer Naming": "Custom"'
+        msg += '\n\n"Custom Naming String": "<RenderPass>"'
+        data = instance.data('data')
+        if 'multiCamNamingMode' in data:
+            assert int(data['multiCamNamingMode']) == 1, msg
+            assert render_globals.bufferName.get() == '<RenderPass>', msg
 
-        local_first_frame = render_globals.startFrame.get()
+        # validate current render layer
+        msg = 'Current layer needs to be "masterLayer"'
+        currentLayer = pymel.core.nodetypes.RenderLayer.currentLayer()
+        assert currentLayer == 'defaultRenderLayer', msg
 
-        online_first_frame = shot.getFrameStart()
-
-        msg = 'First frame is incorrect.'
-        msg += '\n\nLocal last frame: %s' % local_first_frame
-        msg += '\n\nOnline last frame: %s' % online_first_frame
-        assert local_first_frame == online_first_frame, msg
-
-        local_last_frame = render_globals.endFrame.get()
-
-        online_last_frame = shot.getFrameEnd()
-
-        msg = 'Last frame is incorrect.'
-        msg += '\n\nLocal last frame: %s' % local_last_frame
-        msg += '\n\nOnline last frame: %s' % online_last_frame
-        assert local_last_frame == online_last_frame, msg
-
-    def repair(self, instance):
+    def repair(self, instance, context):
 
         render_globals = pymel.core.PyNode('defaultRenderGlobals')
         ftrack_data = instance.context.data('ftrackData')
+
+        # repairing current render layer
+        layer = pymel.core.PyNode('defaultRenderLayer')
+        pymel.core.nodetypes.RenderLayer.setCurrent(layer)
 
         # repairing frame/animation ext
         render_globals.animation.set(1)
@@ -132,7 +142,10 @@ class ValidateRenderOutput(pyblish.api.Validator):
         render_globals.extensionPadding.set(4)
 
         # repairing file name prefix
-        render_globals.imageFilePrefix.set('')
+        filename = os.path.basename(context.data('currentFile'))
+        filename = os.path.splitext(filename)[0]
+        expected_prefix = '<RenderLayer>/%s' % filename
+        render_globals.imageFilePrefix.set(expected_prefix)
 
         # repairing image path
         output = self.get_path(instance).replace('\\', '/')
@@ -143,10 +156,6 @@ class ValidateRenderOutput(pyblish.api.Validator):
         project_path = self.get_project_path(instance).replace('\\', '/')
         pymel.core.mel.eval(' setProject "%s"' % project_path)
 
-        # repairing frame range
-        task = ftrack.Task(ftrack_data['Task']['id'])
-        project = task.getParents()[-1]
-        shot = task.getParent()
-
-        render_globals.startFrame.set(shot.getFrameStart())
-        render_globals.endFrame.set(shot.getFrameEnd())
+        # repairing renderpass naming
+        render_globals.multiCamNamingMode.set(1)
+        render_globals.bufferName.set('<RenderPass>')

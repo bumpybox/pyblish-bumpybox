@@ -15,7 +15,13 @@ class ValidateRenderOutput(pyblish.api.Validator):
 
     def get_path(self, instance):
         ftrack_data = instance.context.data('ftrackData')
-        shot_name = ftrack_data['Shot']['name']
+
+        parent_name = None
+        try:
+            parent_name = ftrack_data['Shot']['name']
+        except:
+            parent_name = ftrack_data['Asset_Build']['name'].replace(' ', '_')
+
         project = ftrack.Project(id=ftrack_data['Project']['id'])
         root = project.getRoot()
         file_name = os.path.basename(instance.context.data('currentFile'))
@@ -23,10 +29,10 @@ class ValidateRenderOutput(pyblish.api.Validator):
         task_name = ftrack_data['Task']['name'].replace(' ', '_').lower()
         version_number = instance.context.data('version')
         version_name = 'v%s' % (str(version_number).zfill(3))
-        filename = '.'.join([shot_name, task_name, version_name,
+        filename = '.'.join([parent_name, task_name, version_name,
                             '%04d'])
 
-        output = os.path.join(root, 'renders', 'img_sequences', shot_name,
+        output = os.path.join(root, 'renders', 'img_sequences', parent_name,
                                 task_name, version_name, str(instance),
                                 filename)
 
@@ -34,7 +40,7 @@ class ValidateRenderOutput(pyblish.api.Validator):
 
     def process(self, instance):
 
-        path = instance.data('deadlineJobData')['OutputFilename0']
+        path = instance.data('deadlineData')['job']['OutputFilename0']
         path = path.replace('####', '%04d')
 
         # on going project specific exception
@@ -63,8 +69,8 @@ class ValidateRenderOutput(pyblish.api.Validator):
         assert ext == '.exr' or ext == '.png', msg
 
         # validate alpha
-        msg = 'Need to output alpha.'
-        assert node['channels'].value() == 'rgba', msg
+        msg = 'Output channels are wrong.'
+        assert node['channels'].value() == 'rgb', msg
 
         # validate exr settings
         if ext == '.exr':
@@ -112,4 +118,4 @@ class ValidateRenderOutput(pyblish.api.Validator):
             os.makedirs(os.path.dirname(output))
 
         # repairing alpha output
-        node['channels'].setValue('rgba')
+        node['channels'].setValue('rgb')

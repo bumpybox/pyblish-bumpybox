@@ -15,8 +15,8 @@ class ValidateRenderer(pyblish.api.Validator):
 
     def process(self, instance):
 
-        self.log.info(instance.data('deadlineJobData'))
-        self.log.info(instance.data('deadlinePluginData'))
+        self.log.info(instance.data('deadlineData')['job'])
+        self.log.info(instance.data('deadlineData')['plugin'])
 
         # skipping the call up project
         ftrack_data = instance.context.data('ftrackData')
@@ -27,5 +27,5 @@ class ValidateRenderer(pyblish.api.Validator):
 
         # validate renderer
         msg = "Render Farm can't handle hardware renders on: %s" % str(instance)
-        renderer = instance.data('deadlinePluginData')['Renderer']
+        renderer = instance.data('deadlineData')['plugin']['Renderer']
         assert 'hardware' not in renderer.lower(), msg

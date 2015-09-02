@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hieroXML>
+<hieroXML version="9" revision="96532" release="v1" name="Hiero">
+ <Project editable="1" timedisplayformat="0" samplerate="48000/1" sixteenBitLut="sRGB" guid="{ba9eb7de-26cc-7146-a12b-b59ab35d5469}" logLut="Cineon" floatLut="linear" buildTrackName="VFX" nukeUseOCIO="0" framerate="24/1" redVideoDecodeMode="0" starttimecode="86400" name="tags" thumbnailLut="sRGB" viewerLut="sRGB" eightBitLut="sRGB">
+  <items>
+   <RootBinProjectItem editable="1" guid="{a3ba3ce5-8d61-6240-a7b3-b99e4a8bbe9d}" name="Sequences">
+    <BinViewType>2</BinViewType>
+    <BinViewZoom>70</BinViewZoom>
+    <AllowedItems>13</AllowedItems>
+   </RootBinProjectItem>
+   <RootBinProjectItem editable="1" guid="{74723746-d7a9-884f-9489-bf0cfe2137fa}" name="Tags">
+    <items>
+     <TagClassProjectItem editable="1" guid="{f745d781-291e-db4f-ace0-5ef33dbe8002}" name="transcode_png">
+      <TagClass editable="1" objName="tag" guid="3f2e04c7-e646-cb42-b578-86316dee47db" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/transcode_png.png" name="transcode_png">
+       <sets>
+        <Set title="" domainroot="tag">
+         <values>
+          <StringValue default="1" value="transcode_png" name="tag.label"/>
+         </values>
+        </Set>
+       </sets>
+      </TagClass>
+     </TagClassProjectItem>
+     <TagClassProjectItem editable="1" guid="{d1b126a9-61ad-cc46-aba2-cd808b4c7a13}" name="ftrack">
+      <TagClass editable="1" objName="tag" guid="1f8eb2f6-6e5e-d049-a3e9-9a24dca9df94" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/ftrack.png" name="ftrack">
+       <sets>
+        <Set title="" domainroot="tag">
+         <values>
+          <StringValue default="1" value="ftrack" name="tag.label"/>
+         </values>
+        </Set>
+       </sets>
+      </TagClass>
+     </TagClassProjectItem>
+    </items>
+    <BinViewType>2</BinViewType>
+    <BinViewZoom>70</BinViewZoom>
+    <AllowedItems>17</AllowedItems>
+   </RootBinProjectItem>
+  </items>
+  <BinViewType>2</BinViewType>
+  <BinViewZoom>70</BinViewZoom>
+  <AllowedItems>2</AllowedItems>
+  <RootBinProjectItem objName="sequencesBin" guid="{a3ba3ce5-8d61-6240-a7b3-b99e4a8bbe9d}" link="internal"/>
+  <RootBinProjectItem objName="tagsBin" guid="{74723746-d7a9-884f-9489-bf0cfe2137fa}" link="internal"/>
+  <MediaFormatValue default="0" objName="outputformat" value="1,[ 0, 0, 1920, 1080],[ 0, 0, 1920, 1080],HD 1080" name=""/>
+  <ProjectExportPreset objName="defaultShotPreset" presetName="Project Shot Template">
+   <presetXML><![CDATA[<root presetname="Project Shot Template" tasktype="hiero.exporters.FnShotProcessor.ShotProcessor">
+    <startFrameIndex valuetype="int">1001</startFrameIndex>
+    <exportRoot valuetype="str" />
+    <versionIndex valuetype="int">1</versionIndex>
+    <vfxTrack valuetype="str">VFX</vfxTrack>
+    <cutUseHandles valuetype="bool">False</cutUseHandles>
+    <versionPadding valuetype="int">2</versionPadding>
+    <exportTemplate valuetype="list">
+        <SequenceItem valuetype="tuple">
+            <SequenceItem valuetype="str">{shot}/nuke/script/{shot}_comp_{event}_{version}.{ext}</SequenceItem>
+            <SequenceItem valuetype="hiero.exporters.FnNukeShotExporter.NukeShotPreset">
+                <root presetname="" tasktype="hiero.exporters.FnNukeShotExporter.NukeShotExporter">
+                    <collateSequence valuetype="bool">False</collateSequence>
+                    <additionalNodesEnabled valuetype="bool">False</additionalNodesEnabled>
+                    <additionalNodesData valuetype="list" />
+                    <collateShotNames valuetype="bool">False</collateShotNames>
+                    <writePaths valuetype="list">
+                        <SequenceItem valuetype="str">{shot}/nuke/renders/{shot}_comp_{event}_{version}.####.{ext}</SequenceItem>
+                    </writePaths>
+                    <readPaths valuetype="list">
+                        <SequenceItem valuetype="unicode">{shot}/plates/{filename}</SequenceItem>
+                    </readPaths>
+                    <collateTracks valuetype="bool">False</collateTracks>
+                    <method valuetype="str">Blend</method>
+                    <collateCustomStart valuetype="bool">True</collateCustomStart>
+                </root>
+            </SequenceItem>
+        </SequenceItem>
+        <SequenceItem valuetype="tuple">
+            <SequenceItem valuetype="str">{shot}/nuke/renders/{shot}_comp_{event}_{version}.####.{ext}</SequenceItem>
+            <SequenceItem valuetype="hiero.exporters.FnExternalRender.NukeRenderPreset">
+                <root presetname="" tasktype="hiero.exporters.FnExternalRender.NukeRenderTask">
+                    <burninDataEnabled valuetype="bool">False</burninDataEnabled>
+                    <colourspace valuetype="str">default</colourspace>
+                    <file_type valuetype="str">dpx</file_type>
+                    <mov valuetype="dict" />
+                    <dpx valuetype="dict">
+                        <datatype valuetype="str">10 bit</datatype>
+                    </dpx>
+                    <channels valuetype="str">all</channels>
+                    <burninData valuetype="dict">
+                        <burnIn_bottomRight valuetype="NoneType">None</burnIn_bottomRight>
+                        <burnIn_topLeft valuetype="NoneType">None</burnIn_topLeft>
+                        <burnIn_topMiddle valuetype="NoneType">None</burnIn_topMiddle>
+                        <burnIn_padding valuetype="NoneType">None</burnIn_padding>
+                        <burnIn_topRight valuetype="NoneType">None</burnIn_topRight>
+                        <burnIn_bottomMiddle valuetype="NoneType">None</burnIn_bottomMiddle>
+                        <burnIn_bottomLeft valuetype="NoneType">None</burnIn_bottomLeft>
+                        <burnIn_textSize valuetype="NoneType">None</burnIn_textSize>
+                        <burnIn_font valuetype="NoneType">None</burnIn_font>
+                    </burninData>
+                    <writeNodeName valuetype="str">Write_{ext}</writeNodeName>
+                    <reformat valuetype="dict">
+                        <pixelAspect valuetype="float">1.0</pixelAspect>
+                        <name valuetype="str">NTSC 4:3</name>
+                        <width valuetype="int">720</width>
+                        <height valuetype="int">480</height>
+                        <to_type valuetype="str">None</to_type>
+                        <resize valuetype="unicode">width</resize>
+                    </reformat>
+                    <targa valuetype="dict" />
+                </root>
+            </SequenceItem>
+        </SequenceItem>
+    </exportTemplate>
+    <excludeTags valuetype="list" />
+    <includeTags valuetype="list" />
+    <excludedTracks valuetype="list" />
+    <includeRetimes valuetype="bool">True</includeRetimes>
+    <startFrameSource valuetype="str">Source</startFrameSource>
+    <cutLength valuetype="bool">True</cutLength>
+    <cutHandles valuetype="int">12</cutHandles>
+</root>
+]]></presetXML>
+  </ProjectExportPreset>
+ </Project>
+ <UIState/>
+</hieroXML>

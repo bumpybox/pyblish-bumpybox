@@ -2,11 +2,12 @@ import pymel
 import pyblish.api
 
 
-@pyblish.api.log
 class ValidateShading(pyblish.api.Validator):
     """"""
 
     families = ['scene']
+    optional = True
+    label = 'Modeling - Shading'
 
     def process(self, instance):
 

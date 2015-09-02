@@ -4,7 +4,6 @@ import shutil
 import pyblish.api
 
 
-@pyblish.api.log
 class ExtractScene(pyblish.api.Extractor):
     """ Extract work file to 'publish' directory next to work file
     """

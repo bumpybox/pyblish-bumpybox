@@ -2,16 +2,14 @@ import os
 
 import pyblish.api
 import pyseq
-
 import ftrack
 
 
-@pyblish.api.log
-class SelectPNG(pyblish.api.Selector):
+class CollectPNG(pyblish.api.Collector):
     """"""
 
     order = pyblish.api.Selector.order + 0.2
-    hosts = ['python']
+    hosts = ['ftrack']
 
     def process(self, context):
 
@@ -21,7 +19,6 @@ class SelectPNG(pyblish.api.Selector):
                  if name.endswith('.png')]
 
         for seq in pyseq.get_sequences(files):
-
             name = seq.head()
 
             # stripping the last character if its a symbol
@@ -31,7 +28,9 @@ class SelectPNG(pyblish.api.Selector):
 
             instance = context.create_instance(name=name)
             instance.set_data('family', value='png')
-            instance.set_data('path', value=seq.format())
+            path = os.path.join(os.path.dirname(seq.path()),
+                                                seq.format(fmt='%h%p%t %R'))
+            instance.set_data('path', value=path)
 
             path = os.path.join(seq.dirname, seq.format('%h%p%t %R'))
             components = {name: {'path': path}}

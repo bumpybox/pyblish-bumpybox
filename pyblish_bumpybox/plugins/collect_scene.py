@@ -3,8 +3,7 @@ import os
 import pyblish.api
 
 
-@pyblish.api.log
-class SelectScene(pyblish.api.Selector):
+class CollectScene(pyblish.api.Collector):
     """"""
 
     order = pyblish.api.Selector.order + 0.2

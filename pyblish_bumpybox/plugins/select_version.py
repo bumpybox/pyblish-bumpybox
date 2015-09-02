@@ -11,14 +11,17 @@ class SelectVersion(pyblish.api.Selector):
     """"""
 
     order = pyblish.api.Selector.order + 0.2
-    hosts = ['python']
+    hosts = ['ftrack']
 
     def process(self, context):
 
         ftrack_data = context.data('ftrackData')
 
-        shot = ftrack.Shot(ftrack_data['Shot']['id'])
-        assets = shot.getAssets(assetTypes=['img'])
+        task = ftrack.Task(ftrack_data['Task']['id'])
+
+        parent = task.getParent()
+
+        assets = parent.getAssets(assetTypes=['img'])
         version_number = 1
         if assets:
             for a in assets:
