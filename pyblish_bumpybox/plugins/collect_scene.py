@@ -10,12 +10,6 @@ class CollectScene(pyblish.api.Collector):
 
     def process(self, context):
 
-        # skipping if not launched from ftrack
-        if not context.has_data('ftrackData'):
-            return
-
-        ftrack_data = context.data('ftrackData')
-
         current_file = context.data('currentFile')
         current_dir = os.path.dirname(current_file)
         publish_dir = os.path.join(current_dir, 'publish')
@@ -33,6 +27,11 @@ class CollectScene(pyblish.api.Collector):
         instance.context.set_data('deadlineInput', value=publish_file)
 
         # ftrack data
+        if not context.has_data('ftrackData'):
+            return
+
+        ftrack_data = context.data('ftrackData')
+
         host = pyblish.api.current_host()
         components = {'%s_publish' % host: {'path': publish_file}}
         components['%s_work' % host] = {'path': current_file}
