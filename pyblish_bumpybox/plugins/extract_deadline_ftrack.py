@@ -14,6 +14,9 @@ class ExtractDeadlineFtrack(pyblish.api.Extractor):
 
     def process(self, context, instance):
 
+        if not context.has_data('ftrackData'):
+            return
+
         # getting job data
         job_data = {}
         if instance.has_data('deadlineData'):

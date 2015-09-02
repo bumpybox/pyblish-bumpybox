@@ -2,7 +2,6 @@ import pymel
 import pyblish.api
 
 
-@pyblish.api.log
 class ValidateFtrackAssetNode(pyblish.api.Validator):
     """
     """
@@ -23,7 +22,10 @@ class ValidateFtrackAssetNode(pyblish.api.Validator):
     hyperLayout
     """
 
-    def process(self, instance):
+    def process(self, instance, context):
+
+        if not context.has_data('ftrackData'):
+            return
 
         check = True
 

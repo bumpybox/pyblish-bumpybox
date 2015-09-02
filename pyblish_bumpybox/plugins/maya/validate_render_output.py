@@ -2,7 +2,6 @@ import os
 
 import pymel
 import pyblish.api
-import ftrack
 
 
 @pyblish.api.log
@@ -64,11 +63,6 @@ class ValidateRenderOutput(pyblish.api.Validator):
 
     def process(self, instance, context):
 
-        # skipping the call up project
-        ftrack_data = instance.context.data('ftrackData')
-        if ftrack_data['Project']['code'] == 'the_call_up':
-            return
-
         render_globals = pymel.core.PyNode('defaultRenderGlobals')
 
         # validate frame/animation ext
@@ -91,6 +85,32 @@ class ValidateRenderOutput(pyblish.api.Validator):
         expected_prefix = '<RenderLayer>/%s' % filename
         assert prefix == expected_prefix, msg
 
+        # validate current render layer
+        msg = 'Current layer needs to be "masterLayer"'
+        currentLayer = pymel.core.nodetypes.RenderLayer.currentLayer()
+        assert currentLayer == 'defaultRenderLayer', msg
+
+        # validate renderpass naming
+        msg = 'Renderpass naming is incorrect:'
+        msg += '\n\n"Frame Buffer Naming": "Custom"'
+        msg += '\n\n"Custom Naming String": "<RenderPass>"'
+        data = instance.data('data')
+        if 'multiCamNamingMode' in data:
+            assert int(data['multiCamNamingMode']) == 1, msg
+            assert render_globals.bufferName.get() == '<RenderPass>', msg
+
+        # validate workspace path
+        path = os.path.dirname(pymel.core.system.sceneName())
+        workspace_path = pymel.core.system.Workspace.getPath()
+        msg = 'Current workspace is not next to the work file.'
+        assert path == workspace_path, msg
+
+        # ftrack dependent validation
+        if context.has_data('ftrackData'):
+            import ftrack
+        else:
+            return
+
         # validate image path
         expected_output = self.get_path(instance).replace('\\', '/')
         paths = [str(pymel.core.system.Workspace.getPath().expand())]
@@ -108,24 +128,9 @@ class ValidateRenderOutput(pyblish.api.Validator):
         msg = 'Project path is incorrect. Expected: %s' % project_path
         assert project_path == scene_project, msg
 
-        # validate renderpass naming
-        msg = 'Renderpass naming is incorrect:'
-        msg += '\n\n"Frame Buffer Naming": "Custom"'
-        msg += '\n\n"Custom Naming String": "<RenderPass>"'
-        data = instance.data('data')
-        if 'multiCamNamingMode' in data:
-            assert int(data['multiCamNamingMode']) == 1, msg
-            assert render_globals.bufferName.get() == '<RenderPass>', msg
-
-        # validate current render layer
-        msg = 'Current layer needs to be "masterLayer"'
-        currentLayer = pymel.core.nodetypes.RenderLayer.currentLayer()
-        assert currentLayer == 'defaultRenderLayer', msg
-
     def repair(self, instance, context):
 
         render_globals = pymel.core.PyNode('defaultRenderGlobals')
-        ftrack_data = instance.context.data('ftrackData')
 
         # repairing current render layer
         layer = pymel.core.PyNode('defaultRenderLayer')
@@ -147,6 +152,20 @@ class ValidateRenderOutput(pyblish.api.Validator):
         expected_prefix = '<RenderLayer>/%s' % filename
         render_globals.imageFilePrefix.set(expected_prefix)
 
+        # repairing renderpass naming
+        render_globals.multiCamNamingMode.set(1)
+        render_globals.bufferName.set('<RenderPass>')
+
+        # repairing workspace path
+        path = os.path.dirname(pymel.core.system.sceneName())
+        pymel.core.system.Workspace.open(path)
+
+        # ftrack dependent validation
+        if context.has_data('ftrackData'):
+            import ftrack
+        else:
+            return
+
         # repairing image path
         output = self.get_path(instance).replace('\\', '/')
         pymel.core.system.Workspace.fileRules['images'] = output
@@ -155,7 +174,3 @@ class ValidateRenderOutput(pyblish.api.Validator):
         # repairing project directory
         project_path = self.get_project_path(instance).replace('\\', '/')
         pymel.core.mel.eval(' setProject "%s"' % project_path)
-
-        # repairing renderpass naming
-        render_globals.multiCamNamingMode.set(1)
-        render_globals.bufferName.set('<RenderPass>')

@@ -2,7 +2,6 @@ import maya
 import pyblish.api
 
 
-@pyblish.api.log
 class ExtractSceneSave(pyblish.api.Extractor):
     """
     """
