@@ -58,6 +58,9 @@ class CollectRenderlayers(pyblish.api.Collector):
             if layer.name().endswith('defaultRenderLayer'):
                 continue
 
+            if 'defaultRenderLayer' in layer.name() and layer.isReferenced():
+                continue
+
             layer_data = {}
             if layer.adjustments.get(multiIndices=True):
                 for count in layer.adjustments.get(multiIndices=True):
