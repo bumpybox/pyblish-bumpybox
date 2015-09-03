@@ -8,7 +8,7 @@ class ValidateSceneVersion(pyblish.api.Validator):
     families = ['scene']
     label = 'Scene Version'
 
-    def process(self, context):
+    def process(self, instance, context):
 
         msg = 'Could not find a version number in the scene name.'
         assert context.has_data('version'), msg
