@@ -15,9 +15,10 @@ class ValidateSettings(pyblish.api.Validator):
 
     def process(self, instance):
 
-        # skipping the call up project
         ftrack_data = instance.context.data('ftrackData')
-        if ftrack_data['Project']['code'] == 'the_call_up':
+
+        # skipping asset builds
+        if 'Asset_Build' in ftrack_data:
             return
 
         task = ftrack.Task(ftrack_data['Task']['id'])
