@@ -4,7 +4,6 @@ import pymel
 import pyblish.api
 
 
-@pyblish.api.log
 class ValidateRenderOutput(pyblish.api.Validator):
     """ Validates settings """
 
@@ -13,6 +12,8 @@ class ValidateRenderOutput(pyblish.api.Validator):
     label = 'Render Output'
 
     def get_project_path(self, instance):
+        import ftrack
+
         # get ftrack data
         ftrack_data = instance.context.data('ftrackData')
         project = ftrack.Project(id=ftrack_data['Project']['id'])
@@ -43,6 +44,8 @@ class ValidateRenderOutput(pyblish.api.Validator):
         return file_path
 
     def get_path(self, instance):
+        import ftrack
+
         ftrack_data = instance.context.data('ftrackData')
 
         parent_name = None
@@ -106,9 +109,7 @@ class ValidateRenderOutput(pyblish.api.Validator):
         assert path == workspace_path, msg
 
         # ftrack dependent validation
-        if context.has_data('ftrackData'):
-            import ftrack
-        else:
+        if not context.has_data('ftrackData'):
             return
 
         # validate image path

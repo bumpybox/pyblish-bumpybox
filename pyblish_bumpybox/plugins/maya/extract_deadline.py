@@ -46,7 +46,8 @@ class ExtractDeadline(pyblish.api.Extractor):
         render_file = os.path.basename(current_file)
         render_file = os.path.join(render_dir, render_file)
 
-        if not os.path.exists(render_file):
+        if not context.has_data('deadlineRenderSave'):
             shutil.copy(current_file, render_file)
+            context.set_data('deadlineRenderSave', value=True)
 
         context.set_data('deadlineInput', value=render_file)

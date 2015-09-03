@@ -70,14 +70,15 @@ class ValidateRenderOutput(pyblish.api.Validator):
 
         # validate alpha
         msg = 'Output channels are wrong.'
-        assert node['channels'].value() == 'rgb', msg
+        valid_outputs = ['rgb', 'rgba', 'all']
+        assert node['channels'].value() in valid_outputs, msg
 
         # validate exr settings
         if ext == '.exr':
 
             # validate compression
             msg = 'Compression needs to be "none"'
-            assert node['compression'].value() == 'none', msg
+            assert node['compression'].value() == 'Zip (1 scanline)', msg
 
             # validate colour space
             msg = 'Colour space needs to be "linear"'
@@ -110,7 +111,7 @@ class ValidateRenderOutput(pyblish.api.Validator):
             output = os.path.splitext(node['file'].value())[0]
             node['file'].setValue(output + '.exr')
             nuke.updateUI()
-            node['compression'].setValue('none')
+            node['compression'].setValue('Zip (1 scanline)')
             node['colorspace'].setValue('default (linear)')
 
         # making directories
@@ -118,4 +119,4 @@ class ValidateRenderOutput(pyblish.api.Validator):
             os.makedirs(os.path.dirname(output))
 
         # repairing alpha output
-        node['channels'].setValue('rgb')
+        node['channels'].setValue('all')
