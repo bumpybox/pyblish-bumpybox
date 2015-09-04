@@ -60,11 +60,23 @@ class ValidateRenderOutput(pyblish.api.Validator):
         version_number = instance.context.data('version')
         version_name = 'v%s' % (str(version_number).zfill(3))
 
-        output = os.path.join(root, 'renders', 'img_sequences', parent_name,
-                                task_name, version_name)
-        return output
+        path = [root, 'renders', 'img_sequences']
+
+        task = ftrack.Task(ftrack_data['Task']['id'])
+        for p in reversed(task.getParents()[:-1]):
+            path.append(p.getName())
+
+        path.append(task_name)
+        path.append(version_name)
+
+        return os.path.join(*path).replace('\\', '/')
 
     def process(self, instance, context):
+
+        if context.has_data('renderOutputChecked'):
+            return
+        else:
+            context.set_data('renderOutputChecked', value=True)
 
         render_globals = pymel.core.PyNode('defaultRenderGlobals')
 
@@ -130,6 +142,11 @@ class ValidateRenderOutput(pyblish.api.Validator):
         assert project_path == scene_project, msg
 
     def repair(self, instance, context):
+
+        if context.has_data('renderOutputRepaired'):
+            return
+        else:
+            context.set_data('renderOutputRepaired', value=True)
 
         render_globals = pymel.core.PyNode('defaultRenderGlobals')
 

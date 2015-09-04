@@ -6,17 +6,25 @@ import ftrack
 
 class ExtractDeadline(pyblish.api.Extractor):
 
-    label = 'Deadline'
+    label = 'Render Farm'
     families = ['render']
     order = pyblish.api.Extractor.order - 0.1
+    optional = True
 
     def process(self, instance, context):
+
+        # check if its a movie
+        movie_check = False
+        if os.path.splitext(instance.data('path'))[1] == '.mov':
+            movie_check = True
 
         job_data = {}
         job_data['Name'] = str(instance)
         job_data['Frames'] = '%s-%s' % (instance.data('start'),
                                                         instance.data('end'))
         job_data['ChunkSize'] = 10
+        if movie_check:
+            job_data['ChunkSize'] = 1000000
         job_data['Group'] = 'ae_cc_2015'
         job_data['Pool'] = 'medium'
         job_data['Plugin'] = 'AfterEffects'
@@ -27,7 +35,10 @@ class ExtractDeadline(pyblish.api.Extractor):
 
         path = [ftrack_data['Project']['root']]
         path.append('renders')
-        path.append('img_sequences')
+        if movie_check:
+            path.append('movies')
+        else:
+            path.append('img_sequences')
         for p in reversed(task.getParents()[:-1]):
             path.append(p.getName())
 
@@ -44,7 +55,11 @@ class ExtractDeadline(pyblish.api.Extractor):
 
         filename = [task.getParent().getName(), task_name, version_string]
         filename = '.'.join(filename)
-        filename = filename + '_####.png'
+
+        if not movie_check:
+            filename += '_####'
+
+        filename += os.path.splitext(instance.data('path'))[1]
         path.append(filename)
 
         output_path = os.path.join(*path).replace('\\', '/')

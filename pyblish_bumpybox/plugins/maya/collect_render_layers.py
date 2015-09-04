@@ -64,6 +64,9 @@ class CollectRenderlayers(pyblish.api.Collector):
             layer_data = {}
             if layer.adjustments.get(multiIndices=True):
                 for count in layer.adjustments.get(multiIndices=True):
+                    if not layer.adjustments[count].plug.connections():
+                        continue
+
                     if layer.adjustments[count].plug.connections()[0] == drg:
                         attr = layer.adjustments[count].plug.connections(plugs=True)[0]
                         layer_data[attr.name(includeNode=False)] = layer.adjustments[count].value.get()

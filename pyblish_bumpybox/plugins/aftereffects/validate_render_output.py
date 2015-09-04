@@ -17,5 +17,5 @@ class ValidateRenderOutput(pyblish.api.Validator):
         assert context.data('sameNamedRenders'), msg
 
         ext = os.path.splitext(instance.data('path'))[1]
-        msg = 'Please use either PNGs or EXRs. Currently using "%s"' % ext
-        assert ext in ['.exr', '.png'], msg
+        msg = 'Please use either PNGs, EXRs or MOVs. Currently using "%s"' % ext
+        assert ext in ['.exr', '.png', '.mov'], msg

@@ -32,11 +32,18 @@ class ValidateRenderOutput(pyblish.api.Validator):
         filename = '.'.join([parent_name, task_name, version_name,
                             '%04d'])
 
-        output = os.path.join(root, 'renders', 'img_sequences', parent_name,
-                                task_name, version_name, str(instance),
-                                filename)
+        path = [root, 'renders', 'img_sequences']
 
-        return output
+        task = ftrack.Task(ftrack_data['Task']['id'])
+        for p in reversed(task.getParents()[:-1]):
+            path.append(p.getName())
+
+        path.append(task_name)
+        path.append(version_name)
+        path.append(str(instance))
+        path.append(filename)
+
+        return os.path.join(*path).replace('\\', '/')
 
     def process(self, instance):
 

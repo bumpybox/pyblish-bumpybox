@@ -1,3 +1,5 @@
+import os
+
 import pyblish.api
 
 
@@ -25,13 +27,18 @@ class CollectRender(pyblish.api.Collector):
                         instance.set_data('end', value=v[3])
 
                         instance.set_data('ftrackComponents', value={})
-                        instance.set_data('ftrackAssetType', value='img')
+
+                        if os.path.splitext(v[1])[1] == '.mov':
+                            instance.set_data('ftrackAssetType', value='mov')
+                        else:
+                            instance.set_data('ftrackAssetType', value='img')
 
                         ftrack_data = context.data('ftrackData')
                         task_name = ftrack_data['Task']['name'].replace(' ', '_')
                         task_name = task_name.lower()
                         instance.set_data('ftrackAssetName', value=task_name)
-                    except:
+                    except Exception as e:
+                        self.log.error(e)
                         check = False
 
         context.set_data('sameNamedRenders', value=check)
