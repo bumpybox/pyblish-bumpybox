@@ -5,7 +5,6 @@ import ftrack
 import nuke
 
 
-@pyblish.api.log
 class ValidateRenderOutput(pyblish.api.Validator):
     """ Validates the output path for nuke renders """
 
@@ -84,7 +83,7 @@ class ValidateRenderOutput(pyblish.api.Validator):
         if ext == '.exr':
 
             # validate compression
-            msg = 'Compression needs to be "none"'
+            msg = 'Compression needs to be "Zip (1 scanline)"'
             assert node['compression'].value() == 'Zip (1 scanline)', msg
 
             # validate colour space

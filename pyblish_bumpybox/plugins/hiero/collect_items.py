@@ -9,6 +9,8 @@ class CollectItems(pyblish.api.Collector):
     def process(self, context):
         project = context.data('activeProject')
 
+        valid_tags = ['ftrack', 'transcode_png', 'transcode_prores']
+
         video_tracks = []
         for seq in project.sequences():
 
@@ -24,6 +26,10 @@ class CollectItems(pyblish.api.Collector):
             for item in vid.items():
                 tags = item.tags() + vid.tags()
                 for tag in tags:
+
+                    if tag.name() not in valid_tags:
+                        continue
+
                     name = vid.name() + ': ' + item.name()
                     name += " (%s)" % tag.name()
 

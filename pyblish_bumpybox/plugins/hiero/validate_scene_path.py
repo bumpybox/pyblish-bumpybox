@@ -77,10 +77,11 @@ class ValidateScenePath(pyblish.api.Validator):
 
         # validating scene work path
         file_path = self.get_path(instance)
+        work_path = instance.data('workPath').replace('\\', '/')
         msg = 'Scene path is not correct:'
-        msg += '\n\nCurrent: %s' % instance.data('workPath')
+        msg += '\n\nCurrent: %s' % work_path
         msg += '\n\nExpected: %s' % file_path
-        assert file_path == instance.data('workPath'), msg
+        assert file_path == work_path, msg
 
     def repair(self, instance):
         """

@@ -10,6 +10,17 @@
    </RootBinProjectItem>
    <RootBinProjectItem editable="1" guid="{74723746-d7a9-884f-9489-bf0cfe2137fa}" name="Tags">
     <items>
+     <TagClassProjectItem editable="1" guid="{193b9cc0-0063-574d-9095-458238f4b920}" name="transcode_prores">
+      <TagClass editable="1" objName="tag" guid="e059b8e5-eaea-7e4c-9638-7335e1b74006" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/quicktime.png" name="transcode_prores">
+       <sets>
+        <Set title="" domainroot="tag">
+         <values>
+          <StringValue default="1" value="transcode_prores" name="tag.label"/>
+         </values>
+        </Set>
+       </sets>
+      </TagClass>
+     </TagClassProjectItem>
      <TagClassProjectItem editable="1" guid="{f745d781-291e-db4f-ace0-5ef33dbe8002}" name="transcode_png">
       <TagClass editable="1" objName="tag" guid="c153822a-fa73-8540-85e9-5632bf47cf62" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/transcode.png" name="transcode_png">
        <sets>
@@ -91,18 +102,18 @@
                         <burnIn_topMiddle valuetype="NoneType">None</burnIn_topMiddle>
                         <burnIn_padding valuetype="NoneType">None</burnIn_padding>
                         <burnIn_topRight valuetype="NoneType">None</burnIn_topRight>
-                        <burnIn_textSize valuetype="NoneType">None</burnIn_textSize>
-                        <burnIn_bottomLeft valuetype="NoneType">None</burnIn_bottomLeft>
                         <burnIn_bottomMiddle valuetype="NoneType">None</burnIn_bottomMiddle>
+                        <burnIn_bottomLeft valuetype="NoneType">None</burnIn_bottomLeft>
+                        <burnIn_textSize valuetype="NoneType">None</burnIn_textSize>
                         <burnIn_font valuetype="NoneType">None</burnIn_font>
                     </burninData>
                     <writeNodeName valuetype="str">Write_{ext}</writeNodeName>
                     <reformat valuetype="dict">
                         <pixelAspect valuetype="float">1.0</pixelAspect>
                         <name valuetype="str">NTSC 4:3</name>
-                        <to_type valuetype="str">None</to_type>
-                        <height valuetype="int">480</height>
                         <width valuetype="int">720</width>
+                        <height valuetype="int">480</height>
+                        <to_type valuetype="str">None</to_type>
                         <resize valuetype="unicode">width</resize>
                     </reformat>
                     <targa valuetype="dict" />
