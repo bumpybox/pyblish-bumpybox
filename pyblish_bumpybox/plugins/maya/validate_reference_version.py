@@ -64,11 +64,16 @@ class ValidateReferenceVersion(pyblish.api.Validator):
         max_version = version
         path = basename
         for f in os.listdir(os.path.dirname(file_ref.path)):
-            f_version_string = self.version_get(f, 'v')[1]
-            if head != f.split(f_version_string)[0]:
+            if ext != os.path.splitext(f)[1]:
                 continue
 
-            if ext != os.path.splitext(f)[1]:
+            # fail safe against files without version numbers
+            try:
+                f_version_string = self.version_get(f, 'v')[1]
+            except:
+                continue
+
+            if head != f.split(f_version_string)[0]:
                 continue
 
             v = int(self.version_get(f, 'v')[1])

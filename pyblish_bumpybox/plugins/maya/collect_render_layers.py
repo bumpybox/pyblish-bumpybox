@@ -71,9 +71,11 @@ class CollectRenderlayers(pyblish.api.Collector):
                         attr = layer.adjustments[count].plug.connections(plugs=True)[0]
                         layer_data[attr.name(includeNode=False)] = layer.adjustments[count].value.get()
 
-                data[layer.name()] = layer_data
+                layer_data['renderpasses'] = layer.connections(type='renderPass')
             else:
-                data[layer.name()] = {}
+                layer_data['renderpasses'] = layer.connections(type='renderPass')
+
+            data[layer.name()] = layer_data
 
         # getting path
         paths = [str(pymel.core.system.Workspace.getPath().expand())]

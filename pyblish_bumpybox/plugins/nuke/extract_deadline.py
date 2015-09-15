@@ -4,9 +4,6 @@ import pyblish.api
 import nuke
 
 
-drafts_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-drafts_path = os.path.join(drafts_path, 'draft')
-
 class ExtractDeadline(pyblish.api.Extractor):
     """ Gathers optional Nuke related data for Deadline
     """
@@ -35,9 +32,6 @@ class ExtractDeadline(pyblish.api.Extractor):
         extra_info_key_value = {}
         if 'ExtraInfoKeyValue' in job_data:
             extra_info_key_value = job_data['ExtraInfoKeyValue']
-
-        #path = os.path.join(drafts_path, 'MJPEG_full_linearTo2.2.py')
-        #extra_info_key_value['DraftTemplates0'] = path
 
         args = '-codec mjpeg -q:v 0 -vf lutrgb=r=gammaval(0.45454545):'
         args += 'g=gammaval(0.45454545):b=gammaval(0.45454545)'

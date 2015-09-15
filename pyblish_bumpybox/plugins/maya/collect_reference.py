@@ -21,6 +21,9 @@ class CollectReferences(pyblish.api.Collector):
             except:
                 continue
 
+            if not file_ref.isLoaded():
+                continue
+
             instance = context.create_instance(name=node.name())
             instance.set_data('family', value='reference')
             instance.add(node)

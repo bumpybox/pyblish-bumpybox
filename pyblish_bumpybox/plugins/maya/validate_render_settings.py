@@ -4,12 +4,12 @@ import pymel
 import pyblish.api
 
 
-class ValidateRenderOutput(pyblish.api.Validator):
+class ValidateRenderSettings(pyblish.api.Validator):
     """ Validates settings """
 
     families = ['deadline.render']
     optional = True
-    label = 'Render Output'
+    label = 'Render Settings'
 
     def get_project_path(self, instance):
         import ftrack
@@ -120,6 +120,10 @@ class ValidateRenderOutput(pyblish.api.Validator):
         msg = 'Current workspace is not next to the work file.'
         assert path == workspace_path, msg
 
+        # validate default lighting off
+        msg = 'Default lighting is enabled.'
+        assert not render_globals.enableDefaultLight.get(), msg
+
         # ftrack dependent validation
         if not context.has_data('ftrackData'):
             return
@@ -142,11 +146,6 @@ class ValidateRenderOutput(pyblish.api.Validator):
         assert project_path == scene_project, msg
 
     def repair(self, instance, context):
-
-        if context.has_data('renderOutputRepaired'):
-            return
-        else:
-            context.set_data('renderOutputRepaired', value=True)
 
         render_globals = pymel.core.PyNode('defaultRenderGlobals')
 
@@ -177,6 +176,9 @@ class ValidateRenderOutput(pyblish.api.Validator):
         # repairing workspace path
         path = os.path.dirname(pymel.core.system.sceneName())
         pymel.core.system.Workspace.open(path)
+
+        # repairing default lighting
+        render_globals.enableDefaultLight.set(False)
 
         # ftrack dependent validation
         if context.has_data('ftrackData'):

@@ -16,7 +16,7 @@ class ExtractLevelSplit(pyblish.api.Extractor):
         job_data['Name'] = str(instance)
         job_data['Frames'] = '%s-%s' % (instance.data('start'),
                                                         instance.data('end'))
-        job_data['ChunkSize'] = instance.data('chunk')
+        job_data['ChunkSize'] = 25
         job_data['Group'] = 'celaction'
         job_data['Pool'] = 'medium'
         job_data['Plugin'] = 'CelAction'

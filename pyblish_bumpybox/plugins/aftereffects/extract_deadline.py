@@ -28,8 +28,10 @@ class ExtractDeadline(pyblish.api.Extractor):
         job_data['Group'] = 'ae_cc_2015'
         job_data['Pool'] = 'medium'
         job_data['Plugin'] = 'AfterEffects'
+        job_data['LimitGroups'] = 'reelsmartmb,trapcode'
 
         # get output filename
+        """
         ftrack_data = instance.context.data('ftrackData')
         task = ftrack.Task(ftrack_data['Task']['id'])
 
@@ -56,13 +58,18 @@ class ExtractDeadline(pyblish.api.Extractor):
         filename = [task.getParent().getName(), task_name, version_string]
         filename = '.'.join(filename)
 
-        if not movie_check:
-            filename += '_####'
-
         filename += os.path.splitext(instance.data('path'))[1]
         path.append(filename)
+        """
 
-        output_path = os.path.join(*path).replace('\\', '/')
+        output_path = instance.data('path')
+
+        if not movie_check:
+            start_index = output_path.index('[')
+            end_index = output_path.index(']')
+            sub_string = output_path[start_index: end_index + 1]
+            output_path = output_path.replace(sub_string, '####')
+
         job_data['OutputFilename0'] = output_path
 
         # plugin data

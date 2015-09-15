@@ -1,24 +1,40 @@
 import pymel
 import pyblish.api
 
+class PassthroughModeling(pyblish.api.Validator):
 
-class Extractmodeling(pyblish.api.Extractor):
-    """ Extract work file to 'publish' directory next to work file
-    """
-
-    order = pyblish.api.Extractor.order + 0.1
-    families = ['scene']
-    label = 'Modeling'
+    families = ['geometry', 'scene']
+    label = 'Passthrough'
+    ExtractModeling = True
 
     def process(self, instance):
 
-        transforms = []
-        for m in pymel.core.ls(type='mesh'):
-            transforms.append(m.getParent())
+        pass
 
-        pymel.core.select(set(transforms))
+class ExtractModeling(pyblish.api.Integrator):
+    """ Extract work file to 'publish' directory next to work file
+    """
 
-        publish_file = instance.data('publishPath')
+    families = ['geometry']
+    label = 'Modeling'
+
+    def process(self, context):
+
+        nodes = []
+        publish_file = ''
+
+        for item in context.data('results'):
+            try:
+                item['plugin'].ExtractModeling
+                instance = item['instance']
+                if instance.data('family') == 'geometry':
+                    nodes.append(instance[0])
+                if instance.data('family') == 'scene':
+                    publish_file = instance.data('publishPath')
+            except:
+                pass
+
+        pymel.core.select(nodes)
         pymel.core.system.exportSelected(publish_file,
         constructionHistory=False, preserveReferences=True, shader=True,
         constraints=False, force=True)

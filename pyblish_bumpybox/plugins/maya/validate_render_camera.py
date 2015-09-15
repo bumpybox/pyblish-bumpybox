@@ -5,7 +5,6 @@ import pyblish.api
 import ftrack
 
 
-@pyblish.api.log
 class ValidateRenderCamera(pyblish.api.Validator):
     """ Validates settings """
 
@@ -36,3 +35,6 @@ class ValidateRenderCamera(pyblish.api.Validator):
 
         msg = 'Renderable Cameras is incorrect. Expected non default camera.'
         assert check, msg
+
+        msg = "Can't render multiple cameras. Please use a render layer instead"
+        assert len(render_cameras) == 1, msg

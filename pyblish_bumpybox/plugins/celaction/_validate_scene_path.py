@@ -6,7 +6,6 @@ import pyblish.api
 import ftrack
 
 
-@pyblish.api.log
 class ValidateScenePath(pyblish.api.Validator):
     """ Validates the path of the hiero file """
 

@@ -10,7 +10,7 @@ class ExtractAlembic(pyblish.api.Extractor):
     """
     """
 
-    families = ['alembic']
+    families = ['alembic', 'alembic.asset', 'alembic.camera']
 
     def get_path(self, instance):
 
