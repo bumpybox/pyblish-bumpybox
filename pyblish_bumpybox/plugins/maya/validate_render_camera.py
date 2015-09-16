@@ -2,7 +2,6 @@ import os
 
 import pymel
 import pyblish.api
-import ftrack
 
 
 class ValidateRenderCamera(pyblish.api.Validator):
@@ -13,11 +12,6 @@ class ValidateRenderCamera(pyblish.api.Validator):
     label = 'Render Camera'
 
     def process(self, instance):
-
-        # skipping the call up project
-        ftrack_data = instance.context.data('ftrackData')
-        if ftrack_data['Project']['code'] == 'the_call_up':
-            return
 
         # validate non native camera active
         render_cameras = []
@@ -38,3 +32,6 @@ class ValidateRenderCamera(pyblish.api.Validator):
 
         msg = "Can't render multiple cameras. Please use a render layer instead"
         assert len(render_cameras) == 1, msg
+
+        msg = "No renderable camera seleted."
+        assert render_cameras, msg

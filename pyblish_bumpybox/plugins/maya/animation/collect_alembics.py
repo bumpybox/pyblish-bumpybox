@@ -19,6 +19,9 @@ class CollectAlembics(pyblish.api.Collector):
                 asset_nodes.append(t)
 
                 # adding ftrack data to activate processing
+                if not context.has_data('ftrackData'):
+                    continue
+
                 ftrack_data = context.data('ftrackData')
 
                 instance.set_data('ftrackComponents', value={})
@@ -61,6 +64,9 @@ class CollectAlembics(pyblish.api.Collector):
             instance.add(node)
 
             # adding ftrack data to activate processing
+            if not context.has_data('ftrackData'):
+                continue
+
             ftrack_data = context.data('ftrackData')
 
             instance.set_data('ftrackComponents', value={})

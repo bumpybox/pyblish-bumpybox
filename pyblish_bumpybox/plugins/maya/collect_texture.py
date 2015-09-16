@@ -17,6 +17,9 @@ class CollectTexture(pyblish.api.Collector):
             if not node.fileTextureName.get():
                 continue
 
+            if not os.path.exists(node.fileTextureName.get()):
+                continue
+
             name = os.path.basename(node.fileTextureName.get())
             instance = context.create_instance(name=name)
             instance.set_data('family', value='texture')
