@@ -11,6 +11,7 @@ class ValidateShotName(pyblish.api.Validator):
     families = ['ftrack.trackItem', 'transcode_png.trackItem',
                                                 'transcode_prores.trackItem']
     label = 'Shot Name'
+    optional = True
 
     def process(self, instance, context):
 

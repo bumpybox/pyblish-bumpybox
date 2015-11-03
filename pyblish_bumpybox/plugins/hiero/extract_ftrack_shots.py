@@ -1,5 +1,9 @@
 import re
 import os
+import inspect
+import subprocess
+import traceback
+import tempfile
 
 import pyblish.api
 import hiero
@@ -37,6 +41,16 @@ class ExtractFtrackShots(pyblish.api.Extractor):
 
         return os.path.join(*path).replace('\\', '/')
 
+    def frames_to_timecode(self, frames, framerate):
+
+        h = str(int(frames / (3600 * framerate))).zfill(2)
+        m = str(int(frames / (60 * framerate) % 60)).zfill(2)
+        s = int(float(frames) / framerate % 60)
+        f = float('0.' + str((float(frames) / framerate) - s).split('.')[1])
+        f = int(f / (1.0 / framerate))
+
+        return '%s:%s:%s' % (h, m, str(s).zfill(2))
+
     def process(self, instance, context):
 
         # skipping if not launched from ftrack
@@ -45,47 +59,53 @@ class ExtractFtrackShots(pyblish.api.Extractor):
 
         ftrack_data = context.data('ftrackData')
         parent = ftrack.Project(ftrack_data['Project']['id'])
-        parent_path = [parent.getName()]
-
-        if 'Episode' in ftrack_data:
-            parent_name = ftrack_data['Episode']['name']
-            parent_path.append(parent_name)
-
-            parent = ftrack.getSequence(parent_path)
-
+        project = parent
+        project_name = ftrack_data['Project']['code']
         item = instance[0]
 
-        # creating sequence
-        sequence = None
-        if 'Sequence' in ftrack_data:
-            sequence = ftrack.Sequence(ftrack_data['Sequence']['id'])
-            parent_path.append(ftrack_data['Sequence']['name'])
-        else:
-            naming = r'([a-z]{1,2}[0-9]{3}\b)'
-            result = re.findall(naming, item.name())
-            sequence_name = item.name().replace(result[0], '')
-            if not sequence_name:
-                sequence_name = item.sequence().name()
+        if 'Episode' in ftrack_data:
+            parent = ftrack.Sequence(ftrack_data['Episode']['id'])
+
+        if '--' in item.name():
+            name_split = item.name().split('--')
+            try:
+                if len(name_split) == 2:
+                    parent = parent.createSequence(name_split[0])
+            except:
+                self.log.error(traceback.format_exc())
+                if parent == project or 'Sequence' in ftrack_data:
+                    parent = ftrack.getSequence([project_name,
+                                                name_split[0]])
+                else:
+                    parent = ftrack.getSequence([project_name,
+                                ftrack_data['Episode']['name'], name_split[0]])
 
             try:
-                sequence = parent.createSequence(sequence_name)
-
-                msg = 'Creating new sequence with name'
-                msg += ' "%s"' % sequence_name
-                self.log.info(msg)
+                if len(name_split) == 3:
+                    try:
+                        parent = project.createEpisode(name_split[0])
+                    except:
+                        parent = ftrack.getSequence([project_name,
+                                                    name_split[0]])
+                    parent = parent.createSequence(name_split[1])
             except:
-                path = list(parent_path)
-                path.append(sequence_name)
-                sequence = ftrack.getSequence(path)
-
-        parent_path.append(sequence.getName())
+                self.log.error(traceback.format_exc())
+                parent = ftrack.getSequence([ftrack_data['Project']['name'],
+                                            name_split[0], name_split[1]])
 
         # creating shot
-        try:
-            shot = sequence.createShot(item.name())
+        shot_name = item.name()
+        duration = item.sourceOut() - item.sourceIn() + 1
+        if '--' in item.name():
+            shot_name = item.name().split('--')[-1]
 
-            shot.set('fstart', value=item.sourceIn())
-            shot.set('fend', value=item.sourceOut())
+        tasks = []
+
+        try:
+            shot = parent.createShot(shot_name)
+
+            shot.set('fstart', value=1)
+            shot.set('fend', value=duration)
 
             path = self.get_path(shot, context)
 
@@ -94,43 +114,68 @@ class ExtractFtrackShots(pyblish.api.Extractor):
             if not os.path.exists(os.path.dirname(path)):
                 os.makedirs(os.path.dirname(path))
 
-            item.sequence().writeAudioToFile(path, item.sourceIn(),
-                                                    item.sourceOut())
+            item.sequence().writeAudioToFile(path, item.timelineIn(),
+                                                    item.timelineOut())
 
             msg = 'Creating new shot with name'
             msg += ' "%s"' % item.name()
             self.log.info(msg)
         except:
-            path = list(parent_path)
-            path.append(item.name())
+            path = []
+            try:
+                for p in reversed(parent.getParents()):
+                    path.append(p.getName())
+            except:
+                pass
+            path.append(parent.getName())
+            path.append(shot_name)
             shot = ftrack.getShot(path)
 
             instance.set_data('ftrackId', value=shot.getId())
 
-            update = False
-            if shot.get('fstart') != item.sourceIn():
-                shot.set('fstart', value=item.sourceIn())
+            shot.set('fstart', value=1)
+            shot.set('fend', value=duration)
 
-                update = True
+            path = self.get_path(shot, context)
 
-                msg = 'Updating frame start for shot with name'
-                msg += ' "%s"' % item.name()
-                self.log.info(msg)
+            if not os.path.exists(os.path.dirname(path)):
+                os.makedirs(os.path.dirname(path))
 
-            if shot.get('fend') != item.sourceOut():
-                shot.set('fend', value=item.sourceOut())
+            item.sequence().writeAudioToFile(path, item.timelineIn(),
+                                                    item.timelineOut())
 
-                update = True
+        d = os.path.dirname
+        tools_path = d(d(d(d(d(d(inspect.getfile(inspect.currentframe())))))))
+        exe = os.path.join(tools_path, 'ffmpeg', 'bin', 'ffmpeg.exe')
+        input_path = item.source().mediaSource().fileinfos()[0].filename()
+        ext = os.path.splitext(input_path)[1]
+        output_path = os.path.splitext(input_path)[0]
+        output_path += '_thumbnail.png'
+        output_path = os.path.join(tempfile.gettempdir(),
+                                    os.path.basename(output_path))
+        input_cmd = ''
+        fps = item.sequence().framerate().toFloat()
 
-                msg = 'Updating frame end for shot with name'
-                msg += ' "%s"' % item.name()
-                self.log.info(msg)
+        if ext == '.mov':
+            arg = ' scale=-1:108'
+            input_cmd = ' -vf' + arg + ' -vframes' + ' 1'
+        else:
+            arg = ' scale=-1:108'
+            if os.path.splitext(input_path)[1] == '.exr':
+                arg += ',lutrgb=r=gammaval(0.45454545):'
+                arg += 'g=gammaval(0.45454545):'
+                arg += 'b=gammaval(0.45454545)'
+            input_cmd = ' -vf' + arg
 
-            if update:
-                path = self.get_path(shot, context)
+        tc = self.frames_to_timecode(item.sourceIn(), fps)
+        cmd = exe + ' -ss '+ tc +' -i "' + input_path + '" ' + input_cmd
+        cmd += ' -y "' + output_path + '"'
+        subprocess.call(cmd)
 
-                if not os.path.exists(os.path.dirname(path)):
-                    os.makedirs(os.path.dirname(path))
+        # creating thumbnails
+        thumb = shot.createThumbnail(output_path)
+        for t in shot.getTasks():
+            t.set('thumbid', value=thumb.get('entityId'))
 
-                item.sequence().writeAudioToFile(path, item.sourceIn(),
-                                                        item.sourceOut())
+        if os.path.exists(output_path):
+            os.remove(output_path)

@@ -7,16 +7,20 @@ class ValidateSmoothDisplay(pyblish.api.Validator):
 
     families = ['geometry']
     optional = True
-    label = 'Modeling - Smooth Display'
+    label = 'Smooth Display'
 
     def process(self, instance):
 
-        node = instance[0]
+        check = True
+        for node in instance:
+            if node.displaySmoothMesh.get():
+                msg = '%s has smooth display enabled' % node.name()
+                self.log.error(msg)
+                check = False
 
-        msg = '%s has smooth display enabled' % node.name()
-        assert not node.displaySmoothMesh.get(), msg
+        assert check, 'Smooth display enabled meshes in the scene.'
 
     def repair(self, instance):
 
-         node = instance[0]
-         node.displaySmoothMesh.set(False)
+         for node in instance:
+             node.displaySmoothMesh.set(False)

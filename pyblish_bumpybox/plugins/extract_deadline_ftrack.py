@@ -3,12 +3,12 @@ import getpass
 import pyblish.api
 
 
-@pyblish.api.log
 class ExtractDeadlineFtrack(pyblish.api.Extractor):
     """ Gathers Ftrack related data for Deadline
     """
     order = pyblish.api.Extractor.order + 0.4
-    families = ['deadline.render', 'render']
+    families = ['deadline.render', 'render', 'transcode_dpx.trackItem',
+    'transcode_png.trackItem', 'transcode_prores.trackItem', 'copy.trackItem']
     optional = True
     label = 'Ftrack to Deadline'
 

@@ -5,7 +5,6 @@ import pyblish.api
 import ftrack
 
 
-@pyblish.api.log
 class ValidateSettings(pyblish.api.Validator):
     """ Validates settings """
 
@@ -24,6 +23,8 @@ class ValidateSettings(pyblish.api.Validator):
         task = ftrack.Task(ftrack_data['Task']['id'])
         project = task.getParents()[-1]
         shot = task.getParent()
+
+        handles = shot.get('handles')
 
         # validating fps
         local_fps = nuke.root()['fps'].value()
@@ -48,13 +49,13 @@ class ValidateSettings(pyblish.api.Validator):
         # validating last frame
         local_last_frame = nuke.root()['last_frame'].value()
 
-        online_last_frame = shot.getFrameEnd()
+        online_last_frame = shot.getFrameEnd() + (handles * 2)
 
         msg = 'Last frame is incorrect.'
         msg += '\n\nLocal last frame: %s' % local_last_frame
         msg += '\n\nOnline last frame: %s' % online_last_frame
         assert local_last_frame == online_last_frame, msg
-
+        """
         # validating resolution width
         local_width = nuke.root().format().width()
 
@@ -74,14 +75,11 @@ class ValidateSettings(pyblish.api.Validator):
         msg += '\n\nLocal height: %s' % local_height
         msg += '\n\nOnline height: %s' % online_height
         assert local_height == online_height, msg
+        """
 
     def repair(self, instance):
 
-        # skipping the call up project
         ftrack_data = instance.context.data('ftrackData')
-        if ftrack_data['Project']['code'] == 'the_call_up':
-            return
-
         task = ftrack.Task(ftrack_data['Task']['id'])
         project = task.getParents()[-1]
         shot = task.getParent()
@@ -90,9 +88,11 @@ class ValidateSettings(pyblish.api.Validator):
         nuke.root()['first_frame'].setValue(shot.getFrameStart())
         nuke.root()['last_frame'].setValue(shot.getFrameEnd())
 
+        """
         width = int(project.get('resolution_width'))
         height = int(project.get('resolution_height'))
         name = project.getName()
         format_cmd = '%s %s 1.0 %s' % (width, height, name)
         new_format = nuke.addFormat(format_cmd)
         nuke.Root()['format'].setValue(new_format)
+        """

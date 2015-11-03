@@ -1,7 +1,7 @@
 import nuke
 import pyblish.api
 
-@pyblish.api.log
+
 class ValidateCrop(pyblish.api.Validator):
     """Validates the existence of crop node before write node
     """
@@ -21,3 +21,14 @@ class ValidateCrop(pyblish.api.Validator):
 
         msg = "Couldn't find a crop node before %s" % instance
         assert node.dependencies()[0].Class() == 'Crop', msg
+
+    def repair(self, instance):
+        
+        node = nuke.toNode(str(instance))
+        input = node.input(0)
+
+        crop = nuke.nodes.Crop(inputs=[node.input(0)])
+        crop['box'].setValue(input.width(), 2)
+        crop['box'].setValue(input.height(), 3)
+
+        node.setInput(0, crop)

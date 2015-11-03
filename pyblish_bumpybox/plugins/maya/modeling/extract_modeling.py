@@ -3,7 +3,7 @@ import pyblish.api
 
 class PassthroughModeling(pyblish.api.Validator):
 
-    families = ['geometry', 'scene']
+    families = ['geometry', 'scene', 'reference.geometry']
     label = 'Passthrough'
     ExtractModeling = True
 
@@ -28,7 +28,9 @@ class ExtractModeling(pyblish.api.Integrator):
                 item['plugin'].ExtractModeling
                 instance = item['instance']
                 if instance.data('family') == 'geometry':
-                    nodes.append(instance[0])
+                    nodes.extend(instance)
+                if instance.data('family') == 'reference.geometry':
+                    nodes.extend(instance)
                 if instance.data('family') == 'scene':
                     publish_file = instance.data('publishPath')
             except:

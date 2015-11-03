@@ -7,10 +7,10 @@ from pyblish_bumpybox.plugins.hiero import utils
 reload(utils)
 
 
-class ExtractPRORES(pyblish.api.Extractor):
+class ExtractH264(pyblish.api.Extractor):
 
-    families = ['prores.trackItem']
-    label = 'Transcode to PRORES'
+    families = ['h264.trackItem']
+    label = 'Transcode to H264'
 
     def frames_to_timecode(self, frames, framerate):
 
@@ -25,11 +25,10 @@ class ExtractPRORES(pyblish.api.Extractor):
     def process(self, instance, context):
 
         item = instance[0]
-        input_path = item.source().mediaSource().fileinfos()[0].filename()
         fps = item.sequence().framerate().toFloat()
 
         # create output path
-        output_path = utils.get_path(instance, 'mov', self.log, tag='prores',
+        output_path = utils.get_path(instance, 'mov', self.log, tag='h264',
                                     sequence=False)
         if not os.path.exists(os.path.dirname(output_path)):
             os.makedirs(os.path.dirname(output_path))
@@ -41,19 +40,15 @@ class ExtractPRORES(pyblish.api.Extractor):
         plugin_data = {'OutputFile': output_path, 'ReplacePadding': False,
                         'UseSameInputArgs': False}
 
-        args = ''
-        if os.path.splitext(input_path)[1] == '.mov':
-            args += '-ss %s' % (item.sourceIn()/fps)
-            args += ' -t %s' % ((item.sourceOut() - item.sourceIn() + 1)/fps)
-        plugin_data['InputArgs0'] = args
-
-        args = '-c:v prores'
+        args = '-pix_fmt yuv420p -q:v 0'
         args += ' -timecode %s' % self.frames_to_timecode(item.sourceIn(), fps)
-        if os.path.splitext(input_path)[1] == '.exr':
-            args += ' -vf lutrgb=r=gammaval(0.45454545)'
-            args += ':g=gammaval(0.45454545):b=gammaval(0.45454545)'
         plugin_data['OutputArgs'] = args
 
+        args = '-ss %s' % (item.sourceIn()/fps)
+        args += ' -t %s' % ((item.sourceOut() - item.sourceIn() + 1)/fps)
+        plugin_data['InputArgs0'] = args
+
+        input_path = item.source().mediaSource().fileinfos()[0].filename()
         plugin_data['InputFile0'] = input_path
 
         if instance.has_data('audio'):

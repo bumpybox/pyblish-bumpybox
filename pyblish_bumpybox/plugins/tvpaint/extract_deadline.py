@@ -51,10 +51,7 @@ class ExtractDeadline(pyblish.api.Extractor):
         output_path = os.path.join(*path).replace('\\', '/')
         job_data['OutputFilename0'] = output_path
 
-        shot = task.getParent()
-        start_frame = int(shot.get('fstart'))
-        end_frame = int(shot.get('fend'))
-        job_data['Frames'] = '%s-%s' % (start_frame, end_frame)
+        job_data['Frames'] = '1'
 
         # plugin data
         plugin_data = {}
@@ -62,15 +59,15 @@ class ExtractDeadline(pyblish.api.Extractor):
         plugin_data['SceneFile'] = context.data('kwargs')['data']['scene']
         plugin_data['Version'] = appVersion
         plugin_data['OutputFormat'] = 'PNG'
-        plugin_data['OutputFile'] = output_path.replace('.####', '')
-        plugin_data['SubmitJobSequenced'] = 'True'
-        plugin_data['SceneBackgroundBox'] = 'False'
+        plugin_data['OutputFile'] = output_path.replace('.####', '.0001')
+        plugin_data['JobModeBox'] = 'Single Layer'
         plugin_data['Build'] = 'None'
         plugin_data['Build0'] = 'None'
         plugin_data['Build1'] = '32bit'
         plugin_data['Build2'] = '64bit'
-        plugin_data['Layer'] = str(instance)
-        plugin_data['AllLayers'] = 'False'
+        plugin_data['LayerName'] = str(instance)
+        plugin_data['UseCameraBox'] = False
+        plugin_data['AlphaSaveModeBox'] = 'PreMultiply'
 
         # adding to instance
         data = {'job': job_data, 'plugin': plugin_data}

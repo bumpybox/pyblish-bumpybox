@@ -6,13 +6,16 @@ class ValidateHierarchy(pyblish.api.Validator):
     """ Ensures a flat hierarchy """
 
     families = ['geometry']
-    label = 'Modeling - Hierarchy'
+    label = 'Hierarchy'
 
     def process(self, instance):
 
-        node = instance[0]
-        if node.getParent():
+        check = True
+        for node in instance:
+            if node.getParent():
+                msg = '"%s" is parented to "%s"' % (node, node.getParent())
+                msg += ' Please unparent %s' % node
+                self.log.error(msg)
+                check = False
 
-            msg = '"%s" is parented to "%s"' % (node, node.getParent())
-            msg += ' Please unparent %s' % node
-            assert check, msg
+        assert check, 'Wrong hierarchy in the scene.'

@@ -5,7 +5,7 @@ import ftrack
 import nuke
 
 
-class ValidateRenderOutput(pyblish.api.Validator):
+class ValidateRenderSettings(pyblish.api.Validator):
     """ Validates the output path for nuke renders """
 
     families = ['deadline.render']
@@ -90,6 +90,10 @@ class ValidateRenderOutput(pyblish.api.Validator):
             msg = 'Colour space needs to be "linear"'
             assert node['colorspace'].value() == 'default (linear)', msg
 
+        # validate proxy mode
+        msg = "Can't publish with proxy mode enabled."
+        assert not nuke.root()['proxy'].value(), msg
+
     def repair(self, instance):
 
         node = nuke.toNode(str(instance))
@@ -126,3 +130,6 @@ class ValidateRenderOutput(pyblish.api.Validator):
 
         # repairing alpha output
         node['channels'].setValue('all')
+
+        # repairing proxy mode
+        nuke.root()['proxy'].setValue(False)

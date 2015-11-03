@@ -12,36 +12,68 @@ class ValidateRenderSettings(pyblish.api.Validator):
     label = 'Render Settings'
 
     def get_project_path(self, instance):
-        import ftrack
+        path = []
+        filename = []
 
         # get ftrack data
         ftrack_data = instance.context.data('ftrackData')
-        project = ftrack.Project(id=ftrack_data['Project']['id'])
-        root_dir = ftrack_data['Project']['root']
-        task_name = ftrack_data['Task']['name']
-        task_name = task_name.replace(' ', '_').lower()
+        path.append(ftrack_data['Project']['root'])
+        child_path = []
+        parent = False
+        parent_name = ftrack_data['Project']['name']
+
+        try:
+            name = ftrack_data['Asset_Build']['name'].replace(' ', '_').lower()
+            path.append('library')
+            asset_type = ftrack_data['Asset_Build']['type'].lower()
+            path.append(asset_type)
+            path.append(name)
+            parent_name = name
+        except:
+            self.log.info('No asset build found.')
+
+        try:
+            name = ftrack_data['Episode']['name'].replace(' ', '_').lower()
+            path.append('episodes')
+            child_path.append(name)
+            parent = True
+            parent_name = name
+        except:
+            self.log.info('No episode found.')
+
+        try:
+            name = ftrack_data['Sequence']['name'].replace(' ', '_').lower()
+            child_path.append(name)
+
+            if not parent:
+                path.append('sequences')
+
+            parent = True
+            parent_name = name
+        except:
+            self.log.info('No sequences found.')
+
+        try:
+            name = ftrack_data['Shot']['name'].replace(' ', '_').lower()
+            child_path.append(name)
+
+            if not parent:
+                path.append('shots')
+            parent_name = name
+        except:
+            self.log.info('No shot found.')
+
+        path.extend(child_path)
+
+        task_name = ftrack_data['Task']['name'].replace(' ', '_').lower()
+        path.append(task_name)
 
         version = 1
         if instance.context.has_data('version'):
             version = instance.context.data('version')
         version_string = 'v%s' % str(version).zfill(3)
 
-        file_path = ''
-        if 'Sequence' in ftrack_data:
-            seq_name = ftrack_data['Sequence']['name']
-            shot_name = ftrack_data['Shot']['name'].replace(' ', '_')
-            shot_name = shot_name.lower()
-            file_path = os.path.join(root_dir, 'sequences', seq_name, shot_name,
-                                     task_name)
-        else:
-            asset_type = ftrack_data['Asset_Build']['type'].replace(' ', '_')
-            asset_type = asset_type.lower()
-            asset_name = ftrack_data['Asset_Build']['name'].replace(' ', '_')
-            asset_name = asset_name.lower()
-            file_path = os.path.join(root_dir, 'library', asset_type,
-                                    asset_name, task_name)
-
-        return file_path
+        return os.path.join(*path).replace('\\', '/')
 
     def get_path(self, instance):
         import ftrack
@@ -136,13 +168,17 @@ class ValidateRenderSettings(pyblish.api.Validator):
 
         msg = 'Project Images directory is incorrect.'
         msg += ' Expected: %s' % expected_output
+        self.log.info(expected_output)
         assert output == expected_output, msg
 
         # validate project directory
-        project_path = self.get_project_path(instance)
+        project_path = self.get_project_path(instance).replace('\\', '/')
         scene_project = pymel.core.system.Workspace.getPath().expand()
+        scene_project = scene_project.replace('\\', '/')
 
-        msg = 'Project path is incorrect. Expected: %s' % project_path
+        msg = 'Project path is incorrect.'
+        msg += '\n\nCurrent: %s' % scene_project
+        msg += '\n\nExpected: %s' % project_path
         assert project_path == scene_project, msg
 
     def repair(self, instance, context):

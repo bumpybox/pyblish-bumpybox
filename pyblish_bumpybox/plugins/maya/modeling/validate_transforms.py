@@ -8,34 +8,30 @@ class ValidateTransforms(pyblish.api.Validator):
     """"""
 
     families = ['geometry']
-    label = 'Modeling - Transforms'
+    label = 'Transforms'
 
     def process(self, instance):
 
         check = True
-        node = instance[0]
-        if node.isReferenced():
-            return
+        for node in instance:
+            v = sum(node.getRotatePivot(space='world'))
+            if v > 0.09:
+                msg = '"%s" pivot is not at world zero.' % node.name()
+                self.log.error(msg)
+                check = False
 
-        transform = node
-        v = sum(transform.getRotatePivot(space='world'))
-        if (math.ceil(v*100.0)/100.0) > 0.01:
-            msg = '"%s" pivot is not at world zero.' % transform.name()
-            self.log.error(msg)
-            check = False
+            v = sum(node.getRotation(space='world'))
+            if v != 0:
+                msg = '"%s" pivot axis is not aligned to world.' % node.name()
+                self.log.error(msg)
+                check = False
 
-        v = sum(transform.getRotation(space='world'))
-        if (math.ceil(v*100.0)/100.0) > 0.01:
-            msg = '"%s" pivot axis is not aligned to world.' % transform.name()
-            self.log.error(msg)
-            check = False
-
-        if sum(transform.scale.get()) != 3:
-            msg = '"%s" scale is not neutral.' % transform.name()
-            self.log.error(msg)
-            check = False
+            if sum(node.scale.get()) != 3:
+                msg = '"%s" scale is not neutral.' % node.name()
+                self.log.error(msg)
+                check = False
 
         msg = "Transforms in the scene aren't reset."
-        msg += ' Please reset by moving the pivot to world zero,'
-        msg += ' and freeze the transform.'
+        msg += ' Please reset by "Modify" > "Freeze Transformations",'
+        msg += ' followed by "Modify" > "Reset Transformations".'
         assert check, msg

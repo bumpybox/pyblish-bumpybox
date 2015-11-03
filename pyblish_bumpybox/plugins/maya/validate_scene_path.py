@@ -1,11 +1,10 @@
 import os
+import re
 
 import pyblish.api
-import ftrack
 import pymel
 
 
-@pyblish.api.log
 class ValidateScenePath(pyblish.api.Validator):
     """ Validates the path of the maya scene """
 
@@ -13,38 +12,75 @@ class ValidateScenePath(pyblish.api.Validator):
     label = 'Scene Path'
 
     def get_path(self, instance):
+
+        path = []
+        filename = []
+
         # get ftrack data
         ftrack_data = instance.context.data('ftrackData')
-        project = ftrack.Project(id=ftrack_data['Project']['id'])
-        root_dir = ftrack_data['Project']['root']
-        task_name = ftrack_data['Task']['name']
-        task_name = task_name.replace(' ', '_').lower()
+        path.append(ftrack_data['Project']['root'])
+        child_path = []
+        parent = False
+        parent_name = ftrack_data['Project']['name']
+
+        try:
+            name = ftrack_data['Asset_Build']['name'].replace(' ', '_').lower()
+            path.append('library')
+            asset_type = ftrack_data['Asset_Build']['type'].lower()
+            path.append(asset_type)
+            path.append(name)
+            parent_name = name
+        except:
+            self.log.info('No asset build found.')
+
+        try:
+            name = ftrack_data['Episode']['name'].replace(' ', '_').lower()
+            path.append('episodes')
+            child_path.append(name)
+            parent = True
+            parent_name = name
+        except:
+            self.log.info('No episode found.')
+
+        try:
+            name = ftrack_data['Sequence']['name'].replace(' ', '_').lower()
+            child_path.append(name)
+
+            if not parent:
+                path.append('sequences')
+
+            parent = True
+            parent_name = name
+        except:
+            self.log.info('No sequences found.')
+
+        try:
+            name = ftrack_data['Shot']['name'].replace(' ', '_').lower()
+            child_path.append(name)
+
+            if not parent:
+                path.append('shots')
+            parent_name = name
+        except:
+            self.log.info('No shot found.')
+
+        path.extend(child_path)
+
+        task_name = ftrack_data['Task']['name'].replace(' ', '_').lower()
+        path.append(task_name)
 
         version = 1
         if instance.context.has_data('version'):
             version = instance.context.data('version')
         version_string = 'v%s' % str(version).zfill(3)
 
-        file_path = ''
-        if 'Sequence' in ftrack_data:
-            seq_name = ftrack_data['Sequence']['name']
-            shot_name = ftrack_data['Shot']['name'].replace(' ', '_')
-            shot_name = shot_name.lower()
-            file_name = '.'.join([shot_name, task_name,
-                                 version_string, 'mb'])
-            file_path = os.path.join(root_dir, 'sequences', seq_name, shot_name,
-                                     task_name, file_name)
-        else:
-            asset_type = ftrack_data['Asset_Build']['type'].replace(' ', '_')
-            asset_type = asset_type.lower()
-            asset_name = ftrack_data['Asset_Build']['name'].replace(' ', '_')
-            asset_name = asset_name.lower()
-            file_name = '.'.join([asset_name, task_name,
-                                 version_string, 'mb'])
-            file_path = os.path.join(root_dir, 'library', asset_type,
-                                    asset_name, task_name, file_name)
+        filename.append(parent_name)
+        filename.append(task_name)
+        filename.append(version_string)
+        filename.append('mb')
+        path.append('.'.join(filename))
 
-        return file_path
+        return os.path.join(*path).replace('\\', '/')
 
     def process(self, instance):
 
@@ -55,11 +91,11 @@ class ValidateScenePath(pyblish.api.Validator):
 
         # validating scene work path
         file_path = self.get_path(instance)
-        self.log.info(file_path)
+        work_path = instance.data('workPath').replace('\\', '/')
         msg = 'Scene path is not correct:'
-        msg += '\n\nCurrent: %s' % instance.data('workPath')
+        msg += '\n\nCurrent: %s' % work_path
         msg += '\n\nExpected: %s' % file_path
-        assert file_path == instance.data('workPath'), msg
+        assert file_path == work_path, msg
 
     def repair(self, instance):
         """ Saves the maya scene to the correct path.

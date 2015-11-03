@@ -62,10 +62,10 @@ class ExtractLevelSplit(pyblish.api.Extractor):
 
         args += ' -s <STARTFRAME>'
         args += ' -e <ENDFRAME>'
-        args += ' -d %s' % os.path.dirname(output_path)
+        args += ' -d <QUOTE>%s<QUOTE>' % os.path.dirname(output_path)
         args += ' -x %s' % instance.data('x')
         args += ' -y %s' % instance.data('y')
-        args += ' -r %s' % output_path.replace('_####', '')
+        args += ' -r <QUOTE>%s<QUOTE>' % output_path.replace('_####', '')
         args += ' -= AbsoluteFrameNumber=on -= PadDigits=4'
         args += ' -= ClearAttachment=on'
 
