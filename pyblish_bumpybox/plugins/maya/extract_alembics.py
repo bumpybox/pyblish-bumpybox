@@ -125,6 +125,7 @@ class ExtractAlembic(pyblish.api.Extractor):
 
         cmd = '-frameRange %s %s' % (frame_start, frame_end)
         cmd += ' -stripNamespaces -uvWrite -worldSpace -wholeFrameGeo '
+        cmd += '-eulerFilter '
         cmd += '-writeVisibility %s -file "%s"' % (nodesString, path)
 
         pymel.core.general.refresh(suspend=True)

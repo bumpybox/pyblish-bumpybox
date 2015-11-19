@@ -129,7 +129,9 @@ class ValidateRenderSettings(pyblish.api.Validator):
             os.makedirs(os.path.dirname(output))
 
         # repairing alpha output
-        node['channels'].setValue('all')
+        valid_outputs = ['rgb', 'rgba', 'all']
+        if node['channels'].value() not in valid_outputs:
+            node['channels'].setValue('all')
 
         # repairing proxy mode
         nuke.root()['proxy'].setValue(False)

@@ -43,19 +43,19 @@ class ExtractDeadline(pyblish.api.Extractor):
         if 'ExtraInfoKeyValue' in job_data:
             extra_info_key_value = job_data['ExtraInfoKeyValue']
 
-        args = '-pix_fmt yuv420p -q:v 0 -vf '
-
-        if os.path.splitext(job_data['OutputFilename0'])[1] == '.exr':
-            args += 'lutrgb=r=gammaval(0.45454545):'
-            args += 'g=gammaval(0.45454545):b=gammaval(0.45454545),'
-
-        args += 'colormatrix=bt601:bt709'
-        args += ',scale=trunc(iw/2)*2:trunc(ih/2)*2'
+        args = '-q:v 0 -pix_fmt yuv420p -vf '
+        args += 'scale=trunc(iw/2)*2:trunc(ih/2)*2'
         start_frame = nuke.root()['first_frame'].value()
         fps = nuke.root()['fps'].value()
         args += ' -timecode %s' % self.frames_to_timecode(start_frame, fps)
         extra_info_key_value['FFMPEGOutputArgs0'] = args
-        extra_info_key_value['FFMPEGInputArgs0'] = ''
+
+        args = ''
+        if os.path.splitext(job_data['OutputFilename0'])[1] == '.exr':
+            args += '-gamma 2.2 '
+        args += '-framerate %s' % nuke.root()['fps'].value()
+        extra_info_key_value['FFMPEGInputArgs0'] = args
+
         input_file = job_data['OutputFilename0'].replace('####', '%04d')
         extra_info_key_value['FFMPEGInput0'] = input_file
         output_file = input_file.replace('img_sequences', 'movies')

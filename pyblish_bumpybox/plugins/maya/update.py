@@ -1,17 +1,66 @@
 import os
 import re
+import traceback
 
-import pyblish.api
 import pymel
+import pyblish.api
+from PySide import QtGui
 
 
-class ValidateReferenceVersion(pyblish.api.Validator):
-    """ Validates that the current reference path is the latest version.
-    """
+def message_box(context, text, title, warning=False):
 
-    families = ['reference']
-    label = 'Reference Version'
-    optional = True
+    box = QtGui.QMessageBox()
+    box.setText(text)
+    context.data['messageBox'] = box
+    box.setWindowTitle(title)
+    if warning:
+        box.setIcon(QtGui.QMessageBox.Warning)
+    box.show()
+
+
+class Reference(pyblish.api.Action):
+
+    label = 'Update Reference'
+
+    def process(self, context):
+
+        errors = False
+        try:
+            for node in pymel.core.ls(type='reference'):
+                if 'sharedReferenceNode' in node.name():
+                    continue
+
+                if node.isReferenced():
+                    continue
+
+                file_ref = pymel.core.system.FileReference(node)
+                try:
+                    self.log.info(file_ref.path)
+                except:
+                    continue
+
+                if not file_ref.isLoaded():
+                    continue
+
+                file_ref =  pymel.core.system.FileReference(node)
+                basename = os.path.basename(file_ref.path)
+
+                if self.get_latest_version(node) != basename:
+                    new_basename = self.get_latest_version(node)
+                    new_path = os.path.join(os.path.dirname(file_ref.path),
+                                                                    new_basename)
+
+                    file_ref.replaceWith(new_path)
+        except:
+            errors = True
+            self.log.error(traceback.format_exc())
+
+        if errors:
+            message_box(context, 'Reference update completed with errors!',
+                        'Update', warning=True)
+        else:
+            message_box(context, 'Reference update completed successfully!',
+                        'Update', warning=False)
 
     def version_get(self, string, prefix, suffix = None):
       """Extract version information from filenames used by DD (and Weta, apparently)
@@ -83,26 +132,11 @@ class ValidateReferenceVersion(pyblish.api.Validator):
 
         return path
 
-    def process(self, instance):
 
-        node = instance[0]
+class Update(pyblish.api.Plugin):
 
-        file_ref =  pymel.core.system.FileReference(node)
-        basename = os.path.basename(file_ref.path)
+    actions = [Reference]
 
-        msg = 'Newer reference version available for %s' % file_ref.path
-        assert self.get_latest_version(node) == basename, msg
+    def process(self, context):
 
-    def repair(self, instance):
-
-        node = instance[0]
-
-        file_ref =  pymel.core.system.FileReference(node)
-        basename = os.path.basename(file_ref.path)
-
-        if self.get_latest_version(node) != basename:
-            new_basename = self.get_latest_version(node)
-            new_path = os.path.join(os.path.dirname(file_ref.path),
-                                                                new_basename)
-
-            file_ref.replaceWith(new_path)
+        pass

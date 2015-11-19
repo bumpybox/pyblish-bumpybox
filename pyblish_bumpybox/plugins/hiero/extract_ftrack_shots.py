@@ -58,40 +58,43 @@ class ExtractFtrackShots(pyblish.api.Extractor):
             return
 
         ftrack_data = context.data('ftrackData')
-        parent = ftrack.Project(ftrack_data['Project']['id'])
-        project = parent
-        project_name = ftrack_data['Project']['code']
+        task = ftrack.Task(ftrack_data['Task']['id'])
+        parents = task.getParents()
         item = instance[0]
 
-        if 'Episode' in ftrack_data:
-            parent = ftrack.Sequence(ftrack_data['Episode']['id'])
+        path = []
+        for p in parents:
+            path.append(p.getName())
 
+        # setup parent
+        parent = parents[0]
         if '--' in item.name():
             name_split = item.name().split('--')
-            try:
-                if len(name_split) == 2:
-                    parent = parent.createSequence(name_split[0])
-            except:
-                self.log.error(traceback.format_exc())
-                if parent == project or 'Sequence' in ftrack_data:
-                    parent = ftrack.getSequence([project_name,
-                                                name_split[0]])
-                else:
-                    parent = ftrack.getSequence([project_name,
-                                ftrack_data['Episode']['name'], name_split[0]])
+            if len(name_split) == 2:
+                try:
+                    copy_path = list(path)
+                    copy_path.append(name_split[0])
+                    parent = ftrack.getSequence(copy_path)
+                except:
+                    parent = parents[0].createSequence(name_split[0])
+            if len(name_split) == 3:
+                try:
+                    copy_path = list(path)
+                    copy_path.append(name_split[0])
+                    parent = ftrack.getSequence(copy_path)
+                except:
+                    parent = parents[0].createEpisode(name_split[0])
 
-            try:
-                if len(name_split) == 3:
-                    try:
-                        parent = project.createEpisode(name_split[0])
-                    except:
-                        parent = ftrack.getSequence([project_name,
-                                                    name_split[0]])
-                    parent = parent.createSequence(name_split[1])
-            except:
-                self.log.error(traceback.format_exc())
-                parent = ftrack.getSequence([ftrack_data['Project']['name'],
-                                            name_split[0], name_split[1]])
+                parents = [parent] + parents
+
+                try:
+                    copy_path.append(name_split[1])
+                    parent = ftrack.getSequence(copy_path)
+                except:
+                    parent = parents[0].createSequence(name_split[1])
+
+        self.log.info(parent)
+        self.log.info(parents[0])
 
         # creating shot
         shot_name = item.name()
@@ -170,6 +173,7 @@ class ExtractFtrackShots(pyblish.api.Extractor):
         tc = self.frames_to_timecode(item.sourceIn(), fps)
         cmd = exe + ' -ss '+ tc +' -i "' + input_path + '" ' + input_cmd
         cmd += ' -y "' + output_path + '"'
+        self.log.info(cmd)
         subprocess.call(cmd)
 
         # creating thumbnails

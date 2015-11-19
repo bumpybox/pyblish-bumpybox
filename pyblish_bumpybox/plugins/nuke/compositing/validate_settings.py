@@ -86,7 +86,10 @@ class ValidateSettings(pyblish.api.Validator):
 
         nuke.root()['fps'].setValue(project.get('fps'))
         nuke.root()['first_frame'].setValue(shot.getFrameStart())
-        nuke.root()['last_frame'].setValue(shot.getFrameEnd())
+
+        handles = shot.get('handles')
+        last_frame = shot.getFrameEnd() + (handles * 2)
+        nuke.root()['last_frame'].setValue(last_frame)
 
         """
         width = int(project.get('resolution_width'))
