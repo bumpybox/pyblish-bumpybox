@@ -20,6 +20,15 @@ class CollectRenderlayers(pyblish.api.Collector):
     'gif': 0, 'iff': 10, 'swft': 63, 'pict': 33, 'exr': 51, 'tif': 3,
     'cin': 11, 'avi': 23, 'tga': 19, 'png': 32}
 
+    def getFPS(self):
+
+        options = {'pal': 25, 'game': 15, 'film': 24, 'ntsc': 30, 'show': 48,
+                    'palf': 50, 'ntscf': 60}
+
+        option = pymel.core.general.currentUnit(q=True, t=True)
+
+        return options[option]
+
     def process(self, context):
 
         # getting output path
@@ -136,6 +145,15 @@ class CollectRenderlayers(pyblish.api.Collector):
 
             # setting job data
             job_data = job_data.copy()
+
+            # getting frames
+            start_frame = int(render_globals.startFrame.get())
+            end_frame = int(render_globals.endFrame.get())
+
+            if 'endFrame' in data[layer]:
+                end_frame = int(data[layer]['endFrame'] * self.getFPS())
+            if 'startFrame' in data[layer]:
+                start_frame = int(data[layer]['startFrame'] * self.getFPS())
 
             frames = '%s-%s' % (start_frame, end_frame)
             instance.set_data('deadlineFrames', value=frames)
