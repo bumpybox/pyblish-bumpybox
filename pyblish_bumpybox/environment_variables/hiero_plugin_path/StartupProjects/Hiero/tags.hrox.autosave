@@ -11,7 +11,7 @@
    <RootBinProjectItem editable="1" guid="{74723746-d7a9-884f-9489-bf0cfe2137fa}" name="Tags">
     <items>
      <TagClassProjectItem editable="1" guid="{569a163e-3e00-3242-8be9-41aa4a9cbf5c}" name="nuke">
-      <TagClass editable="1" objName="tag" guid="d0c8ca7c-9936-5944-a04c-b5b35122c522" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/environment_variables/hiero_plugin_path/StartupProjects/Hiero/nuke.png" name="nuke">
+      <TagClass editable="1" objName="tag" guid="1674dcb2-28b2-fe4d-8cc5-d979c3fa0ddd" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/environment_variables/hiero_plugin_path/StartupProjects/Hiero/nuke.png" name="nuke">
        <sets>
         <Set title="" domainroot="tag">
          <values>
@@ -22,7 +22,7 @@
       </TagClass>
      </TagClassProjectItem>
      <TagClassProjectItem editable="1" guid="{143c769c-5c99-9448-9978-9615a85645f7}" name="h264">
-      <TagClass editable="1" objName="tag" guid="bee2361c-5a34-e241-8c7b-e6f61f96bcfd" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/quicktime.png" name="h264">
+      <TagClass editable="1" objName="tag" guid="912bdf38-9214-e843-bbf3-fd34367a8b81" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/quicktime.png" name="h264">
        <sets>
         <Set title="" domainroot="tag">
          <values>
@@ -33,7 +33,7 @@
       </TagClass>
      </TagClassProjectItem>
      <TagClassProjectItem editable="1" guid="{98851d76-8dc8-f34e-a039-d364ac5fdbac}" name="copy">
-      <TagClass editable="1" objName="tag" guid="443aa235-b66d-6f44-adff-6f5582638516" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/copy.png" name="copy">
+      <TagClass editable="1" objName="tag" guid="3a0858ff-172a-b74c-913b-06ccf58b8131" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/copy.png" name="copy">
        <sets>
         <Set title="" domainroot="tag">
          <values>
@@ -44,14 +44,14 @@
       </TagClass>
      </TagClassProjectItem>
      <TagClassProjectItem editable="1" guid="{51cc952b-95b2-d04a-86bd-c32ab35f60aa}" name="dpx">
-      <TagClass editable="1" objName="tag" guid="1de1e3e3-efbc-5e45-b0fc-2e6c3323eddb" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/transcode.png" name="dpx">
+      <TagClass editable="1" objName="tag" guid="0bc2825b-b56d-334a-a9fb-97b38af2f170" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/transcode.png" name="dpx">
        <sets>
         <Set title="" domainroot="tag">
          <values>
           <StringValue default="1" value="dpx" name="tag.label"/>
          </values>
         </Set>
-        <Set title="User" domainroot="user">
+        <Set title="" domainroot="user">
          <values>
           <VectorValue name="user.tags">
            <values>
@@ -80,7 +80,7 @@
       </TagClass>
      </TagClassProjectItem>
      <TagClassProjectItem editable="1" guid="{193b9cc0-0063-574d-9095-458238f4b920}" name="prores">
-      <TagClass editable="1" objName="tag" guid="e059b8e5-eaea-7e4c-9638-7335e1b74006" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/quicktime.png" name="prores">
+      <TagClass editable="1" objName="tag" guid="a36c66ae-40d8-2e45-b1b8-2f2654043b24" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/quicktime.png" name="prores">
        <sets>
         <Set title="" domainroot="tag">
          <values>
@@ -91,7 +91,7 @@
       </TagClass>
      </TagClassProjectItem>
      <TagClassProjectItem editable="1" guid="{f745d781-291e-db4f-ace0-5ef33dbe8002}" name="png">
-      <TagClass editable="1" objName="tag" guid="c153822a-fa73-8540-85e9-5632bf47cf62" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/transcode.png" name="png">
+      <TagClass editable="1" objName="tag" guid="f6256886-58a2-9b4d-a37b-d3b826723298" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/transcode.png" name="png">
        <sets>
         <Set title="" domainroot="tag">
          <values>
@@ -102,7 +102,7 @@
       </TagClass>
      </TagClassProjectItem>
      <TagClassProjectItem editable="1" guid="{d1b126a9-61ad-cc46-aba2-cd808b4c7a13}" name="ftrack">
-      <TagClass editable="1" objName="tag" guid="6b246c8e-75f2-e744-89a0-72c8b5c8a4da" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/ftrack.png" name="ftrack">
+      <TagClass editable="1" objName="tag" guid="abc452e8-ddd3-ee43-9504-19275ea613ca" visible="1" icon="K:/development/tools/pyblish/pyblish-bumpybox/pyblish_bumpybox/hiero/StartupProjects/Hiero/ftrack.png" name="ftrack">
        <sets>
         <Set title="" domainroot="tag">
          <values>
@@ -115,7 +115,7 @@
      <BinProjectItem editable="1" guid="{c26fe4a3-ea9b-e446-92c3-4f2d1e5c5c47}" name="task">
       <items>
        <TagClassProjectItem editable="1" guid="{bd84a0a6-454a-e346-8cfc-b32719aac901}" name="Animation">
-        <TagClass editable="1" objName="tag" guid="bfa87b4a-5337-9d4a-9bc1-00a7d5987b1a" visible="1" icon="icons:Tag.png" name="Animation">
+        <TagClass editable="1" objName="tag" guid="4128ded5-cf1d-7249-9d2c-ddbe52d2e4e7" visible="1" icon="icons:Tag.png" name="Animation">
          <sets>
           <Set title="" domainroot="tag">
            <values>
@@ -127,7 +127,7 @@
         </TagClass>
        </TagClassProjectItem>
        <TagClassProjectItem editable="1" guid="{b3236005-6f9b-ef4a-bb5d-0df15637e9a5}" name="Texturing">
-        <TagClass editable="1" objName="tag" guid="cd24e703-b158-5644-af00-7fa0edc62df8" visible="1" icon="icons:Tag.png" name="Texturing">
+        <TagClass editable="1" objName="tag" guid="3a00a983-f8a1-d44e-8446-48fd5ba2e7c4" visible="1" icon="icons:Tag.png" name="Texturing">
          <sets>
           <Set title="" domainroot="tag">
            <values>
@@ -139,7 +139,7 @@
         </TagClass>
        </TagClassProjectItem>
        <TagClassProjectItem editable="1" guid="{459777c3-87e1-b648-9f9e-48c63318e458}" name="Layout">
-        <TagClass editable="1" objName="tag" guid="17346f5a-653c-e244-a4e5-b0f9fc74fda5" visible="1" icon="icons:Tag.png" name="Layout">
+        <TagClass editable="1" objName="tag" guid="4289d2cd-5328-6b40-a897-f3ede4e816c7" visible="1" icon="icons:Tag.png" name="Layout">
          <sets>
           <Set title="" domainroot="tag">
            <values>
@@ -151,7 +151,7 @@
         </TagClass>
        </TagClassProjectItem>
        <TagClassProjectItem editable="1" guid="{9151f675-6785-d74f-9fcb-5ba1d3975213}" name="Build">
-        <TagClass editable="1" objName="tag" guid="66c8af6a-b343-4a47-a3cc-0d3055d7c85f" visible="1" icon="icons:Tag.png" name="Build">
+        <TagClass editable="1" objName="tag" guid="ad57f46d-7f01-8b46-a42d-e4f166d6c5a2" visible="1" icon="icons:Tag.png" name="Build">
          <sets>
           <Set title="" domainroot="tag">
            <values>
@@ -163,7 +163,7 @@
         </TagClass>
        </TagClassProjectItem>
        <TagClassProjectItem editable="1" guid="{3f6a2f81-38ed-3a40-8dc1-8795d046ceb0}" name="Painting">
-        <TagClass editable="1" objName="tag" guid="da91a8c2-5bdc-8b48-aa3d-b7a320e3adb6" visible="1" icon="icons:Tag.png" name="Painting">
+        <TagClass editable="1" objName="tag" guid="92531993-b3ef-f049-94da-0290fcb43877" visible="1" icon="icons:Tag.png" name="Painting">
          <sets>
           <Set title="" domainroot="tag">
            <values>
@@ -175,7 +175,7 @@
         </TagClass>
        </TagClassProjectItem>
        <TagClassProjectItem editable="1" guid="{32c40ffe-b951-db45-a06f-96aa1ee886c9}" name="Rigging">
-        <TagClass editable="1" objName="tag" guid="0d4d2e52-9546-9946-a3c6-d6e56ec9918e" visible="1" icon="icons:Tag.png" name="Rigging">
+        <TagClass editable="1" objName="tag" guid="ef53b66c-6389-f341-a548-98ab0f5dfd36" visible="1" icon="icons:Tag.png" name="Rigging">
          <sets>
           <Set title="" domainroot="tag">
            <values>
@@ -187,7 +187,7 @@
         </TagClass>
        </TagClassProjectItem>
        <TagClassProjectItem editable="1" guid="{458175b6-56c8-6241-a3c5-3bb15c7b4321}" name="Match Move">
-        <TagClass editable="1" objName="tag" guid="4cde06a6-9cf1-cc4a-8c60-060a3279e8c5" visible="1" icon="icons:Tag.png" name="Match Move">
+        <TagClass editable="1" objName="tag" guid="2da532f7-6102-e648-9cc9-f897adde24fa" visible="1" icon="icons:Tag.png" name="Match Move">
          <sets>
           <Set title="" domainroot="tag">
            <values>
@@ -199,7 +199,7 @@
         </TagClass>
        </TagClassProjectItem>
        <TagClassProjectItem editable="1" guid="{4f432ee8-08b9-1541-b724-16da8d326575}" name="Compositing">
-        <TagClass editable="1" objName="tag" guid="7f56117d-4f58-0f46-8683-d935164a4f98" visible="1" icon="icons:Tag.png" name="Compositing">
+        <TagClass editable="1" objName="tag" guid="6dfee79f-109e-6943-86ee-e4868eebf885" visible="1" icon="icons:Tag.png" name="Compositing">
          <sets>
           <Set title="" domainroot="tag">
            <values>
@@ -211,7 +211,7 @@
         </TagClass>
        </TagClassProjectItem>
        <TagClassProjectItem editable="1" guid="{3bc6599b-7095-f744-8f96-74a2fbbaba51}" name="Lighting">
-        <TagClass editable="1" objName="tag" guid="25e3f364-06d2-f240-9223-a68522402465" visible="1" icon="icons:Tag.png" name="Lighting">
+        <TagClass editable="1" objName="tag" guid="2e295a1d-0730-4544-bc28-471e217295cf" visible="1" icon="icons:Tag.png" name="Lighting">
          <sets>
           <Set title="" domainroot="tag">
            <values>
@@ -223,7 +223,7 @@
         </TagClass>
        </TagClassProjectItem>
        <TagClassProjectItem editable="1" guid="{59cc88aa-30fb-d94b-9c6b-860585be1c5a}" name="Lookdev">
-        <TagClass editable="1" objName="tag" guid="80a2b093-2e3d-9744-adba-877f1d196482" visible="1" icon="icons:Tag.png" name="Lookdev">
+        <TagClass editable="1" objName="tag" guid="728df9b6-afc7-8d4f-b85e-0d944d484c73" visible="1" icon="icons:Tag.png" name="Lookdev">
          <sets>
           <Set title="" domainroot="tag">
            <values>
@@ -235,7 +235,7 @@
         </TagClass>
        </TagClassProjectItem>
        <TagClassProjectItem editable="1" guid="{f3a97406-c1af-fe4a-a607-da3872d15f1b}" name="Modeling">
-        <TagClass editable="1" objName="tag" guid="7b3f2c7b-fe8e-0240-88aa-c4530f56566a" visible="1" icon="icons:Tag.png" name="Modeling">
+        <TagClass editable="1" objName="tag" guid="8440a540-145b-6b47-b935-18dcc0ca5766" visible="1" icon="icons:Tag.png" name="Modeling">
          <sets>
           <Set title="" domainroot="tag">
            <values>

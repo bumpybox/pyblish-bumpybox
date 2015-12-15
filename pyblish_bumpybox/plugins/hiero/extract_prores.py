@@ -9,7 +9,7 @@ reload(utils)
 
 class ExtractPRORES(pyblish.api.Extractor):
 
-    families = ['prores.trackItem']
+    families = ['prores']
     label = 'Transcode to PRORES'
 
     def frames_to_timecode(self, frames, framerate):

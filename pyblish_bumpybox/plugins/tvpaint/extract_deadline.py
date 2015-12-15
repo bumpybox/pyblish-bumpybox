@@ -23,6 +23,7 @@ class ExtractDeadline(pyblish.api.Extractor):
         job_data['Group'] = 'tvpaint_%s' % appVersion
         job_data['Pool'] = 'medium'
         job_data['Plugin'] = 'TVPaint'
+        job_data['TaskTimeoutSeconds'] = 3600
 
         # get output filename
         task = ftrack.Task(ftrack_data['Task']['id'])

@@ -9,7 +9,7 @@ class ExtractPNG(pyblish.api.Extractor):
     """
     """
 
-    families = ['png.trackItem']
+    families = ['png']
     label = 'Transcode to PNG'
 
     def frames_to_timecode(self, frames, framerate):

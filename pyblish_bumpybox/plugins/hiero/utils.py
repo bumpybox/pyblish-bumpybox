@@ -3,14 +3,12 @@ import re
 
 
 def get_path(instance, ext, log, tag=None, sequence=True):
-    import ftrack
 
     path = []
     filename = []
 
     # get ftrack data
     ftrack_data = instance.context.data('ftrackData')
-    project = ftrack.Project(id=ftrack_data['Project']['id'])
     path.append(ftrack_data['Project']['root'])
     path.append('renders')
     path.append('transcode')

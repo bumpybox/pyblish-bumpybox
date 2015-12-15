@@ -10,7 +10,7 @@ class ExtractAudio(pyblish.api.Extractor):
     """ Extracting audio
     """
 
-    families = ['h264.trackItem', 'prores.trackItem']
+    families = ['h264', 'prores']
     label = 'Audio'
     order = pyblish.api.Extractor.order - 0.5
 

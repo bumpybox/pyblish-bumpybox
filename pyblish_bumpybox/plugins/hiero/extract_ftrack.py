@@ -1,12 +1,10 @@
-import re
 import os
 import inspect
 import subprocess
-import traceback
 import tempfile
+import traceback
 
 import pyblish.api
-import hiero
 import ftrack
 
 
@@ -14,7 +12,7 @@ class ExtractFtrackShots(pyblish.api.Extractor):
     """ Creates ftrack shots by the name of the shot
     """
 
-    families = ['ftrack.trackItem']
+    families = ['ftrack', 'nuke']
     label = 'Ftrack Shots'
     optional = True
 
@@ -93,16 +91,13 @@ class ExtractFtrackShots(pyblish.api.Extractor):
                 except:
                     parent = parents[0].createSequence(name_split[1])
 
-        self.log.info(parent)
-        self.log.info(parents[0])
-
         # creating shot
         shot_name = item.name()
-        duration = item.sourceOut() - item.sourceIn() + 1
+        duration = item.sourceOut() - item.sourceIn()
+        duration = abs(int(round((abs(duration) + 1) / item.playbackSpeed())))
+
         if '--' in item.name():
             shot_name = item.name().split('--')[-1]
-
-        tasks = []
 
         try:
             shot = parent.createShot(shot_name)
@@ -118,11 +113,13 @@ class ExtractFtrackShots(pyblish.api.Extractor):
                 os.makedirs(os.path.dirname(path))
 
             item.sequence().writeAudioToFile(path, item.timelineIn(),
-                                                    item.timelineOut())
+                                             item.timelineOut())
 
             msg = 'Creating new shot with name'
             msg += ' "%s"' % item.name()
             self.log.info(msg)
+
+            instance.data['ftrackShot'] = shot
         except:
             path = []
             try:
@@ -145,7 +142,9 @@ class ExtractFtrackShots(pyblish.api.Extractor):
                 os.makedirs(os.path.dirname(path))
 
             item.sequence().writeAudioToFile(path, item.timelineIn(),
-                                                    item.timelineOut())
+                                             item.timelineOut())
+
+            instance.data['ftrackShot'] = shot
 
         d = os.path.dirname
         tools_path = d(d(d(d(d(d(inspect.getfile(inspect.currentframe())))))))
@@ -155,7 +154,7 @@ class ExtractFtrackShots(pyblish.api.Extractor):
         output_path = os.path.splitext(input_path)[0]
         output_path += '_thumbnail.png'
         output_path = os.path.join(tempfile.gettempdir(),
-                                    os.path.basename(output_path))
+                                   os.path.basename(output_path))
         input_cmd = ''
         fps = item.sequence().framerate().toFloat()
 
@@ -171,9 +170,8 @@ class ExtractFtrackShots(pyblish.api.Extractor):
             input_cmd = ' -vf' + arg
 
         tc = self.frames_to_timecode(item.sourceIn(), fps)
-        cmd = exe + ' -ss '+ tc +' -i "' + input_path + '" ' + input_cmd
+        cmd = exe + ' -ss ' + tc + ' -i "' + input_path + '" ' + input_cmd
         cmd += ' -y "' + output_path + '"'
-        self.log.info(cmd)
         subprocess.call(cmd)
 
         # creating thumbnails
@@ -183,3 +181,31 @@ class ExtractFtrackShots(pyblish.api.Extractor):
 
         if os.path.exists(output_path):
             os.remove(output_path)
+
+
+class ExtractFtrackTasks(pyblish.api.Extractor):
+    """
+    """
+
+    families = ['task']
+    label = 'Ftrack Tasks'
+    optional = True
+    order = ExtractFtrackShots.order + 0.1
+
+    def getTaskTypeByName(self, name):
+        for t in ftrack.getTaskTypes():
+            if t.getName().lower() == name.lower():
+                return t
+
+        return None
+
+    def process(self, instance):
+
+        for t in instance.data['taskTypes']:
+            task_type = self.getTaskTypeByName(t)
+            try:
+                shot = instance.data['ftrackShot']
+                shot.createTask(task_type.getName().lower(),
+                                taskType=task_type)
+            except:
+                self.log.error(traceback.format_exc())

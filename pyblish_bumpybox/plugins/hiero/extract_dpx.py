@@ -8,7 +8,7 @@ from pyblish_bumpybox import draft
 
 class ExtractDPX(pyblish.api.Extractor):
 
-    families = ['dpx.trackItem']
+    families = ['dpx']
     label = 'Transcode to DPX'
 
     def frames_to_timecode(self, frames, framerate):

@@ -9,7 +9,7 @@ class ExtractCopy(pyblish.api.Extractor):
     """
     """
 
-    families = ['copy.trackItem']
+    families = ['copy']
     label = 'Copy'
 
     def process(self, instance, context):

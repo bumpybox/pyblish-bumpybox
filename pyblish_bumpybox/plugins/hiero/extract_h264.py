@@ -9,7 +9,7 @@ reload(utils)
 
 class ExtractH264(pyblish.api.Extractor):
 
-    families = ['h264.trackItem']
+    families = ['h264']
     label = 'Transcode to H264'
 
     def frames_to_timecode(self, frames, framerate):
