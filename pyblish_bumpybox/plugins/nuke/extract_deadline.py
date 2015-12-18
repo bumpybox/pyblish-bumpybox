@@ -38,16 +38,28 @@ class ExtractDeadline(pyblish.api.Extractor):
 
         instance.set_data('deadlineJobData', value=job_data)
 
-        # setting extra info key values
+        # returning if rendering a single image
+        first_frame = nuke.root()['first_frame'].value()
+        last_frame = nuke.root()['last_frame'].value()
+        if first_frame == last_frame:
+            data = instance.data('deadlineData')
+            data['job'] = job_data
+            instance.set_data('deadlineData', value=data)
+
+            components = {str(instance): {}}
+            instance.set_data('ftrackComponents', value=components)
+
+            return
+
+        # setting ffmpeg settings
         extra_info_key_value = {}
         if 'ExtraInfoKeyValue' in job_data:
             extra_info_key_value = job_data['ExtraInfoKeyValue']
 
         args = '-q:v 0 -pix_fmt yuv420p -vf '
         args += 'scale=trunc(iw/2)*2:trunc(ih/2)*2'
-        start_frame = nuke.root()['first_frame'].value()
         fps = nuke.root()['fps'].value()
-        args += ' -timecode %s' % self.frames_to_timecode(start_frame, fps)
+        args += ' -timecode %s' % self.frames_to_timecode(first_frame, fps)
         extra_info_key_value['FFMPEGOutputArgs0'] = args
 
         args = ''

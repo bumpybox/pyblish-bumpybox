@@ -1,5 +1,4 @@
 import pyblish.api
-import maya.cmds as cmds
 import pymel
 
 
@@ -8,18 +7,26 @@ class ValidateDisplaylayer(pyblish.api.Validator):
 
     families = ['scene']
     optional = True
-    label = 'Modeling - Display Layers'
+    label = 'Display Layers'
 
     def process(self, instance):
         """Process all the nodes in the instance """
 
         layers = []
-        for layer in cmds.ls(type='displayLayer'):
+        for layer in pymel.core.ls(type='displayLayer'):
             # skipping references
             if pymel.core.PyNode(layer).isReferenced():
                 return
 
-            if layer != 'defaultLayer':
+            if layer.name() != 'defaultLayer':
                 layers.append(layer)
 
         assert not layers, 'Scene has displayLayers: %s' % layers
+
+    def repair(self, instance):
+
+        for layer in pymel.core.ls(type='displayLayer'):
+            try:
+                pymel.core.delete(layer)
+            except:
+                pass

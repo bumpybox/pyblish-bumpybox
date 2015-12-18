@@ -10,7 +10,8 @@ class CollectAlembics(pyblish.api.Collector):
 
         asset_nodes = []
         for t in pymel.core.ls(type='transform'):
-            if pymel.core.general.hasAttr(t, 'pyblish_alembic'):
+            if pymel.core.general.hasAttr(t, 'pyblish_alembic') and \
+            t.pyblish_alembic.get():
 
                 instance = context.create_instance(name=str(t))
                 instance.set_data('family', value='alembic.asset')
