@@ -8,7 +8,8 @@ class ValidateNeatVideo(pyblish.api.Validator):
     families = ['deadline.render']
     label = 'Neat Video'
 
-    def process(self, instance):
+    def process(self, context):
+
         for node in nuke.allNodes():
             if node.Class().lower().startswith('ofxcom.absoft.neatvideo'):
                 if not node['disable'].getValue():

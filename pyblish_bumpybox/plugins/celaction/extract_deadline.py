@@ -1,21 +1,21 @@
 import os
 
 import pyblish.api
+import pyblish_standalone
 import ftrack
 
 
-class ExtractLevelSplit(pyblish.api.Extractor):
+class ExtractLevelSplit(pyblish.api.InstancePlugin):
 
     label = 'Deadline'
     families = ['render']
-    order = pyblish.api.Extractor.order - 0.1
+    order = pyblish.api.ExtractorOrder - 0.1
 
-    def process(self, instance, context):
-
+    def process(self, instance):
         job_data = {}
         job_data['Name'] = str(instance)
         job_data['Frames'] = '%s-%s' % (instance.data('start'),
-                                                        instance.data('end'))
+                                        instance.data('end'))
         job_data['ChunkSize'] = 25
         job_data['Group'] = 'celaction'
         job_data['Pool'] = 'medium'
@@ -52,8 +52,8 @@ class ExtractLevelSplit(pyblish.api.Extractor):
         # plugin data
         plugin_data = {}
 
-        path = os.path.dirname(instance.data('scene'))
-        filename = os.path.basename(instance.data('scene'))
+        path = os.path.dirname(pyblish_standalone.kwargs['path'][0])
+        filename = os.path.basename(pyblish_standalone.kwargs['path'][0])
         args = '<QUOTE>%s<QUOTE>' % os.path.join(path, 'publish', filename)
         args += ' -a'
 

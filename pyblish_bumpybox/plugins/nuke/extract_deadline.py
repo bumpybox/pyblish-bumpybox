@@ -39,8 +39,8 @@ class ExtractDeadline(pyblish.api.Extractor):
         instance.set_data('deadlineJobData', value=job_data)
 
         # returning if rendering a single image
-        first_frame = nuke.root()['first_frame'].value()
-        last_frame = nuke.root()['last_frame'].value()
+        first_frame = instance.data['firstFrame']
+        last_frame = instance.data['endFrame']
         if first_frame == last_frame:
             data = instance.data('deadlineData')
             data['job'] = job_data
@@ -58,6 +58,7 @@ class ExtractDeadline(pyblish.api.Extractor):
 
         args = '-q:v 0 -pix_fmt yuv420p -vf '
         args += 'scale=trunc(iw/2)*2:trunc(ih/2)*2'
+        args += ',colormatrix=bt601:bt709'
         fps = nuke.root()['fps'].value()
         args += ' -timecode %s' % self.frames_to_timecode(first_frame, fps)
         extra_info_key_value['FFMPEGOutputArgs0'] = args
@@ -66,6 +67,7 @@ class ExtractDeadline(pyblish.api.Extractor):
         if os.path.splitext(job_data['OutputFilename0'])[1] == '.exr':
             args += '-gamma 2.2 '
         args += '-framerate %s' % nuke.root()['fps'].value()
+        args += ' -start_number %s' % first_frame
         extra_info_key_value['FFMPEGInputArgs0'] = args
 
         input_file = job_data['OutputFilename0'].replace('####', '%04d')

@@ -5,14 +5,15 @@ import pyblish.api
 import pymel
 
 
-class ExtractDeadline(pyblish.api.Extractor):
+class ExtractDeadline(pyblish.api.InstancePlugin):
     """ Gathers optional Maya related data for Deadline
     """
 
+    order = pyblish.api.ExtractorOrder
     families = ['deadline.render']
     label = 'Maya to Deadline'
 
-    def process(self, instance, context):
+    def process(self, instance):
 
         # getting job data
         job_data = {}
@@ -35,7 +36,7 @@ class ExtractDeadline(pyblish.api.Extractor):
         components = {str(instance): {}}
         instance.set_data('ftrackComponents', value=components)
 
-        current_file = context.data('currentFile')
+        current_file = instance.context.data('currentFile')
         render_dir = os.path.join(os.path.dirname(current_file), 'render')
 
         # create publish directory
@@ -46,8 +47,28 @@ class ExtractDeadline(pyblish.api.Extractor):
         render_file = os.path.basename(current_file)
         render_file = os.path.join(render_dir, render_file)
 
-        if not context.has_data('deadlineRenderSave'):
+        if not instance.context.has_data('deadlineRenderSave'):
             shutil.copy(current_file, render_file)
-            context.set_data('deadlineRenderSave', value=True)
 
-        context.set_data('deadlineInput', value=render_file)
+            instance.context.set_data('deadlineRenderSave', value=True)
+
+        instance.context.set_data('deadlineInput', value=render_file)
+
+
+class ExtractRenderFile(pyblish.api.InstancePlugin):
+    """ Adds the render file to Ftrack integration
+    """
+
+    order = pyblish.api.ExtractorOrder
+    families = ['scene']
+    label = 'Maya to Ftrack'
+
+    def process(self, instance):
+        current_file = instance.context.data('currentFile')
+        render_dir = os.path.join(os.path.dirname(current_file), 'render')
+        render_file = os.path.basename(current_file)
+        render_file = os.path.join(render_dir, render_file)
+
+        if not os.path.exists(render_file):
+            components = instance.data['ftrackComponents']
+            components['maya_render'] = {'path': render_file}

@@ -1,11 +1,12 @@
-import os
-
 import nuke
 import pyblish.api
 
 
-class CollectDeadlineWriteNodes(pyblish.api.Collector):
+class CollectWriteNodes(pyblish.api.Collector):
     """Selects all write nodes"""
+
+    label = 'Collect Write Nodes'
+    order = pyblish.api.Collector.order + 0.4
 
     def process(self, context):
 
@@ -18,12 +19,14 @@ class CollectDeadlineWriteNodes(pyblish.api.Collector):
 
         # creating instances per write node
         for node in nuke.allNodes():
-            if node.Class() == 'Write' and not node['disable'].getValue():
+            if node.Class() == 'Write':
                 instance = context.create_instance(name=node.name())
                 instance.set_data('family', value='deadline.render')
                 instance.add(node)
 
                 output = node['file'].getValue()
+
+                instance.set_data("publish", not node['disable'].getValue())
 
                 # setting job data
                 job_data = {}
@@ -48,14 +51,18 @@ class CollectDeadlineWriteNodes(pyblish.api.Collector):
                     end_frame = int(node['last'].getValue())
 
                 frames = '%s-%s\n' % (start_frame, end_frame)
+                instance.data['firstFrame'] = start_frame
+                instance.data['endFrame'] = end_frame
                 instance.set_data('deadlineFrames', value=frames)
 
                 # setting plugin data
                 plugin_data = plugin_data.copy()
                 plugin_data['WriteNode'] = node.name()
 
+                current_file = instance.context.data['currentFile']
                 data = {'job': job_data, 'plugin': plugin_data,
-                        'order': int(node['render_order'].value())}
+                        'order': int(node['render_order'].value()),
+                        'auxiliaryFiles': [current_file]}
                 instance.set_data('deadlineData', value=data)
 
                 # adding ftrack data to activate processing

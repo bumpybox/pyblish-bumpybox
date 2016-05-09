@@ -1,5 +1,4 @@
 import pyblish.api
-import pymel
 
 
 class ValidateSmoothDisplay(pyblish.api.Validator):
@@ -22,5 +21,5 @@ class ValidateSmoothDisplay(pyblish.api.Validator):
 
     def repair(self, instance):
 
-         for node in instance:
-             node.displaySmoothMesh.set(False)
+        for node in instance:
+            node.displaySmoothMesh.set(False)

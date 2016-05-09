@@ -1,8 +1,27 @@
-import os
-
 import nuke
 import pyblish.api
 import ftrack
+
+
+class RepairSettings(pyblish.api.Action):
+
+    label = 'Repair'
+    icon = 'wrench'
+    on = 'failed'
+
+    def process(self, context, plugin):
+
+        ftrack_data = context.data('ftrackData')
+        task = ftrack.Task(ftrack_data['Task']['id'])
+        project = task.getParents()[-1]
+        shot = task.getParent()
+
+        nuke.root()['fps'].setValue(project.get('fps'))
+        nuke.root()['first_frame'].setValue(shot.getFrameStart())
+
+        handles = shot.get('handles')
+        last_frame = shot.getFrameEnd() + (handles * 2)
+        nuke.root()['last_frame'].setValue(last_frame)
 
 
 class ValidateSettings(pyblish.api.Validator):
@@ -11,10 +30,11 @@ class ValidateSettings(pyblish.api.Validator):
     families = ['scene']
     optional = True
     label = 'Settings'
+    actions = [RepairSettings]
 
-    def process(self, instance):
+    def process(self, context):
 
-        ftrack_data = instance.context.data('ftrackData')
+        ftrack_data = context.data('ftrackData')
 
         # skipping asset builds
         if 'Asset_Build' in ftrack_data:
@@ -55,47 +75,3 @@ class ValidateSettings(pyblish.api.Validator):
         msg += '\n\nLocal last frame: %s' % local_last_frame
         msg += '\n\nOnline last frame: %s' % online_last_frame
         assert local_last_frame == online_last_frame, msg
-        """
-        # validating resolution width
-        local_width = nuke.root().format().width()
-
-        online_width = int(project.get('resolution_width'))
-
-        msg = 'Width is incorrect.'
-        msg += '\n\nLocal width: %s' % local_width
-        msg += '\n\nOnline width: %s' % online_width
-        assert local_width == online_width, msg
-
-        # validating resolution width
-        local_height = nuke.root().format().height()
-
-        online_height = int(project.get('resolution_height'))
-
-        msg = 'Height is incorrect.'
-        msg += '\n\nLocal height: %s' % local_height
-        msg += '\n\nOnline height: %s' % online_height
-        assert local_height == online_height, msg
-        """
-
-    def repair(self, instance):
-
-        ftrack_data = instance.context.data('ftrackData')
-        task = ftrack.Task(ftrack_data['Task']['id'])
-        project = task.getParents()[-1]
-        shot = task.getParent()
-
-        nuke.root()['fps'].setValue(project.get('fps'))
-        nuke.root()['first_frame'].setValue(shot.getFrameStart())
-
-        handles = shot.get('handles')
-        last_frame = shot.getFrameEnd() + (handles * 2)
-        nuke.root()['last_frame'].setValue(last_frame)
-
-        """
-        width = int(project.get('resolution_width'))
-        height = int(project.get('resolution_height'))
-        name = project.getName()
-        format_cmd = '%s %s 1.0 %s' % (width, height, name)
-        new_format = nuke.addFormat(format_cmd)
-        nuke.Root()['format'].setValue(new_format)
-        """

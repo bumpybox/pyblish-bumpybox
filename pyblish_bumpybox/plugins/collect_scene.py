@@ -3,17 +3,18 @@ import os
 import pyblish.api
 
 
-class CollectScene(pyblish.api.Collector):
-    """"""
-
-    order = pyblish.api.Selector.order + 0.2
+class CollectScene(pyblish.api.ContextPlugin):
+    """ Collecting the scene from the context """
+    # offset to get latest currentFile
+    order = pyblish.api.CollectorOrder + 0.2
 
     def process(self, context):
 
         current_file = context.data('currentFile')
         current_dir = os.path.dirname(current_file)
         publish_dir = os.path.join(current_dir, 'publish')
-        publish_file = os.path.join(publish_dir, os.path.basename(current_file))
+        publish_file = os.path.join(publish_dir,
+                                    os.path.basename(current_file))
 
         # create instance
         name = os.path.basename(current_file)
@@ -22,9 +23,6 @@ class CollectScene(pyblish.api.Collector):
         instance.set_data('family', value='scene')
         instance.set_data('workPath', value=current_file)
         instance.set_data('publishPath', value=publish_file)
-
-        # deadline data
-        instance.context.set_data('deadlineInput', value=publish_file)
 
         # ftrack data
         if not context.has_data('ftrackData'):

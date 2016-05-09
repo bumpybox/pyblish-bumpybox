@@ -1,6 +1,3 @@
-import math
-
-import pymel
 import pyblish.api
 
 

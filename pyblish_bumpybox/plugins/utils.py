@@ -1,5 +1,43 @@
 import os
 import re
+import platform
+
+
+def GetTaskFilename(task_id, ext):
+
+    import ftrack_api
+
+    session = ftrack_api.Session()
+    task = session.query('Task where id is "%s"' % task_id).one()
+    path = []
+    parents = task['link']
+    project = session.query('Project where id is "%s"' % parents[0]['id'])
+
+    disk = project.one()['disk']['windows']
+    if platform.system().lower() != 'windows':
+        disk = project.one()['disk']['unix']
+    path.append(disk)
+
+    path.append(project.one()['root'])
+
+    root_folder = []
+    for p in parents[1:]:
+        tc = session.query('TypedContext where id is "%s"' % p['id']).one()
+        path.append(tc['name'].lower())
+
+        if tc['object_type']['name'] == 'Episode':
+            root_folder.append('episodes')
+        if tc['object_type']['name'] == 'Sequence':
+            root_folder.append('sequences')
+        if tc['object_type']['name'] == 'Shot':
+            root_folder.append('shots')
+    root_folder.append('tasks')
+    path.insert(2, root_folder[0])
+
+    filename = [parents[-2]['name'], parents[-1]['name'], 'v001', ext]
+    path.append('.'.join(filename))
+
+    return os.path.join(*path).replace('\\', '/')
 
 
 def version_get(string, prefix, suffix=None):

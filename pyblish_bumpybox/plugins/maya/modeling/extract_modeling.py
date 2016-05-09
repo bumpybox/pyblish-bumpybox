@@ -1,19 +1,9 @@
-import pymel
+import pymel.core
 import pyblish.api
 
-class PassthroughModeling(pyblish.api.Validator):
 
-    families = ['geometry', 'scene', 'reference.geometry']
-    label = 'Passthrough'
-    ExtractModeling = True
-
-    def process(self, instance):
-
-        pass
-
-class ExtractModeling(pyblish.api.Integrator):
-    """ Extract work file to 'publish' directory next to work file
-    """
+class ExtractModeling(pyblish.api.Extractor):
+    """ Extracts instances of 'geometry' and 'reference.geometry' family """
 
     families = ['geometry']
     label = 'Modeling'
@@ -23,20 +13,20 @@ class ExtractModeling(pyblish.api.Integrator):
         nodes = []
         publish_file = ''
 
-        for item in context.data('results'):
-            try:
-                item['plugin'].ExtractModeling
-                instance = item['instance']
-                if instance.data('family') == 'geometry':
-                    nodes.extend(instance)
-                if instance.data('family') == 'reference.geometry':
-                    nodes.extend(instance)
-                if instance.data('family') == 'scene':
-                    publish_file = instance.data('publishPath')
-            except:
-                pass
+        for instance in context:
+
+            if not instance.data.get("publish", True):
+                continue
+
+            if instance.data('family') == 'geometry':
+                nodes.extend(instance)
+            if instance.data('family') == 'reference.geometry':
+                nodes.extend(instance)
+            if instance.data('family') == 'scene':
+                publish_file = instance.data('publishPath')
 
         pymel.core.select(nodes)
         pymel.core.system.exportSelected(publish_file,
-        constructionHistory=False, preserveReferences=True, shader=True,
-        constraints=False, force=True)
+                                         constructionHistory=False,
+                                         preserveReferences=True, shader=True,
+                                         constraints=False, force=True)

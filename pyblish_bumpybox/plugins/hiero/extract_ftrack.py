@@ -1,11 +1,11 @@
 import os
-import inspect
-import subprocess
 import tempfile
 import traceback
+import time
 
 import pyblish.api
 import ftrack
+import hiero
 
 
 class ExtractFtrackShots(pyblish.api.Extractor):
@@ -99,11 +99,9 @@ class ExtractFtrackShots(pyblish.api.Extractor):
         if '--' in item.name():
             shot_name = item.name().split('--')[-1]
 
+        shot = None
         try:
             shot = parent.createShot(shot_name)
-
-            shot.set('fstart', value=1)
-            shot.set('fend', value=duration)
 
             path = self.get_path(shot, context)
 
@@ -133,9 +131,6 @@ class ExtractFtrackShots(pyblish.api.Extractor):
 
             instance.set_data('ftrackId', value=shot.getId())
 
-            shot.set('fstart', value=1)
-            shot.set('fend', value=duration)
-
             path = self.get_path(shot, context)
 
             if not os.path.exists(os.path.dirname(path)):
@@ -146,42 +141,64 @@ class ExtractFtrackShots(pyblish.api.Extractor):
 
             instance.data['ftrackShot'] = shot
 
-        d = os.path.dirname
-        tools_path = d(d(d(d(d(d(inspect.getfile(inspect.currentframe())))))))
-        exe = os.path.join(tools_path, 'ffmpeg', 'bin', 'ffmpeg.exe')
+        # assign attributes to shot
+        shot.set('fstart', value=1)
+        shot.set('fend', value=duration)
+        shot.set('handles', value=instance.data['handles'])
+
+        # generate thumbnail
+        nukeWriter = hiero.core.nuke.ScriptWriter()
+
+        root_node = hiero.core.nuke.RootNode(1, 1)
+        nukeWriter.addNode(root_node)
+
+        handles = instance.data['handles']
+
+        item.addToNukeScript(script=nukeWriter, firstFrame=1,
+                             includeRetimes=True, retimeMethod='Frame',
+                             startHandle=handles, endHandle=handles)
+
         input_path = item.source().mediaSource().fileinfos()[0].filename()
-        ext = os.path.splitext(input_path)[1]
         output_path = os.path.splitext(input_path)[0]
         output_path += '_thumbnail.png'
         output_path = os.path.join(tempfile.gettempdir(),
                                    os.path.basename(output_path))
-        input_cmd = ''
-        fps = item.sequence().framerate().toFloat()
 
-        if ext == '.mov':
-            arg = ' scale=-1:108'
-            input_cmd = ' -vf' + arg + ' -vframes' + ' 1'
-        else:
-            arg = ' scale=-1:108'
-            if os.path.splitext(input_path)[1] == '.exr':
-                arg += ',lutrgb=r=gammaval(0.45454545):'
-                arg += 'g=gammaval(0.45454545):'
-                arg += 'b=gammaval(0.45454545)'
-            input_cmd = ' -vf' + arg
+        fmt = hiero.core.Format(150, 100, 1, 'thumbnail')
+        fmt.addToNukeScript(script=nukeWriter)
 
-        tc = self.frames_to_timecode(item.sourceIn(), fps)
-        cmd = exe + ' -ss ' + tc + ' -i "' + input_path + '" ' + input_cmd
-        cmd += ' -y "' + output_path + '"'
-        subprocess.call(cmd)
+        write_node = hiero.core.nuke.WriteNode(output_path)
+        write_node.setKnob('file_type', 'png')
+        nukeWriter.addNode(write_node)
 
-        # creating thumbnails
-        thumb = shot.createThumbnail(output_path)
-        for t in shot.getTasks():
-            t.set('thumbid', value=thumb.get('entityId'))
+        script_path = output_path.replace('.png', '.nk')
+        nukeWriter.writeToDisk(script_path)
+        logFileName = output_path.replace('.png', '.log')
+        process = hiero.core.nuke.executeNukeScript(script_path,
+                                                    open(logFileName, 'w'))
+
+        while process.poll() is None:
+            time.sleep(0.5)
 
         if os.path.exists(output_path):
-            os.remove(output_path)
+            self.log.info("Thumbnail rendered successfully!")
 
+            # creating thumbnails
+            thumb = shot.createThumbnail(output_path)
+            for t in shot.getTasks():
+                t.set('thumbid', value=thumb.get('entityId'))
+        else:
+            self.log.error("Thumbnail failed to render")
+
+        # clean up
+        """
+        try:
+            os.remove(script_path)
+            os.remove(logFileName)
+            os.remove(output_path)
+        except Exception as e:
+            raise e
+        """
 
 class ExtractFtrackTasks(pyblish.api.Extractor):
     """

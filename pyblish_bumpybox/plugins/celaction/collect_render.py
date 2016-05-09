@@ -1,10 +1,10 @@
 import pyblish.api
 
 
-class CollectRender(pyblish.api.Collector):
-    """"""
+class CollectRender(pyblish.api.ContextPlugin):
+    """ Adds the celaction render instance """
 
-    order = pyblish.api.Collector.order + 0.1
+    order = pyblish.api.CollectorOrder + 0.1
 
     def process(self, context):
 

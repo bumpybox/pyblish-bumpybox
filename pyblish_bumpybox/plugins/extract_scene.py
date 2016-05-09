@@ -4,10 +4,11 @@ import shutil
 import pyblish.api
 
 
-class ExtractScene(pyblish.api.Extractor):
+class ExtractScene(pyblish.api.InstancePlugin):
     """ Extract work file to 'publish' directory next to work file
     """
 
+    order = pyblish.api.ExtractorOrder
     families = ['scene']
     label = 'Scene'
 

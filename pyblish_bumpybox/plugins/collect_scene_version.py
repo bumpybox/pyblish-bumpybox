@@ -10,8 +10,8 @@ class CollectSceneVersion(pyblish.api.Collector):
         Arguments:
         version (int, optional): version number of the publish
     """
-
-    order = pyblish.api.Collector.order + 0.1
+    # offset to get the latest currentFile update
+    order = pyblish.api.Collector.order + 0.1 
 
     def process(self, context):
 

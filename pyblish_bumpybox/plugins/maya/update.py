@@ -42,7 +42,7 @@ class Reference(pyblish.api.Action):
                 if not file_ref.isLoaded():
                     continue
 
-                file_ref =  pymel.core.system.FileReference(node)
+                file_ref = pymel.core.system.FileReference(node)
                 basename = os.path.basename(file_ref.path)
 
                 if self.get_latest_version(node) != basename:
@@ -62,7 +62,7 @@ class Reference(pyblish.api.Action):
             message_box(context, 'Reference update completed successfully!',
                         'Update', warning=False)
 
-    def version_get(self, string, prefix, suffix = None):
+    def version_get(self, string, prefix, suffix=None):
       """Extract version information from filenames used by DD (and Weta, apparently)
       These are _v# or /v# or .v# where v is a prefix string, in our case
       we use "v" for render version and "c" for camera track version.
@@ -103,7 +103,7 @@ class Reference(pyblish.api.Action):
 
     def get_latest_version(self, node):
 
-        file_ref =  pymel.core.system.FileReference(node)
+        file_ref = pymel.core.system.FileReference(node)
         basename = os.path.basename(file_ref.path)
         version_string = self.version_get(basename, 'v')[1]
         version = int(version_string)

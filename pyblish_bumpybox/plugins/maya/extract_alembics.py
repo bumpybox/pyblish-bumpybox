@@ -39,7 +39,6 @@ class ExtractAlembic(pyblish.api.Extractor):
         try:
             name = ftrack_data['Episode']['name'].replace(' ', '_').lower()
             child_path.append(name)
-            parent = True
             parent_name = name
         except:
             self.log.info('No episode found.')
@@ -91,7 +90,7 @@ class ExtractAlembic(pyblish.api.Extractor):
             version = instance.context.data('version')
         version_string = 'v%s' % str(version).zfill(3)
 
-        filename= [re.sub('[^\w\-_\. ]', '_', str(instance))]
+        filename = [re.sub('[^\w\-_\. ]', '_', str(instance))]
 
         filename.append(version_string)
         filename.append('abc')
@@ -102,14 +101,11 @@ class ExtractAlembic(pyblish.api.Extractor):
 
     def process(self, instance, context):
 
-        root = instance[0]
         path = self.get_path(instance, context)
 
         # ftrack dependencies
         if context.has_data('ftrackData'):
             path = self.get_ftrack_path(instance)
-
-            ftrack_data = context.data('ftrackData')
 
             components = {str(instance): {'path': path}}
 
@@ -118,13 +114,27 @@ class ExtractAlembic(pyblish.api.Extractor):
         if not os.path.exists(os.path.dirname(path)):
             os.makedirs(os.path.dirname(path))
 
-        nodesString = '-root ' + root.name()
+        nodesString = ''
+        stripNamespaces = True
+        root_names = []
+        for member in instance:
+            nodesString += '-root %s ' % member.name()
+            if member.name().split(':')[-1] not in root_names:
+                root_names.append(member.name().split(':')[-1])
+            else:
+                stripNamespaces = False
 
         frame_start = int(pymel.core.playbackOptions(q=True, min=True))
         frame_end = int(pymel.core.playbackOptions(q=True, max=True))
 
         cmd = '-frameRange %s %s' % (frame_start, frame_end)
-        cmd += ' -stripNamespaces -uvWrite -worldSpace -wholeFrameGeo '
+        if stripNamespaces:
+            cmd += ' -stripNamespaces'
+        else:
+            msg = "Can't strip namespaces, because of conflicting root names."
+            msg += " Nodes will be renamed."
+            self.log.warning(msg)
+        cmd += ' -uvWrite -worldSpace -wholeFrameGeo '
         cmd += '-eulerFilter '
         cmd += '-writeVisibility %s -file "%s"' % (nodesString, path)
 
@@ -132,5 +142,5 @@ class ExtractAlembic(pyblish.api.Extractor):
         try:
             pymel.core.AbcExport(j=cmd)
         except Exception as e:
-            self.log.error(e)
+            raise e
         pymel.core.general.refresh(suspend=False)

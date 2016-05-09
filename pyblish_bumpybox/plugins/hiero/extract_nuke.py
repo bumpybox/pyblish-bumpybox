@@ -17,6 +17,7 @@ class ExtractNuke(pyblish.api.Extractor):
         item = instance[0]
         file_path = item.source().mediaSource().fileinfos()[0].filename()
         fps = item.sequence().framerate().toFloat()
+        handles = instance.data['handles']
 
         reverse = False
         if item.playbackSpeed() < 0:
@@ -26,9 +27,9 @@ class ExtractNuke(pyblish.api.Extractor):
         if item.playbackSpeed() != 1.0:
             retime = True
 
-        first_frame = int(item.sourceIn() + 1)
+        first_frame = int(item.sourceIn() + 1) - handles
         first_frame_offset = 1
-        last_frame = int(item.sourceOut() + 1)
+        last_frame = int(item.sourceOut() + 1) + handles
         last_frame_offset = last_frame - first_frame + 1
         if reverse:
             first_frame = int(item.sourceOut() + 1)
@@ -45,22 +46,13 @@ class ExtractNuke(pyblish.api.Extractor):
 
         width = item.parent().parent().format().width()
         height = item.parent().parent().format().height()
-        read_node = hiero.core.nuke.ReadNode(file_path, width=width,
-                                             height=height,
-                                             firstFrame=first_frame,
-                                             lastFrame=last_frame)
-        read_node.setKnob('colorspace', item.sourceMediaColourTransform())
-        nukeWriter.addNode(read_node)
 
-        retime_node = hiero.core.nuke.RetimeNode(first_frame, last_frame,
-                                                 first_frame_offset,
-                                                 last_frame_offset)
-        retime_node.setInputNode(0, read_node)
-        nukeWriter.addNode(retime_node)
+        item.addToNukeScript(script=nukeWriter, firstFrame=first_frame_offset,
+                             includeRetimes=True, retimeMethod='Frame',
+                             startHandle=handles, endHandle=handles)
 
         write_path = utils.get_path(instance, 'exr', self.log, sequence=True)
-        write_node = hiero.core.nuke.WriteNode(write_path,
-                                               inputNode=retime_node)
+        write_node = hiero.core.nuke.WriteNode(write_path)
         write_node.setKnob('file_type', 'exr')
         write_node.setKnob('metadata', 'all metadata')
         nukeWriter.addNode(write_node)
@@ -73,7 +65,8 @@ class ExtractNuke(pyblish.api.Extractor):
         job_data = {'Group': 'nuke_9', 'Pool': 'medium', 'Plugin': 'Nuke',
                     'OutputFilename0': write_path, 'ChunkSize': 10,
                     'Frames': '{0}-{1}'.format(first_frame_offset,
-                                               last_frame_offset)}
+                                               last_frame_offset),
+                    'LimitGroups': 'nuke'}
 
         plugin_data = {'NukeX': False, 'Version': '9.0',
                        'EnforceRenderOrder': True, 'SceneFile': ''}
@@ -142,14 +135,13 @@ class ExtractNuke(pyblish.api.Extractor):
         items = list(set(items))
         items.remove(item)
 
-        if retime:
-            last_frame = abs(int(round(last_frame_offset /
-                                       item.playbackSpeed())))
+        last_frame = abs(int(round(last_frame_offset /
+                                   item.playbackSpeed())))
 
         for i in items:
             src = i.source().mediaSource().fileinfos()[0].filename()
-            in_frame = i.mapTimelineToSource(time_in) + 1
-            out_frame = i.mapTimelineToSource(time_out) + 1
+            in_frame = i.mapTimelineToSource(time_in) + 1 - handles
+            out_frame = i.mapTimelineToSource(time_out) + 1 + handles
             read_node = hiero.core.nuke.ReadNode(src, width=width,
                                                  height=height,
                                                  firstFrame=in_frame,

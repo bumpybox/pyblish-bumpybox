@@ -250,6 +250,337 @@
       <BinViewType>2</BinViewType>
       <BinViewZoom>70</BinViewZoom>
      </BinProjectItem>
+     <BinProjectItem editable="1" guid="{942982b8-5d7f-8b41-a521-de802dc7b7d2}" name="handles">
+      <items>
+       <TagClassProjectItem editable="1" guid="{c06cd641-77cb-3242-8ba5-f471363aba65}" name="25 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="de9bc6e2-c1f6-2a47-bab4-f47bce405c46" visible="1" icon="icons:TagBlue.png" name="25 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="25 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="25" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{54136a00-2ae5-ca43-9382-728fc0b50340}" name="24 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="f37a0f15-cc1c-5448-874a-f21fdb766f91" visible="1" icon="icons:TagBlue.png" name="24 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="24 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="24" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{1659d5a3-ab1e-334e-97b5-bd23419583fe}" name="23 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="4ebf0605-d696-0d4e-937f-e7e2cbdc5324" visible="1" icon="icons:TagBlue.png" name="23 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="23 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="23" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{96530477-74c4-8547-961a-028a7579350b}" name="22 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="e8b5ba95-0e9b-c449-acf1-e5c8656cbc08" visible="1" icon="icons:TagBlue.png" name="22 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="22 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="22" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{875f13b7-59b4-ca43-b023-f72fa000d70e}" name="21 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="f6fbdf87-0220-e548-9bf5-b0ddf15f52b7" visible="1" icon="icons:TagBlue.png" name="21 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="21 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="21" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{6f3b8283-875c-9541-9a16-e889d393e54a}" name="20 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="ab3098e9-bef5-5b4f-a236-a88b8d24f60d" visible="1" icon="icons:TagBlue.png" name="20 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="20 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="20" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{aaaa9525-8943-cb4e-83eb-0e7b70895bdb}" name="19 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="4378e2a4-4b67-8b4e-9e96-896fed974d6f" visible="1" icon="icons:TagBlue.png" name="19 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="19 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="19" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{912dd589-5742-5b40-a900-aac5af869fb0}" name="18 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="e0a37940-aba4-334a-8ea3-41523425639f" visible="1" icon="icons:TagBlue.png" name="18 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="18 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="18" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{429c5f24-1ef9-1843-9383-f31ddeb224a6}" name="17 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="2120ba30-cf56-6b4b-9457-23e030341367" visible="1" icon="icons:TagBlue.png" name="17 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="17 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="17" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{1df6d1c4-c4bb-144e-9b29-b997093e72fb}" name="16 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="70c6aa11-ca5c-954c-b034-9707e8083e99" visible="1" icon="icons:TagBlue.png" name="16 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="16 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="16" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{5bb47f74-798a-6444-ab27-8844df71210e}" name="15 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="7f7a96d6-dad5-e742-85ea-c1597d339b33" visible="1" icon="icons:TagBlue.png" name="15 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="15 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="15" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{a1a70b81-a100-1040-9239-24accf2a2825}" name="14 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="f1d38624-98c0-7541-9ed0-3d20942967af" visible="1" icon="icons:TagBlue.png" name="14 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="14 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="14" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{00aee11b-109c-bc49-a0c8-0c6563246864}" name="13 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="cf73387b-ef53-a446-9846-e210eb4aaf73" visible="1" icon="icons:TagBlue.png" name="13 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="13 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="13" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{c482d0b2-7863-e54e-8275-d536055b9c95}" name="12 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="44b8b931-2035-484d-8acf-752cfe4b5498" visible="1" icon="icons:TagBlue.png" name="12 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="12 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="12" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{4e8ff759-2f79-1044-ac77-8fa38e22f76a}" name="11 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="b2a05788-caf8-3a49-9b43-e417178b1482" visible="1" icon="icons:TagBlue.png" name="11 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="11 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="11" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{89a75491-fc65-894e-a958-25b1607a66cb}" name="10 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="2fec202f-7ec2-e44d-9495-1ed521baeb0b" visible="1" icon="icons:TagBlue.png" name="10 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="10 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="10" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{3c4299af-6a7a-3d46-8c2d-a40e3fb4aadf}" name="9 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="56e1bed2-0952-374b-a011-ff00780130ab" visible="1" icon="icons:TagBlue.png" name="9 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="9 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="9" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{bc03e2e4-c97a-dc49-97d0-4ef3710cfda0}" name="8 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="cd86582a-ae2c-f046-9a5d-ed3baadd2b6a" visible="1" icon="icons:TagBlue.png" name="8 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="8 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="8" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{7e7ced9d-3c17-8844-bab5-aefd37d49d59}" name="7 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="623bbce9-3094-e74c-8ff7-fe12d8ec4f28" visible="1" icon="icons:TagBlue.png" name="7 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="7 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="7" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{5cf20eb2-f185-9847-91f1-c4584bfc7a19}" name="6 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="f041bfb4-2ca1-5747-ad93-58cb1e4313ff" visible="1" icon="icons:TagBlue.png" name="6 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="6 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="6" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{98c23206-d813-3d4c-ab34-18f7d2946689}" name="5 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="002c48f7-a32d-1b44-b9f2-767a58c3ce24" visible="1" icon="icons:TagBlue.png" name="5 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="5 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="5" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{6bb9155d-2faa-be46-99a5-cc9d6a8ab082}" name="4 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="28711d27-7146-874e-a479-0f8e6e7c5ea7" visible="1" icon="icons:TagBlue.png" name="4 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="4 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="4" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{0fac65a6-bb48-9040-903e-8b967626e1b6}" name="3 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="41a074d4-1c32-1342-a662-555303f3ab2f" visible="1" icon="icons:TagBlue.png" name="3 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="3 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="3" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{e0629c49-3065-a943-8ada-62d91c2a800a}" name="2 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="020dcb49-1c73-b847-9450-8f0c38cf1e5b" visible="1" icon="icons:TagBlue.png" name="2 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="2 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="2" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{90696b8b-b59b-d64e-b747-a0fd9069be33}" name="1 Frame Handles">
+        <TagClass editable="1" objName="tag" guid="6c303bb3-a208-2b4f-8270-1c5c08b33e46" visible="1" icon="icons:TagBlue.png" name="1 Frame Handles">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="1 Frame Handles" name="tag.label"/>
+            <StringValue default="1" value="handles" name="tag.type"/>
+            <StringValue default="1" value="1" name="tag.value"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+      </items>
+      <BinViewType>2</BinViewType>
+      <BinViewZoom>70</BinViewZoom>
+     </BinProjectItem>
     </items>
     <BinViewType>2</BinViewType>
     <BinViewZoom>70</BinViewZoom>

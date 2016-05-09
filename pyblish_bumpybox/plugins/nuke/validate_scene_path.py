@@ -2,95 +2,181 @@ import os
 
 import nuke
 import pyblish.api
-import ftrack
 
 
-@pyblish.api.log
-class ValidateScenePath(pyblish.api.Validator):
-    """ Validates the path of the nuke script """
+class RepairScenePath(pyblish.api.Action):
 
-    families = ['scene']
-    label = 'Scene Path'
+    label = "Repair"
+    icon = "wrench"
+    on = "failed"
 
-    def get_path(self, instance):
+    def process(self, context):
 
-        path = []
-        filename = []
-
-        # get ftrack data
-        ftrack_data = instance.context.data('ftrackData')
-        project = ftrack.Project(id=ftrack_data['Project']['id'])
-        path.append(ftrack_data['Project']['root'])
-
-        try:
-            ep_name = ftrack_data['Episode']['name'].replace(' ', '_').lower()
-            path.append('episodes')
-            path.append(ep_name)
-        except:
-            self.log.info('No episodes found.')
-
-        try:
-            seq_name = ftrack_data['Sequence']['name'].replace(' ', '_').lower()
-            if 'Episode' not in ftrack_data:
-                path.append('sequences')
-            path.append(seq_name)
-        except:
-            self.log.info('No sequences found.')
-
-        try:
-            shot_name = ftrack_data['Shot']['name'].replace(' ', '_').lower()
-            path.append(shot_name)
-            filename.append(shot_name)
-        except:
-            self.log.info('No shot found.')
-
-        task_name = ftrack_data['Task']['name'].replace(' ', '_').lower()
-        path.append(task_name)
-        filename.append(task_name)
-
-        # get version data
-        version = 1
-        if instance.context.has_data('version'):
-            version = instance.context.data('version')
-        version_string = 'v%s' % str(version).zfill(3)
-
-        filename.append(version_string)
-
-        # extension
-        ext = os.path.splitext(instance.context.data('currentFile'))[1]
-        self.log.info(instance.context.data('currentFile'))
-        try:
-            filename.append(ext.split('.')[1])
-        except:
-            filename.append('nk')
-
-        path.append('.'.join(filename))
-
-        return os.path.join(*path).replace('\\', '/')
-
-    def process(self, instance):
-
-        # skipping the call up project
-        ftrack_data = instance.context.data('ftrackData')
-        if ftrack_data['Project']['code'] == 'the_call_up':
-            return
-
-        # validating scene work path
-        file_path = self.get_path(instance)
-        work_path = instance.data('workPath').replace('\\', '/')
-        msg = 'Scene path is not correct:'
-        msg += '\n\nCurrent: %s' % work_path
-        msg += '\n\nExpected: %s' % file_path
-        assert file_path == work_path, msg
-
-    def repair(self, instance):
-        """ Saves the nuke script to the correct path.
-        """
         # saving nuke script
-        file_path = self.get_path(instance)
+        file_path = self.get_path(context)
         file_dir = os.path.dirname(file_path)
 
         if not os.path.exists(file_dir):
             os.makedirs(file_dir)
 
         nuke.scriptSaveAs(file_path)
+
+    def get_path(self, context):
+
+        path = []
+        filename = []
+
+        # get ftrack data
+        ftrack_data = context.data('ftrackData')
+        path.append(ftrack_data['Project']['root'])
+        child_path = []
+        parent = False
+        parent_name = ftrack_data['Project']['name']
+
+        try:
+            name = ftrack_data['Asset_Build']['name'].replace(' ', '_').lower()
+            path.append('library')
+            asset_type = ftrack_data['Asset_Build']['type'].lower()
+            path.append(asset_type)
+            path.append(name)
+            parent_name = name
+        except:
+            self.log.info('No asset build found.')
+
+        try:
+            name = ftrack_data['Episode']['name'].replace(' ', '_').lower()
+            path.append('episodes')
+            child_path.append(name)
+            parent = True
+            parent_name = name
+        except:
+            self.log.info('No episode found.')
+
+        try:
+            name = ftrack_data['Sequence']['name'].replace(' ', '_').lower()
+            child_path.append(name)
+
+            if not parent:
+                path.append('sequences')
+
+            parent = True
+            parent_name = name
+        except:
+            self.log.info('No sequences found.')
+
+        try:
+            name = ftrack_data['Shot']['name'].replace(' ', '_').lower()
+            child_path.append(name)
+
+            if not parent:
+                path.append('shots')
+            parent_name = name
+        except:
+            self.log.info('No shot found.')
+
+        path.extend(child_path)
+
+        task_name = ftrack_data['Task']['name'].replace(' ', '_').lower()
+        path.append(task_name)
+
+        version = 1
+        if context.has_data('version'):
+            version = context.data('version')
+        version_string = 'v%s' % str(version).zfill(3)
+
+        filename.append(parent_name)
+        filename.append(task_name)
+        filename.append(version_string)
+        filename.append('nk')
+        path.append('.'.join(filename))
+
+        return os.path.join(*path).replace('\\', '/')
+
+
+class ValidateScenePath(pyblish.api.Validator):
+    """ Validates the path of the nuke script """
+
+    families = ['scene']
+    label = 'Scene Path'
+    actions = [RepairScenePath]
+
+    def get_path(self, context):
+
+        path = []
+        filename = []
+
+        # get ftrack data
+        ftrack_data = context.data('ftrackData')
+        path.append(ftrack_data['Project']['root'])
+        child_path = []
+        parent = False
+        parent_name = ftrack_data['Project']['name']
+
+        try:
+            name = ftrack_data['Asset_Build']['name'].replace(' ', '_').lower()
+            path.append('library')
+            asset_type = ftrack_data['Asset_Build']['type'].lower()
+            path.append(asset_type)
+            path.append(name)
+            parent_name = name
+        except:
+            self.log.info('No asset build found.')
+
+        try:
+            name = ftrack_data['Episode']['name'].replace(' ', '_').lower()
+            path.append('episodes')
+            child_path.append(name)
+            parent = True
+            parent_name = name
+        except:
+            self.log.info('No episode found.')
+
+        try:
+            name = ftrack_data['Sequence']['name'].replace(' ', '_').lower()
+            child_path.append(name)
+
+            if not parent:
+                path.append('sequences')
+
+            parent = True
+            parent_name = name
+        except:
+            self.log.info('No sequences found.')
+
+        try:
+            name = ftrack_data['Shot']['name'].replace(' ', '_').lower()
+            child_path.append(name)
+
+            if not parent:
+                path.append('shots')
+            parent_name = name
+        except:
+            self.log.info('No shot found.')
+
+        path.extend(child_path)
+
+        task_name = ftrack_data['Task']['name'].replace(' ', '_').lower()
+        path.append(task_name)
+
+        version = 1
+        if context.has_data('version'):
+            version = context.data('version')
+        version_string = 'v%s' % str(version).zfill(3)
+
+        filename.append(parent_name)
+        filename.append(task_name)
+        filename.append(version_string)
+        filename.append('nk')
+        path.append('.'.join(filename))
+
+        return os.path.join(*path).replace('\\', '/')
+
+    def process(self, instance):
+
+        # validating scene work path
+        file_path = self.get_path(instance.context)
+        work_path = instance.data('workPath').replace('\\', '/')
+        msg = 'Scene path is not correct:'
+        msg += '\n\nCurrent: %s' % work_path
+        msg += '\n\nExpected: %s' % file_path
+        assert file_path == work_path, msg

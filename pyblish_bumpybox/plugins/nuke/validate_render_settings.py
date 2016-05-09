@@ -5,12 +5,99 @@ import ftrack
 import nuke
 
 
-class ValidateRenderSettings(pyblish.api.Validator):
-    """ Validates the output path for nuke renders """
+class RepairRenderSettings(pyblish.api.Action):
 
+    label = 'Repair'
+    icon = 'wrench'
+    on = 'failed'
+
+    def get_path(self, instance):
+        ftrack_data = instance.context.data('ftrackData')
+
+        parent_name = None
+        try:
+            parent_name = ftrack_data['Shot']['name']
+        except:
+            parent_name = ftrack_data['Asset_Build']['name'].replace(' ', '_')
+
+        project = ftrack.Project(id=ftrack_data['Project']['id'])
+        root = project.getRoot()
+        file_name = os.path.basename(instance.context.data('currentFile'))
+        file_name = os.path.splitext(file_name)[0]
+        task_name = ftrack_data['Task']['name'].replace(' ', '_').lower()
+        version_number = instance.context.data('version')
+        version_name = 'v%s' % (str(version_number).zfill(3))
+        filename = '.'.join([parent_name, task_name, version_name,
+                            '%04d'])
+
+        path = [root, 'renders', 'img_sequences']
+
+        task = ftrack.Task(ftrack_data['Task']['id'])
+        for p in reversed(task.getParents()[:-1]):
+            path.append(p.getName())
+
+        path.append(task_name)
+        path.append(version_name)
+        path.append(str(instance))
+        path.append(filename)
+
+        return os.path.join(*path).replace('\\', '/')
+
+    def process(self, context, plugin):
+
+        # Get the errored instances
+        failed = []
+        for result in context.data["results"]:
+            if (result["error"] is not None and result["instance"] is not None
+               and result["instance"] not in failed):
+                failed.append(result["instance"])
+
+        # Apply pyblish.logic to get the instances for the plug-in
+        instances = pyblish.api.instances_by_plugin(failed, plugin)
+
+        for instance in instances:
+            node = nuke.toNode(str(instance))
+
+            path = node['file'].value()
+            ext = os.path.splitext(path)[-1]
+
+            # repairing the path string
+            output = self.get_path(instance)
+            if ext:
+                output = output + ext
+            else:
+                output = output + '.exr'
+            output = output.replace('\\', '/')
+
+            node['file'].setValue(output)
+
+            if ext == '.exr' or not ext:
+                output = os.path.splitext(node['file'].value())[0]
+                node['file'].setValue(output + '.exr')
+                nuke.updateUI()
+                node['compression'].setValue('Zip (1 scanline)')
+                node['colorspace'].setValue('default (linear)')
+
+            # making directories
+            if not os.path.exists(os.path.dirname(output)):
+                os.makedirs(os.path.dirname(output))
+
+            # repairing alpha output
+            valid_outputs = ['rgb', 'rgba', 'all']
+            if node['channels'].value() not in valid_outputs:
+                node['channels'].setValue('all')
+
+            # repairing proxy mode
+            nuke.root()['proxy'].setValue(False)
+
+
+class ValidateRenderSettings(pyblish.api.InstancePlugin):
+    """ Validates the output path for nuke renders """
+    order = pyblish.api.ValidatorOrder
     families = ['deadline.render']
     label = 'Render Output'
     optional = True
+    actions = [RepairRenderSettings]
 
     def get_path(self, instance):
         ftrack_data = instance.context.data('ftrackData')
@@ -58,7 +145,6 @@ class ValidateRenderSettings(pyblish.api.Validator):
 
         node = nuke.toNode(str(instance))
         ext = os.path.splitext(path)[-1]
-        basename = os.path.basename(path)
         output = self.get_path(instance)
 
         # validate path
@@ -93,45 +179,3 @@ class ValidateRenderSettings(pyblish.api.Validator):
         # validate proxy mode
         msg = "Can't publish with proxy mode enabled."
         assert not nuke.root()['proxy'].value(), msg
-
-    def repair(self, instance):
-
-        node = nuke.toNode(str(instance))
-        path = node['file'].value()
-        ext = os.path.splitext(path)[-1]
-
-        # on going project specific exception
-        ftrack_data = instance.context.data('ftrackData')
-        if ftrack_data['Project']['code'] == 'the_call_up':
-            if not os.path.exists(os.path.dirname(path)):
-                os.makedirs(os.path.dirname(path))
-            return
-
-        # repairing the path string
-        output = self.get_path(instance)
-        if ext:
-            output = output + ext
-        else:
-            output = output + '.exr'
-        output = output.replace('\\', '/')
-
-        node['file'].setValue(output)
-
-        if ext == '.exr' or not ext:
-            output = os.path.splitext(node['file'].value())[0]
-            node['file'].setValue(output + '.exr')
-            nuke.updateUI()
-            node['compression'].setValue('Zip (1 scanline)')
-            node['colorspace'].setValue('default (linear)')
-
-        # making directories
-        if not os.path.exists(os.path.dirname(output)):
-            os.makedirs(os.path.dirname(output))
-
-        # repairing alpha output
-        valid_outputs = ['rgb', 'rgba', 'all']
-        if node['channels'].value() not in valid_outputs:
-            node['channels'].setValue('all')
-
-        # repairing proxy mode
-        nuke.root()['proxy'].setValue(False)
