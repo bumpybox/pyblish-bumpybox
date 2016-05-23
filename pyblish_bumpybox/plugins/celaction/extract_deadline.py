@@ -5,18 +5,18 @@ import pyblish_standalone
 import ftrack
 
 
-class ExtractLevelSplit(pyblish.api.InstancePlugin):
+class ExtractDeadline(pyblish.api.InstancePlugin):
 
     label = 'Deadline'
     families = ['render']
-    order = pyblish.api.ExtractorOrder - 0.1
+    order = pyblish.api.ExtractorOrder
 
     def process(self, instance):
         job_data = {}
         job_data['Name'] = str(instance)
         job_data['Frames'] = '%s-%s' % (instance.data('start'),
                                         instance.data('end'))
-        job_data['ChunkSize'] = 25
+        job_data['ChunkSize'] = 10
         job_data['Group'] = 'celaction'
         job_data['Pool'] = 'medium'
         job_data['Plugin'] = 'CelAction'

@@ -1,4 +1,5 @@
 import pyblish.api
+import ftrack
 
 
 class CollectRender(pyblish.api.ContextPlugin):
@@ -8,12 +9,48 @@ class CollectRender(pyblish.api.ContextPlugin):
 
     def process(self, context):
 
-        instance = context.create_instance(name='celaction')
+        # common data
+        fps = 25
+        task = ftrack.Task(context.data['ftrackData']['Task']['id'])
+        assets = task.getParent().getAssets(assetTypes=['audio'])
+        audio = None
+        for a in assets:
+            for v in a.getVersions():
+                audio = v.getComponent().getFilesystemPath()
+
+        # scene render
+        instance = context.create_instance(name='scene')
         instance.set_data('family', value='render')
+        instance.data["publish"] = False
 
         data = context.data('kwargs')['data']
         for item in data:
             instance.set_data(item, value=data[item])
+
+        instance.data["movie"] = {"fps": fps,
+                                  "first_frame": int(data['start']),
+                                  "audio": audio}
+
+        instance.set_data('ftrackComponents', value={})
+        instance.set_data('ftrackAssetType', value='img')
+
+        ftrack_data = context.data('ftrackData')
+        task_name = ftrack_data['Task']['name'].replace(' ', '_').lower()
+        instance.set_data('ftrackAssetName', value=task_name)
+
+        # levels render
+        instance = context.create_instance(name='levels')
+        instance.set_data('family', value='render')
+        instance.set_data('levelSplit', value=True)
+        instance.data["publish"] = False
+
+        data = context.data('kwargs')['data']
+        for item in data:
+            instance.set_data(item, value=data[item])
+
+        instance.data["movie"] = {"fps": fps,
+                                  "first_frame": int(data['start']),
+                                  "audio": audio}
 
         instance.set_data('ftrackComponents', value={})
         instance.set_data('ftrackAssetType', value='img')

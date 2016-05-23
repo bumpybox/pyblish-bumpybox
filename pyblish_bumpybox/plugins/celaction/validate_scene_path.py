@@ -3,6 +3,7 @@ import shutil
 
 import pyblish.api
 import pyblish_standalone
+from pyblish_bumpybox.plugins import utils
 
 
 class RepairScenePath(pyblish.api.Action):
@@ -20,11 +21,10 @@ class RepairScenePath(pyblish.api.Action):
             os.makedirs(file_dir)
 
         src = pyblish_standalone.kwargs['path'][0]
-        dst = file_path + '.scn'
 
-        shutil.copy(src, dst)
+        shutil.copy(src, file_path)
 
-        pyblish_standalone.kwargs['path'] = [dst]
+        pyblish_standalone.kwargs['path'] = [file_path]
 
     def get_path(self, context):
 
@@ -65,13 +65,16 @@ class RepairScenePath(pyblish.api.Action):
         version = 1
         if context.has_data('version'):
             version = context.data('version')
+
         version_string = 'v%s' % str(version).zfill(3)
 
         filename.append(version_string)
+        filename.append('scn')
 
         path.append('.'.join(filename))
+        path = os.path.join(*path).replace('\\', '/')
 
-        return os.path.join(*path).replace('\\', '/')
+        return utils.next_nonexisting_version(path)
 
 
 class ValidateScenePath(pyblish.api.InstancePlugin):
@@ -120,25 +123,35 @@ class ValidateScenePath(pyblish.api.InstancePlugin):
         version = 1
         if instance.context.has_data('version'):
             version = instance.context.data('version')
+
         version_string = 'v%s' % str(version).zfill(3)
 
         filename.append(version_string)
+        filename.append('scn')
 
         path.append('.'.join(filename))
+        path = os.path.join(*path).replace('\\', '/')
 
-        return os.path.join(*path).replace('\\', '/')
+        return path
 
     def process(self, instance):
 
-        # validating scene work path
-        file_path = self.get_path(instance)
-        work_path = pyblish_standalone.kwargs['path'][0]
+        # getting current work file
+        work_path = pyblish_standalone.kwargs['path'][0].replace('\\', '/')
+        work_path = work_path.lower()
 
+        # getting expected work file
+        file_path = self.get_path(instance).lower()
+
+        # if the path is completely invalid,
+        # we need to find the next non-existing version to validate
+        if file_path.split('v')[0] != work_path.split('v')[0]:
+            self.log.info("Invalid path found.")
+            file_path = utils.next_nonexisting_version(file_path)
+
+        # validating scene work path
         msg = 'Scene path is not correct:'
         msg += '\n\nCurrent: %s' % (work_path)
-        msg += '\n\nExpected: %s' % (file_path + '.scn')
+        msg += '\n\nExpected: %s' % (file_path)
 
-        assert (file_path + '.scn') == work_path, msg
-
-        #import webbrowser
-        #webbrowser.open('file://%s' % work_path)
+        assert file_path == work_path, msg

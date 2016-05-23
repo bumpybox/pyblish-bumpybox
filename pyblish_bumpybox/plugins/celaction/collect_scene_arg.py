@@ -8,7 +8,5 @@ class CollectCelActionScene(pyblish.api.ContextPlugin):
 
     def process(self, context):
 
-        pyblish.api.register_host('celaction')
-
         path = context.data('kwargs')['path'][0]
         context.set_data('currentFile', value=path)
