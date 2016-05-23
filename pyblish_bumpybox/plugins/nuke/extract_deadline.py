@@ -39,8 +39,8 @@ class ExtractDeadline(pyblish.api.Extractor):
         instance.set_data('deadlineJobData', value=job_data)
 
         # returning if rendering a single image
-        first_frame = instance.data['firstFrame']
-        last_frame = instance.data['endFrame']
+        first_frame = nuke.root()['first_frame'].value()
+        last_frame = nuke.root()['last_frame'].value()
         if first_frame == last_frame:
             data = instance.data('deadlineData')
             data['job'] = job_data
@@ -81,6 +81,7 @@ class ExtractDeadline(pyblish.api.Extractor):
 
         data = instance.data('deadlineData')
         data['job'] = job_data
+        data['auxiliaryFiles'] = instance.context.data('currentFile')
         instance.set_data('deadlineData', value=data)
 
         components = {str(instance): {}}
