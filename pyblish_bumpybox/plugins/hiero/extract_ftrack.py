@@ -2,42 +2,21 @@ import os
 import tempfile
 import traceback
 import time
+import shutil
 
 import pyblish.api
 import ftrack
 import hiero
+import pipeline_schema
 
 
 class ExtractFtrackShots(pyblish.api.Extractor):
     """ Creates ftrack shots by the name of the shot
     """
 
-    families = ['ftrack', 'nuke']
+    families = ['ftrack', 'nuke', 'task']
     label = 'Ftrack Shots'
     optional = True
-
-    def get_path(self, shot, context):
-
-        ftrack_data = context.data('ftrackData')
-
-        path = [ftrack_data['Project']['root']]
-        path.append('renders')
-        path.append('audio')
-        for p in reversed(shot.getParents()[:-1]):
-            path.append(p.getName())
-
-        path.append(shot.getName())
-
-        # get version data
-        version = 1
-        if context.has_data('version'):
-            version = context.data('version')
-        version_string = 'v%s' % str(version).zfill(3)
-
-        filename = [shot.getName(), version_string, 'wav']
-        path.append('.'.join(filename))
-
-        return os.path.join(*path).replace('\\', '/')
 
     def frames_to_timecode(self, frames, framerate):
 
@@ -55,6 +34,11 @@ class ExtractFtrackShots(pyblish.api.Extractor):
         if not context.has_data('ftrackData'):
             return
 
+        # get version data
+        version = 1
+        if context.has_data('version'):
+            version = context.data('version')
+
         ftrack_data = context.data('ftrackData')
         task = ftrack.Task(ftrack_data['Task']['id'])
         parents = task.getParents()
@@ -63,6 +47,7 @@ class ExtractFtrackShots(pyblish.api.Extractor):
         path = []
         for p in parents:
             path.append(p.getName())
+        path.reverse()
 
         # setup parent
         parent = parents[0]
@@ -74,6 +59,7 @@ class ExtractFtrackShots(pyblish.api.Extractor):
                     copy_path.append(name_split[0])
                     parent = ftrack.getSequence(copy_path)
                 except:
+                    self.log.error(traceback.format_exc())
                     parent = parents[0].createSequence(name_split[0])
             if len(name_split) == 3:
                 try:
@@ -81,6 +67,7 @@ class ExtractFtrackShots(pyblish.api.Extractor):
                     copy_path.append(name_split[0])
                     parent = ftrack.getSequence(copy_path)
                 except:
+                    self.log.error(traceback.format_exc())
                     parent = parents[0].createEpisode(name_split[0])
 
                 parents = [parent] + parents
@@ -89,6 +76,7 @@ class ExtractFtrackShots(pyblish.api.Extractor):
                     copy_path.append(name_split[1])
                     parent = ftrack.getSequence(copy_path)
                 except:
+                    self.log.error(traceback.format_exc())
                     parent = parents[0].createSequence(name_split[1])
 
         # creating shot
@@ -103,22 +91,15 @@ class ExtractFtrackShots(pyblish.api.Extractor):
         try:
             shot = parent.createShot(shot_name)
 
-            path = self.get_path(shot, context)
-
-            instance.set_data('ftrackId', value=shot.getId())
-
-            if not os.path.exists(os.path.dirname(path)):
-                os.makedirs(os.path.dirname(path))
-
-            item.sequence().writeAudioToFile(path, item.timelineIn(),
-                                             item.timelineOut())
-
             msg = 'Creating new shot with name'
             msg += ' "%s"' % item.name()
             self.log.info(msg)
 
+            instance.data['ftrackId'] = shot.getId()
             instance.data['ftrackShot'] = shot
         except:
+            self.log.error(traceback.format_exc())
+
             path = []
             try:
                 for p in reversed(parent.getParents()):
@@ -129,27 +110,65 @@ class ExtractFtrackShots(pyblish.api.Extractor):
             path.append(shot_name)
             shot = ftrack.getShot(path)
 
-            instance.set_data('ftrackId', value=shot.getId())
-
-            path = self.get_path(shot, context)
-
-            if not os.path.exists(os.path.dirname(path)):
-                os.makedirs(os.path.dirname(path))
-
-            item.sequence().writeAudioToFile(path, item.timelineIn(),
-                                             item.timelineOut())
-
+            instance.data['ftrackId'] = shot.getId()
             instance.data['ftrackShot'] = shot
+
+        # publishing audio
+        asset = shot.createAsset(name='audio', assetType='audio')
+
+        assetversion = None
+        for v in asset.getVersions():
+            if v.getVersion() == version:
+                assetversion = v
+
+        if not assetversion:
+            assetversion = asset.createVersion(taskid=shot.getId())
+            assetversion.publish()
+            assetversion.set('version', value=int(version))
+
+        component = None
+        for c in assetversion.getComponents():
+            if c.getName() == 'main':
+                component = c
+
+        if not component:
+            component = assetversion.createComponent()
+
+        # get output path
+        data = pipeline_schema.get_data(component.getId())
+        data['version'] = version
+        data['extension'] = 'wav'
+        output_file = pipeline_schema.get_path('output_file', data)
+        output_dir = os.path.dirname(output_file)
+
+        # copy audio file
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        shutil.copy(instance.data['audio'], output_file)
+
+        component.delete()
+        assetversion.createComponent(path=output_file)
 
         # assign attributes to shot
         shot.set('fstart', value=1)
         shot.set('fend', value=duration)
         shot.set('handles', value=instance.data['handles'])
 
-        # generate thumbnail
+        # generate_thumbnail
+        try:
+            self.generate_thumbnail(instance, item, shot)
+        except:
+            self.log.error(traceback.format_exc())
+
+    def generate_thumbnail(self, instance, item, shot):
         nukeWriter = hiero.core.nuke.ScriptWriter()
 
-        root_node = hiero.core.nuke.RootNode(1, 1)
+        # getting top most track with media
+        seq = item.parent().parent()
+        item = seq.trackItemAt(item.timelineIn())
+
+        root_node = hiero.core.nuke.RootNode(1, 1, fps=seq.framerate())
         nukeWriter.addNode(root_node)
 
         handles = instance.data['handles']
@@ -164,7 +183,7 @@ class ExtractFtrackShots(pyblish.api.Extractor):
         output_path = os.path.join(tempfile.gettempdir(),
                                    os.path.basename(output_path))
 
-        fmt = hiero.core.Format(150, 100, 1, 'thumbnail')
+        fmt = hiero.core.Format(300, 200, 1, 'thumbnail')
         fmt.addToNukeScript(script=nukeWriter)
 
         write_node = hiero.core.nuke.WriteNode(output_path)
@@ -173,6 +192,7 @@ class ExtractFtrackShots(pyblish.api.Extractor):
 
         script_path = output_path.replace('.png', '.nk')
         nukeWriter.writeToDisk(script_path)
+        self.log.info(script_path)
         logFileName = output_path.replace('.png', '.log')
         process = hiero.core.nuke.executeNukeScript(script_path,
                                                     open(logFileName, 'w'))
@@ -190,15 +210,6 @@ class ExtractFtrackShots(pyblish.api.Extractor):
         else:
             self.log.error("Thumbnail failed to render")
 
-        # clean up
-        """
-        try:
-            os.remove(script_path)
-            os.remove(logFileName)
-            os.remove(output_path)
-        except Exception as e:
-            raise e
-        """
 
 class ExtractFtrackTasks(pyblish.api.Extractor):
     """
@@ -222,7 +233,6 @@ class ExtractFtrackTasks(pyblish.api.Extractor):
             task_type = self.getTaskTypeByName(t)
             try:
                 shot = instance.data['ftrackShot']
-                shot.createTask(task_type.getName().lower(),
-                                taskType=task_type)
+                shot.createTask(t.lower(), taskType=task_type)
             except:
                 self.log.error(traceback.format_exc())

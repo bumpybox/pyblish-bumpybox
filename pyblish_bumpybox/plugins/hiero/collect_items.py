@@ -45,18 +45,19 @@ class CollectItems(pyblish.api.Collector):
                 families = []
                 task_types = []
                 for tag in (item.tags() + vid.tags()):
-                    families.append(tag.name())
                     data = tag.metadata()
                     if data.hasKey('type') and data.value('type') == 'task':
                         families.append('task')
                         task_types.append(tag.name())
+                    else:
+                        families.append(tag.name())
 
                     instance.data['handles'] = 0
                     if data.hasKey('type') and data.value('type') == 'handles':
                         instance.data['handles'] = int(data.value('value'))
 
                 instance.data['taskTypes'] = task_types
-                instance.data['families'] = families
+                instance.data['families'] = list(set(families))
                 instance.add(item)
                 instance.data['videoTrack'] = vid
                 instance.data['publish'] = publish_state
