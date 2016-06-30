@@ -7,7 +7,7 @@ import pipeline_schema
 class ExtractAudio(pyblish.api.InstancePlugin):
     """ Extracting audio """
 
-    families = ['h264', 'prores', 'task']
+    families = ['trackItem']
     label = 'Audio'
     order = pyblish.api.Extractor.order - 0.5
 

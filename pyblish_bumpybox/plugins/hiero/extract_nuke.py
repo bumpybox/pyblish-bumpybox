@@ -1,18 +1,18 @@
 import os
-import tempfile
 
 import pyblish.api
 import hiero
-from pyblish_bumpybox.plugins.hiero import utils
+import pipeline_schema
 
 
-class ExtractNuke(pyblish.api.Extractor):
+class ExtractNuke(pyblish.api.InstancePlugin):
+    """ Extract nuke script """
 
     families = ['nuke']
     label = 'Nuke Script'
-    order = pyblish.api.Extractor.order + 0.1
+    order = pyblish.api.ExtractorOrder + 0.1
 
-    def process(self, instance, context):
+    def process(self, instance):
 
         item = instance[0]
         file_path = item.source().mediaSource().fileinfos()[0].filename()
@@ -51,14 +51,26 @@ class ExtractNuke(pyblish.api.Extractor):
                              includeRetimes=True, retimeMethod='Frame',
                              startHandle=handles, endHandle=handles)
 
-        write_path = utils.get_path(instance, 'exr', self.log, sequence=True)
+        # get version data
+        version = 1
+        if 'version' in instance.context.data:
+            version = instance.context.data['version']
+
+        # expected path
+        data = pipeline_schema.get_data()
+        data['version'] = version
+        data['extension'] = 'exr'
+        data['output_type'] = 'img'
+        data['name'] = str(instance)
+        write_path = pipeline_schema.get_path('output_sequence', data)
+
         write_node = hiero.core.nuke.WriteNode(write_path)
         write_node.setKnob('file_type', 'exr')
         write_node.setKnob('metadata', 'all metadata')
         nukeWriter.addNode(write_node)
 
-        script_path = os.path.join(tempfile.gettempdir(),
-                                   str(instance) + '.nk')
+        data['extension'] = 'nk'
+        script_path = pipeline_schema.get_path('temp_file', data)
         nukeWriter.writeToDisk(script_path)
 
         # adding deadline data
@@ -71,9 +83,9 @@ class ExtractNuke(pyblish.api.Extractor):
         plugin_data = {'NukeX': False, 'Version': '9.0',
                        'EnforceRenderOrder': True, 'SceneFile': ''}
 
-        data = {'job': job_data, 'plugin': plugin_data,
-                'auxiliaryFiles': [script_path]}
-        instance.set_data('deadlineData', value=data)
+        instance.data['deadlineData'] = {'job': job_data,
+                                         'plugin': plugin_data,
+                                         'auxiliaryFiles': [script_path]}
 
         # creating shot nuke script
         nukeWriter = hiero.core.nuke.ScriptWriter()
@@ -116,9 +128,9 @@ class ExtractNuke(pyblish.api.Extractor):
             nukeWriter.addNode(retime_node)
             last_node = retime_node
 
-        write_path = os.path.join(tempfile.gettempdir(),
-                                  str(instance) + '.exr')
-        write_node = hiero.core.nuke.WriteNode(write_path, inputNode=last_node)
+        data['extension'] = 'exr'
+        temp_file = pipeline_schema.get_path('temp_file', data)
+        write_node = hiero.core.nuke.WriteNode(temp_file, inputNode=last_node)
         write_node.setKnob('file_type', 'exr')
         write_node.setKnob('metadata', 'all metadata')
         nukeWriter.addNode(write_node)
@@ -156,43 +168,8 @@ class ExtractNuke(pyblish.api.Extractor):
             nukeWriter.addNode(retime_node)
 
         # get file path
-        path = []
-        filename = []
-
-        ftrack_data = instance.context.data('ftrackData')
-        path.append(ftrack_data['Project']['root'])
-
-        parent_dir = 'shots'
-        parent_names = []
-        for p in instance.data['ftrackShot'].getParents():
-            try:
-                parent_dir = p.get('objecttypename').lower() + 's'
-                parent_names.append(p.get('name'))
-            except:
-                pass
-        path.append(parent_dir)
-
-        for p in reversed(parent_names):
-            path.append(p)
-
-        name = str(instance).split('--')[-1]
-        path.append(name)
-        path.append('publish')
-
-        filename.append(name)
-
-        # get version data
-        version = 1
-        if instance.context.has_data('version'):
-            version = instance.context.data('version')
-        version_string = 'v%s' % str(version).zfill(3)
-
-        filename.append(version_string)
-        filename.append('nk')
-
-        path.append('.'.join(filename))
-
-        file_path = os.path.join(*path).replace('\\', '/')
+        data['extension'] = 'nk'
+        file_path = pipeline_schema.get_path('output_file', data)
 
         # create directories
         if not os.path.exists(os.path.dirname(file_path)):
@@ -202,15 +179,15 @@ class ExtractNuke(pyblish.api.Extractor):
         nukeWriter.writeToDisk(file_path)
 
         # publishing to ftrack
-        asset = instance.data['ftrackShot'].createAsset(name, 'scene')
+        asset = instance.data['ftrackShot'].createAsset(str(instance), 'scene')
 
         # removing existing version
         for v in asset.getVersions():
-            if v.getVersion() == context.data['version']:
+            if v.getVersion() == instance.context.data['version']:
                 v.delete()
 
         # creating new version
         version = asset.createVersion()
-        version.set('version', context.data['version'])
+        version.set('version', instance.context.data['version'])
         version.createComponent(name='nuke', path=file_path)
         version.publish()

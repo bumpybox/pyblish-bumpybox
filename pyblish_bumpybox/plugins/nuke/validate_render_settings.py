@@ -70,6 +70,7 @@ class RepairRenderSettings(pyblish.api.Action):
             output = output.replace('\\', '/')
 
             node['file'].setValue(output)
+            node['file_type'].setValue(os.path.splitext(output)[1][1:])
 
             if ext == '.exr' or not ext:
                 output = os.path.splitext(node['file'].value())[0]
@@ -156,9 +157,9 @@ class ValidateRenderSettings(pyblish.api.InstancePlugin):
         assert os.path.exists(os.path.dirname(output)), msg
 
         # validate extension
-        msg = 'Output extension needs to be ".exr" or ".png",'
+        msg = 'Output extension needs to be ".exr", ".png" or ".dpx",'
         msg += ' currently "%s"' % os.path.splitext(path)[-1]
-        assert ext == '.exr' or ext == '.png', msg
+        assert ext in ['.exr', '.png', '.dpx'], msg
 
         # validate alpha
         msg = 'Output channels are wrong.'

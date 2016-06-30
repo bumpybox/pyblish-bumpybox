@@ -2,7 +2,7 @@ import os
 
 import pyblish.api
 import pyblish_standalone
-import ftrack
+import pipeline_schema
 
 
 class ExtractDeadline(pyblish.api.InstancePlugin):
@@ -21,57 +21,54 @@ class ExtractDeadline(pyblish.api.InstancePlugin):
         job_data['Pool'] = 'medium'
         job_data['Plugin'] = 'CelAction'
 
-        # get output filename
-        ftrack_data = instance.context.data('ftrackData')
-        task = ftrack.Task(ftrack_data['Task']['id'])
-
-        path = [ftrack_data['Project']['root']]
-        path.append('renders')
-        path.append('img_sequences')
-        for p in reversed(task.getParents()[:-1]):
-            path.append(p.getName())
-
-        task_name = task.getName().replace(' ', '_').lower()
-        path.append(task_name)
-
+        # get version data
         version = 1
         if instance.context.has_data('version'):
             version = instance.context.data('version')
-        version_string = 'v%s' % str(version).zfill(3)
-        path.append(version_string)
-        path.append(str(instance))
 
-        filename = [task.getParent().getName(), task_name, version_string]
-        filename = '.'.join(filename)
-        filename = filename + '_####.png'
-        path.append(filename)
-
-        output_path = os.path.join(*path).replace('\\', '/')
-        job_data['OutputFilename0'] = output_path
+        # get output filename
+        data = pipeline_schema.get_data()
+        data['extension'] = 'png'
+        data['output_type'] = 'img'
+        data['name'] = str(instance)
+        data['version'] = version
+        output_path = pipeline_schema.get_path('output_sequence', data)
+        job_data['OutputFilename0'] = output_path.replace('%04d', '####')
 
         # plugin data
         plugin_data = {}
-
+        render_name_separator = '.'
         path = os.path.dirname(pyblish_standalone.kwargs['path'][0])
         filename = os.path.basename(pyblish_standalone.kwargs['path'][0])
         args = '<QUOTE>%s<QUOTE>' % os.path.join(path, 'publish', filename)
         args += ' -a'
 
+        # not rendering a movie if outputting levels
+        # also changing the RenderNameSeparator for better naming
+        # ei. "levels.v001_1sky.0001.png" > "levels_1sky.v001.0001.png"
         if instance.has_data('levelSplit'):
             args += ' -l'
+            instance.data.pop("movie", None)
+
+            version_string = pipeline_schema.get_path('version', data)
+            output_path = output_path.replace('.' + version_string, '')
+            job_data['OutputFilename0'] = output_path.replace('%04d', '####')
+
+            render_name_separator = '.%s.' % version_string
 
         args += ' -s <STARTFRAME>'
         args += ' -e <ENDFRAME>'
         args += ' -d <QUOTE>%s<QUOTE>' % os.path.dirname(output_path)
         args += ' -x %s' % instance.data('x')
         args += ' -y %s' % instance.data('y')
-        args += ' -r <QUOTE>%s<QUOTE>' % output_path.replace('_####', '')
+        args += ' -r <QUOTE>%s<QUOTE>' % output_path.replace('.%04d', '')
         args += ' -= AbsoluteFrameNumber=on -= PadDigits=4'
         args += ' -= ClearAttachment=on'
 
         plugin_data['Arguments'] = args
 
         plugin_data['StartupDirectory'] = ''
+        plugin_data['RenderNameSeparator'] = render_name_separator
 
         # adding to instance
         data = {'job': job_data, 'plugin': plugin_data}
@@ -82,6 +79,5 @@ class ExtractDeadline(pyblish.api.InstancePlugin):
             os.makedirs(os.path.dirname(output_path))
 
         # ftrack data
-        path = output_path.replace('####', '%04d')
-        components = {str(instance): {'path': path}}
+        components = {str(instance): {'path': output_path}}
         instance.set_data('ftrackComponents', value=components)

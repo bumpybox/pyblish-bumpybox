@@ -4,6 +4,7 @@ import shutil
 import pyblish.api
 import pyblish_standalone
 from pyblish_bumpybox.plugins import utils
+import pipeline_schema
 
 
 class RepairScenePath(pyblish.api.Action):
@@ -13,8 +14,19 @@ class RepairScenePath(pyblish.api.Action):
 
     def process(self, context, plugin):
 
+        # get version data
+        version = 1
+        if context.has_data('version'):
+            version = context.data('version')
+
+        # expected path
+        data = pipeline_schema.get_data()
+        data['version'] = version
+        data['extension'] = 'scn'
+        expected_path = pipeline_schema.get_path('task_work', data)
+
         # saving scene
-        file_path = self.get_path(context)
+        file_path = utils.next_nonexisting_version(expected_path)
         file_dir = os.path.dirname(file_path)
 
         if not os.path.exists(file_dir):
@@ -25,56 +37,6 @@ class RepairScenePath(pyblish.api.Action):
         shutil.copy(src, file_path)
 
         pyblish_standalone.kwargs['path'] = [file_path]
-
-    def get_path(self, context):
-
-        path = []
-        filename = []
-
-        # get ftrack data
-        ftrack_data = context.data('ftrackData')
-        path.append(ftrack_data['Project']['root'])
-
-        try:
-            ep_name = ftrack_data['Episode']['name'].replace(' ', '_').lower()
-            path.append('episodes')
-            path.append(ep_name)
-        except:
-            self.log.info('No episodes found.')
-
-        try:
-            seq_name = ftrack_data['Sequence']['name'].replace(' ', '_').lower()
-            if 'Episode' not in ftrack_data:
-                path.append('sequences')
-            path.append(seq_name)
-        except:
-            self.log.info('No sequences found.')
-
-        try:
-            shot_name = ftrack_data['Shot']['name'].replace(' ', '_').lower()
-            path.append(shot_name)
-            filename.append(shot_name)
-        except:
-            self.log.info('No shot found.')
-
-        task_name = ftrack_data['Task']['name'].replace(' ', '_').lower()
-        path.append(task_name)
-        filename.append(task_name)
-
-        # get version data
-        version = 1
-        if context.has_data('version'):
-            version = context.data('version')
-
-        version_string = 'v%s' % str(version).zfill(3)
-
-        filename.append(version_string)
-        filename.append('scn')
-
-        path.append('.'.join(filename))
-        path = os.path.join(*path).replace('\\', '/')
-
-        return utils.next_nonexisting_version(path)
 
 
 class ValidateScenePath(pyblish.api.InstancePlugin):
@@ -140,8 +102,16 @@ class ValidateScenePath(pyblish.api.InstancePlugin):
         work_path = pyblish_standalone.kwargs['path'][0].replace('\\', '/')
         work_path = work_path.lower()
 
-        # getting expected work file
-        file_path = self.get_path(instance).lower()
+        # get version data
+        version = 1
+        if instance.context.has_data('version'):
+            version = instance.context.data('version')
+
+        # expected path
+        data = pipeline_schema.get_data()
+        data['version'] = version
+        data['extension'] = 'scn'
+        file_path = pipeline_schema.get_path('task_work', data)
 
         # if the path is completely invalid,
         # we need to find the next non-existing version to validate

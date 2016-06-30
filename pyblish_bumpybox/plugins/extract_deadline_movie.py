@@ -1,13 +1,11 @@
-import os
-import re
-
 import pyblish.api
+import pipeline_schema
 
 
 class ExtractDeadlineMovie(pyblish.api.InstancePlugin):
 
     hosts = ['celaction']
-    label = 'Movie'
+    label = 'Deadline Movie'
     families = ['*']
     order = pyblish.api.ExtractorOrder + 0.4
 
@@ -26,6 +24,12 @@ class ExtractDeadlineMovie(pyblish.api.InstancePlugin):
         # skipping instance if data is missing
         if 'deadlineData' not in instance.data:
             msg = 'No deadlineData present. Skipping "%s"' % instance
+            self.log.info(msg)
+            return
+
+        # skipping instance if the required data is missing
+        if 'movie' not in instance.data:
+            msg = 'Missing movie data.'
             self.log.info(msg)
             return
 
@@ -53,9 +57,19 @@ class ExtractDeadlineMovie(pyblish.api.InstancePlugin):
             args += ' -i ' + audio.replace('\\', '/')
         extra_info_key_value['FFMPEGInput0'] = args
 
-        output_file = input_file.replace('img_sequences', 'movies')
-        output_file = re.sub(r'.%04d', '', output_file)
-        output_file = os.path.splitext(output_file)[0] + '.mov'
+        # get version data
+        version = 1
+        if instance.context.has_data('version'):
+            version = instance.context.data('version')
+
+        # expected path
+        data = pipeline_schema.get_data()
+        data['version'] = version
+        data['extension'] = 'mov'
+        data['output_type'] = 'mov'
+        data['name'] = str(instance)
+        output_file = pipeline_schema.get_path('output_file', data)
+
         extra_info_key_value['FFMPEGOutput0'] = output_file
 
         job_data['ExtraInfoKeyValue'] = extra_info_key_value

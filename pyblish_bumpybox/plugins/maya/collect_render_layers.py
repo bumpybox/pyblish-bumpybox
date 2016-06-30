@@ -7,9 +7,6 @@ import pymel.core
 
 class CollectRenderlayers(pyblish.api.Collector):
     """ Gathers all renderlayers
-    TODO:
-        - support frame range overrides
-            - getting some odd returned values from the renderlayer adjustments
     """
 
     imageFormats = {'svg': 62, 'psd': 36, 'bmp': 20, 'sgi': 13, 'eps': 9,
@@ -63,9 +60,6 @@ class CollectRenderlayers(pyblish.api.Collector):
             if layer.name().endswith('defaultRenderLayer'):
                 continue
 
-            if 'defaultRenderLayer' in layer.name() and layer.isReferenced():
-                continue
-
             layer_data = {}
             render_cams = []
             if layer.adjustments.get(multiIndices=True):
@@ -74,21 +68,28 @@ class CollectRenderlayers(pyblish.api.Collector):
                         continue
 
                     if layer.adjustments[count].plug.connections()[0] == drg:
-                        attr = layer.adjustments[count].plug.connections(plugs=True)[0]
-                        layer_data[attr.name(includeNode=False)] = layer.adjustments[count].value.get()
+                        attr = layer.adjustments[count].plug
+                        attr = attr.connections(plugs=True)[0]
+                        layer_value = layer.adjustments[count].value.get()
+                        layer_data[attr.name(includeNode=False)] = layer_value
 
-                    for cam_attr in layer.adjustments[count].plug.connections(plugs=True, type='camera'):
-                        if cam_attr.endswith('renderable') and layer.adjustments[count].value.get() == 1.0:
-                            render_cams.append(pymel.core.PyNode(cam_attr.split('.')[0]))
+                    plug = layer.adjustments[count].plug
+                    for cam_attr in plug.connections(plugs=True,
+                                                     type='camera'):
+                        renderable = cam_attr.endswith('renderable')
+                        layer_value = layer.adjustments[count].value.get()
+                        if renderable and layer_value == 1.0:
+                            name = cam_attr.split('.')[0]
+                            render_cams.append(pymel.core.PyNode(name))
 
-                layer_data['renderpasses'] = layer.connections(type='renderPass')
+                render_pass = layer.connections(type='renderPass')
+                layer_data['renderpasses'] = render_pass
             else:
-                layer_data['renderpasses'] = layer.connections(type='renderPass')
+                render_pass = layer.connections(type='renderPass')
+                layer_data['renderpasses'] = render_pass
 
             layer_data['cameras'] = render_cams
             data[layer.name()] = layer_data
-
-        self.log.info(data)
 
         # getting path
         paths = [str(pymel.core.system.Workspace.getPath().expand())]

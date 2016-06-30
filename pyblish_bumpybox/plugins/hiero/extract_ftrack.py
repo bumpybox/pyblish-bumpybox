@@ -114,41 +114,39 @@ class ExtractFtrackShots(pyblish.api.Extractor):
             instance.data['ftrackShot'] = shot
 
         # publishing audio
-        asset = shot.createAsset(name='audio', assetType='audio')
+        if 'audio' in instance.data:
+            asset = shot.createAsset(name='audio', assetType='audio')
 
-        assetversion = None
-        for v in asset.getVersions():
-            if v.getVersion() == version:
-                assetversion = v
+            assetversion = None
+            for v in asset.getVersions():
+                if v.getVersion() == version:
+                    assetversion = v
 
-        if not assetversion:
-            assetversion = asset.createVersion(taskid=shot.getId())
-            assetversion.publish()
-            assetversion.set('version', value=int(version))
+            if not assetversion:
+                assetversion = asset.createVersion(taskid=shot.getId())
+                assetversion.publish()
+                assetversion.set('version', value=int(version))
 
-        component = None
-        for c in assetversion.getComponents():
-            if c.getName() == 'main':
-                component = c
+            # get output path
+            data = pipeline_schema.get_data()
+            data['version'] = version
+            data['extension'] = 'wav'
+            data['output_type'] = 'audio'
+            data['name'] = str(instance)
+            output_file = pipeline_schema.get_path('output_file', data)
+            self.log.info(output_file)
 
-        if not component:
-            component = assetversion.createComponent()
+            # copy audio file
+            output_dir = os.path.dirname(output_file)
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
 
-        # get output path
-        data = pipeline_schema.get_data(component.getId())
-        data['version'] = version
-        data['extension'] = 'wav'
-        output_file = pipeline_schema.get_path('output_file', data)
-        output_dir = os.path.dirname(output_file)
+            shutil.copy(instance.data['audio'], output_file)
 
-        # copy audio file
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-
-        shutil.copy(instance.data['audio'], output_file)
-
-        component.delete()
-        assetversion.createComponent(path=output_file)
+            try:
+                assetversion.createComponent(path=output_file)
+            except:
+                self.log.error(traceback.format_exc())
 
         # assign attributes to shot
         shot.set('fstart', value=1)

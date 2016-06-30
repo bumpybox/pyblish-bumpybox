@@ -17,3 +17,5 @@ class IntegrateCleanUp(pyblish.api.ContextPlugin):
         data['extension'] = 'temp'
         output_dir = pipeline_schema.get_path('temp_dir', data=data)
         shutil.rmtree(output_dir, ignore_errors=True)
+
+        self.log.info('Removed "%s"' % output_dir)
