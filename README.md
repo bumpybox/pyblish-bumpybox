@@ -23,6 +23,13 @@ You also need to setup the environment before launching any application:
 
 ## Usage
 
+- maya workflow
+- nuke workflow
+- houdini workflow
+- celaction workflow
+- tv paint workflow
+- after effects workflow
+
 ## Families
 
 All the instances presented when publishing are categorized into three levels; ```Output Type```, ```Processing Location``` and ```File Type```. This is visualized through the families (sections in the UI), separated by a dot: ```[Output Type].[Processing Location].[File Type]```.
