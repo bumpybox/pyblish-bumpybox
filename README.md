@@ -5,6 +5,7 @@
 This package is dependent on:
 
 - [pyblish-base](https://github.com/pyblish/pyblish-base)
+- [pyblish-qml](https://github.com/pyblish/pyblish-qml)
 - [pyblish-maya](https://github.com/pyblish/pyblish-maya)
 - [pyblish-nuke](https://github.com/pyblish/pyblish-nuke)
 - [pyblish-houdini](https://github.com/pyblish/pyblish-houdini)
