@@ -25,9 +25,9 @@ class ValidateFtrackStatus(pyblish.api.Validator):
             task.setStatus(self.GetStatusByName('in progress'))
 
 
-class DeadlineFtrackStatus(pyblish.api.Integrator):
+class DeadlineFtrackStatus(pyblish.api.ContextPlugin):
 
-    order = pyblish.api.Integrator.order - 0.1
+    order = pyblish.api.IntegratorOrder - 0.1
 
     def process(self, context):
 
@@ -74,7 +74,9 @@ class DeadlineFtrackStatus(pyblish.api.Integrator):
             data = instance.data['deadlineData']['job']
             if 'ExtraInfoKeyValue' in data:
                 data['ExtraInfoKeyValue']['FT_StatusUpdate'] = False
+            instance.data["ftrackStatusUpdate"] = False
 
         data = new_context[-1].data['deadlineData']['job']
         if 'ExtraInfoKeyValue' in data:
             data['ExtraInfoKeyValue']['FT_StatusUpdate'] = True
+        new_context[-1].data["ftrackStatusUpdate"] = True

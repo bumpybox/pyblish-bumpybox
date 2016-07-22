@@ -26,10 +26,10 @@ class RepairIntermediateShapes(pyblish.api.Action):
 
 
 class ValidateIntermediateShapes(pyblish.api.InstancePlugin):
-    """ Ensures all points in mesh are zero'ed out """
+    """ Ensures there are no intermediate shapes in the scene. """
 
     families = ['geometry']
-    label = 'Intermediate Obejcts'
+    label = 'Intermediate Shapes'
     order = pyblish.api.ValidatorOrder
     actions = [RepairIntermediateShapes]
 
