@@ -1,3 +1,4 @@
+import os
 import json
 
 import pyblish.api
@@ -24,7 +25,7 @@ class UpdateFtrackStatus(pyblish.api.ContextPlugin):
             return
 
         # since "render" families will always produce a secondary job
-        if instance_data["family"].startswith("render"):
+        if os.path.splitext(instance_data["family"])[1] in [".ifd"]:
             return
 
         event = context.data["deadlineEvent"]
