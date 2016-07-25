@@ -21,8 +21,8 @@ class CollectRender(pyblish.api.ContextPlugin):
             return
         instance_data = json.loads(value)
 
-        # return early if isn't not of family render.*
-        if "render.*" not in instance_data["families"]:
+        # return early if it isn't a render file
+        if os.path.splitext(instance_data["family"])[1] not in [".ifd"]:
             return
 
         instance = context.create_instance(name=instance_data["name"])
