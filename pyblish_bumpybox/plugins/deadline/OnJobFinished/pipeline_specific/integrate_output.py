@@ -15,11 +15,16 @@ class IntegrateOutput(pyblish.api.InstancePlugin):
 
     def process(self, instance):
 
+        # we won't integrate render files as they will be rendering
+        if os.path.splitext(instance.data["family"])[1] in [".ifd"]:
+            return
+
         # get output path, extension is "temp" as we"ll get the extension from
         # the output files
         task_id = instance.context.data["ftrackData"]["Task"]["id"]
         data = pipeline_schema.get_data(task_id)
-        data["extension"] = "temp"
+        ext = os.path.splitext(instance.data["family"])[1].replace("_", ".")
+        data["extension"] = ext[1:]
         data["output_type"] = instance.data["ftrackAssetType"]
         data["name"] = str(instance)
         data["version"] = instance.context.data["version"]
@@ -30,38 +35,24 @@ class IntegrateOutput(pyblish.api.InstancePlugin):
         paths = []
         for path in instance.data["files"].keys():
 
-            output = output_file
-            sequence = False
-            # convert to sequence template if its multiple files
-            if "%" in path:
-                output = output_seq
-                sequence = True
-
             # create root
-            if not os.path.exists(os.path.dirname(output)):
-                os.makedirs(os.path.dirname(output))
+            if not os.path.exists(os.path.dirname(output_file)):
+                os.makedirs(os.path.dirname(output_file))
 
             # moving output
             pattern = r"\.[0-9]+\."
             files = []
-            ext = ""
+            output = output_file
             for f in instance.data["files"][path]:
 
-                dst = output
+                dst = output_file
 
                 # get frame number
-                if sequence:
+                if "%" in path:
                     frame = re.findall(pattern, os.path.basename(f))[-1]
                     frame = int(frame[1:-1])
-                    dst = output % frame
-
-                # get extension
-                ext = os.path.splitext(f)[1]
-
-                if f.endswith(".bgeo.sc"):
-                    ext = ".bgeo.sc"
-
-                dst = dst.replace(".temp", ext)
+                    dst = output_seq % frame
+                    output = output_seq
 
                 files.append(dst)
 
