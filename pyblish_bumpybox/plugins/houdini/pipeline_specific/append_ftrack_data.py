@@ -4,7 +4,7 @@ import pyblish.api
 class AppendFtrackData(pyblish.api.InstancePlugin):
     """ Appending ftrack component and asset type data """
 
-    families = ["img.*", "render.*", "cache.*"]
+    families = ["img.*", "cache.*"]
     # offset to piggy back from default collectors
     order = pyblish.api.CollectorOrder + 0.2
 
@@ -18,7 +18,5 @@ class AppendFtrackData(pyblish.api.InstancePlugin):
 
         if "img.*" in instance.data["families"]:
             instance.data["ftrackAssetType"] = "img"
-        if "render.*" in instance.data["families"]:
-            instance.data["ftrackAssetType"] = "render"
         if "cache.*" in instance.data["families"]:
             instance.data["ftrackAssetType"] = "cache"

@@ -1,3 +1,4 @@
+import os
 import re
 
 import hou
@@ -39,11 +40,15 @@ class CollectGeometry(pyblish.api.ContextPlugin):
             instance.data["outputPath"] = re.sub(r"\.[0-9]{4}\.", ".%04d.",
                                                  path)
 
+            ext = os.path.splitext(path)[1]
+            if path.endswith(".bgeo.sc"):
+                ext = ".bgeo_sc"
+
             # assigning families
             if node in nodes_local:
-                instance.data["family"] = "cache.local.geometry"
+                instance.data["family"] = "cache.local" + ext
                 instance.data["families"] = ["cache.*", "cache.local.*"]
             else:
-                instance.data["family"] = "cache.farm.geometry"
+                instance.data["family"] = "cache.farm" + ext
                 instance.data["families"] = ["cache.*", "cache.farm.*",
                                              "deadline"]

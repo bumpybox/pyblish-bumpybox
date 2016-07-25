@@ -7,7 +7,7 @@ import pyblish.api
 class AppendDeadlineDataBumpybox(pyblish.api.InstancePlugin):
     """ Appending Deadline data to houdini farm instances """
 
-    families = ["img.farm.*", "render.farm.*", "cache.farm.*"]
+    families = ["img.farm.*", "cache.farm.*"]
     order = pyblish.api.ExtractorOrder
 
     def process(self, instance):

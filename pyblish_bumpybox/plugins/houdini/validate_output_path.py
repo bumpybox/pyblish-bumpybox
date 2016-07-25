@@ -1,5 +1,6 @@
 import os
 
+import hou
 import pyblish.api
 
 
@@ -27,34 +28,35 @@ class RepairOutputPath(pyblish.api.Action):
             root = "${hip}/${HIPNAME}"
 
             padding_string = ".$F4"
-            if (instance.data["family"].endswith("alembic") and
+            if (instance.data["family"].endswith("abc") and
                "$F" not in instance.data["originalOutputPath"]):
                 padding_string = ""
 
             path = instance.data["originalOutputPath"]
-            ext = os.path.splitext(path)[1]
-            if path.endswith(".bgeo.sc"):
-                ext = ".bgeo.sc"
-
+            ext = os.path.splitext(instance.data["family"])[1].replace("_",
+                                                                       ".")
             output_path = "{0}_{1}{2}{3}".format(root, instance.data("name"),
                                                  padding_string, ext)
 
             # getting parameter name
             parm = ""
 
-            if instance.data["family"].endswith("alembic"):
+            if instance[0].type() == hou.nodeType(hou.ropNodeTypeCategory(),
+                                                  "alembic"):
                 parm = "filename"
-            if instance.data["family"].endswith("geometry"):
+            if instance[0].type() == hou.nodeType(hou.ropNodeTypeCategory(),
+                                                  "geometry"):
                 parm = "sopoutput"
-            if instance.data["family"].startswith("render"):
-                parm = "soho_diskfile"
+
             if instance.data["family"].startswith("img"):
                 parm = "vm_picture"
+            if instance.data["family"].endswith("ifd"):
+                parm = "soho_diskfile"
 
             instance[0].setParms({parm: output_path})
 
-            # extra validation for render
-            if instance.data["family"].startswith("render"):
+            # extra validation for ifd output
+            if instance.data["family"].endswith("ifd"):
                 path = instance.data["renderOutputPath"]
                 ext = os.path.splitext(path)[1]
 
@@ -67,7 +69,7 @@ class RepairOutputPath(pyblish.api.Action):
 class ValidateOutputPath(pyblish.api.InstancePlugin):
     """ Validates output path """
 
-    families = ["img.*", "render.*", "cache.*"]
+    families = ["img.*", "cache.*"]
     order = pyblish.api.ValidatorOrder
     label = "Output Path"
     actions = [RepairOutputPath]
@@ -84,15 +86,12 @@ class ValidateOutputPath(pyblish.api.InstancePlugin):
         # all outputs needs to have frame padding, except for alembics as they
         # can contain animation within a single file
         padding_string = ".$F4"
-        if (instance.data["family"].endswith("alembic") and
+        if (instance.data["family"].endswith("abc") and
            "$F" not in current):
             padding_string = ""
 
         path = instance.data["originalOutputPath"]
-        ext = os.path.splitext(path)[1]
-        if path.endswith(".bgeo.sc"):
-            ext = ".bgeo.sc"
-
+        ext = os.path.splitext(instance.data["family"])[1].replace("_", ".")
         expected = "{0}_{1}{2}{3}".format(root, instance.data("name"),
                                           padding_string, ext)
 
@@ -100,8 +99,8 @@ class ValidateOutputPath(pyblish.api.InstancePlugin):
         msg += "\n\nCurrent: {0}\n\nExpected: {1}"
         assert current == expected, msg.format(current, expected)
 
-        # extra validation for render
-        if instance.data["family"].startswith("render"):
+        # extra validation for ifd output
+        if instance.data["family"].endswith("ifd"):
             current = instance[0].parm("vm_picture").unexpandedString()
 
             path = instance[0].parm("vm_picture").unexpandedString()

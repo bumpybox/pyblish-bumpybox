@@ -23,9 +23,9 @@ class RepairMantraSettings(pyblish.api.Action):
         for instance in instances:
 
             # background vs. foreground rendering
-            soho_foreground = 0
-            if instance.data["family"].startswith("img.local"):
-                soho_foreground = 1
+            soho_foreground = 1
+            if instance.data["family"].endswith("ifd"):
+                soho_foreground = 0
 
             # setting parms
             instance[0].setParms({"soho_foreground": soho_foreground})
@@ -34,7 +34,7 @@ class RepairMantraSettings(pyblish.api.Action):
 class ValidateMantraSettings(pyblish.api.InstancePlugin):
     """ Validates mantra settings """
 
-    families = ["img.*", "render.*"]
+    families = ["img.*"]
     order = pyblish.api.ValidatorOrder
     label = "Mantra Settings"
     actions = [RepairMantraSettings]
@@ -46,13 +46,13 @@ class ValidateMantraSettings(pyblish.api.InstancePlugin):
 
         # When rendering locally we need to block, so Pyblish doesn"t execute
         # other plugins. When render on a farm, the block needs to be lifted.
-        if "img.local.*" in instance.data["families"]:
-            msg = "Mantra needs to render in the foreground for local "
-            msg += "rendering. Enable \"Block Until Render Complete\" in "
-            msg += "\"Driver\"."
-            assert node.parm("soho_foreground").eval(), msg
-        else:
+        if instance.data["family"].endswith("ifd"):
             msg = "Mantra needs to render in the background for farm "
             msg += "rendering. Disable \"Block Until Render Complete\" in "
             msg += "\"Driver\"."
             assert not node.parm("soho_foreground").eval(), msg
+        else:
+            msg = "Mantra needs to render in the foreground for local "
+            msg += "rendering. Enable \"Block Until Render Complete\" in "
+            msg += "\"Driver\"."
+            assert node.parm("soho_foreground").eval(), msg

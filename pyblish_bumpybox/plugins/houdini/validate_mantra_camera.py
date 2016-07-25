@@ -5,7 +5,7 @@ import pyblish.api
 class ValidateMantraCamera(pyblish.api.InstancePlugin):
     """ Validates mantra settings """
 
-    families = ["img.*", "render.*"]
+    families = ["img.*"]
     order = pyblish.api.ValidatorOrder
     label = "Mantra Camera"
 

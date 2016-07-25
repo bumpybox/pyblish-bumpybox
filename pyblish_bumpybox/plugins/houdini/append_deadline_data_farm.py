@@ -6,7 +6,7 @@ import pyblish.api
 class AppendDeadlineDataFarm(pyblish.api.InstancePlugin):
     """ Appending Deadline data to farm related instances """
 
-    families = ["img.farm.*", "render.farm.*", "cache.farm.*"]
+    families = ["img.farm.*", "cache.farm.*"]
     order = pyblish.api.ExtractorOrder
 
     def process(self, instance):

@@ -10,7 +10,7 @@ class CollectAlembic(pyblish.api.ContextPlugin):
     def process(self, context):
 
         # storing plugin data
-        node_type = hou.nodeType(hou.ropNodeTypeCategory(), 'alembic')
+        node_type = hou.nodeType(hou.ropNodeTypeCategory(), "alembic")
         nodes = node_type.instances()
 
         # categorize nodes based on whether they are in a network box starting
@@ -35,9 +35,9 @@ class CollectAlembic(pyblish.api.ContextPlugin):
             instance.data["originalOutputPath"] = path
 
             if node in nodes_local:
-                instance.data["family"] = "cache.local.alembic"
+                instance.data["family"] = "cache.local.abc"
                 instance.data["families"] = ["cache.*", "cache.local.*"]
             else:
-                instance.data["family"] = "cache.farm.alembic"
+                instance.data["family"] = "cache.farm.abc"
                 instance.data["families"] = ["cache.*", "cache.farm.*",
                                              "deadline"]

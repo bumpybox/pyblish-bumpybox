@@ -1,3 +1,4 @@
+import hou
 import pyblish.api
 
 
@@ -30,7 +31,7 @@ class RepairAlembicSettings(pyblish.api.Action):
 class ValidateAlembicSettings(pyblish.api.InstancePlugin):
     """ Validates Alembic settings """
 
-    families = ["cache.local.alembic", "cache.farm.alembic"]
+    families = ["cache.local.abc", "cache.farm.abc"]
     order = pyblish.api.ValidatorOrder
     label = "Alembic Settings"
     actions = [RepairAlembicSettings]
@@ -39,6 +40,9 @@ class ValidateAlembicSettings(pyblish.api.InstancePlugin):
     def process(self, instance):
 
         node = instance[0]
+
+        if node.type() != hou.nodeType(hou.ropNodeTypeCategory(), "alembic"):
+            return
 
         # partition mode
         msg = "Partition mode is not correct. Expected \"Use Combination of "

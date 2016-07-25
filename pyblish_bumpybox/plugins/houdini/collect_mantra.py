@@ -50,11 +50,11 @@ class CollectMantra(pyblish.api.ContextPlugin):
                 instance.data["renderOutputPath"] = vm_picture
 
                 if node in nodes_local:
-                    instance.data["family"] = "render.local.ifd"
-                    instance.data["families"] = ["render.*", "render.local.*"]
+                    instance.data["family"] = "img.local.ifd"
+                    instance.data["families"] = ["img.*", "img.local.*"]
                 else:
-                    instance.data["family"] = "render.farm.ifd"
-                    instance.data["families"] = ["render.*", "render.farm.*",
+                    instance.data["family"] = "img.farm.ifd"
+                    instance.data["families"] = ["img.*", "img.farm.*",
                                                  "deadline"]
             else:
                 instance.data["outputPath"] = vm_picture
