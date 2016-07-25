@@ -6,28 +6,27 @@ import pyblish.api
 import pipeline_schema
 
 
-class IntegrateSequenceLocal(pyblish.api.InstancePlugin):
-    """ Integrates mantra local output """
+class IntegrateLocal(pyblish.api.InstancePlugin):
+    """ Integrates local output """
 
-    families = ["img.local.*", "render.local.*", "cache.local.geometry"]
-    label = "Sequence Local"
+    families = ["img.local.*", "cache.local.*"]
+    label = "Local"
     order = pyblish.api.IntegratorOrder
     optional = True
 
     def process(self, instance):
 
         data = pipeline_schema.get_data()
-
-        ext = os.path.splitext(instance.data["outputPath"])[1][1:]
-        if instance.data["outputPath"].endswith("bgeo.sc"):
-            ext = "bgeo.sc"
-
-        data["extension"] = ext
+        ext = os.path.splitext(instance.data["family"])[1].replace("_", ".")
+        data["extension"] = ext[1:]
         data["output_type"] = "img"
-        if instance.data["family"] == "cache.local.geometry":
-            data["output_type"] = "cache"
         data["name"] = str(instance)
+
+        if instance.data["family"].startswith("cache"):
+            data["output_type"] = "cache"
+
         output_seq = pipeline_schema.get_path("output_sequence", data=data)
+        output_file = pipeline_schema.get_path("output_file", data=data)
 
         # copy output
         if not os.path.exists(os.path.dirname(output_seq)):
@@ -35,8 +34,12 @@ class IntegrateSequenceLocal(pyblish.api.InstancePlugin):
 
         pattern = r"\.[0-9]{4}\."
         for f in instance.data["outputFiles"]:
-            frame = int(re.findall(pattern, f)[0][1:-1])
-            dst = output_seq % frame
+            dst = output_file
+
+            if "%" in instance.data["outputPath"]:
+                frame = int(re.findall(pattern, f)[0][1:-1])
+                dst = output_seq % frame
+
             shutil.copy(f, dst)
 
             # delete output
