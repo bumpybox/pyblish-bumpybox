@@ -21,6 +21,10 @@ class ExtractDeadline(pyblish.api.InstancePlugin):
         job_data['Pool'] = 'medium'
         job_data['Plugin'] = 'CelAction'
 
+        name = os.path.basename(instance.context.data["currentFile"])
+        name = os.path.splitext(name)[0] + " - " + str(instance)
+        job_data["Name"] = name
+
         # get version data
         version = 1
         if instance.context.has_data('version'):
