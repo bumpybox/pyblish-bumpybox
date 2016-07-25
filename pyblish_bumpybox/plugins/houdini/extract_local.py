@@ -5,9 +5,9 @@ import pyblish.api
 
 
 class ExtractLocal(pyblish.api.InstancePlugin):
-    """ Extracts "img", "render" and "cache" locally """
+    """ Extracts "img" and "cache" locally """
 
-    families = ["img.local.*", "render.local.*", "cache.local.*"]
+    families = ["img.local.*", "cache.local.*"]
     order = pyblish.api.ExtractorOrder
     label = "Local"
     optional = True
