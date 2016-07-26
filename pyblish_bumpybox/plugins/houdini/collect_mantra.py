@@ -42,20 +42,32 @@ class CollectMantra(pyblish.api.ContextPlugin):
             vm_picture = node.parm("vm_picture").eval()
             vm_picture = regex.sub(".%04d.", vm_picture)
 
+            # getting deep output
+            instance.data["deepPath"] = ""
+            if node.parm("vm_deepresolver").eval() == "shadow":
+                path = node.parm("vm_dsmfilename").unexpandedString()
+                instance.data["deepPath"] = path
+            if node.parm("vm_deepresolver").eval() == "camera":
+                path = node.parm("vm_dcmfilename").unexpandedString()
+                instance.data["deepPath"] = path
+
+            # assigning families
+            family_name = "img."
+            if node in nodes_local:
+                family_name += "local."
+                instance.data["families"] = ["img.*", "img.local.*"]
+            else:
+                family_name += "farm."
+                instance.data["families"] = ["img.*", "img.farm.*",
+                                             "deadline"]
+
             # assigning families
             if node.parm("soho_outputmode").eval():
                 instance.data["outputPath"] = soho_diskfile
                 path = node.parm("soho_diskfile").unexpandedString()
                 instance.data["originalOutputPath"] = path
                 instance.data["renderOutputPath"] = vm_picture
-
-                if node in nodes_local:
-                    instance.data["family"] = "img.local.ifd"
-                    instance.data["families"] = ["img.*", "img.local.*"]
-                else:
-                    instance.data["family"] = "img.farm.ifd"
-                    instance.data["families"] = ["img.*", "img.farm.*",
-                                                 "deadline"]
+                instance.data["family"] = family_name + "ifd"
             else:
                 instance.data["outputPath"] = vm_picture
 
@@ -63,10 +75,4 @@ class CollectMantra(pyblish.api.ContextPlugin):
                 instance.data["originalOutputPath"] = path
 
                 ext = os.path.splitext(vm_picture)[1][1:]
-                if node in nodes_local:
-                    instance.data["family"] = "img.local." + ext
-                    instance.data["families"] = ["img.*", "img.local.*"]
-                else:
-                    instance.data["family"] = "img.farm." + ext
-                    instance.data["families"] = ["img.*", "img.farm.*",
-                                                 "deadline"]
+                instance.data["family"] = family_name + ext

@@ -31,6 +31,7 @@ class CollectRender(pyblish.api.ContextPlugin):
         instance.data["family"] = "img.farm" + ext
         instance.data["families"] = ["img.*", "img.farm.*", "deadline"]
         instance.data["familyParent"] = instance_data["family"]
+        instance.data["outputPath"] = instance_data["outputPath"]
 
         for key in instance_data.keys():
             if key.startswith("ftrack"):

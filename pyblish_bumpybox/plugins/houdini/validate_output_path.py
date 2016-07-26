@@ -65,6 +65,18 @@ class RepairOutputPath(pyblish.api.Action):
                                                      padding_string, ext)
                 instance[0].setParms({"vm_picture": output_path})
 
+            # extra validation for deep data
+            if "deepPath" in instance.data and instance.data["deepPath"]:
+                ext = os.path.splitext(instance.data["deepPath"])[1]
+                path = "{0}_{1}_deep{2}{3}".format(root, instance.data("name"),
+                                                   padding_string, ext)
+
+                node = instance[0]
+                if node.parm("vm_deepresolver").eval() == "shadow":
+                    node.setParms({"vm_dsmfilename": path})
+                if node.parm("vm_deepresolver").eval() == "camera":
+                    node.setParms({"vm_dcmfilename": path})
+
 
 class ValidateOutputPath(pyblish.api.InstancePlugin):
     """ Validates output path """
@@ -110,5 +122,16 @@ class ValidateOutputPath(pyblish.api.InstancePlugin):
                                               padding_string, ext)
 
             msg = "Image path is not correct:"
+            msg += "\n\nCurrent: {0}\n\nExpected: {1}"
+            assert current == expected, msg.format(current, expected)
+
+        # extra validation for deep data
+        if "deepPath" in instance.data and instance.data["deepPath"]:
+            current = instance.data["deepPath"]
+            ext = os.path.splitext(instance.data["deepPath"])[1]
+            expected = "{0}_{1}_deep{2}{3}".format(root, instance.data("name"),
+                                                   padding_string, ext)
+
+            msg = "Deep image path is not correct:"
             msg += "\n\nCurrent: {0}\n\nExpected: {1}"
             assert current == expected, msg.format(current, expected)
