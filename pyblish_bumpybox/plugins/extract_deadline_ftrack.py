@@ -1,6 +1,8 @@
+import os
 import getpass
 
 import pyblish.api
+import ftrack
 
 
 class ExtractDeadlineFtrack(pyblish.api.Extractor):
@@ -81,6 +83,16 @@ class ExtractDeadlineFtrack(pyblish.api.Extractor):
         extra_info_key_value['FT_ComponentName'] = component_name
 
         job_data['ExtraInfoKeyValue'] = extra_info_key_value
+
+        # commenting to store full ftrack path
+        comment = ""
+        task = ftrack.Task(instance.context.data["ftrackData"]["Task"]["id"])
+        for p in reversed(task.getParents()):
+            comment += p.getName() + "/"
+        comment += task.getName()
+        comment = "Ftrack path: \"{0}\"".format(comment)
+
+        job_data["Comment"] = comment
 
         # setting data
         data = {'job': job_data, 'plugin': plugin_data}
