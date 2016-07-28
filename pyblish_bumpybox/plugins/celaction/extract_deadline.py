@@ -12,7 +12,13 @@ class ExtractDeadline(pyblish.api.InstancePlugin):
     order = pyblish.api.ExtractorOrder
 
     def process(self, instance):
+
         job_data = {}
+        plugin_data = {}
+        if "deadlineData" in instance.data:
+            job_data = instance.data["deadlineData"]["job"].copy()
+            plugin_data = instance.data["deadlineData"]["plugin"].copy()
+
         job_data['Name'] = str(instance)
         job_data['Frames'] = '%s-%s' % (instance.data('start'),
                                         instance.data('end'))
@@ -40,7 +46,6 @@ class ExtractDeadline(pyblish.api.InstancePlugin):
         job_data['OutputFilename0'] = output_path.replace('%04d', '####')
 
         # plugin data
-        plugin_data = {}
         render_name_separator = '.'
         path = os.path.dirname(pyblish_standalone.kwargs['path'][0])
         filename = os.path.basename(pyblish_standalone.kwargs['path'][0])
