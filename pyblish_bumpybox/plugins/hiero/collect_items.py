@@ -6,15 +6,15 @@ class CollectItems(pyblish.api.Collector):
     order = pyblish.api.Collector.order + 0.2
 
     def process(self, context):
-        project = context.data('activeProject')
+        project = context.data("activeProject")
 
         selection = None
         try:
-            selection = context.data('selection')
+            selection = context.data("selection")
         except:
             pass
 
-        valid_tags = ['ftrack', 'png', 'prores', 'dpx', 'copy', 'h264', 'nuke']
+        valid_tags = ["ftrack", "png", "prores", "dpx", "copy", "h264", "nuke"]
 
         video_tracks = []
         for seq in project.sequences():
@@ -30,7 +30,7 @@ class CollectItems(pyblish.api.Collector):
                     if tag.name() in valid_tags:
                         check = True
                     data = tag.metadata()
-                    if data.hasKey('type') and data.value('type') == 'task':
+                    if data.hasKey("type") and data.value("type") == "task":
                         check = True
 
                 if not check:
@@ -42,23 +42,23 @@ class CollectItems(pyblish.api.Collector):
                         publish_state = False
 
                 instance = context.create_instance(name=item.name())
-                families = []
+                families = ["deadline"]
                 task_types = []
                 for tag in (item.tags() + vid.tags()):
                     data = tag.metadata()
-                    if data.hasKey('type') and data.value('type') == 'task':
-                        families.append('task')
+                    if data.hasKey("type") and data.value("type") == "task":
+                        families.append("task")
                         task_types.append(tag.name())
                     else:
                         families.append(tag.name())
 
-                    instance.data['handles'] = 0
-                    if data.hasKey('type') and data.value('type') == 'handles':
-                        instance.data['handles'] = int(data.value('value'))
+                    instance.data["handles"] = 0
+                    if data.hasKey("type") and data.value("type") == "handles":
+                        instance.data["handles"] = int(data.value("value"))
 
-                instance.data['taskTypes'] = task_types
-                instance.data['families'] = list(set(families))
+                instance.data["taskTypes"] = task_types
+                instance.data["families"] = list(set(families))
                 instance.add(item)
-                instance.data['videoTrack'] = vid
-                instance.data['publish'] = publish_state
-                instance.data['family'] = 'trackItem'
+                instance.data["videoTrack"] = vid
+                instance.data["publish"] = publish_state
+                instance.data["family"] = "trackItem"
