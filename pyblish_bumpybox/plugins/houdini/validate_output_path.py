@@ -28,9 +28,13 @@ class RepairOutputPath(pyblish.api.Action):
             root = "${hip}/${HIPNAME}"
 
             padding_string = ".$F4"
+            # special case for alembics
             if (instance.data["family"].endswith("abc") and
                "$F" not in instance.data["originalOutputPath"]):
                 padding_string = ""
+            # special case for dynamics
+            if instance.data["family"].endswith("sim"):
+                padding_string = r".`padzero(4, $SF)`"
 
             path = instance.data["originalOutputPath"]
             ext = os.path.splitext(instance.data["family"])[1].replace("_",
@@ -52,6 +56,8 @@ class RepairOutputPath(pyblish.api.Action):
                 parm = "vm_picture"
             if instance.data["family"].endswith("ifd"):
                 parm = "soho_diskfile"
+            if instance.data["family"].endswith("sim"):
+                parm = "dopoutput"
 
             instance[0].setParms({parm: output_path})
 
@@ -95,12 +101,14 @@ class ValidateOutputPath(pyblish.api.InstancePlugin):
 
         current = instance.data["originalOutputPath"]
 
-        # all outputs needs to have frame padding, except for alembics as they
-        # can contain animation within a single file
         padding_string = ".$F4"
+        # special case for alembics
         if (instance.data["family"].endswith("abc") and
-           "$F" not in current):
+           "$F" not in instance.data["originalOutputPath"]):
             padding_string = ""
+        # special case for dynamics
+        if instance.data["family"].endswith("sim"):
+            padding_string = r".`padzero(4, $SF)`"
 
         path = instance.data["originalOutputPath"]
         ext = os.path.splitext(instance.data["family"])[1].replace("_", ".")
