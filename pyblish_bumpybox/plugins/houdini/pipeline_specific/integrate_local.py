@@ -29,16 +29,19 @@ class IntegrateLocal(pyblish.api.InstancePlugin):
         output_file = pipeline_schema.get_path("output_file", data=data)
 
         # copy output
-        if not os.path.exists(os.path.dirname(output_seq)):
-            os.makedirs(os.path.dirname(output_seq))
-
         pattern = r"\.[0-9]{4}\."
         for f in instance.data["outputFiles"]:
             dst = output_file
 
+            parent_dir = os.path.dirname(output_file)
             if "%" in instance.data["outputPath"]:
+                parent_dir = os.path.dirname(output_seq)
+
                 frame = int(re.findall(pattern, f)[0][1:-1])
                 dst = output_seq % frame
+
+            if not os.path.exists(parent_dir):
+                os.makedirs(parent_dir)
 
             shutil.copy(f, dst)
 
