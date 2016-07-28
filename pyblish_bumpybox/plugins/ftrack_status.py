@@ -40,9 +40,10 @@ class DeadlineFtrackStatus(pyblish.api.ContextPlugin):
             if not instance.data.get("publish", True):
                 continue
 
-            # skipping instance if data is missing
-            if not instance.has_data('deadlineData'):
-                msg = 'No deadlineData present. Skipping "%s"' % instance
+            # skipping instance if not part of the family
+            if "deadline" not in instance.data.get("families", []):
+                msg = "No \"deadline\" family assigned. "
+                msg += "Skipping \"%s\"." % instance
                 self.log.info(msg)
                 continue
 
