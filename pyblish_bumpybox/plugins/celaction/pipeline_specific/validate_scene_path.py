@@ -25,8 +25,13 @@ class RepairScenePath(pyblish.api.Action):
         data['extension'] = 'scn'
         expected_path = pipeline_schema.get_path('task_work', data)
 
-        # saving scene
-        file_path = utils.next_nonexisting_version(expected_path)
+        # saving scene, if current directory is the same as the expected its
+        # safe to assume to overwrite scene file
+        current = context.data["currentFile"].replace("\\", "/")
+        file_path = expected_path
+        if os.path.dirname(expected_path) != os.path.dirname(current):
+            file_path = utils.next_nonexisting_version(expected_path)
+
         file_dir = os.path.dirname(file_path)
 
         if not os.path.exists(file_dir):
@@ -37,6 +42,8 @@ class RepairScenePath(pyblish.api.Action):
         shutil.copy(src, file_path)
 
         pyblish_standalone.kwargs['path'] = [file_path]
+
+        self.log.info("Saved to \"%s\"" % file_path)
 
 
 class ValidateScenePath(pyblish.api.InstancePlugin):
@@ -63,7 +70,8 @@ class ValidateScenePath(pyblish.api.InstancePlugin):
             self.log.info('No episodes found.')
 
         try:
-            seq_name = ftrack_data['Sequence']['name'].replace(' ', '_').lower()
+            seq_name = ftrack_data['Sequence']['name']
+            seq_name = seq_name.replace(' ', '_').lower()
             if 'Episode' not in ftrack_data:
                 path.append('sequences')
             path.append(seq_name)
@@ -112,12 +120,13 @@ class ValidateScenePath(pyblish.api.InstancePlugin):
         data['version'] = version
         data['extension'] = 'scn'
         file_path = pipeline_schema.get_path('task_work', data)
-
+        """
         # if the path is completely invalid,
         # we need to find the next non-existing version to validate
         if file_path.split('v')[0] != work_path.split('v')[0]:
             self.log.info("Invalid path found.")
             file_path = utils.next_nonexisting_version(file_path)
+        """
 
         # validating scene work path
         msg = 'Scene path is not correct:'
