@@ -27,6 +27,15 @@ class ValidateShapeName(pyblish.api.ContextPlugin):
 
     def process(self, context):
 
+        validate = False
+        for instance in context:
+            if instance.data["family"] == "geometry":
+                if instance.data.get("publish", True):
+                    validate = True
+
+        if not validate:
+            return
+
         invalid_shapes = []
         msg = 'Duplicate shape names:'
         for shp in pymel.core.ls(type='mesh'):
