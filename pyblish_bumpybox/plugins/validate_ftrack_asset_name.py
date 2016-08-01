@@ -21,4 +21,3 @@ class ValidateFtrackAssetName(pyblish.api.Validator):
         if ftrack_data['Project']['code'] != 'the_call_up':
             asset_name = ftrack_data['Task']['name']
             instance.set_data('ftrackAssetName', value=asset_name)
-            self.log.info(instance)
