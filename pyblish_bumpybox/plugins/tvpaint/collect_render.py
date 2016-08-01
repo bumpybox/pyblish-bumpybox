@@ -17,6 +17,7 @@ class CollectRender(pyblish.api.Collector):
         for layer in layers:
             instance = context.create_instance(name=layer)
             instance.set_data('family', value='render')
+            instance.data["families"] = ["deadline"]
 
             instance.set_data('ftrackComponents', value={})
             instance.set_data('ftrackAssetType', value='img')
