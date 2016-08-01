@@ -9,7 +9,7 @@ import pipeline_schema
 class IntegrateLocal(pyblish.api.InstancePlugin):
 
     label = "Local"
-    families = ["img.local.*"]
+    families = ["img.local.*", "mov.local.*"]
     order = pyblish.api.IntegratorOrder
 
     def process(self, instance):
@@ -20,26 +20,36 @@ class IntegrateLocal(pyblish.api.InstancePlugin):
         data = pipeline_schema.get_data()
         ext = os.path.splitext(instance.data["family"])[1].replace("_", ".")
         data["extension"] = ext[1:]
-        data["output_type"] = "img"
-        data["name"] = str(instance)
-        images_path = pipeline_schema.get_path("output_sequence", data=data)
-
-        data["output_type"] = "mov"
-        data["extension"] = "mov"
-        movie_path = pipeline_schema.get_path("output_file", data=data)
 
         pattern = r"\.[0-9]{4}\."
+        components = {}
         for path in instance.data["outputPaths"]:
 
             if ".%04d." in path:
+                data["output_type"] = "img"
+                name = str(instance)
+
+                if str(instance) == "levels":
+                    current_file = instance.context.data["currentFile"]
+                    current_file = os.path.basename(current_file)
+                    pattern = current_file.replace(".scn",
+                                                   r"_([0-9]{2}).*\.png")
+                    level = re.match(pattern, path).group(1)
+                    name = "levels_" + str(level)
+
+                data["name"] = name
+                images_path = pipeline_schema.get_path("output_sequence",
+                                                       data=data)
                 # ensuring parent path exists
                 parent_path = os.path.dirname(images_path)
                 if not os.path.exists(parent_path):
                     os.makedirs(parent_path)
 
+                components[name] = {"path": images_path}
+
                 for f in instance.data["outputPaths"][path]:
                     basename = os.path.basename(f)
-                    frame = int(re.findall(pattern, basename)[0][1:-1])
+                    frame = int(re.findall(r"\.[0-9]{4}\.", basename)[0][1:-1])
                     dst = images_path % frame
 
                     shutil.copy(f, dst)
@@ -49,10 +59,16 @@ class IntegrateLocal(pyblish.api.InstancePlugin):
 
                     self.log.info("Moved {0} to {1}".format(f, dst))
             else:
+                data["output_type"] = "mov"
+                data["extension"] = "mov"
+                movie_path = pipeline_schema.get_path("output_file", data=data)
+
                 # ensuring parent path exists
                 parent_path = os.path.dirname(movie_path)
                 if not os.path.exists(parent_path):
                     os.makedirs(parent_path)
+
+                components[str(instance)] = {"path": movie_path}
 
                 shutil.copy(path, movie_path)
 
@@ -60,3 +76,5 @@ class IntegrateLocal(pyblish.api.InstancePlugin):
                 os.remove(path)
 
                 self.log.info("Moved {0} to {1}".format(path, movie_path))
+
+        instance.data["ftrackComponents"] = components
