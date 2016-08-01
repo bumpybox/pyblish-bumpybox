@@ -1,4 +1,3 @@
-import os
 import getpass
 
 import pyblish.api
@@ -17,6 +16,10 @@ class ExtractDeadlineFtrack(pyblish.api.Extractor):
 
         if not context.has_data('ftrackData'):
             return
+
+        for member in ["ftrackAsset", "ftrackAssetVersion"]:
+            if member not in instance.data.keys():
+                return
 
         job_data = {}
         plugin_data = {}
