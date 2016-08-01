@@ -46,7 +46,7 @@ class ValidateMantraSettings(pyblish.api.InstancePlugin):
 
         # When rendering locally we need to block, so Pyblish doesn"t execute
         # other plugins. When render on a farm, the block needs to be lifted.
-        if instance.data["family"].endswith("ifd"):
+        if instance.data["family"].startswith("img.farm"):
             msg = "Mantra needs to render in the background for farm "
             msg += "rendering. Disable \"Block Until Render Complete\" in "
             msg += "\"Driver\"."
