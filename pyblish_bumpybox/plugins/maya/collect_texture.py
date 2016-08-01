@@ -24,3 +24,13 @@ class CollectTexture(pyblish.api.Collector):
             instance = context.create_instance(name=name)
             instance.set_data('family', value='texture')
             instance.add(node)
+            instance.data["publish"] = True
+
+            try:
+                attr = getattr(node, "pyblish_texture")
+                instance.data["publish"] = attr.get()
+            except:
+                msg = "Attribute \"{0}\"".format("pyblish_texture")
+                msg += " does not exists on: \"{0}\".".format(node.name())
+                msg += " Defaulting to active publish"
+                self.log.info(msg)

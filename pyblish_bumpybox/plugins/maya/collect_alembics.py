@@ -69,6 +69,15 @@ class CollectAlembics(pyblish.api.Collector):
             instance = context.create_instance(name=str(node))
             instance.set_data('family', value='alembic.camera')
             instance.add(node)
+            instance.data["publish"] = True
+            try:
+                attr = getattr(node, "pyblish_camera")
+                instance.data["publish"] = attr.get()
+            except:
+                msg = "Attribute \"{0}\"".format("pyblish_camera")
+                msg += " does not exists on: \"{0}\".".format(node.name())
+                msg += " Defaulting to active publish"
+                self.log.info(msg)
 
             # adding ftrack data to activate processing
             if not context.has_data('ftrackData'):
