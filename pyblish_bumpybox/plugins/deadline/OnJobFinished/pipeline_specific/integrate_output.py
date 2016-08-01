@@ -3,19 +3,23 @@ import shutil
 import re
 
 import pyblish.api
-import Deadline
 import pipeline_schema
 
 
 class IntegrateOutput(pyblish.api.InstancePlugin):
     """ Integrates output """
 
-    families = ["cache.*", "img.*"]
+    families = ["cache.*", "img.*", "mov.*"]
     order = pyblish.api.IntegratorOrder
 
     def process(self, instance):
 
-        # we won't integrate render files as they will be rendering
+        # required data members for successfull integration
+        if ("ftrackAssetType" not in instance.data and
+           "files" not in instance.data):
+            return
+
+        # do not integrate render files
         if os.path.splitext(instance.data["family"])[1] in [".ifd"]:
             return
 
@@ -32,12 +36,8 @@ class IntegrateOutput(pyblish.api.InstancePlugin):
         output_seq = pipeline_schema.get_path("output_sequence", data=data)
 
         components = {}
-        paths = []
+        paths = {}
         for path in instance.data["files"].keys():
-
-            # create root
-            if not os.path.exists(os.path.dirname(output_file)):
-                os.makedirs(os.path.dirname(output_file))
 
             # moving output
             pattern = r"\.[0-9]+\."
@@ -56,13 +56,17 @@ class IntegrateOutput(pyblish.api.InstancePlugin):
 
                 files.append(dst)
 
+                # create root
+                if not os.path.exists(os.path.dirname(dst)):
+                    os.makedirs(os.path.dirname(dst))
+
                 # moving file
-                shutil.copy(f, dst)
-                os.remove(f)
+                if f != dst:
+                    shutil.copy(f, dst)
 
-                self.log.info("Moved {0} to {1}".format(f, dst))
+                    self.log.info("Copied {0} to {1}".format(f, dst))
 
-            paths.append(output.replace(".temp", ext).replace("%04d", "####"))
+            paths[output.replace(".temp", ext)] = files
 
             # ftrack data
             component_name = str(instance)
@@ -72,11 +76,7 @@ class IntegrateOutput(pyblish.api.InstancePlugin):
 
             components[component_name] = {"path": output.replace(".temp", ext)}
 
-        # updating job output
-        job = instance.context.data["deadlineJob"]
-
-        Deadline.Scripting.RepositoryUtils.UpdateJobOutputFileNames(job, paths)
-        self.log.info("Updating job output to: " + str(paths))
+        instance.data["files"] = paths
 
         # adding component data
         instance.data["ftrackComponents"] = components

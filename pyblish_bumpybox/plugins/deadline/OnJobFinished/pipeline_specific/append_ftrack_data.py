@@ -6,8 +6,8 @@ import pyblish.api
 class AppendFtrackData(pyblish.api.InstancePlugin):
     """ Append Ftrack data """
 
-    order = pyblish.api.ExtractorOrder
-    families = ["img.*"]
+    order = pyblish.api.CollectorOrder + 0.2
+    families = ["mov.*"]
 
     def process(self, instance):
 
@@ -16,5 +16,6 @@ class AppendFtrackData(pyblish.api.InstancePlugin):
         instance_data = json.loads(value)
 
         instance.data["ftrackComponents"] = {}
-        instance.data["ftrackAssetType"] = "img"
+        instance.data["ftrackAssetType"] = "mov"
         instance.data["ftrackAssetName"] = instance_data["ftrackAssetName"]
+        instance.data["ftrackStatusUpdate"] = True

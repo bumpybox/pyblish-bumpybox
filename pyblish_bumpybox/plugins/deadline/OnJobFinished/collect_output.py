@@ -41,7 +41,8 @@ class CollectOutput(pyblish.api.ContextPlugin):
             collection = []
             for f in os.listdir(directory):
                 if f.startswith(start_base) and f.endswith(ext):
-                    collection.append(os.path.join(directory, f))
+                    file_path = os.path.join(directory, f).replace("\\", "/")
+                    collection.append(file_path)
 
             files[path] = collection
 
@@ -49,6 +50,10 @@ class CollectOutput(pyblish.api.ContextPlugin):
         instance = context.create_instance(name=data["name"])
         for key in data:
             instance.data[key] = data[key]
+
+        # prevent resubmitting same job
+        del instance.data["deadlineData"]
+        instance.data["families"].remove("deadline")
 
         instance.data["files"] = files
         self.log.debug("Found files: " + str(files))
