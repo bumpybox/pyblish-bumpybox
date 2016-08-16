@@ -165,13 +165,24 @@ class CollectRenderlayers(pyblish.api.Collector):
             # getting frames
             start_frame = int(render_globals.startFrame.get())
             end_frame = int(render_globals.endFrame.get())
+            step_frame = int(render_globals.byFrameStep.get())
 
             if "endFrame" in data[layer]:
                 end_frame = int(data[layer]["endFrame"] * self.getFPS())
             if "startFrame" in data[layer]:
                 start_frame = int(data[layer]["startFrame"] * self.getFPS())
 
-            job_data["Frames"] = "%s-%s" % (start_frame, end_frame)
+            if step_frame == 1:
+                job_data["Frames"] = "{0}-{1}".format(start_frame, end_frame)
+            else:
+                frames = ""
+                for f in range(start_frame, end_frame, step_frame):
+                    frames += "," + str(f)
+                job_data["Frames"] = frames
+
+            instance.data["stepFrame"] = step_frame
+            instance.data["endFrame"] = end_frame
+            instance.data["startFrame"] = end_frame
 
             ext = extension[1:]
             try:
@@ -185,6 +196,8 @@ class CollectRenderlayers(pyblish.api.Collector):
 
             safe_layer_name = layer.replace(":", "_")
             job_data["OutputFilename0"] = path.format(layer=safe_layer_name,
+                                                      ext=ext)
+            instance.data["outputPath"] = path.format(layer=safe_layer_name,
                                                       ext=ext)
 
             deadline_data = {"job": job_data, "plugin": plugin_data}

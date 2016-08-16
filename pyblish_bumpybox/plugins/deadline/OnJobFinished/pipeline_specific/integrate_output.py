@@ -33,7 +33,11 @@ class IntegrateOutput(pyblish.api.InstancePlugin):
         data["name"] = str(instance)
         data["version"] = instance.context.data["version"]
         output_file = pipeline_schema.get_path("output_file", data=data)
+
+        frame_padding = instance.data["framePadding"]
+        padding_string = ".%{0}d.".format(str(frame_padding).zfill(2))
         output_seq = pipeline_schema.get_path("output_sequence", data=data)
+        output_seq = output_seq.replace(".%04d.", padding_string)
 
         components = {}
         paths = {}
@@ -75,8 +79,6 @@ class IntegrateOutput(pyblish.api.InstancePlugin):
                 component_name = "{0}_{1}".format(component_name, str(index))
 
             components[component_name] = {"path": output.replace(".temp", ext)}
-
-        instance.data["files"] = paths
 
         # adding component data
         instance.data["ftrackComponents"] = components

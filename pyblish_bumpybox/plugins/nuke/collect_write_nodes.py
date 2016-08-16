@@ -28,6 +28,7 @@ class CollectWriteNodes(pyblish.api.Collector):
                 instance.add(node)
 
                 output = node["file"].getValue()
+                instance.data["outputPath"] = output
 
                 instance.set_data("publish", not node["disable"].getValue())
 

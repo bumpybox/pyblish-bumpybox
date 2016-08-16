@@ -28,8 +28,8 @@ class IntegrateLocal(pyblish.api.InstancePlugin):
         output_seq = pipeline_schema.get_path("output_sequence", data=data)
         output_file = pipeline_schema.get_path("output_file", data=data)
 
-        # copy output
-        pattern = r"\.[0-9]{4}\."
+        # move output
+        pattern = r"\.[0-9]{4,}\."
         for f in instance.data["outputFiles"]:
             dst = output_file
 

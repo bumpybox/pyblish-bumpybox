@@ -39,13 +39,17 @@ class CollectMovie(pyblish.api.InstancePlugin):
             new_instance.data["families"] = ["mov.*", "mov.farm.*", "deadline"]
             new_instance.data["files"] = {}
 
-            output_path = path.replace(".%04d", "")
+            frame_padding = instance.data["framePadding"]
+            padding_string = ".%{0}d".format(str(frame_padding).zfill(2))
+            output_path = path.replace(padding_string, "")
             output_path = os.path.splitext(output_path)[0] + ".mov"
+            new_instance.data["framePadding"] = frame_padding
 
             # setting job data
             job_data = {}
             job_data["Plugin"] = "FFmpeg"
-            job_data["Frames"] = job.JobFrames
+            job_data["Frames"] = "{0}-{1}".format(job.JobFramesList[0],
+                                                  job.JobFramesList[-1])
             job_data["Name"] = job.Name
             job_data["UserName"] = job.UserName
             job_data["OutputFilename0"] = output_path

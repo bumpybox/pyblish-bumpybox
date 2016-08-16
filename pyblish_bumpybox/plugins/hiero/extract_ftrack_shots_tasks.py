@@ -28,7 +28,9 @@ class ExtractFtrackShots(pyblish.api.Extractor):
 
         return '%s:%s:%s' % (h, m, str(s).zfill(2))
 
-    def process(self, instance, context):
+    def process(self, instance):
+
+        context = instance.context
 
         # skipping if not launched from ftrack
         if not context.has_data('ftrackData'):

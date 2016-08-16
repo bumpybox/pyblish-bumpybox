@@ -24,7 +24,8 @@ class RepairMantraSettings(pyblish.api.Action):
 
             # background vs. foreground rendering
             soho_foreground = 1
-            if instance.data["family"].endswith("ifd"):
+            if (instance.data["family"].endswith("ifd") or
+               instance.data["family"].startswith("img.farm")):
                 soho_foreground = 0
 
             # setting parms
@@ -43,6 +44,10 @@ class ValidateMantraSettings(pyblish.api.InstancePlugin):
     def process(self, instance):
 
         node = instance[0]
+
+        # igonore local ifds
+        if instance.data["family"] == "img.local.ifd":
+            return
 
         # When rendering locally we need to block, so Pyblish doesn"t execute
         # other plugins. When render on a farm, the block needs to be lifted.

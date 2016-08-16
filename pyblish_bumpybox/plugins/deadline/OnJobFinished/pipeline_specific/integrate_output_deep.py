@@ -33,7 +33,9 @@ class IntegrateOutputDeep(pyblish.api.InstancePlugin):
         output_path = instance.data["outputPath"]
 
         pattern = os.path.basename(output_path)
-        pattern = pattern.replace(".%04d.", r"_deep\.([0-9]{4})\.")
+        frame_padding = instance.data["framePadding"]
+        padding_string = ".%{0}d.".format(str(frame_padding).zfill(2))
+        pattern = pattern.replace(padding_string, r"_deep\.([0-9]{4,})\.")
         pattern = pattern.replace(".ifd", ".exr")
         self.log.debug("Pattern generated: " + pattern)
 

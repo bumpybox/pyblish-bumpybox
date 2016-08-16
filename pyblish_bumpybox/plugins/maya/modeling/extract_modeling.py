@@ -25,8 +25,10 @@ class ExtractModeling(pyblish.api.Extractor):
             if instance.data('family') == 'scene':
                 publish_file = instance.data('publishPath')
 
-        pymel.core.select(nodes)
-        pymel.core.system.exportSelected(publish_file,
-                                         constructionHistory=False,
-                                         preserveReferences=True, shader=True,
-                                         constraints=False, force=True)
+        if nodes:
+            pymel.core.select(nodes)
+            pymel.core.system.exportSelected(publish_file,
+                                             constructionHistory=False,
+                                             preserveReferences=True,
+                                             shader=True,constraints=False,
+                                             force=True)

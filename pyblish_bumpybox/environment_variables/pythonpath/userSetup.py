@@ -2,8 +2,14 @@ import pymel.core
 import maya.cmds as cmds
 
 import pyblish.api
-import pyblish_qml
-from pyblish_bumpybox.environment_variables import utils
+
+
+# disabling debug logging, cause of FTrack constant stream of print outs
+def disableDebug():
+    import logging
+    logging.getLogger().setLevel(logging.INFO)
+
+cmds.evalDeferred('disableDebug()', lowestPriority=True)
 
 
 # Pyblish callbacks for presisting instance states to the scene
@@ -47,13 +53,7 @@ def toggle_instance(instance, new_value, old_value):
                                attributeType="bool")
    """
 
-
 pyblish.api.register_callback("instanceToggled", toggle_instance)
 
-
-# setting Pyblish window title to ftrack context path
-def setPyblishWindowTitle():
-
-    pyblish_qml.settings.WindowTitle = utils.getFtrackContextPath()
-
-cmds.evalDeferred("setPyblishWindowTitle()")
+# register pyblish_qml
+pyblish.api.register_gui("pyblish_lite")

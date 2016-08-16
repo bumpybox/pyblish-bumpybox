@@ -1,8 +1,9 @@
 import os
+import re
 
 import pyblish.api
-import ftrack
 import nuke
+import pipeline_schema
 
 
 class RepairRenderSettings(pyblish.api.Action):
@@ -10,38 +11,6 @@ class RepairRenderSettings(pyblish.api.Action):
     label = "Repair"
     icon = "wrench"
     on = "failed"
-
-    def get_path(self, instance):
-        ftrack_data = instance.context.data("ftrackData")
-
-        parent_name = None
-        try:
-            parent_name = ftrack_data["Shot"]["name"]
-        except:
-            parent_name = ftrack_data["Asset_Build"]["name"].replace(" ", "_")
-
-        project = ftrack.Project(id=ftrack_data["Project"]["id"])
-        root = project.getRoot()
-        file_name = os.path.basename(instance.context.data("currentFile"))
-        file_name = os.path.splitext(file_name)[0]
-        task_name = ftrack_data["Task"]["name"].replace(" ", "_").lower()
-        version_number = instance.context.data("version")
-        version_name = "v%s" % (str(version_number).zfill(3))
-        filename = ".".join([parent_name, task_name, version_name,
-                            "%04d"])
-
-        path = [root, "renders", "img_sequences"]
-
-        task = ftrack.Task(ftrack_data["Task"]["id"])
-        for p in reversed(task.getParents()[:-1]):
-            path.append(p.getName())
-
-        path.append(task_name)
-        path.append(version_name)
-        path.append(str(instance))
-        path.append(filename)
-
-        return os.path.join(*path).replace("\\", "/")
 
     def process(self, context, plugin):
 
@@ -63,12 +32,21 @@ class RepairRenderSettings(pyblish.api.Action):
             ext = os.path.splitext(path)[-1]
 
             # repairing the path string
-            output = self.get_path(instance)
+            data = pipeline_schema.get_data()
+            data["output_type"] = "img"
+            data["name"] = str(instance)
             if ext:
-                output = output + ext
+                data["extension"] = ext[1:]
             else:
-                output = output + ".exr"
-            output = output.replace("\\", "/")
+                data["extension"] = "exr"
+            output = pipeline_schema.get_path("output_sequence", data)
+
+            frame_padding = len(str(int(nuke.root()['last_frame'].value())))
+            if frame_padding < 4:
+                frame_padding = 4
+
+            padding_string = "%{0}d".format(str(frame_padding).zfill(2))
+            output = output.replace("%04d", padding_string)
 
             node["file"].setValue(output)
             node["file_type"].setValue(os.path.splitext(output)[1][1:])
@@ -102,57 +80,31 @@ class ValidateRenderSettings(pyblish.api.InstancePlugin):
     optional = True
     actions = [RepairRenderSettings]
 
-    def get_path(self, instance):
-        ftrack_data = instance.context.data("ftrackData")
-
-        parent_name = None
-        try:
-            parent_name = ftrack_data["Shot"]["name"]
-        except:
-            parent_name = ftrack_data["Asset_Build"]["name"].replace(" ", "_")
-
-        project = ftrack.Project(id=ftrack_data["Project"]["id"])
-        root = project.getRoot()
-        file_name = os.path.basename(instance.context.data("currentFile"))
-        file_name = os.path.splitext(file_name)[0]
-        task_name = ftrack_data["Task"]["name"].replace(" ", "_").lower()
-        version_number = instance.context.data("version")
-        version_name = "v%s" % (str(version_number).zfill(3))
-        filename = ".".join([parent_name, task_name, version_name,
-                            "%04d"])
-
-        path = [root, "renders", "img_sequences"]
-
-        task = ftrack.Task(ftrack_data["Task"]["id"])
-        for p in reversed(task.getParents()[:-1]):
-            path.append(p.getName())
-
-        path.append(task_name)
-        path.append(version_name)
-        path.append(str(instance))
-        path.append(filename)
-
-        return os.path.join(*path).replace("\\", "/")
-
     def process(self, instance):
 
-        path = instance.data("deadlineData")["job"]["OutputFilename0"]
-        path = path.replace("####", "%04d")
-
-        # on going project specific exception
-        ftrack_data = instance.context.data("ftrackData")
-        if ftrack_data["Project"]["code"] == "the_call_up":
-            msg = "Output directory doesn't exist on: %s" % str(instance)
-            assert os.path.exists(os.path.dirname(path)), msg
-            return
+        path = instance.data["outputPath"]
 
         node = nuke.toNode(str(instance))
         ext = os.path.splitext(path)[-1]
-        output = self.get_path(instance)
+
+        data = pipeline_schema.get_data()
+        data["output_type"] = "img"
+        data["extension"] = ext[1:]
+        data["name"] = str(instance)
+        output = pipeline_schema.get_path("output_sequence", data)
+
+        frame_padding = len(str(int(nuke.root()['last_frame'].value())))
+        if frame_padding < 4:
+            frame_padding = 4
+
+        padding_string = "%{0}d".format(str(frame_padding).zfill(2))
+        output = output.replace("%04d", padding_string)
 
         # validate path
         msg = "Output path is incorrect on: %s" % str(instance)
-        assert path == (output.replace("\\", "/") + ext), msg
+        msg += " Current: %s" % path.lower()
+        msg += " Expected: %s" % output.lower()
+        assert path.lower() == output.lower(), msg
 
         # validate existence
         msg = "Output directory doesn't exist on: %s" % str(instance)

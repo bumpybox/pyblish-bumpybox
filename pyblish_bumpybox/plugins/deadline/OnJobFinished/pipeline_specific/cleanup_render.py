@@ -50,7 +50,9 @@ class CleanupMovie(pyblish.api.InstancePlugin):
         if not os.path.exists(directory):
             return
 
-        pattern = input_files.replace(".%04d.", r"\.[0-9]{4}\.")
+        frame_padding = instance.data["framePadding"]
+        padding_string = ".%{0}d.".format(str(frame_padding).zfill(2))
+        pattern = input_files.replace(padding_string, r"\.[0-9]{4,}\.")
         self.log.info("Pattern generated: " + pattern)
 
         for f in os.listdir(directory):
@@ -62,3 +64,17 @@ class CleanupMovie(pyblish.api.InstancePlugin):
         f = job.GetJobPluginInfoKeyValue("OutputFile")
         os.remove(f)
         self.log.info("Deleting source file: " + f)
+
+
+class CleanupCaches(pyblish.api.InstancePlugin):
+    """ Cleanup after caches """
+
+    families = ["cache.*"]
+    order = pyblish.api.IntegratorOrder + 0.5
+
+    def process(self, instance):
+
+        for path in instance.data["files"]:
+            for f in instance.data["files"][path]:
+                os.remove(f)
+                self.log.info("Deleting file: " + f)

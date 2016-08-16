@@ -27,14 +27,15 @@ class RepairOutputPath(pyblish.api.Action):
 
             root = "${hip}/${HIPNAME}"
 
-            padding_string = ".$F4"
+            frame_padding = instance.data["framePadding"]
+            padding_string = ".$F%s" % frame_padding
             # special case for alembics
             if (instance.data["family"].endswith("abc") and
                "$F" not in instance.data["originalOutputPath"]):
                 padding_string = ""
             # special case for dynamics
             if instance.data["family"].endswith("sim"):
-                padding_string = r".`padzero(4, $SF)`"
+                padding_string = ".`padzero(%s, $SF)`" % frame_padding
 
             path = instance.data["originalOutputPath"]
             ext = os.path.splitext(instance.data["family"])[1].replace("_",
@@ -101,14 +102,15 @@ class ValidateOutputPath(pyblish.api.InstancePlugin):
 
         current = instance.data["originalOutputPath"]
 
-        padding_string = ".$F4"
+        frame_padding = instance.data["framePadding"]
+        padding_string = ".$F%s" % frame_padding
         # special case for alembics
         if (instance.data["family"].endswith("abc") and
            "$F" not in instance.data["originalOutputPath"]):
             padding_string = ""
         # special case for dynamics
         if instance.data["family"].endswith("sim"):
-            padding_string = r".`padzero(4, $SF)`"
+            padding_string = ".`padzero(%s, $SF)`" % frame_padding
 
         path = instance.data["originalOutputPath"]
         ext = os.path.splitext(instance.data["family"])[1].replace("_", ".")

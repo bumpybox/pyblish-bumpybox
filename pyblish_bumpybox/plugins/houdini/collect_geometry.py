@@ -31,13 +31,23 @@ class CollectGeometry(pyblish.api.ContextPlugin):
             instance.data["publish"] = not node.isBypassed()
             instance.add(node)
 
+            # collet frame padding
+            frame_padding = 4
+            end_frame = node.parm("f2").eval()
+            if len(str(int(end_frame))) > 4:
+                frame_padding = len(str(int(end_frame)))
+
+            instance.data["framePadding"] = frame_padding
+
             # converting houdini frame padding to python padding
             # output paths are validated to "$F4", so its safe to replace
             path = node.parm("sopoutput").unexpandedString()
             instance.data["originalOutputPath"] = path
 
             path = node.parm("sopoutput").eval()
-            instance.data["outputPath"] = re.sub(r"\.[0-9]{4}\.", ".%04d.",
+            padding_string = ".%{0}d.".format(str(frame_padding).zfill(2))
+            instance.data["outputPath"] = re.sub(r"\.[0-9]{4,}\.",
+                                                 padding_string,
                                                  path)
 
             ext = os.path.splitext(path)[1]

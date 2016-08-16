@@ -31,6 +31,8 @@ class CollectAlembic(pyblish.api.ContextPlugin):
 
             instance.data["outputPath"] = node.parm("filename").eval()
 
+            instance.data["framePadding"] = 0
+
             path = node.parm("filename").unexpandedString()
             instance.data["originalOutputPath"] = path
 

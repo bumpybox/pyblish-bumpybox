@@ -64,6 +64,12 @@ class ExtractNuke(pyblish.api.InstancePlugin):
         data["name"] = str(instance)
         write_path = pipeline_schema.get_path("output_sequence", data)
 
+        frame_padding = len(str(last_frame))
+        if frame_padding < 4:
+            frame_padding = 4
+        padding_string = "%{0}d".format(str(frame_padding).zfill(2))
+        write_path = write_path.replace("%04d", padding_string)
+
         write_node = hiero.core.nuke.WriteNode(write_path)
         write_node.setKnob("file_type", "exr")
         write_node.setKnob("metadata", "all metadata")
@@ -137,6 +143,7 @@ class ExtractNuke(pyblish.api.InstancePlugin):
         write_node = hiero.core.nuke.WriteNode(temp_file, inputNode=last_node)
         write_node.setKnob("file_type", "exr")
         write_node.setKnob("metadata", "all metadata")
+        write_node.setName(str(instance))
         nukeWriter.addNode(write_node)
 
         # secondary read nodes
@@ -173,6 +180,7 @@ class ExtractNuke(pyblish.api.InstancePlugin):
 
         # get file path
         data["extension"] = "nk"
+        data["output_type"] = "scene"
         file_path = pipeline_schema.get_path("output_file", data)
 
         # create directories
@@ -181,6 +189,7 @@ class ExtractNuke(pyblish.api.InstancePlugin):
 
         # create nuke script
         nukeWriter.writeToDisk(file_path)
+        self.log.info("Writing Nuke script to: \"%s\"" % file_path)
 
         # publishing to ftrack
         asset = instance.data["ftrackShot"].createAsset(str(instance), "scene")

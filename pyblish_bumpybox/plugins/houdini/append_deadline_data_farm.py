@@ -25,16 +25,26 @@ class AppendDeadlineDataFarm(pyblish.api.InstancePlugin):
         # replace houdini frame padding with deadline padding, and
         # add to job data
         path = instance.data["outputPath"]
-        job_data["OutputFilename0"] = path.replace("$F4", "####")
+        frame_padding = instance.data["framePadding"]
+        padding_string = "%{0}d".format(str(frame_padding).zfill(2))
+        job_data["OutputFilename0"] = path.replace(padding_string,
+                                                   "#" * frame_padding)
 
         # frame range
         start_frame = int(node.parm("f1").eval())
         end_frame = int(node.parm("f2").eval())
+        step_frame = int(node.parm("f3").eval())
 
         if node.parm("trange").eval() == 0:
             start_frame = end_frame = int(hou.frame())
 
-        job_data["Frames"] = "{0}-{1}".format(start_frame, end_frame)
+        if step_frame == 1:
+            job_data["Frames"] = "{0}-{1}".format(start_frame, end_frame)
+        else:
+            frames = ""
+            for f in range(start_frame, end_frame, step_frame):
+                frames += "," + str(f)
+            job_data["Frames"] = frames
 
         # chunk size
         if "%" not in path:

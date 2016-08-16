@@ -36,7 +36,7 @@ class CollectItems(pyblish.api.Collector):
                 if not check:
                     continue
 
-                publish_state = True
+                publish_state = item.isEnabled()
                 if selection:
                     if item not in selection:
                         publish_state = False

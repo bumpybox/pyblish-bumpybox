@@ -32,15 +32,24 @@ class CollectMantra(pyblish.api.ContextPlugin):
             instance.data["publish"] = not node.isBypassed()
             instance.add(node)
 
+            # collet frame padding
+            frame_padding = 4
+            end_frame = node.parm("f2").eval()
+            if len(str(int(end_frame))) > 4:
+                frame_padding = len(str(int(end_frame)))
+
+            instance.data["framePadding"] = frame_padding
+
             # converting houdini frame padding to python padding
             # output paths are validated to 4 digit padding
-            regex = re.compile(r"\.[0-9]{4}\.")
+            regex = re.compile(r"\.[0-9]{4,}\.")
+            python_padding = ".%{0}d.".format(str(frame_padding).zfill(2))
 
             soho_diskfile = node.parm("soho_diskfile").eval()
-            soho_diskfile = regex.sub(".%04d.", soho_diskfile)
+            soho_diskfile = regex.sub(python_padding, soho_diskfile)
 
             vm_picture = node.parm("vm_picture").eval()
-            vm_picture = regex.sub(".%04d.", vm_picture)
+            vm_picture = regex.sub(python_padding, vm_picture)
 
             # getting deep output
             instance.data["deepPath"] = ""

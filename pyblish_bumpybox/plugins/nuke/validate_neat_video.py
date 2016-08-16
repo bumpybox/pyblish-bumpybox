@@ -12,6 +12,5 @@ class ValidateNeatVideo(pyblish.api.Validator):
 
         for node in nuke.allNodes():
             if node.Class().lower().startswith('ofxcom.absoft.neatvideo'):
-                if not node['disable'].getValue():
-                    msg = 'Neat Video is active in file: "%s"' % node.name()
-                    raise ValueError(msg)
+                msg = 'Neat Video is in file: "%s"' % node.name()
+                raise ValueError(msg)

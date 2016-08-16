@@ -36,13 +36,13 @@ class ValidateSettings(pyblish.api.Validator):
 
         ftrack_data = context.data('ftrackData')
 
-        # skipping asset builds
-        if 'Asset_Build' in ftrack_data:
-            return
-
         task = ftrack.Task(ftrack_data['Task']['id'])
         project = task.getParents()[-1]
         shot = task.getParent()
+
+        # skipping all non shot related tasks
+        if shot.getObjectType() != "Shot":
+            return
 
         handles = shot.get('handles')
 

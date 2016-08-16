@@ -26,12 +26,18 @@ class CollectRender(pyblish.api.ContextPlugin):
             return
 
         instance = context.create_instance(name=instance_data["name"])
-        path = instance_data["renderOutputPath"].replace("$F4", "####")
+
+        frame_padding = instance_data["framePadding"]
+        padding_string = "%{0}d".format(str(frame_padding).zfill(2))
+        path = instance_data["renderOutputPath"].replace(padding_string,
+                                                         "#" * frame_padding)
+
         ext = os.path.splitext(path)[1]
         instance.data["family"] = "img.farm" + ext
         instance.data["families"] = ["img.*", "img.farm.*", "deadline"]
         instance.data["familyParent"] = instance_data["family"]
         instance.data["outputPath"] = instance_data["outputPath"]
+        instance.data["framePadding"] = instance_data["framePadding"]
 
         for key in instance_data.keys():
             if key.startswith("ftrack"):
