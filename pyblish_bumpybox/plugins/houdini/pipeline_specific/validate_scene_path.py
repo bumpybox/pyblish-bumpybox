@@ -12,15 +12,15 @@ class RepairScenePath(pyblish.api.Action):
 
     def process(self, context, plugin):
 
-        # get version data
+        # expected path
+        data = pipeline_schema.get_data()
+        data["extension"] = "hip"
+
         version = 1
         if context.has_data("version"):
             version = context.data("version")
-
-        # expected path
-        data = pipeline_schema.get_data()
         data["version"] = version
-        data["extension"] = "hip"
+
         file_path = pipeline_schema.get_path("task_work", data)
 
         if not os.path.exists(os.path.dirname(file_path)):
@@ -41,15 +41,15 @@ class ValidateScenePath(pyblish.api.InstancePlugin):
         # getting current work file
         work_path = instance.data["workPath"]
 
-        # get version data
+        # expected path
+        data = pipeline_schema.get_data()
+        data["extension"] = "hip"
+
         version = 1
         if instance.context.has_data("version"):
             version = instance.context.data("version")
-
-        # expected path
-        data = pipeline_schema.get_data()
         data["version"] = version
-        data["extension"] = "hip"
+
         file_path = pipeline_schema.get_path("task_work", data)
 
         # validating scene work path

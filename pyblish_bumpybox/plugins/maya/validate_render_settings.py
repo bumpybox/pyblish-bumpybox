@@ -56,14 +56,28 @@ class RepairRenderSettings(pyblish.api.Action):
         data = pipeline_schema.get_data()
         data["extension"] = "temp"
         data["output_type"] = "img"
+
+        version = 1
+        if context.has_data("version"):
+            version = context.data("version")
+        data["version"] = version
+
         expected_output = pipeline_schema.get_path("output_sequence", data)
         expected_output = os.path.dirname(os.path.dirname(expected_output))
         pymel.core.system.Workspace.fileRules["images"] = expected_output
         pymel.core.system.Workspace.save()
 
         # repairing project directory
-        project_path = utils.get_project_path(context,
-                                              self.log).replace("\\", "/")
+        data = pipeline_schema.get_data()
+        data["extension"] = "mb"
+
+        version = 1
+        if context.has_data("version"):
+            version = context.data("version")
+        data["version"] = version
+
+        project_path = pipeline_schema.get_path("task_work", data)
+        project_path = os.path.dirname(project_path).lower()
         pymel.core.mel.eval(" setProject \"%s\"" % project_path)
 
 
@@ -135,6 +149,12 @@ class ValidateRenderSettings(pyblish.api.InstancePlugin):
         data = pipeline_schema.get_data()
         data["extension"] = "temp"
         data["output_type"] = "img"
+
+        version = 1
+        if instance.context.has_data("version"):
+            version = instance.context.data("version")
+        data["version"] = version
+
         expected_output = pipeline_schema.get_path("output_sequence", data)
         expected_output = os.path.dirname(os.path.dirname(expected_output))
         paths = [str(pymel.core.system.Workspace.getPath().expand())]
@@ -146,10 +166,18 @@ class ValidateRenderSettings(pyblish.api.InstancePlugin):
         assert output == expected_output, msg
 
         # validate project directory
-        project_path = utils.get_project_path(instance.context,
-                                              self.log).replace("\\", "/")
+        data = pipeline_schema.get_data()
+        data["extension"] = "mb"
+
+        version = 1
+        if instance.context.has_data("version"):
+            version = instance.context.data("version")
+        data["version"] = version
+
+        project_path = pipeline_schema.get_path("task_work", data)
+        project_path = os.path.dirname(project_path).lower()
         scene_project = pymel.core.system.Workspace.getPath().expand()
-        scene_project = scene_project.replace("\\", "/")
+        scene_project = scene_project.replace("\\", "/").lower()
 
         msg = "Project path is incorrect."
         msg += "\n\nCurrent: %s" % scene_project

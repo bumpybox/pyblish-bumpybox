@@ -1,5 +1,6 @@
-import hou
+import math
 
+import hou
 import pyblish.api
 
 
@@ -38,17 +39,18 @@ class AppendDeadlineDataFarm(pyblish.api.InstancePlugin):
         if node.parm("trange").eval() == 0:
             start_frame = end_frame = int(hou.frame())
 
-        if step_frame == 1:
-            job_data["Frames"] = "{0}-{1}".format(start_frame, end_frame)
-        else:
-            frames = ""
-            for f in range(start_frame, end_frame, step_frame):
-                frames += "," + str(f)
-            job_data["Frames"] = frames
+        job_data["Frames"] = "{0}-{1}x{2}".format(start_frame,
+                                                  end_frame,
+                                                  step_frame)
 
         # chunk size
         if "%" not in path:
             job_data["ChunkSize"] = str(end_frame)
+        else:
+            tasks = (end_frame - start_frame + 1.0) / step_frame
+            # Deadline can only handle 5000 tasks maximum
+            if tasks > 5000:
+                job_data["ChunkSize"] = str(int(math.ceil(tasks / 5000.0)))
 
         # setting plugin data
         plugin_data["OutputDriver"] = node.path()

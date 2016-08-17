@@ -172,13 +172,9 @@ class CollectRenderlayers(pyblish.api.Collector):
             if "startFrame" in data[layer]:
                 start_frame = int(data[layer]["startFrame"] * self.getFPS())
 
-            if step_frame == 1:
-                job_data["Frames"] = "{0}-{1}".format(start_frame, end_frame)
-            else:
-                frames = ""
-                for f in range(start_frame, end_frame, step_frame):
-                    frames += "," + str(f)
-                job_data["Frames"] = frames
+            job_data["Frames"] = "{0}-{1}x{2}".format(start_frame,
+                                                      end_frame,
+                                                      step_frame)
 
             instance.data["stepFrame"] = step_frame
             instance.data["endFrame"] = end_frame

@@ -1,5 +1,4 @@
 import os
-import re
 
 import pyblish.api
 import nuke
@@ -35,10 +34,17 @@ class RepairRenderSettings(pyblish.api.Action):
             data = pipeline_schema.get_data()
             data["output_type"] = "img"
             data["name"] = str(instance)
+
             if ext:
                 data["extension"] = ext[1:]
             else:
                 data["extension"] = "exr"
+
+            version = 1
+            if instance.context.has_data("version"):
+                version = instance.context.data("version")
+            data["version"] = version
+
             output = pipeline_schema.get_path("output_sequence", data)
 
             frame_padding = len(str(int(nuke.root()['last_frame'].value())))
@@ -91,6 +97,12 @@ class ValidateRenderSettings(pyblish.api.InstancePlugin):
         data["output_type"] = "img"
         data["extension"] = ext[1:]
         data["name"] = str(instance)
+
+        version = 1
+        if instance.context.has_data("version"):
+            version = instance.context.data("version")
+        data["version"] = version
+
         output = pipeline_schema.get_path("output_sequence", data)
 
         frame_padding = len(str(int(nuke.root()['last_frame'].value())))
