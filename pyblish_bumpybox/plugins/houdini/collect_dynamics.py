@@ -37,7 +37,7 @@ class CollectDynamics(pyblish.api.ContextPlugin):
 
             # collet frame padding
             frame_padding = 4
-            end_frame = node.parm("f2").eval()
+            end_frame = int(hou.hscriptExpression("$FEND"))
             if len(str(int(end_frame))) > 4:
                 frame_padding = len(str(int(end_frame)))
 
