@@ -1,6 +1,6 @@
 import os
-import re
 import json
+import re
 
 import pyblish.api
 
@@ -18,6 +18,7 @@ class CollectOutput(pyblish.api.ContextPlugin):
         if "FT_ProjectId" in job.GetJobExtraInfoKeys():
             return
 
+        task = context.data["deadlineTask"]
         data = job.GetJobExtraInfoKeyValueWithDefault("PyblishInstanceData",
                                                       "")
         if not data:
@@ -39,15 +40,10 @@ class CollectOutput(pyblish.api.ContextPlugin):
                 path = "{0}".format(path.replace(padding, "%%0%dd" % len_pad))
 
             # collecting all matching output files
-            directory = os.path.dirname(path)
-            ext = os.path.splitext(path)[1]
-            start_base = os.path.basename(path).split("%")[0]
-
             collection = []
-            for f in os.listdir(directory):
-                if f.startswith(start_base) and f.endswith(ext):
-                    file_path = os.path.join(directory, f).replace("\\", "/")
-                    collection.append(file_path)
+            for f in task.TaskFrameList:
+                if os.path.exists(path % f):
+                    collection.append(path % f)
 
             files[path] = collection
 
