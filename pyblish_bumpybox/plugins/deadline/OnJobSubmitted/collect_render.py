@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import math
 
 import pyblish.api
 
@@ -51,7 +52,12 @@ class CollectRender(pyblish.api.ContextPlugin):
         job_data["JobDependency0"] = job.JobId
         job_data["OutputFilename0"] = path
         job_data["IsFrameDependent"] = True
-        job_data["ChunkSize"] = job.ChunkSize
+
+        frame_count = 0
+        for f in job.JobFramesList:
+            frame_count += 1
+        if frame_count > 5000:
+            job_data["ChunkSize"] = int(math.ceil(frame_count / 5000.0))
 
         # setting plugin data
         plugin_data = {}
