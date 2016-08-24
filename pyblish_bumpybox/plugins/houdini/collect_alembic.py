@@ -43,3 +43,5 @@ class CollectAlembic(pyblish.api.ContextPlugin):
                 instance.data["family"] = "cache.farm.abc"
                 instance.data["families"] = ["cache.*", "cache.farm.*",
                                              "deadline"]
+
+                instance.data["farmChunkSize"] = 1

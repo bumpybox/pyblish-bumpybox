@@ -44,6 +44,7 @@ class AppendDeadlineDataFarm(pyblish.api.InstancePlugin):
                                                   step_frame)
 
         # chunk size
+        job_data["ChunkSize"] = str(instance.data["farmChunkSize"])
         if "%" not in path:
             job_data["ChunkSize"] = str(end_frame)
         else:
