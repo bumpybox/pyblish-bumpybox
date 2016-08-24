@@ -44,13 +44,14 @@ class AppendDeadlineDataFarm(pyblish.api.InstancePlugin):
                                                   step_frame)
 
         # chunk size
-        job_data["ChunkSize"] = str(instance.data["farmChunkSize"])
+        job_data["ChunkSize"] = instance.data["farmChunkSize"]
         if "%" not in path:
             job_data["ChunkSize"] = str(end_frame)
         else:
             tasks = (end_frame - start_frame + 1.0) / step_frame
+            chunks = (end_frame - start_frame + 1.0) / job_data["ChunkSize"]
             # Deadline can only handle 5000 tasks maximum
-            if tasks > 5000:
+            if tasks > 5000 and chunks > 5000:
                 job_data["ChunkSize"] = str(int(math.ceil(tasks / 5000.0)))
 
         # setting plugin data
