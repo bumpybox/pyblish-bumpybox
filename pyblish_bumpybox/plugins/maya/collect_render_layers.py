@@ -131,6 +131,7 @@ class CollectRenderlayers(pyblish.api.Collector):
 
         for layer in data:
 
+            node = pymel.core.PyNode(layer)
             instance = context.create_instance(name=layer)
             instance.data["family"] = "deadline.render"
             instance.data["families"] = ["deadline"]
@@ -145,6 +146,21 @@ class CollectRenderlayers(pyblish.api.Collector):
                 layer_name = "masterLayer"
             else:
                 layer_name = layer
+
+            # collecting chunk size
+            chunk_size = 1
+            try:
+                attr = getattr(node, "pyblishFarmChunkSize")
+                chunk_size = attr.get()
+            except:
+                self.log.info("failed to get attribute")
+                pymel.core.addAttr(node, longName="pyblishFarmChunkSize",
+                                   defaultValue=1, attributeType="long")
+                msg = "Attribute \"pyblishFarmChunkSize\""
+                msg += " does not exists. Defaulting to chunk size of 1"
+                self.log.info(msg)
+
+            job_data["ChunkSize"] = str(chunk_size)
 
             # setting plugin_data
             plugin_data = plugin_data.copy()
