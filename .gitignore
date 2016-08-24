@@ -1,3 +1,4 @@
 *.pyc
 ._*
 sync.ffs_db
+pyblish_bumpybox.egg-info/
