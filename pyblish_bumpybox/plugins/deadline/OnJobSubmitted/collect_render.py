@@ -51,6 +51,7 @@ class CollectRender(pyblish.api.ContextPlugin):
         job_data["JobDependency0"] = job.JobId
         job_data["OutputFilename0"] = path
         job_data["IsFrameDependent"] = True
+        job_data["ChunkSize"] = job.ChunkSize
 
         # setting plugin data
         plugin_data = {}
