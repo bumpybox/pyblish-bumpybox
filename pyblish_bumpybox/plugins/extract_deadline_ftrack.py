@@ -10,7 +10,7 @@ class ExtractDeadlineFtrack(pyblish.api.Extractor):
     order = pyblish.api.Extractor.order + 0.4
     optional = True
     label = 'Ftrack to Deadline'
-    hosts = ["nuke", "maya", "standalone"]
+    hosts = ["nuke", "maya", "celaction"]
 
     def process(self, context, instance):
 
@@ -86,6 +86,28 @@ class ExtractDeadlineFtrack(pyblish.api.Extractor):
         extra_info_key_value['FT_ComponentName'] = component_name
 
         job_data['ExtraInfoKeyValue'] = extra_info_key_value
+
+        # setting data
+        data = {'job': job_data, 'plugin': plugin_data}
+        instance.data['deadlineData'] = data
+
+
+class ExtractDeadlineFtrackPath(pyblish.api.InstancePlugin):
+    """ Extract Ftrack path for Deadline """
+
+    order = pyblish.api.ExtractorOrder
+    families = ["deadline"]
+
+    def process(self, instance):
+
+        if not instance.context.has_data('ftrackData'):
+            return
+
+        job_data = {}
+        plugin_data = {}
+        if 'deadlineData' in instance.data:
+            job_data = instance.data['deadlineData']['job'].copy()
+            plugin_data = instance.data['deadlineData']['plugin'].copy()
 
         # commenting to store full ftrack path
         comment = ""

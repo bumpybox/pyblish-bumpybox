@@ -5,7 +5,7 @@ class AppendFtrackAssetName(pyblish.api.InstancePlugin):
     """ Appending "ftrackAssetName" """
 
     label = "Ftrack Asset Name"
-    order = pyblish.api.CollectorOrder + 0.2
+    order = pyblish.api.ValidatorOrder - 0.4
 
     def process(self, instance):
 

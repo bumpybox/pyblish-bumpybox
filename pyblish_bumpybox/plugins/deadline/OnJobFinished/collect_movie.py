@@ -53,7 +53,7 @@ class CollectMovie(pyblish.api.InstancePlugin):
             job_data["Name"] = job.Name
             job_data["UserName"] = job.UserName
             job_data["OutputFilename0"] = output_path
-            job_data["ChunkSize"] = job.JobFramesList[-1]
+            job_data["ChunkSize"] = job.JobFramesList[-1] + 1
 
             # setting plugin data
             plugin_data = {}

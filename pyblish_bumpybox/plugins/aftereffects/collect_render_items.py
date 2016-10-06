@@ -5,6 +5,8 @@ import pyblish_aftereffects
 
 
 class CollectRenderItems(pyblish.api.ContextPlugin):
+    """ Collect render queue items. """
+
     order = pyblish.api.CollectorOrder
 
     def process(self, context):
@@ -26,30 +28,21 @@ class CollectRenderItems(pyblish.api.ContextPlugin):
 
             ext = os.path.splitext(output)[1]
 
+            # hardcoding frame padding to 4 for now, as output path
+            # validation is rigid on padding
+            frame_padding = 4
+
             instance = context.create_instance(name)
             instance.data["family"] = "img.farm" + ext
             instance.data["families"] = ["img.farm.*", "img.*", "deadline"]
-            instance.data["publish"] = False
             instance.data["output"] = output
             instance.data["index"] = count
+            instance.data["framePadding"] = frame_padding
 
             instance = context.create_instance(name)
             instance.data["family"] = "img.local" + ext
             instance.data["families"] = ["img.local.*", "img.*"]
+            instance.data["publish"] = False
             instance.data["output"] = output
             instance.data["index"] = count
-            """
-            cmd = "return app.project.renderQueue.item({0}).comp.frameDuration"
-            frame_duration = pyblish_aftereffects.send(cmd.format(count))
-            frame_duration = float(frame_duration)
-
-            cmd = "return app.project.renderQueue.item({0}).timeSpanStart"
-            time_start = float(pyblish_aftereffects.send(cmd.format(count)))
-            first_frame = time_start * (1 / frame_duration)
-
-            cmd = "return app.project.renderQueue.item({0}).timeSpanDuration"
-            time_duration = float(pyblish_aftereffects.send(cmd.format(count)))
-            last_frame = time_duration * (1 / frame_duration)
-
-            self.log.info((name, output, first_frame, last_frame))
-            """
+            instance.data["framePadding"] = frame_padding

@@ -5,8 +5,8 @@ class AppendFtrackData(pyblish.api.InstancePlugin):
     """ Appending ftrack component and asset type data """
 
     families = ["img.*", "cache.*"]
-    # offset to piggy back from default collectors
-    order = pyblish.api.CollectorOrder + 0.2
+    # order before default ftrack plugins
+    order = pyblish.api.ValidatorOrder - 0.4
 
     def process(self, instance):
 

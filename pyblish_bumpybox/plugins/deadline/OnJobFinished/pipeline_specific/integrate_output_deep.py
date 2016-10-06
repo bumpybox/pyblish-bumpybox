@@ -26,10 +26,6 @@ class IntegrateOutputDeep(pyblish.api.InstancePlugin):
         data["version"] = instance.context.data["version"]
         output_seq = pipeline_schema.get_path("output_sequence", data=data)
 
-        # copy output
-        if not os.path.exists(os.path.dirname(output_seq)):
-            os.makedirs(os.path.dirname(output_seq))
-
         output_path = instance.data["outputPath"]
 
         pattern = os.path.basename(output_path)
@@ -47,6 +43,9 @@ class IntegrateOutputDeep(pyblish.api.InstancePlugin):
 
                 frame = int(re.findall(pattern, f)[0])
                 dst = output_seq % frame
+
+                if not os.path.exists(os.path.dirname(output_seq)):
+                    os.makedirs(os.path.dirname(output_seq))
 
                 shutil.copy(f, dst)
 
