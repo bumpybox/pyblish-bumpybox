@@ -54,7 +54,8 @@ class AppendDeadlineData(pyblish.api.InstancePlugin):
         job_data["OutputFilename0"] = output
 
         job_data["Pool"] = "medium"
-        job_data["Group"] = "aftereffects_{0}".format(app_major_version)
+        group = "aftereffects_{0}".format(app_major_version.replace(".", "_"))
+        job_data["Group"] = group
         job_data["LimitGroups"] = "aftereffects"
         job_data["ChunkSize"] = "10"
 
