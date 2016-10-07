@@ -24,7 +24,7 @@ class AppendDeadlineData(pyblish.api.InstancePlugin):
         plugin_data["Comp"] = str(instance)
 
         app_version = pyblish_aftereffects.send("return app.version")
-        app_major_version = app_version.split("x")[0]
+        app_major_version = ".".join(app_version.split("x")[0].split(".")[:2])
         plugin_data["Version"] = app_major_version
 
         # setting job data
