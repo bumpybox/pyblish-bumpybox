@@ -68,7 +68,7 @@ class AppendDeadlineData(pyblish.api.InstancePlugin):
         group = "aftereffects_{0}".format(app_major_version.replace(".", "_"))
         job_data["Group"] = group
         job_data["LimitGroups"] = "aftereffects"
-        job_data["ChunkSize"] = "25"
+        job_data["ChunkSize"] = "100"
 
         # setting data
         data = {"job": job_data, "plugin": plugin_data}
