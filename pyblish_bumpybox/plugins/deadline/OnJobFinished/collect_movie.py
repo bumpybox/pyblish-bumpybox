@@ -67,6 +67,9 @@ class CollectMovie(pyblish.api.InstancePlugin):
             inputs_args += start_frame
             plugin_data["InputArgs0"] = inputs_args
 
+            if "audio" in instance.context.data:
+                plugin_data["InputArgs1"] = instance.context.data["audio"]
+
             output_args = "-q:v 0 -pix_fmt yuv420p -vf scale=trunc(iw/2)*2:"
             output_args += "trunc(ih/2)*2,colormatrix=bt601:bt709"
             output_args += " -timecode 00:00:00:01"
