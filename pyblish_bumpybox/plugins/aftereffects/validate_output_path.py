@@ -34,10 +34,6 @@ class RepairOutputPath(pyblish.api.Action):
 
             pyblish_aftereffects.send(cmd.format(instance.data["index"],
                                                  data.format(path)))
-
-            # ensure output directory exists
-            if not os.path.exists(os.path.dirname(path)):
-                os.makedirs(os.path.dirname(path))
             
 
 class ValidateOutputPath(pyblish.api.InstancePlugin):
