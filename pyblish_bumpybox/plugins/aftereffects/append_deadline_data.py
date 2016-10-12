@@ -60,6 +60,10 @@ class AppendDeadlineData(pyblish.api.InstancePlugin):
         output = instance.data["output"].replace("[", "").replace("]", "")
         job_data["OutputFilename0"] = output
 
+        # ensure output directory exists
+        if not os.path.exists(os.path.dirname(output)):
+            os.makedirs(os.path.dirname(output))
+
         job_data["Pool"] = "medium"
         group = "aftereffects_{0}".format(app_major_version.replace(".", "_"))
         job_data["Group"] = group
