@@ -34,7 +34,7 @@ class RepairOutputPath(pyblish.api.Action):
 
             pyblish_aftereffects.send(cmd.format(instance.data["index"],
                                                  data.format(path)))
-
+            
 
 class ValidateOutputPath(pyblish.api.InstancePlugin):
 
