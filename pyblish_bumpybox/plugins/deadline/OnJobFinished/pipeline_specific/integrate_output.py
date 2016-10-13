@@ -40,7 +40,6 @@ class IntegrateOutput(pyblish.api.InstancePlugin):
         output_seq = output_seq.replace(".%04d.", padding_string)
 
         components = {}
-        paths = {}
         for path in instance.data["files"].keys():
 
             # moving output
@@ -69,8 +68,6 @@ class IntegrateOutput(pyblish.api.InstancePlugin):
                     shutil.copy(f, dst)
 
                     self.log.info("Copied {0} to {1}".format(f, dst))
-
-            paths[output.replace(".temp", ext)] = files
 
             # ftrack data
             component_name = str(instance)
