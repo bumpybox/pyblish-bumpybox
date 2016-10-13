@@ -79,6 +79,7 @@ class IntegrateOutput(pyblish.api.InstancePlugin):
                 component_name = "{0}_{1}".format(component_name, str(index))
 
             components[component_name] = {"path": output.replace(".temp", ext)}
+            components["main"] = {"path": output.replace(".temp", ext)}
 
         # adding component data
         instance.data["ftrackComponents"] = components
