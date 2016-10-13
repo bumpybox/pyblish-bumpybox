@@ -73,3 +73,7 @@ class AppendDeadlineData(pyblish.api.InstancePlugin):
         # setting data
         data = {"job": job_data, "plugin": plugin_data}
         instance.data["deadlineData"] = data
+
+        # ensure scene is saved before submitting to the farm
+        cmd = "app.project.save()"
+        pyblish_aftereffects.send(cmd)
