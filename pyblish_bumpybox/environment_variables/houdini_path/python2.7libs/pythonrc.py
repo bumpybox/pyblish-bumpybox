@@ -1,4 +1,5 @@
 import pyblish.api
+import pyblish_lite.settings
 
 
 # Pyblish callbacks for presisting instance states to the scene
@@ -14,3 +15,6 @@ pyblish.api.register_callback("instanceToggled", toggle_instance)
 
 # register gui
 pyblish.api.register_gui("pyblish_lite")
+
+# customize pyblish_lite
+pyblish_lite.settings.InitialTab = "overview"
