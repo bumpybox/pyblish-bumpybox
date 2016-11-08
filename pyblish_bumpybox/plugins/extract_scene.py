@@ -5,18 +5,17 @@ import pyblish.api
 
 
 class ExtractScene(pyblish.api.InstancePlugin):
-    """ Extract work file to 'publish' directory next to work file
-    """
+    """ Extract file to the "publishPath" datamember. """
 
     order = pyblish.api.ExtractorOrder
-    families = ['scene']
-    label = 'Scene'
+    families = ["scene"]
+    label = "Scene"
 
     def process(self, instance):
 
-        current_file = instance.data('workPath')
-        publish_file = instance.data('publishPath')
-        publish_dir = os.path.dirname(instance.data('publishPath'))
+        current_file = instance.data["path"]
+        publish_file = instance.data["publishPath"]
+        publish_dir = os.path.dirname(publish_file)
 
         # create publish directory
         if not os.path.exists(publish_dir):

@@ -5,37 +5,29 @@ import pyblish.api
 
 class CollectScene(pyblish.api.ContextPlugin):
     """ Collecting the scene from the context """
-    # offset to get latest currentFile
-    order = pyblish.api.CollectorOrder + 0.2
+
+    # offset to get latest currentFile from context
+    order = pyblish.api.CollectorOrder + 0.1
 
     def process(self, context):
 
-        current_file = context.data('currentFile')
-        current_dir = os.path.dirname(current_file)
-        publish_dir = os.path.join(current_dir, 'publish')
-        publish_file = os.path.join(publish_dir,
-                                    os.path.basename(current_file))
+        current_file = context.data("currentFile")
 
         # create instance
-        name = os.path.basename(current_file)
-        instance = context.create_instance(name=name)
+        instance = context.create_instance(name=os.path.basename(current_file))
 
-        instance.set_data('family', value='scene')
-        instance.set_data('workPath', value=current_file)
-        instance.set_data('publishPath', value=publish_file)
+        instance.data["family"] = "scene"
+        instance.data["path"] = current_file
 
         # ftrack data
-        if not context.has_data('ftrackData'):
+        if "ftrackData" not in instance.context.data:
             return
 
-        ftrack_data = context.data('ftrackData')
+        instance.data["ftrackAssetType"] = "scene"
 
-        host = pyblish.api.current_host()
-        components = {'%s_publish' % host: {'path': publish_file}}
-        components['%s_work' % host] = {'path': current_file}
+        ftrack_data = instance.context.data("ftrackData")
+        instance.data["ftrackAssetName"] = ftrack_data["Task"]["name"]
 
-        instance.set_data('ftrackComponents', value=components)
-        instance.set_data('ftrackAssetType', value='scene')
-
-        asset_name = ftrack_data['Task']['name']
-        instance.set_data('ftrackAssetName', value=asset_name)
+        component_name = "%s_work" % pyblish.api.current_host()
+        components = {component_name: {"path": current_file}}
+        instance.data["ftrackComponents"] = components
