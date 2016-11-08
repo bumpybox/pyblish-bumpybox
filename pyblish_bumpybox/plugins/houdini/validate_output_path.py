@@ -25,7 +25,7 @@ class RepairOutputPath(pyblish.api.Action):
 
         for instance in instances:
 
-            root = "${hip}/${HIPNAME}"
+            root = "${hip}/workspace/${HIPNAME}"
 
             frame_padding = instance.data["framePadding"]
             padding_string = ".$F%s" % frame_padding
@@ -98,7 +98,7 @@ class ValidateOutputPath(pyblish.api.InstancePlugin):
 
         # file path needs formatting to lower case start, because
         # hou.hipFile.path(), used in currentFile, return lower case
-        root = "${hip}/${HIPNAME}"
+        root = "${hip}/workspace/${HIPNAME}"
 
         current = instance.data["originalOutputPath"]
 
