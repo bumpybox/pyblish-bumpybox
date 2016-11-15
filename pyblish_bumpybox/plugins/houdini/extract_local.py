@@ -2,6 +2,7 @@ import os
 import re
 
 import pyblish.api
+import clique
 
 
 class ExtractLocal(pyblish.api.InstancePlugin):
@@ -39,3 +40,10 @@ class ExtractLocal(pyblish.api.InstancePlugin):
 
         instance.data["outputFiles"] = files
         self.log.debug("Extracted files: " + str(files))
+
+        # modify output path with frames
+        collections = clique.assemble(files, minimum_items=1)[0]
+        for col in collections:
+            path = col.format('{head}{padding}{tail}').replace("\\", "/")
+            if path == output_path:
+                instance.data["outputPath"] = col.format()
