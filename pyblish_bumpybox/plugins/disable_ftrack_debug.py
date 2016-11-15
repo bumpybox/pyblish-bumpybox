@@ -12,4 +12,4 @@ class DisableFtrackDebugMessages(pyblish.api.ContextPlugin):
 
         for log in logging.Logger.manager.loggerDict.keys():
             if "ftrack" in log:
-                logging.getLogger(log).setLevel(logging.WARNING)
+                logging.getLogger(log).setLevel(logging.INFO)
