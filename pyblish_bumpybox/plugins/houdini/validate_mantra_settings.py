@@ -35,7 +35,7 @@ class RepairMantraSettings(pyblish.api.Action):
 class ValidateMantraSettings(pyblish.api.InstancePlugin):
     """ Validates mantra settings """
 
-    families = ["img.*"]
+    families = ["mantra"]
     order = pyblish.api.ValidatorOrder
     label = "Mantra Settings"
     actions = [RepairMantraSettings]
@@ -45,13 +45,14 @@ class ValidateMantraSettings(pyblish.api.InstancePlugin):
 
         node = instance[0]
 
-        # igonore local ifds
-        if instance.data["family"] == "img.local.ifd":
+        # Igonore local ifds
+        if ("ifd" in instance.data["families"] and
+           "local" in instance.data["families"]):
             return
 
         # When rendering locally we need to block, so Pyblish doesn"t execute
         # other plugins. When render on a farm, the block needs to be lifted.
-        if instance.data["family"].startswith("img.farm"):
+        if "farm" in instance.data["families"]:
             msg = "Mantra needs to render in the background for farm "
             msg += "rendering. Disable \"Block Until Render Complete\" in "
             msg += "\"Driver\"."

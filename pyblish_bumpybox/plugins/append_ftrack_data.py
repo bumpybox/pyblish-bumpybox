@@ -13,11 +13,11 @@ class AppendFtrackAssetData(pyblish.api.InstancePlugin):
         instance.data["ftrackComponents"] = components
 
         # assigning asset type
-        if "families" in instance.data:
-            if "img.*" in instance.data["families"]:
-                instance.data["ftrackAssetType"] = "img"
-            if "cache.*" in instance.data["families"]:
-                instance.data["ftrackAssetType"] = "cache"
+        families = instance.data.get("families", [])
+        if "img" in families:
+            instance.data["ftrackAssetType"] = "img"
+        if "cache" in families:
+            instance.data["ftrackAssetType"] = "cache"
 
         if instance.data["family"] == "scene":
             instance.data["ftrackAssetType"] = "scene"
@@ -39,9 +39,9 @@ class AppendFtrackComponents(pyblish.api.InstancePlugin):
 
     def process(self, instance):
 
-        if "outputPath" in instance.data:
+        if "collection" in instance.data:
             components = instance.data.get("ftrackComponents", {})
-            data = {"path": instance.data["outputPath"],
+            data = {"path": instance.data["collection"].format(),
                     "overwrite": True}
             components[str(instance)] = data
             instance.data["ftrackComponents"] = components

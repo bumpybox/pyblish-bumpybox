@@ -1,4 +1,3 @@
-import hou
 import pyblish.api
 
 
@@ -23,15 +22,14 @@ class RepairAlembicSettings(pyblish.api.Action):
 
         for instance in instances:
 
-            # setting parms
-            instance[0].setParms({"partition_mode": 4,
-                                  "collapse": 1})
+            # Setting parameters.
+            instance[0].setParms({"partition_mode": 4, "collapse": 1})
 
 
 class ValidateAlembicSettings(pyblish.api.InstancePlugin):
     """ Validates Alembic settings """
 
-    families = ["cache.local.abc", "cache.farm.abc"]
+    families = ["alembic"]
     order = pyblish.api.ValidatorOrder
     label = "Alembic Settings"
     actions = [RepairAlembicSettings]
@@ -39,17 +37,12 @@ class ValidateAlembicSettings(pyblish.api.InstancePlugin):
 
     def process(self, instance):
 
-        node = instance[0]
-
-        if node.type() != hou.nodeType(hou.ropNodeTypeCategory(), "alembic"):
-            return
-
-        # partition mode
+        # Partition mode.
         msg = "Partition mode is not correct. Expected \"Use Combination of "
         msg += "Transform/Shape Node\""
-        assert node.parm("partition_mode").eval() == 4, msg
+        assert instance[0].parm("partition_mode").eval() == 4, msg
 
-        # collapse mode
+        # Collapse mode.
         msg = "Collapse mode is not correct. Expected \"Collapse Non-Animating"
         msg += " Identity Objects\""
-        assert node.parm("collapse").eval() == 1, msg
+        assert instance[0].parm("collapse").eval() == 1, msg

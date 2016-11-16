@@ -1,6 +1,5 @@
 import os
 
-import hou
 import pyblish.api
 
 
@@ -20,128 +19,75 @@ class RepairOutputPath(pyblish.api.Action):
                result["instance"] not in failed):
                 failed.append(result["instance"])
 
-        # Apply pyblish.logic to get the instances for the plug-in
+        # Apply pyblish.logic to get the instances for the plug-in.
         instances = pyblish.api.instances_by_plugin(failed, plugin)
 
+        plugin = plugin()
         for instance in instances:
 
-            root = "${hip}/workspace/${HIPNAME}"
+            node = instance[0]
 
-            frame_padding = instance.data["framePadding"]
-            padding_string = ".$F%s" % frame_padding
-            # special case for alembics
-            if (instance.data["family"].endswith("abc") and
-               "$F" not in instance.data["originalOutputPath"]):
-                padding_string = ""
-            # special case for dynamics
-            if instance.data["family"].endswith("sim"):
-                padding_string = ".`padzero(%s, $SF)`" % frame_padding
-
-            path = instance.data["originalOutputPath"]
-            ext = os.path.splitext(instance.data["family"])[1].replace("_",
-                                                                       ".")
-            output_path = "{0}_{1}{2}{3}".format(root, instance.data("name"),
-                                                 padding_string, ext)
-
-            # getting parameter name
-            parm = ""
-
-            if instance[0].type() == hou.nodeType(hou.ropNodeTypeCategory(),
-                                                  "alembic"):
-                parm = "filename"
-            if instance[0].type() == hou.nodeType(hou.ropNodeTypeCategory(),
-                                                  "geometry"):
-                parm = "sopoutput"
-
-            if instance.data["family"].startswith("img"):
-                parm = "vm_picture"
-            if instance.data["family"].endswith("ifd"):
-                parm = "soho_diskfile"
-            if instance.data["family"].endswith("sim"):
-                parm = "dopoutput"
-
-            instance[0].setParms({parm: output_path})
-
-            # extra validation for ifd output
-            if instance.data["family"].endswith("ifd"):
-                path = instance.data["renderOutputPath"]
-                ext = os.path.splitext(path)[1]
-
-                output_path = "{0}_{1}{2}{3}".format(root,
-                                                     instance.data("name"),
-                                                     padding_string, ext)
-                instance[0].setParms({"vm_picture": output_path})
-
-            # extra validation for deep data
-            if "deepPath" in instance.data and instance.data["deepPath"]:
-                ext = os.path.splitext(instance.data["deepPath"])[1]
-                path = "{0}_{1}_deep{2}{3}".format(root, instance.data("name"),
-                                                   padding_string, ext)
-
-                node = instance[0]
-                if node.parm("vm_deepresolver").eval() == "shadow":
-                    node.setParms({"vm_dsmfilename": path})
-                if node.parm("vm_deepresolver").eval() == "camera":
-                    node.setParms({"vm_dcmfilename": path})
+            for parm in node.parms():
+                if parm.name() in plugin.get_supported_parameters():
+                    expected = plugin.get_expected_path(instance, parm.name())
+                    parm.set(expected)
 
 
 class ValidateOutputPath(pyblish.api.InstancePlugin):
-    """ Validates output path """
+    """ Validates parameter for output """
 
-    families = ["img.*", "cache.*"]
+    families = ["alembic", "mantra", "geometry", "dynamics"]
     order = pyblish.api.ValidatorOrder
     label = "Output Path"
     actions = [RepairOutputPath]
     optional = True
 
+    def get_supported_parameters(self):
+
+        return ["vm_picture", "soho_diskfile", "filename", "sopoutput",
+                "dopoutput", "vm_dsmfilename", "vm_dcmfilename"]
+
     def process(self, instance):
 
-        # file path needs formatting to lower case start, because
-        # hou.hipFile.path(), used in currentFile, return lower case
+        # All instances has to have a collection.
+        msg = "No collection was found on instance \"{0}\"."
+        assert instance.data["collection"], msg.format(str(instance))
+
+        # Validate all supported output parameters
+        for parm in instance[0].parms():
+            if parm.name() in self.get_supported_parameters():
+                expected = self.get_expected_path(instance, parm.name())
+                current = parm.unexpandedString()
+
+                msg = "Output path for parameter \"{0}\"."
+                msg += "Current: {1}. Expected: {2}"
+                assert current == expected, msg.format(parm.name(), current,
+                                                       expected)
+
+    def get_expected_path(self, instance, parameter_name):
+
+        output = instance[0].parm(parameter_name).eval()
+
+        # Get extension
+        ext = os.path.splitext(output)[1]
+        # Special case for *.bgeo.sc files since it was two "extensions".
+        if output.endswith(".bgeo.sc"):
+            ext = ".bgeo.sc"
+
+        # Default padding starting at 4 digits.
+        padding = 4
+        if instance.data["collection"]:
+            padding = instance.data["collection"].padding
+        # Can't have less than 4 digits.
+        if padding < 4:
+            padding = 4
+
+        # File path needs formatting to lower case start, because
+        # hou.hipFile.path(), used in currentFile, return lower case.
         root = "${hip}/workspace/${HIPNAME}"
 
-        current = instance.data["originalOutputPath"]
+        # Generate padding string
+        padding_string = ".$F{0}".format(padding)
 
-        frame_padding = instance.data["framePadding"]
-        padding_string = ".$F%s" % frame_padding
-        # special case for alembics
-        if (instance.data["family"].endswith("abc") and
-           "$F" not in instance.data["originalOutputPath"]):
-            padding_string = ""
-        # special case for dynamics
-        if instance.data["family"].endswith("sim"):
-            padding_string = ".`padzero(%s, $SF)`" % frame_padding
-
-        path = instance.data["originalOutputPath"]
-        ext = os.path.splitext(instance.data["family"])[1].replace("_", ".")
-        expected = "{0}_{1}{2}{3}".format(root, instance.data("name"),
+        return "{0}_{1}_{2}{3}{4}".format(root, str(instance), parameter_name,
                                           padding_string, ext)
-
-        msg = "Output path is not correct:"
-        msg += "\n\nCurrent: {0}\n\nExpected: {1}"
-        assert current == expected, msg.format(current, expected)
-
-        # extra validation for ifd output
-        if instance.data["family"].endswith("ifd"):
-            current = instance[0].parm("vm_picture").unexpandedString()
-
-            path = instance[0].parm("vm_picture").unexpandedString()
-            ext = os.path.splitext(path)[1]
-
-            expected = "{0}_{1}{2}{3}".format(root, instance.data("name"),
-                                              padding_string, ext)
-
-            msg = "Image path is not correct:"
-            msg += "\n\nCurrent: {0}\n\nExpected: {1}"
-            assert current == expected, msg.format(current, expected)
-
-        # extra validation for deep data
-        if "deepPath" in instance.data and instance.data["deepPath"]:
-            current = instance.data["deepPath"]
-            ext = os.path.splitext(instance.data["deepPath"])[1]
-            expected = "{0}_{1}_deep{2}{3}".format(root, instance.data("name"),
-                                                   padding_string, ext)
-
-            msg = "Deep image path is not correct:"
-            msg += "\n\nCurrent: {0}\n\nExpected: {1}"
-            assert current == expected, msg.format(current, expected)

@@ -3,9 +3,9 @@ import pyblish.api
 
 
 class ValidateMantraCamera(pyblish.api.InstancePlugin):
-    """ Validates mantra settings """
+    """ Validates that the camera for mantra nodes exists. """
 
-    families = ["img.*"]
+    families = ["mantra"]
     order = pyblish.api.ValidatorOrder
     label = "Mantra Camera"
 
@@ -14,6 +14,6 @@ class ValidateMantraCamera(pyblish.api.InstancePlugin):
         node = instance[0]
         camera = node.parm("camera").eval()
 
-        msg = "Camera \"{0}\" does not exist.".format(camera)
+        msg = "Camera \"{0}\" does not exist."
         msg += "\nMake sure mantra points to an existing camera."
-        assert hou.node(node.parm("camera").eval()), msg
+        assert hou.node(node.parm("camera").eval()), msg.format(camera)

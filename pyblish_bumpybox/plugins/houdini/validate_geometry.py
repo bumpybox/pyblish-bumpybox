@@ -1,0 +1,16 @@
+import pyblish.api
+
+
+class ValidateGeometry(pyblish.api.InstancePlugin):
+    """ Validates that the SOP path is set. """
+
+    families = ["geometry"]
+    order = pyblish.api.ValidatorOrder
+    label = "Geometry"
+
+    def process(self, instance):
+
+        node = instance[0]
+
+        msg = "No SOP path specified for node \"{0}\"."
+        assert node.parm("soppath").eval(), msg.format(node.name())
