@@ -108,3 +108,24 @@ class CollectHoudini(pyblish.api.ContextPlugin):
                 families += ["farm"]
 
             instance.data["families"] = families
+
+            # Create existing files instance.
+            existing_files = []
+            for f in collection:
+                if os.path.exists(f):
+                    existing_files.append(f)
+
+            existing_collection = clique.Collection(head=collection.head,
+                                                    tail=collection.tail,
+                                                    padding=collection.padding)
+            for f in existing_files:
+                existing_collection.add(f)
+
+            if existing_files:
+                name = os.path.basename(existing_collection.format())
+                instance = context.create_instance(name=name)
+
+                instance.data["collection"] = existing_collection
+                instance.data["families"] = [category, ext[1:]]
+                instance.data["publish"] = False
+                instance.data["component_name"] = node.name()
