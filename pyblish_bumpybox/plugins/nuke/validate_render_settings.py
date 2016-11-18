@@ -25,7 +25,7 @@ class RepairRenderSettings(pyblish.api.Action):
         instances = pyblish.api.instances_by_plugin(failed, plugin)
 
         for instance in instances:
-            node = nuke.toNode(str(instance))
+            node = nuke.toNode(instance.data["name"])
 
             path = node["file"].value()
             ext = os.path.splitext(path)[-1]
@@ -33,7 +33,7 @@ class RepairRenderSettings(pyblish.api.Action):
             # repairing the path string
             data = pipeline_schema.get_data()
             data["output_type"] = "img"
-            data["name"] = str(instance)
+            data["name"] = instance.data["name"]
 
             if ext:
                 data["extension"] = ext[1:]
@@ -90,13 +90,13 @@ class ValidateRenderSettings(pyblish.api.InstancePlugin):
 
         path = instance.data["outputPath"]
 
-        node = nuke.toNode(str(instance))
+        node = nuke.toNode(instance.data["name"])
         ext = os.path.splitext(path)[-1]
 
         data = pipeline_schema.get_data()
         data["output_type"] = "img"
         data["extension"] = ext[1:]
-        data["name"] = str(instance)
+        data["name"] = instance.data["name"]
 
         version = 1
         if instance.context.has_data("version"):
@@ -113,13 +113,13 @@ class ValidateRenderSettings(pyblish.api.InstancePlugin):
         output = output.replace("%04d", padding_string)
 
         # validate path
-        msg = "Output path is incorrect on: %s" % str(instance)
+        msg = "Output path is incorrect on: %s" % instance.data["name"]
         msg += " Current: %s" % path.lower()
         msg += " Expected: %s" % output.lower()
         assert path.lower() == output.lower(), msg
 
         # validate existence
-        msg = "Output directory doesn't exist on: %s" % str(instance)
+        msg = "Output directory doesn't exist on: %s" % instance.data["name"]
         assert os.path.exists(os.path.dirname(output)), msg
 
         # validate extension

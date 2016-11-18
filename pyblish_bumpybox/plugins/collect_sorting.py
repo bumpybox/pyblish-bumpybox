@@ -9,5 +9,5 @@ class BumpyboxCollectSorting(pyblish.api.Collector):
     def process(self, context):
 
         context[:] = sorted(context,
-                            key=lambda instance: (instance.data("family"),
-                                                  instance.data("name")))
+                            key=lambda instance: (instance.data("name"),
+                                                  instance.data("label")))

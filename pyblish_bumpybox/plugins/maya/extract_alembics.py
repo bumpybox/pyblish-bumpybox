@@ -72,7 +72,7 @@ class ExtractAlembic(pyblish.api.Extractor):
         filename.append(parent_name)
         filename.append(task_name)
         filename.append(version_string)
-        filename.append(re.sub('[^\w\-_\. ]', '_', str(instance)))
+        filename.append(re.sub('[^\w\-_\. ]', '_', instance.data["name"]))
         filename.append('abc')
         path.append('.'.join(filename))
 
@@ -90,7 +90,7 @@ class ExtractAlembic(pyblish.api.Extractor):
             version = instance.context.data('version')
         version_string = 'v%s' % str(version).zfill(3)
 
-        filename = [re.sub('[^\w\-_\. ]', '_', str(instance))]
+        filename = [re.sub('[^\w\-_\. ]', '_', instance.data["name"])]
 
         filename.append(version_string)
         filename.append('abc')
@@ -107,7 +107,7 @@ class ExtractAlembic(pyblish.api.Extractor):
         if context.has_data('ftrackData'):
             path = self.get_ftrack_path(instance)
 
-            components = {str(instance): {'path': path}}
+            components = {instance.data["name"]: {'path': path}}
 
             instance.set_data('ftrackComponents', value=components)
 

@@ -51,7 +51,7 @@ class BumpyboxHoudiniValidateOutputPath(pyblish.api.InstancePlugin):
 
         # All instances has to have a collection.
         msg = "No collection was found on instance \"{0}\"."
-        assert instance.data["collection"], msg.format(str(instance))
+        assert instance.data["collection"], msg.format(instance.data["name"])
 
         # Validate all supported output parameters
         for parm in instance[0].parms():
@@ -89,5 +89,5 @@ class BumpyboxHoudiniValidateOutputPath(pyblish.api.InstancePlugin):
         # Generate padding string
         padding_string = ".$F{0}".format(padding)
 
-        return "{0}_{1}_{2}{3}{4}".format(root, str(instance), parameter_name,
+        return "{0}_{1}_{2}{3}{4}".format(root, instance.data["name"], parameter_name,
                                           padding_string, ext)

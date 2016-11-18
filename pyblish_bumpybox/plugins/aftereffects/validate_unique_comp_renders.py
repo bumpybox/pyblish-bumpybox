@@ -14,7 +14,7 @@ class ValidateUniqueCompRenders(pyblish.api.ContextPlugin):
 
         names = []
         for instance in instances:
-            names.append(str(instance))
+            names.append(instance.data["name"])
 
         msg = "More than one item in the render queue,"
         msg += " are from the same composition"

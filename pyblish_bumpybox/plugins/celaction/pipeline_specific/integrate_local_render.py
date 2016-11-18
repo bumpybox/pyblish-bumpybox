@@ -27,9 +27,9 @@ class IntegrateLocal(pyblish.api.InstancePlugin):
 
             if ".%04d." in path:
                 data["output_type"] = "img"
-                name = str(instance)
+                name = instance.data["name"]
 
-                if str(instance) == "levels":
+                if instance.data["name"] == "levels":
                     current_file = instance.context.data["currentFile"]
                     current_file = os.path.basename(current_file)
                     pattern = current_file.replace(".scn",
@@ -68,7 +68,7 @@ class IntegrateLocal(pyblish.api.InstancePlugin):
                 if not os.path.exists(parent_path):
                     os.makedirs(parent_path)
 
-                components[str(instance)] = {"path": movie_path}
+                components[instance.data["name"]] = {"path": movie_path}
 
                 shutil.copy(path, movie_path)
 

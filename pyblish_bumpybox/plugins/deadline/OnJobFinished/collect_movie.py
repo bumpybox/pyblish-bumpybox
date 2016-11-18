@@ -26,7 +26,7 @@ class CollectMovie(pyblish.api.InstancePlugin):
 
         for path in instance.data["files"]:
 
-            new_instance = instance.context.create_instance(name=str(instance))
+            new_instance = instance.context.create_instance(name=instance.data["name"])
 
             for key in data:
                 instance.data[key] = data[key]

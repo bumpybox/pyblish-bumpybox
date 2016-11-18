@@ -42,20 +42,27 @@ class CollectOutput(pyblish.api.ContextPlugin):
                                                                tail,
                                                                job.JobFrames))
             # Remove all files that does not exist.
+            files = []
             for f in collection:
+                files.append(f)
+
+            for f in files:
                 if not os.path.exists(f):
                     collection.remove(f)
 
-            collections.append(collection)
+            # Only if some files exists will we add the collection.
+            if list(collection):
+                collections.append(collection)
 
-        # creating instance
-        instance = context.create_instance(name=data["name"])
-        for key in data:
-            instance.data[key] = data[key]
+        # Creating instance if collections exists.
+        if collections:
+            instance = context.create_instance(name=data["name"])
+            for key in data:
+                instance.data[key] = data[key]
 
-        # prevent resubmitting same job
-        del instance.data["deadlineData"]
-        instance.data["families"].remove("deadline")
+            # Prevent resubmitting same job.
+            del instance.data["deadlineData"]
+            instance.data["families"].remove("deadline")
 
-        instance.data["collections"] = collections
-        self.log.debug("Found files: " + str(collections))
+            instance.data["collections"] = collections
+            self.log.debug("Found files: " + str(collections))

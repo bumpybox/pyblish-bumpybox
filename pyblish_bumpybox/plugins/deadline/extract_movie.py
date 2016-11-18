@@ -67,7 +67,7 @@ class BumpyboxDeadlineExtractMovie(pyblish.api.InstancePlugin):
         data["version"] = version
         data["extension"] = "mov"
         data["output_type"] = "mov"
-        data["name"] = str(instance)
+        data["name"] = instance.data["name"]
         output_file = pipeline_schema.get_path("output_file", data)
 
         extra_info_key_value["FFMPEGOutput0"] = output_file

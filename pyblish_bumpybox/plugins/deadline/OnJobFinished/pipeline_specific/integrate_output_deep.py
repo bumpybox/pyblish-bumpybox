@@ -22,7 +22,7 @@ class IntegrateOutputDeep(pyblish.api.InstancePlugin):
         data = pipeline_schema.get_data(task_id)
         data["extension"] = "exr"
         data["output_type"] = instance.data["ftrackAssetType"]
-        data["name"] = str(instance) + "_deep"
+        data["name"] = instance.data["name"] + "_deep"
         data["version"] = instance.context.data["version"]
         output_seq = pipeline_schema.get_path("output_sequence", data=data)
 
@@ -55,5 +55,5 @@ class IntegrateOutputDeep(pyblish.api.InstancePlugin):
                 self.log.info("Moved {0} to {1}".format(f, dst))
 
         # ftrack data
-        name = str(instance) + "_deep"
+        name = instance.data["name"] + "_deep"
         instance.data["ftrackComponents"][name] = {"path": output_seq}

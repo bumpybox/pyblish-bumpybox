@@ -46,7 +46,7 @@ class ExtractDeadline(pyblish.api.Extractor):
             data['job'] = job_data
             instance.set_data('deadlineData', value=data)
 
-            components = {str(instance): {}}
+            components = {instance.data["name"]: {}}
             instance.set_data('ftrackComponents', value=components)
 
             return
@@ -84,5 +84,5 @@ class ExtractDeadline(pyblish.api.Extractor):
         data['auxiliaryFiles'] = instance.context.data('currentFile')
         instance.set_data('deadlineData', value=data)
 
-        components = {str(instance): {}}
+        components = {instance.data["name"]: {}}
         instance.set_data('ftrackComponents', value=components)

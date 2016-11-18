@@ -175,7 +175,7 @@ class CollectRenderlayers(pyblish.api.Collector):
             job_data = job_data.copy()
 
             name = os.path.basename(context.data["currentFile"])
-            name = os.path.splitext(name)[0] + " - " + str(instance)
+            name = os.path.splitext(name)[0] + " - " + instance.data["name"]
             job_data["Name"] = name
 
             # getting frames

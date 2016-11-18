@@ -134,7 +134,7 @@ class ExtractFtrackShots(pyblish.api.Extractor):
             data['version'] = version
             data['extension'] = 'wav'
             data['output_type'] = 'audio'
-            data['name'] = str(instance)
+            data['name'] = instance.data["name"]
             output_file = pipeline_schema.get_path('output_file', data)
             self.log.info(output_file)
 

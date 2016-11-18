@@ -30,7 +30,7 @@ class IntegrateOutput(pyblish.api.InstancePlugin):
         ext = os.path.splitext(instance.data["family"])[1].replace("_", ".")
         data["extension"] = ext[1:]
         data["output_type"] = instance.data["ftrackAssetType"]
-        data["name"] = str(instance)
+        data["name"] = instance.data["name"]
         data["version"] = instance.context.data["version"]
         output_file = pipeline_schema.get_path("output_file", data=data)
 
@@ -70,7 +70,7 @@ class IntegrateOutput(pyblish.api.InstancePlugin):
                     self.log.info("Copied {0} to {1}".format(f, dst))
 
             # ftrack data
-            component_name = str(instance)
+            component_name = instance.data["name"]
             if len(instance.data["files"]) > 1:
                 index = instance.data["files"].keys().index(path)
                 component_name = "{0}_{1}".format(component_name, str(index))

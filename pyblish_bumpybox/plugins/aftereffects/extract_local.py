@@ -33,7 +33,7 @@ class ExtractLocal(pyblish.api.InstancePlugin):
         app_path = pyblish_aftereffects.send(cmd)
         render_exe = os.path.join(os.path.dirname(app_path), "aerender.exe")
 
-        args = [render_exe, "-comp", str(instance), "-project",
+        args = [render_exe, "-comp", instance.data["name"], "-project",
                 instance.context.data["currentFile"]]
 
         result = subprocess.check_output(args)

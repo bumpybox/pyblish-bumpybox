@@ -21,7 +21,7 @@ class RepairCrop(pyblish.api.Action):
         instances = pyblish.api.instances_by_plugin(failed, plugin)
 
         for instance in instances:
-            node = nuke.toNode(str(instance))
+            node = nuke.toNode(instance.data["name"])
 
             input = node.input(0)
 
@@ -43,7 +43,7 @@ class ValidateCrop(pyblish.api.Validator):
 
     def process(self, instance):
 
-        node = nuke.toNode(str(instance))
+        node = nuke.toNode(instance.data["name"])
 
         msg = "Couldn't find a crop node before %s" % instance
         assert node.dependencies()[0].Class() == 'Crop', msg

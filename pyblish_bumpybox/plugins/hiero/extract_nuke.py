@@ -61,7 +61,7 @@ class ExtractNuke(pyblish.api.InstancePlugin):
         data["version"] = version
         data["extension"] = "exr"
         data["output_type"] = "img"
-        data["name"] = str(instance)
+        data["name"] = instance.data["name"]
         write_path = pipeline_schema.get_path("output_sequence", data)
 
         frame_padding = len(str(last_frame))
@@ -87,7 +87,7 @@ class ExtractNuke(pyblish.api.InstancePlugin):
                     "LimitGroups": "nuke"}
 
         name = os.path.basename(instance.context.data["currentFile"])
-        name = "{0} - {1}".format(os.path.splitext(name)[0], str(instance))
+        name = "{0} - {1}".format(os.path.splitext(name)[0], instance.data["name"])
         job_data["Name"] = name
 
         plugin_data = {"NukeX": False, "Version": "9.0",
@@ -143,7 +143,7 @@ class ExtractNuke(pyblish.api.InstancePlugin):
         write_node = hiero.core.nuke.WriteNode(temp_file, inputNode=last_node)
         write_node.setKnob("file_type", "exr")
         write_node.setKnob("metadata", "all metadata")
-        write_node.setName(str(instance))
+        write_node.setName(instance.data["name"])
         nukeWriter.addNode(write_node)
 
         # secondary read nodes
@@ -192,7 +192,7 @@ class ExtractNuke(pyblish.api.InstancePlugin):
         self.log.info("Writing Nuke script to: \"%s\"" % file_path)
 
         # publishing to ftrack
-        asset = instance.data["ftrackShot"].createAsset(str(instance), "scene")
+        asset = instance.data["ftrackShot"].createAsset(instance.data["name"], "scene")
 
         # removing existing version
         for v in asset.getVersions():

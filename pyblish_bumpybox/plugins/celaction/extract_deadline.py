@@ -19,7 +19,7 @@ class ExtractDeadline(pyblish.api.InstancePlugin):
             job_data = instance.data["deadlineData"]["job"].copy()
             plugin_data = instance.data["deadlineData"]["plugin"].copy()
 
-        job_data['Name'] = str(instance)
+        job_data['Name'] = instance.data["name"]
         job_data['Frames'] = '%s-%s' % (instance.data('start'),
                                         instance.data('end'))
         job_data['ChunkSize'] = 10
@@ -28,7 +28,7 @@ class ExtractDeadline(pyblish.api.InstancePlugin):
         job_data['Plugin'] = 'CelAction'
 
         name = os.path.basename(instance.context.data["currentFile"])
-        name = os.path.splitext(name)[0] + " - " + str(instance)
+        name = os.path.splitext(name)[0] + " - " + instance.data["name"]
         job_data["Name"] = name
 
         # get version data
@@ -40,7 +40,7 @@ class ExtractDeadline(pyblish.api.InstancePlugin):
         data = pipeline_schema.get_data()
         data['extension'] = 'png'
         data['output_type'] = 'img'
-        data['name'] = str(instance)
+        data['name'] = instance.data["name"]
         data['version'] = version
         output_path = pipeline_schema.get_path('output_sequence', data)
         job_data['OutputFilename0'] = output_path.replace('%04d', '####')
@@ -88,5 +88,5 @@ class ExtractDeadline(pyblish.api.InstancePlugin):
             os.makedirs(os.path.dirname(output_path))
 
         # ftrack data
-        components = {str(instance): {'path': output_path}}
+        components = {instance.data["name"]: {'path': output_path}}
         instance.set_data('ftrackComponents', value=components)

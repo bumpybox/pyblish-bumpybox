@@ -31,7 +31,7 @@ class ExtractDeadline(pyblish.api.InstancePlugin):
 
         job_data['Group'] = 'maya_%s' % pymel.versions.flavor()
 
-        components = {str(instance): {}}
+        components = {instance.data["name"]: {}}
         instance.set_data('ftrackComponents', value=components)
 
         current_file = instance.context.data('currentFile')
@@ -57,7 +57,7 @@ class ExtractDeadline(pyblish.api.InstancePlugin):
         data = pipeline_schema.get_data()
         data["extension"] = "temp"
         data["output_type"] = "img"
-        data["name"] = str(instance)
+        data["name"] = instance.data["name"]
         expected_output = pipeline_schema.get_path("output_sequence", data)
         expected_output = os.path.dirname(expected_output)
 

@@ -40,7 +40,7 @@ class ExtractRenderImages(pyblish.api.InstancePlugin):
         data = pipeline_schema.get_data()
         data['extension'] = 'png'
         data['output_type'] = 'img'
-        data['name'] = str(instance)
+        data['name'] = instance.data["name"]
         data['version'] = version_number
         output_path = pipeline_schema.get_path('output_sequence', data)
 
@@ -85,9 +85,9 @@ class ExtractRenderImages(pyblish.api.InstancePlugin):
         version.publish()
 
         try:
-            version.createComponent(name=str(instance), path=output_path)
+            version.createComponent(name=instance.data["name"], path=output_path)
         except:
-            msg = 'Ftrack component "%s" already exists' % str(instance)
+            msg = 'Ftrack component "%s" already exists' % instance.data["name"]
             self.log.warning(msg)
 
 
@@ -125,7 +125,7 @@ class ExtractRenderMovie(pyblish.api.InstancePlugin):
         data = pipeline_schema.get_data()
         data['extension'] = 'png'
         data['output_type'] = 'img'
-        data['name'] = str(instance)
+        data['name'] = instance.data["name"]
         data['version'] = version_number
         image_files = pipeline_schema.get_path('output_sequence', data)
 
@@ -134,7 +134,7 @@ class ExtractRenderMovie(pyblish.api.InstancePlugin):
         data['version'] = version_number
         data['extension'] = 'mov'
         data['output_type'] = 'mov'
-        data['name'] = str(instance)
+        data['name'] = instance.data["name"]
         output_path = pipeline_schema.get_path('output_file', data)
 
         # get audio file
@@ -182,7 +182,7 @@ class ExtractRenderMovie(pyblish.api.InstancePlugin):
         version.publish()
 
         try:
-            version.createComponent(name=str(instance), path=output_path)
+            version.createComponent(name=instance.data["name"], path=output_path)
         except:
-            msg = 'Ftrack component "%s" already exists' % str(instance)
+            msg = 'Ftrack component "%s" already exists' % instance.data["name"]
             self.log.warning(msg)

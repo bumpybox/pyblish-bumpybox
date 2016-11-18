@@ -45,14 +45,14 @@ class ExtractImages(pyblish.api.InstancePlugin):
                 "-=", "AbsoluteFrameNumber=on", "-=", "PadDigits=4",
                 "-=", "ClearAttachment=on"]
 
-        if str(instance) == "levels":
+        if instance.data["name"] == "levels":
             args.append("-l")
 
         self.log.info("Arguments to execute: %s" % args)
         subprocess.call(args)
 
         pattern = os.path.splitext(os.path.basename(output_path))[0]
-        if str(instance) == "levels":
+        if instance.data["name"] == "levels":
             pattern += "_.+"
         pattern += r"\.[0-9]{4}\.png"
         self.log.info("Pattern generated: \"{0}\"".format(pattern))

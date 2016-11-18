@@ -22,7 +22,7 @@ class AppendDeadlineData(pyblish.api.InstancePlugin):
 
         # setting plugin data
         plugin_data["SceneFile"] = instance.context.data["currentFile"]
-        plugin_data["Comp"] = str(instance)
+        plugin_data["Comp"] = instance.data["name"]
 
         app_version = pyblish_aftereffects.send("return app.version")
         app_major_version = "12.0"
@@ -55,7 +55,7 @@ class AppendDeadlineData(pyblish.api.InstancePlugin):
 
         name = os.path.basename(instance.context.data["currentFile"])
         name = os.path.splitext(name)[0]
-        job_data["Name"] = name + " - " + str(instance)
+        job_data["Name"] = name + " - " + instance.data["name"]
 
         output = instance.data["output"].replace("[", "").replace("]", "")
         job_data["OutputFilename0"] = output

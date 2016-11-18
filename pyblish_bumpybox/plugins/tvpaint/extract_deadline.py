@@ -13,7 +13,7 @@ class ExtractDeadline(pyblish.api.Extractor):
     def process(self, instance, context):
 
         job_data = {}
-        job_data['Name'] = str(instance)
+        job_data['Name'] = instance.data["name"]
 
         ftrack_data = instance.context.data('ftrackData')
 
@@ -41,7 +41,7 @@ class ExtractDeadline(pyblish.api.Extractor):
             version = instance.context.data('version')
         version_string = 'v%s' % str(version).zfill(3)
         path.append(version_string)
-        path.append(str(instance))
+        path.append(instance.data["name"])
 
         filename = [task.getParent().getName(), task_name, version_string]
         filename = '.'.join(filename)
@@ -65,7 +65,7 @@ class ExtractDeadline(pyblish.api.Extractor):
         plugin_data['Build0'] = 'None'
         plugin_data['Build1'] = '32bit'
         plugin_data['Build2'] = '64bit'
-        plugin_data['LayerName'] = str(instance)
+        plugin_data['LayerName'] = instance.data["name"]
         plugin_data['UseCameraBox'] = False
         plugin_data['AlphaSaveModeBox'] = 'PreMultiply'
 
@@ -79,5 +79,5 @@ class ExtractDeadline(pyblish.api.Extractor):
 
         # ftrack data
         path = output_path.replace('####', '%04d')
-        components = {str(instance): {'path': path}}
+        components = {instance.data["name"]: {'path': path}}
         instance.set_data('ftrackComponents', value=components)

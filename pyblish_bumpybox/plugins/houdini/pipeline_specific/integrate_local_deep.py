@@ -20,7 +20,7 @@ class IntegrateLocalDeep(pyblish.api.InstancePlugin):
         ext = os.path.splitext(instance.data["family"])[1].replace("_", ".")
         data["extension"] = ext[1:]
         data["output_type"] = "img"
-        data["name"] = str(instance) + "_deep"
+        data["name"] = instance.data["name"] + "_deep"
 
         output_seq = pipeline_schema.get_path("output_sequence", data=data)
 
@@ -52,5 +52,5 @@ class IntegrateLocalDeep(pyblish.api.InstancePlugin):
                 self.log.info("Moved {0} to {1}".format(f, dst))
 
         # ftrack data
-        name = str(instance) + "_deep"
+        name = instance.data["name"] + "_deep"
         instance.data["ftrackComponents"][name] = {"path": output_seq}

@@ -21,7 +21,7 @@ class AppendDeadlineDataBumpybox(pyblish.api.InstancePlugin):
         # setting job data
         name = os.path.basename(instance.context.data["currentFile"])
         name = os.path.splitext(name)[0]
-        job_data["Name"] = name + " - " + str(instance)
+        job_data["Name"] = name + " - " + instance.data["name"]
         job_data["Pool"] = "medium"
         version = hou.applicationVersion()
         job_data["Group"] = "houdini_{0}_{1}".format(version[0], version[1])

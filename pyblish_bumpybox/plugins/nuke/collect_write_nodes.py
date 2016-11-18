@@ -49,7 +49,7 @@ class CollectWriteNodes(pyblish.api.Collector):
                 job_data["Plugin"] = "Nuke"
 
                 name = os.path.basename(context.data["currentFile"])
-                name = os.path.splitext(name)[0] + " - " + str(instance)
+                name = os.path.splitext(name)[0] + " - " + instance.data["name"]
                 job_data["Name"] = name
 
                 # frame range

@@ -59,7 +59,7 @@ class ValidateOutputPath(pyblish.api.InstancePlugin):
 
         path = instance.context.data["currentFile"]
         func = os.path.join
-        basename = str(instance).replace(" ", "_") + ".[####]"
+        basename = instance.data["name"].replace(" ", "_") + ".[####]"
         basename += os.path.splitext(current_path)[1]
         expected_path = func(os.path.dirname(path), "workspace",
                              os.path.splitext(os.path.basename(path))[0],

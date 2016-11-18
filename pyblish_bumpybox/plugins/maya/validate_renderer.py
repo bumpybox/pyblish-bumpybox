@@ -12,6 +12,6 @@ class ValidateRenderer(pyblish.api.Validator):
 
         # validate renderer
         msg = "Render Farm can't handle hardware "
-        msg += "renders on: %s" % str(instance)
+        msg += "renders on: %s" % instance.data["name"]
         renderer = instance.data('deadlineData')['plugin']['Renderer']
         assert 'hardware' not in renderer.lower(), msg

@@ -20,7 +20,7 @@ class IntegrateLocal(pyblish.api.InstancePlugin):
         ext = os.path.splitext(instance.data["family"])[1].replace("_", ".")
         data["extension"] = ext[1:]
         data["output_type"] = "img"
-        data["name"] = str(instance)
+        data["name"] = instance.data["name"]
 
         if instance.data["family"].startswith("cache"):
             data["output_type"] = "cache"
@@ -51,5 +51,5 @@ class IntegrateLocal(pyblish.api.InstancePlugin):
             self.log.info("Moved {0} to {1}".format(f, dst))
 
         # ftrack data
-        name = str(instance)
+        name = instance.data["name"]
         instance.data["ftrackComponents"][name] = {"path": output_seq}
