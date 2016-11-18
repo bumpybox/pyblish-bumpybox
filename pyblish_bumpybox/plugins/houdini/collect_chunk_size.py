@@ -3,10 +3,11 @@ import hou
 import pyblish.api
 
 
-class AppendFarmChunkSize(pyblish.api.InstancePlugin):
+class BumpyboxHoudiniCollectChunkSize(pyblish.api.InstancePlugin):
 
     order = pyblish.api.CollectorOrder + 0.1
     families = ["farm"]
+    label = "Chunk Size"
 
     def process(self, instance):
 

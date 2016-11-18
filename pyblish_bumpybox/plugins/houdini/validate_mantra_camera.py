@@ -2,7 +2,7 @@ import hou
 import pyblish.api
 
 
-class ValidateMantraCamera(pyblish.api.InstancePlugin):
+class BumpyboxHoudiniValidateMantraCamera(pyblish.api.InstancePlugin):
     """ Validates that the camera for mantra nodes exists. """
 
     families = ["mantra"]

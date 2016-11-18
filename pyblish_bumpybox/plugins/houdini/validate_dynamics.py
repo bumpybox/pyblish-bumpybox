@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class ValidateDynamics(pyblish.api.InstancePlugin):
+class BumpyboxHoudiniValidateDynamics(pyblish.api.InstancePlugin):
     """ Validates that the DOP path is set. """
 
     families = ["dynamics"]

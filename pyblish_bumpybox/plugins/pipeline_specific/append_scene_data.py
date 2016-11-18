@@ -26,14 +26,3 @@ class AppendSceneData(pyblish.api.InstancePlugin):
             components = instance.data["ftrackComponents"]
             components["%s_publish" % host] = {"path": publish_file}
             instance.data["ftrackComponents"] = components
-
-        self.log.info("something")
-
-
-class testValidator(pyblish.api.InstancePlugin):
-
-    order = pyblish.api.ValidatorOrder
-
-    def process(self, instance):
-
-        self.log.info(instance.data["publishPath"])

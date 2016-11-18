@@ -3,6 +3,7 @@ import re
 import json
 
 import pyblish.api
+import clique
 
 
 class CollectOutput(pyblish.api.ContextPlugin):
@@ -14,10 +15,6 @@ class CollectOutput(pyblish.api.ContextPlugin):
 
         job = context.data["deadlineJob"]
 
-        # returning early for old publishes
-        if "FT_ProjectId" in job.GetJobExtraInfoKeys():
-            return
-
         data = job.GetJobExtraInfoKeyValueWithDefault("PyblishInstanceData",
                                                       "")
         if not data:
@@ -26,30 +23,30 @@ class CollectOutput(pyblish.api.ContextPlugin):
         data = json.loads(data)
 
         # collecting all output files
-        files = {}
+        collections = []
         for i in range(len(job.OutputDirectories)):
             path = os.path.join(job.OutputDirectories[i],
                                 job.OutputFileNames[i])
 
-            # Change out deadline "#" padding for python-style padding
+            # Find padding len by assuming deadline padding of "#".
             match = re.search("#+", path)
+            padding = 0
             if match:
-                padding = match.group(0)
-                len_pad = len(padding)
-                path = "{0}".format(path.replace(padding, "%%0%dd" % len_pad))
+                padding = len(match.group(0))
 
-            # collecting all matching output files
-            directory = os.path.dirname(path)
-            ext = os.path.splitext(path)[1]
-            start_base = os.path.basename(path).split("%")[0]
+            # Construct clique collection by parsing string data.
+            padding_string = "%{0}d".format(str(padding).zfill(2))
+            [head, tail] = path.split("#" * padding)
+            collection = clique.parse("{0}{1}{2} [{3}]".format(head,
+                                                               padding_string,
+                                                               tail,
+                                                               job.JobFrames))
+            # Remove all files that does not exist.
+            for f in collection:
+                if not os.path.exists(f):
+                    collection.remove(f)
 
-            collection = []
-            for f in os.listdir(directory):
-                if f.startswith(start_base) and f.endswith(ext):
-                    file_path = os.path.join(directory, f).replace("\\", "/")
-                    collection.append(file_path)
-
-            files[path] = collection
+            collections.append(collection)
 
         # creating instance
         instance = context.create_instance(name=data["name"])
@@ -60,5 +57,5 @@ class CollectOutput(pyblish.api.ContextPlugin):
         del instance.data["deadlineData"]
         instance.data["families"].remove("deadline")
 
-        instance.data["files"] = files
-        self.log.debug("Found files: " + str(files))
+        instance.data["collections"] = collections
+        self.log.debug("Found files: " + str(collections))

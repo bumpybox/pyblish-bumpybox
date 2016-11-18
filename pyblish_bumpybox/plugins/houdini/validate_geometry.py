@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class ValidateGeometry(pyblish.api.InstancePlugin):
+class BumpyboxHoudiniValidateGeometry(pyblish.api.InstancePlugin):
     """ Validates that the SOP path is set. """
 
     families = ["geometry"]

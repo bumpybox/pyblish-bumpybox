@@ -3,7 +3,7 @@ import os
 import pyblish.api
 
 
-class RepairOutputPath(pyblish.api.Action):
+class BumpyboxHoudiniRepairOutputPath(pyblish.api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -33,13 +33,13 @@ class RepairOutputPath(pyblish.api.Action):
                     parm.set(expected)
 
 
-class ValidateOutputPath(pyblish.api.InstancePlugin):
+class BumpyboxHoudiniValidateOutputPath(pyblish.api.InstancePlugin):
     """ Validates parameter for output """
 
     families = ["alembic", "mantra", "geometry", "dynamics"]
     order = pyblish.api.ValidatorOrder
     label = "Output Path"
-    actions = [RepairOutputPath]
+    actions = [BumpyboxHoudiniRepairOutputPath]
     optional = True
 
     def get_supported_parameters(self):

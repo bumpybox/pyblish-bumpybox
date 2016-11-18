@@ -3,10 +3,10 @@ import os
 import pyblish.api
 
 
-class ExtractLocal(pyblish.api.InstancePlugin):
-    """ Extracts "img" and "cache" locally """
+class BumpyboxHoudiniExtractLocal(pyblish.api.InstancePlugin):
+    """ Extracts nodes locally. """
 
-    families = ["mantra", "alembic", "dynamics", "geometry"]
+    families = ["local"]
     order = pyblish.api.ExtractorOrder
     label = "Local"
     optional = True

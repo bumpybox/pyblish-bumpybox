@@ -4,15 +4,17 @@ import hou
 import pyblish.api
 
 
-class AppendDeadlineDataFarm(pyblish.api.InstancePlugin):
-    """ Appending Deadline data to farm related instances """
+class BumpyboxHoudiniExtractDeadline(pyblish.api.InstancePlugin):
+    """ Appending Deadline data to farm related instances. """
 
-    families = ["img.farm.*", "cache.farm.*"]
+    families = ["deadline"]
     order = pyblish.api.ExtractorOrder
+    label = "Deadline"
 
     def process(self, instance):
 
         node = instance[0]
+        collection = instance.data["collection"]
 
         job_data = {}
         plugin_data = {}
@@ -20,16 +22,12 @@ class AppendDeadlineDataFarm(pyblish.api.InstancePlugin):
             job_data = instance.data["deadlineData"]["job"].copy()
             plugin_data = instance.data["deadlineData"]["plugin"].copy()
 
-        # setting job data
+        # Setting job data.
         job_data["Plugin"] = "Houdini"
 
-        # replace houdini frame padding with deadline padding, and
-        # add to job data
-        path = instance.data["outputPath"]
-        frame_padding = instance.data["framePadding"]
-        padding_string = "%{0}d".format(str(frame_padding).zfill(2))
-        job_data["OutputFilename0"] = path.replace(padding_string,
-                                                   "#" * frame_padding)
+        # Replace houdini frame padding with Deadline padding
+        fmt = "{head}" + "#" * collection.padding + "{tail}"
+        job_data["OutputFilename0"] = collection.format(fmt)
 
         # frame range
         start_frame = int(node.parm("f1").eval())
@@ -45,7 +43,7 @@ class AppendDeadlineDataFarm(pyblish.api.InstancePlugin):
 
         # chunk size
         job_data["ChunkSize"] = instance.data["farmChunkSize"]
-        if "%" not in path:
+        if "%" not in collection.format(fmt):
             job_data["ChunkSize"] = str(end_frame)
         else:
             tasks = (end_frame - start_frame + 1.0) / step_frame

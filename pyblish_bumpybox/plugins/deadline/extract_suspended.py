@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class ExtractDeadlineSuspended(pyblish.api.InstancePlugin):
+class BumpyboxDeadlineExtractSuspended(pyblish.api.InstancePlugin):
     """ Option to suspend Deadline job on submission """
 
     order = pyblish.api.ExtractorOrder

@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class RepairMantraSettings(pyblish.api.Action):
+class BumpyboxHoudiniRepairMantraSettings(pyblish.api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -32,13 +32,13 @@ class RepairMantraSettings(pyblish.api.Action):
             instance[0].setParms({"soho_foreground": soho_foreground})
 
 
-class ValidateMantraSettings(pyblish.api.InstancePlugin):
+class BumpyboxHoudiniValidateMantraSettings(pyblish.api.InstancePlugin):
     """ Validates mantra settings """
 
     families = ["mantra"]
     order = pyblish.api.ValidatorOrder
     label = "Mantra Settings"
-    actions = [RepairMantraSettings]
+    actions = [BumpyboxHoudiniRepairMantraSettings]
     optional = True
 
     def process(self, instance):

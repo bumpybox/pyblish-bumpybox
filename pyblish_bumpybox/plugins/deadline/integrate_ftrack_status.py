@@ -1,33 +1,10 @@
 import pyblish.api
-import ftrack
 
 
-class ValidateFtrackStatus(pyblish.api.Validator):
-
-    families = ['scene']
-    label = 'Update FTrack Status'
-
-    def GetStatusByName(self, name):
-        statuses = ftrack.getTaskStatuses()
-
-        result = None
-        for s in statuses:
-            if s.get('name').lower() == name.lower():
-                result = s
-
-        return result
-
-    def process(self, context, instance):
-
-        task = ftrack.Task(context.data('ftrackData')['Task']['id'])
-
-        if task.getStatus().getName().lower() != 'in progress':
-            task.setStatus(self.GetStatusByName('in progress'))
-
-
-class DeadlineFtrackStatus(pyblish.api.ContextPlugin):
+class BumpyboxDeadlineIntegrateFtrackStatus(pyblish.api.ContextPlugin):
 
     order = pyblish.api.IntegratorOrder - 0.1
+    label = "Ftrack Status"
 
     def process(self, context):
 
@@ -47,8 +24,8 @@ class DeadlineFtrackStatus(pyblish.api.ContextPlugin):
                 self.log.info(msg)
                 continue
 
-            if 'order' in instance.data('deadlineData'):
-                order = instance.data('deadlineData')['order']
+            if "order" in instance.data("deadlineData"):
+                order = instance.data("deadlineData")["order"]
                 instances_order.append(order)
                 if order in instances:
                     instances[order].append(instance)
@@ -72,12 +49,12 @@ class DeadlineFtrackStatus(pyblish.api.ContextPlugin):
             return
 
         for instance in new_context[:-1]:
-            data = instance.data['deadlineData']['job']
-            if 'ExtraInfoKeyValue' in data:
-                data['ExtraInfoKeyValue']['FT_StatusUpdate'] = False
+            data = instance.data["deadlineData"]["job"]
+            if "ExtraInfoKeyValue" in data:
+                data["ExtraInfoKeyValue"]["FT_StatusUpdate"] = False
             instance.data["ftrackStatusUpdate"] = False
 
-        data = new_context[-1].data['deadlineData']['job']
-        if 'ExtraInfoKeyValue' in data:
-            data['ExtraInfoKeyValue']['FT_StatusUpdate'] = True
+        data = new_context[-1].data["deadlineData"]["job"]
+        if "ExtraInfoKeyValue" in data:
+            data["ExtraInfoKeyValue"]["FT_StatusUpdate"] = True
         new_context[-1].data["ftrackStatusUpdate"] = True

@@ -3,10 +3,11 @@ import logging
 import pyblish.api
 
 
-class DisableFtrackDebugMessages(pyblish.api.ContextPlugin):
+class BumpyboxFtrackCollectDebug(pyblish.api.ContextPlugin):
     """ Disable the debug messages from the ftrack api. """
 
     order = pyblish.api.CollectorOrder
+    label = "Debug"
 
     def process(self, context):
 

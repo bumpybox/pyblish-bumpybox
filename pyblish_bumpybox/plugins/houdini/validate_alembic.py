@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class RepairAlembicSettings(pyblish.api.Action):
+class BumpyboxHoudiniRepairAlembic(pyblish.api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -26,13 +26,13 @@ class RepairAlembicSettings(pyblish.api.Action):
             instance[0].setParms({"partition_mode": 4, "collapse": 1})
 
 
-class ValidateAlembicSettings(pyblish.api.InstancePlugin):
+class BumpyboxHoudiniValidateAlembic(pyblish.api.InstancePlugin):
     """ Validates Alembic settings """
 
     families = ["alembic"]
     order = pyblish.api.ValidatorOrder
-    label = "Alembic Settings"
-    actions = [RepairAlembicSettings]
+    label = "Alembic"
+    actions = [BumpyboxHoudiniRepairAlembic]
     optional = True
 
     def process(self, instance):

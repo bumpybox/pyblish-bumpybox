@@ -3,11 +3,12 @@ import os
 import pyblish.api
 
 
-class CollectScene(pyblish.api.ContextPlugin):
+class BumpyboxCollectScene(pyblish.api.ContextPlugin):
     """ Collecting the scene from the context """
 
     # offset to get latest currentFile from context
     order = pyblish.api.CollectorOrder + 0.1
+    label = "Scene"
 
     def process(self, context):
 

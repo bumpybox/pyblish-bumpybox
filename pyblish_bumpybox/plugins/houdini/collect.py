@@ -6,10 +6,11 @@ import pyblish.api
 import clique
 
 
-class CollectHoudini(pyblish.api.ContextPlugin):
+class BumpyboxHoudiniCollect(pyblish.api.ContextPlugin):
     """ Collects from all supported Houdini nodes. """
 
     order = pyblish.api.CollectorOrder
+    label = "Collect"
 
     def process(self, context):
 
@@ -108,6 +109,10 @@ class CollectHoudini(pyblish.api.ContextPlugin):
                 families += ["farm"]
 
             instance.data["families"] = families
+
+            # return early if no collection could be found
+            if not collection:
+                continue
 
             # Create existing files instance.
             existing_files = []

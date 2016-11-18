@@ -1,10 +1,11 @@
 import pyblish.api
 
 
-class CollectWorkaround(pyblish.api.ContextPlugin):
+class BumpyboxCollectWorkaround(pyblish.api.ContextPlugin):
     """ Temporary fix for pyblish-lite/#59 """
 
     order = pyblish.api.CollectorOrder - 0.4
+    label = "Workaround"
 
     def process(self, context):
 

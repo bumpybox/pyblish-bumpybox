@@ -1,9 +1,10 @@
 import pyblish.api
 
 
-class CollectSorting(pyblish.api.Collector):
+class BumpyboxCollectSorting(pyblish.api.Collector):
     # offset to execute last of all collectors
     order = pyblish.api.Collector.order + 0.4
+    label = "Sorting"
 
     def process(self, context):
 
