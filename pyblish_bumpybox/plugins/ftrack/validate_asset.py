@@ -21,6 +21,8 @@ class BumpyboxFtrackValidateAsset(pyblish.api.InstancePlugin):
             instance.data["ftrackAssetType"] = "img"
         if "cache" in families:
             instance.data["ftrackAssetType"] = "cache"
+        if "render" in families:
+            instance.data["ftrackAssetType"] = "render"
 
         if instance.data["family"] == "scene":
             instance.data["ftrackAssetType"] = "scene"

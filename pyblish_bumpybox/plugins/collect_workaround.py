@@ -9,4 +9,5 @@ class BumpyboxCollectWorkaround(pyblish.api.ContextPlugin):
 
     def process(self, context):
 
-        context.create_instance("Workaround for pyblish-lite/#59")
+        instance = context.create_instance("Workaround for pyblish-lite/#59")
+        instance.data["label"] = "workaround - ignore this"

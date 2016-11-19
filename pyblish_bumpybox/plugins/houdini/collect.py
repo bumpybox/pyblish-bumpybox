@@ -41,6 +41,11 @@ class BumpyboxHoudiniCollect(pyblish.api.ContextPlugin):
         # Creating instances per node.
         for node in nodes:
 
+            # Haven't figured out distributed simulation yet, so ignoring it as
+            # a special case.
+            if node.type().name() == "dop" and node not in nodes_local:
+                continue
+
             instance = context.create_instance(name=node.name())
             instance.data["publish"] = not node.isBypassed()
             instance.add(node)
@@ -57,6 +62,7 @@ class BumpyboxHoudiniCollect(pyblish.api.ContextPlugin):
 
                 # Rendering *.ifd files.
                 if node.parm("soho_outputmode").eval():
+                    category = "render"
                     output_parm = "soho_diskfile"
 
             if node.type().name() == "alembic":

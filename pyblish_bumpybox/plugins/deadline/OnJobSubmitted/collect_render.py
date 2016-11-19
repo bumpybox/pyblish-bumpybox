@@ -1,12 +1,11 @@
-import os
-import re
 import json
 import math
 
 import pyblish.api
+import clique
 
 
-class CollectRender(pyblish.api.ContextPlugin):
+class BumpyboxDeadlineOnJobSubmittedCollectRender(pyblish.api.ContextPlugin):
     """ Integrates render """
 
     order = pyblish.api.CollectorOrder
@@ -23,26 +22,16 @@ class CollectRender(pyblish.api.ContextPlugin):
         instance_data = json.loads(value)
 
         # return early if it isn't a render file
-        if os.path.splitext(instance_data["family"])[1] not in [".ifd"]:
+        render_families = ["ifd"]
+        if not list(set(instance_data["families"]) & set(render_families)):
             return
 
         instance = context.create_instance(name=instance_data["name"])
 
-        frame_padding = instance_data["framePadding"]
-        padding_string = "%{0}d".format(str(frame_padding).zfill(2))
-        path = instance_data["renderOutputPath"].replace(padding_string,
-                                                         "#" * frame_padding)
-
-        ext = os.path.splitext(path)[1]
-        instance.data["family"] = "img.farm" + ext
-        instance.data["families"] = ["img.*", "img.farm.*", "deadline"]
-        instance.data["familyParent"] = instance_data["family"]
-        instance.data["outputPath"] = instance_data["outputPath"]
-        instance.data["framePadding"] = instance_data["framePadding"]
-
         for key in instance_data.keys():
-            if key.startswith("ftrack"):
-                instance.data[key] = instance_data[key]
+            instance.data[key] = instance_data[key]
+
+        instance.data["families"] = ["img", "farm", "deadline"]
 
         # setting job data
         job_data = {}
@@ -50,7 +39,6 @@ class CollectRender(pyblish.api.ContextPlugin):
         job_data["Frames"] = job.JobFrames
         job_data["Name"] = job.Name
         job_data["JobDependency0"] = job.JobId
-        job_data["OutputFilename0"] = path
         job_data["IsFrameDependent"] = True
 
         frame_count = 0
@@ -59,19 +47,25 @@ class CollectRender(pyblish.api.ContextPlugin):
         if frame_count > 5000:
             job_data["ChunkSize"] = int(math.ceil(frame_count / 5000.0))
 
+        collection = clique.parse(instance_data["render"])
+        fmt = "{head}" + "#" * collection.padding + "{tail}"
+        job_data["OutputFilename0"] = collection.format(fmt)
+
+        # Copy environment keys.
+        index = 0
+        if job.GetJobEnvironmentKeys():
+            for key in job.GetJobEnvironmentKeys():
+                value = job.GetJobEnvironmentKeyValue(key)
+                data = "{0}={1}".format(key, value)
+                job_data["EnvironmentKeyValue" + str(index)] = data
+                index += 1
+
         # setting plugin data
         plugin_data = {}
         plugin_data["Version"] = job.GetJobPluginInfoKeyValue("Version")
 
-        # Change out deadline "#" padding for python-style padding
-        path = os.path.join(job.OutputDirectories[0], job.OutputFileNames[0])
-        match = re.search("#+", path)
-        if match:
-            padding = match.group(0)
-            len_pad = len(padding)
-            path = "{0}".format(path.replace(padding, "%%0%dd" % len_pad))
-
-        plugin_data["SceneFile"] = path % job.Frames[0]
+        collection = clique.parse(instance_data["collection"])
+        plugin_data["SceneFile"] = list(collection)[0]
 
         # setting data
         data = {"job": job_data, "plugin": plugin_data}
