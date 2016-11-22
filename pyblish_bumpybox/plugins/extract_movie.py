@@ -7,10 +7,11 @@ import pyblish.api
 class BumpyboxExtractMovie(pyblish.api.InstancePlugin):
     """ Extracts movie from image sequence. """
 
-    families = ["img"]
+    families = ["img", "local"]
     order = pyblish.api.ExtractorOrder + 0.1
     label = "Movie"
     optional = True
+    match = pyblish.api.Subset
 
     def process(self, instance):
 

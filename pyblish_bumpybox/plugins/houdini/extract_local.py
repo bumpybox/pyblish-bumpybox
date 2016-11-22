@@ -6,7 +6,7 @@ import pyblish.api
 class BumpyboxHoudiniExtractLocal(pyblish.api.InstancePlugin):
     """ Extracts nodes locally. """
 
-    families = ["local"]
+    families = ["mantra", "alembic", "dynamics", "geometry"]
     order = pyblish.api.ExtractorOrder
     label = "Local"
     optional = True

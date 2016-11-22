@@ -138,7 +138,7 @@ class BumpyboxHoudiniCollect(pyblish.api.ContextPlugin):
                 instance = context.create_instance(name=node.name())
 
                 instance.data["collection"] = existing_collection
-                instance.data["families"] = [category, ext[1:]]
+                instance.data["families"] = [category, ext[1:], "local"]
                 instance.data["publish"] = False
                 label = os.path.basename(existing_collection.format())
                 instance.data["label"] = "{0} - {1}".format(node.name(), label)
