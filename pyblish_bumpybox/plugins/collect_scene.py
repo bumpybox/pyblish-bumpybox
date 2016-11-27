@@ -19,6 +19,8 @@ class BumpyboxCollectScene(pyblish.api.ContextPlugin):
 
         instance.data["family"] = "scene"
         instance.data["path"] = current_file
+        label = "{0} - scene".format(os.path.basename(current_file))
+        instance.data["label"] = label
 
         # ftrack data
         if "ftrackData" not in instance.context.data:

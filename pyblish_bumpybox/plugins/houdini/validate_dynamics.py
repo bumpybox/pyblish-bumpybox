@@ -7,6 +7,7 @@ class BumpyboxHoudiniValidateDynamics(pyblish.api.InstancePlugin):
     families = ["dynamics"]
     order = pyblish.api.ValidatorOrder
     label = "Dynamics"
+    hosts = ["houdini"]
 
     def process(self, instance):
 

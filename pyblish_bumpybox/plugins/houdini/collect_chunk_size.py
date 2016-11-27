@@ -8,6 +8,7 @@ class BumpyboxHoudiniCollectChunkSize(pyblish.api.InstancePlugin):
     order = pyblish.api.CollectorOrder + 0.1
     families = ["farm"]
     label = "Chunk Size"
+    hosts = ["houdini"]
 
     def process(self, instance):
 

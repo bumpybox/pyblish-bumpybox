@@ -8,6 +8,7 @@ class BumpyboxHoudiniExtractSceneSave(pyblish.api.InstancePlugin):
     order = pyblish.api.ExtractorOrder - 0.1
     families = ["scene"]
     label = "Scene Save"
+    hosts = ["houdini"]
 
     def process(self, instance):
 

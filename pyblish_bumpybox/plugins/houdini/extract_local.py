@@ -10,6 +10,7 @@ class BumpyboxHoudiniExtractLocal(pyblish.api.InstancePlugin):
     order = pyblish.api.ExtractorOrder
     label = "Local"
     optional = True
+    hosts = ["houdini"]
 
     def process(self, instance):
 

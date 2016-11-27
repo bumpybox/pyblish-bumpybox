@@ -11,6 +11,7 @@ class BumpyboxHoudiniCollect(pyblish.api.ContextPlugin):
 
     order = pyblish.api.CollectorOrder
     label = "Collect"
+    hosts = ["houdini"]
 
     def process(self, context):
 

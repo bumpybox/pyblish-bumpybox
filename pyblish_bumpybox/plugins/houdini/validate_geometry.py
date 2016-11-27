@@ -7,6 +7,7 @@ class BumpyboxHoudiniValidateGeometry(pyblish.api.InstancePlugin):
     families = ["geometry"]
     order = pyblish.api.ValidatorOrder
     label = "Geometry"
+    hosts = ["houdini"]
 
     def process(self, instance):
 

@@ -1,5 +1,6 @@
 import os
 import subprocess
+import sys
 
 import pyblish.api
 
@@ -40,16 +41,18 @@ class BumpyboxExtractMovie(pyblish.api.InstancePlugin):
                 "-timecode", "00:00:00:01",
                 collection.format("{head}mov")]
 
-        self.log.info("Executing args: {0}".format(args))
+        self.log.debug("Executing args: {0}".format(args))
 
-        process = subprocess.Popen(args, stdin=subprocess.PIPE,
-                                   stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE)
-        process.wait()
-        output, error = process.communicate()
+        # Can't use subprocess.check_output, cause Houdini doesn't like that.
+        p = subprocess.Popen(args, stdout=subprocess.PIPE,
+                             stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
 
-        if process.returncode:
-            raise ValueError(error)
+        output = p.communicate()[0]
+
+        if p.returncode != 0:
+            raise ValueError(output)
+
+        self.log.debug(output)
 
     def check_executable(self, executable):
         """ Checks to see if an executable is available.

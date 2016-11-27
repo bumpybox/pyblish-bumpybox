@@ -40,6 +40,7 @@ class BumpyboxHoudiniValidateMantraSettings(pyblish.api.InstancePlugin):
     label = "Mantra Settings"
     actions = [BumpyboxHoudiniRepairMantraSettings]
     optional = True
+    hosts = ["houdini"]
 
     def process(self, instance):
 
