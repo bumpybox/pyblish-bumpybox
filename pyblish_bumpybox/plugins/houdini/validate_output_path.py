@@ -41,6 +41,7 @@ class BumpyboxHoudiniValidateOutputPath(pyblish.api.InstancePlugin):
     label = "Output Path"
     actions = [BumpyboxHoudiniRepairOutputPath]
     optional = True
+    hosts = ["houdini"]
 
     def get_supported_parameters(self):
 

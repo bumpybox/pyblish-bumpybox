@@ -34,6 +34,7 @@ class BumpyboxHoudiniValidateAlembic(pyblish.api.InstancePlugin):
     label = "Alembic"
     actions = [BumpyboxHoudiniRepairAlembic]
     optional = True
+    hosts = ["houdini"]
 
     def process(self, instance):
 

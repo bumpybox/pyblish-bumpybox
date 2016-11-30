@@ -10,6 +10,7 @@ class BumpyboxHoudiniExtractDeadline(pyblish.api.InstancePlugin):
     families = ["deadline"]
     order = pyblish.api.ExtractorOrder
     label = "Deadline"
+    hosts = ["houdini"]
 
     def process(self, instance):
 

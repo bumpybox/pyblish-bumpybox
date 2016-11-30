@@ -8,6 +8,7 @@ class BumpyboxHoudiniValidateMantraCamera(pyblish.api.InstancePlugin):
     families = ["mantra"]
     order = pyblish.api.ValidatorOrder
     label = "Mantra Camera"
+    hosts = ["houdini"]
 
     def process(self, instance):
 
