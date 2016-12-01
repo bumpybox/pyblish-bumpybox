@@ -118,28 +118,3 @@ class BumpyboxHoudiniCollect(pyblish.api.ContextPlugin):
                 instance.data["label"] = node.name() + " - farm"
 
             instance.data["families"] = families
-
-            # Return early if no collection could be found.
-            if not collection:
-                continue
-
-            # Create existing files instance.
-            existing_files = []
-            for f in collection:
-                if os.path.exists(f):
-                    existing_files.append(f)
-
-            existing_collection = clique.Collection(head=collection.head,
-                                                    tail=collection.tail,
-                                                    padding=collection.padding)
-            for f in existing_files:
-                existing_collection.add(f)
-
-            if existing_files:
-                instance = context.create_instance(name=node.name())
-
-                instance.data["collection"] = existing_collection
-                instance.data["families"] = [category, ext[1:], "local"]
-                instance.data["publish"] = False
-                label = os.path.basename(existing_collection.format())
-                instance.data["label"] = "{0} - {1}".format(node.name(), label)
