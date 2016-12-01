@@ -5,10 +5,17 @@ class BumpyboxFtrackValidateAsset(pyblish.api.InstancePlugin):
     """ Appending ftrack asset type and asset name data """
 
     order = pyblish.api.ValidatorOrder - 0.49
-    families = ["local", "scene"]
     label = "Asset"
 
     def process(self, instance):
+
+        # Exclude "workaround" instances
+        if "workaround" in instance.data["name"]:
+            return
+
+        # Exclude "farm" instances
+        if "farm" in instance.data.get("families", []):
+            return
 
         # assign components to activate processing
         components = instance.data.get("ftrackComponents", {})
@@ -16,7 +23,6 @@ class BumpyboxFtrackValidateAsset(pyblish.api.InstancePlugin):
 
         # assigning asset type
         families = instance.data.get("families", [])
-        instance.data["ftrackAssetType"] = "upload"
         if "img" in families:
             instance.data["ftrackAssetType"] = "img"
         if "cache" in families:
