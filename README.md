@@ -5,12 +5,14 @@
 This package is dependent on:
 
 - [pyblish-base](https://github.com/pyblish/pyblish-base)
-- [pyblish-qml](https://github.com/pyblish/pyblish-qml)
+- [pyblish-lite](https://github.com/pyblish/pyblish-lite)
 - [pyblish-maya](https://github.com/pyblish/pyblish-maya)
 - [pyblish-nuke](https://github.com/pyblish/pyblish-nuke)
 - [pyblish-houdini](https://github.com/pyblish/pyblish-houdini)
 - [pyblish-standalone](https://github.com/pyblish/pyblish-standalone)
 - [pipeline-schema](https://github.com/Bumpybox/pipeline-schema)
+- [clique](https://gitlab.com/4degrees/clique)
+- [pyperclip](https://github.com/asweigart/pyperclip)
 
 Please refer to the individual packages for installation.
 

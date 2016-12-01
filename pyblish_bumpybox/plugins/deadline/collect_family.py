@@ -1,13 +1,14 @@
 import pyblish.api
 
 
-class BumpyboxDeadlineCollectFamily(pyblish.api.InstancePlugin):
+class BumpyboxDeadlineCollectFamily(pyblish.api.ContextPlugin):
     """ Append Deadline data to "farm" instances. """
 
     order = pyblish.api.CollectorOrder + 0.4
-    families = ["farm"]
     label = "Family"
 
-    def process(self, instance):
+    def process(self, context):
 
-        instance.data["families"] += ["deadline"]
+        for instance in context:
+            if "farm" in instance.data.get("families", []):
+                instance.data["families"] += ["deadline"]

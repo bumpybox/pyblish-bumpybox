@@ -13,10 +13,11 @@ class BumpyboxCollectExistingFiles(pyblish.api.ContextPlugin):
     def process(self, context):
 
         # Validate instance based on support families.
+        valid_families = ["img", "cache", "render"]
         valid_instances = []
         for instance in context:
             families = instance.data.get("families", [])
-            family_type = list(set(families) & set(["img", "cache"]))
+            family_type = list(set(families) & set(valid_families))
             if family_type:
                 valid_instances.append(instance)
 
@@ -32,7 +33,7 @@ class BumpyboxCollectExistingFiles(pyblish.api.ContextPlugin):
                     existing_collection.add(f)
 
             if list(existing_collection):
-                name = existing_collection.format()
+                name = instance.data["name"]
                 new_instance = instance.context.create_instance(name=name)
 
                 label = instance.data["label"].split("-")[0] + "- "
@@ -41,5 +42,10 @@ class BumpyboxCollectExistingFiles(pyblish.api.ContextPlugin):
                 label += existing_collection.format(" [{ranges}]")
                 new_instance.data["label"] = label
 
-                new_instance.data["families"] = ["local", "img"]
+                families = set(valid_families) & set(instance.data["families"])
+                new_instance.data["families"] = list(families)
                 new_instance.data["publish"] = False
+                new_instance.data["collection"] = existing_collection
+
+                for node in instance:
+                    new_instance.add(node)
