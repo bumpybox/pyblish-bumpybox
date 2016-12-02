@@ -10,7 +10,7 @@ version = version_mod.version
 setup(
     name='pyblish-bumpybox',
     version=version,
-    packages=['pyblish_bumpybox',],
+    packages=['pyblish_bumpybox'],
     license="LGPL",
     long_description=open('README.md').read(),
 )
