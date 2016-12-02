@@ -6,16 +6,9 @@ class BumpyboxFtrackValidateAsset(pyblish.api.InstancePlugin):
 
     order = pyblish.api.ValidatorOrder - 0.49
     label = "Asset"
+    families = ["local", "output"]
 
     def process(self, instance):
-
-        # Exclude "workaround" instances
-        if "workaround" in instance.data["name"]:
-            return
-
-        # Exclude "farm" instances
-        if "farm" in instance.data.get("families", []):
-            return
 
         # assign components to activate processing
         components = instance.data.get("ftrackComponents", {})
