@@ -1,36 +1,46 @@
 import pyblish.api
 
 
-class BumpyboxFtrackValidateAsset(pyblish.api.InstancePlugin):
-    """ Appending ftrack asset type and asset name data """
+class BumpyboxFtrackValidateAsset(pyblish.api.ContextPlugin):
+    """ Appending ftrack asset type and asset name data.
+
+    Currently a ContextPlugin because if an instance is unpublishable, it won't
+    get processed correctly. So we are forcing the data onto the instances.
+    """
 
     order = pyblish.api.ValidatorOrder - 0.49
     label = "Asset"
     families = ["local", "output"]
 
-    def process(self, instance):
+    def process(self, context):
 
-        # assign components to activate processing
-        components = instance.data.get("ftrackComponents", {})
-        instance.data["ftrackComponents"] = components
+        for instance in context:
 
-        # assigning asset type
-        families = instance.data.get("families", [])
-        if "img" in families:
-            instance.data["ftrackAssetType"] = "img"
-        if "cache" in families:
-            instance.data["ftrackAssetType"] = "cache"
-        if "render" in families:
-            instance.data["ftrackAssetType"] = "render"
+            # Skipping invalid instances
+            families = instance.data.get("families", [])
+            if not (set(self.families) & set(families)):
+                continue
 
-        if instance.data["family"] == "scene":
-            instance.data["ftrackAssetType"] = "scene"
+            # assign components to activate processing
+            components = instance.data.get("ftrackComponents", {})
+            instance.data["ftrackComponents"] = components
 
-        # skipping if not launched from ftrack
-        if "ftrackData" not in instance.context.data:
-            return
+            # assigning asset type
+            families = instance.data.get("families", [])
+            if "img" in families:
+                instance.data["ftrackAssetType"] = "img"
+            if "cache" in families:
+                instance.data["ftrackAssetType"] = "cache"
+            if "render" in families:
+                instance.data["ftrackAssetType"] = "render"
+            if "scene" in families:
+                instance.data["ftrackAssetType"] = "scene"
 
-        # assigning asset name
-        ftrack_data = instance.context.data["ftrackData"]
-        asset_name = ftrack_data["Task"]["name"]
-        instance.data["ftrackAssetName"] = asset_name
+            # skipping if not launched from ftrack
+            if "ftrackData" not in instance.context.data:
+                return
+
+            # assigning asset name
+            ftrack_data = instance.context.data["ftrackData"]
+            asset_name = ftrack_data["Task"]["name"]
+            instance.data["ftrackAssetName"] = asset_name
