@@ -10,10 +10,21 @@ class BumpyboxFtrackExtractComponents(pyblish.api.InstancePlugin):
 
     def process(self, instance):
 
+        paths = []
+
         if "collection" in instance.data:
-            components = instance.data.get("ftrackComponents", {})
-            data = {"path": instance.data["collection"].format(),
-                    "overwrite": True}
-            name = instance.data.get("component_name", instance.data["name"])
-            components[name] = data
-            instance.data["ftrackComponents"] = components
+            paths.append(instance.data["collection"].format())
+        """
+        if "collections" in instance.data:
+            for collection in instance.data["collections"]:
+                paths.append(collection.format())
+        """
+        if paths:
+            for path in paths:
+                components = instance.data.get("ftrackComponents", {})
+                data = {"path": path, "overwrite": True}
+                name = instance.data.get(
+                    "component_name", instance.data["name"]
+                )
+                components[name] = data
+                instance.data["ftrackComponents"] = components
