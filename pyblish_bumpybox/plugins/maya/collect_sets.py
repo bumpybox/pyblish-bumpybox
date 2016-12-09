@@ -25,13 +25,19 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
             extensions = {
                 "mayaAscii": "ma", "mayaBinary": "mb", "alembic": "abc"
             }
+            family_mappings = {
+                "mayaAscii": "scene", "mayaBinary": "scene", "alembic": "cache"
+            }
 
             # Add an instance per format supported.
             for fmt in ["mayaBinary", "mayaAscii", "alembic"]:
 
-                instance = context.create_instance(name=object_set.name())
+                name = object_set.name() + "_" + fmt
+                instance = context.create_instance(name=name)
                 instance.add(object_set)
-                instance.data["families"] = [fmt, "local", "cache"]
+                instance.data["families"] = [
+                    fmt, "local", family_mappings[fmt]
+                ]
 
                 label = "{0} - {1}".format(object_set.name(), fmt)
                 instance.data["label"] = label
