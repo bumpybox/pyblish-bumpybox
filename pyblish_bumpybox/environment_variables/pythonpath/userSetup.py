@@ -15,18 +15,25 @@ cmds.evalDeferred('disableDebug()', lowestPriority=True)
 # Pyblish callbacks for presisting instance states to the scene
 def toggle_instance(instance, new_value, old_value):
 
-    if "cache" in instance.data["families"]:
+    node = instance[0]
+
+    families = instance.data.get("families", [])
+    if "cache" in families or "scene" in families:
         attrs = []
-        for attr in instance[0].listAttr(userDefined=True):
+        for attr in node.listAttr(userDefined=True):
             attrs.append(attr.name(includeNode=False))
 
-        attr_list = list(set(attrs) & set(instance.data["families"]))
+        attr_list = list(set(attrs) & set(families))
 
         if attr_list:
-            instance[0].attr(attr_list[0]).set(new_value)
+            node.attr(attr_list[0]).set(new_value)
+
+    if "renderlayer" in instance.data.get("families", []):
+
+        node.renderable.set(new_value)
 
 
-#pyblish.api.register_callback("instanceToggled", toggle_instance)
+pyblish.api.register_callback("instanceToggled", toggle_instance)
 
 # register pyblish_qml
 pyblish.api.register_gui("pyblish_lite")
