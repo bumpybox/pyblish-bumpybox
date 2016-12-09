@@ -13,17 +13,16 @@ class BumpyboxMayaRepairSceneModified(pyblish.api.Action):
         pymel.core.saveFile()
 
 
-class BumpyboxMayaValidateSceneModified(pyblish.api.InstancePlugin):
+class BumpyboxMayaValidateSceneModified(pyblish.api.ContextPlugin):
     """ Validates whether the scene has been saved since modifying. """
 
     order = pyblish.api.ValidatorOrder
-    families = ["scene"]
     hosts = ["maya"]
     label = "Scene Modified"
     optional = True
     actions = [BumpyboxMayaRepairSceneModified]
 
-    def process(self, instance):
+    def process(self, context):
 
         msg = "Scene has not been saved since modifying."
         assert not pymel.core.dgmodified(), msg
