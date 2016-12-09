@@ -1,8 +1,8 @@
 import os
 import subprocess
-import sys
 
 import pyblish.api
+import clique
 
 
 class BumpyboxExtractMovie(pyblish.api.InstancePlugin):
@@ -33,13 +33,16 @@ class BumpyboxExtractMovie(pyblish.api.InstancePlugin):
             self.log.info(msg.format(instance.data["name"]))
             return
 
-        args = ["ffmpeg", "-y", "-gamma", "2.2", "-framerate", "25",
-                "-start_number", str(list(collection.indexes)[0]),
-                "-i", collection.format("{head}{padding}{tail}"),
-                "-q:v", "0", "-pix_fmt", "yuv420p", "-vf",
-                "scale=trunc(iw/2)*2:trunc(ih/2)*2,colormatrix=bt601:bt709",
-                "-timecode", "00:00:00:01",
-                collection.format("{head}mov")]
+        output_file = collection.format("{head}0001.mov")
+        args = [
+            "ffmpeg", "-y", "-gamma", "2.2", "-framerate", "25",
+            "-start_number", str(list(collection.indexes)[0]),
+            "-i", collection.format("{head}{padding}{tail}"),
+            "-q:v", "0", "-pix_fmt", "yuv420p", "-vf",
+            "scale=trunc(iw/2)*2:trunc(ih/2)*2,colormatrix=bt601:bt709",
+            "-timecode", "00:00:00:01",
+            output_file
+        ]
 
         self.log.debug("Executing args: {0}".format(args))
 
@@ -53,6 +56,17 @@ class BumpyboxExtractMovie(pyblish.api.InstancePlugin):
             raise ValueError(output)
 
         self.log.debug(output)
+
+        output_collection = clique.Collection(
+            head=collection.format("{head}"),
+            padding=4,
+            tail=".mov"
+        )
+        output_collection.add(output_file)
+
+        collections = instance.data.get("collections", [])
+        collections.append(output_collection)
+        instance.data["collections"] = collections
 
     def check_executable(self, executable):
         """ Checks to see if an executable is available.
