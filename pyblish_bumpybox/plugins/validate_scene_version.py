@@ -1,14 +1,13 @@
 import pyblish.api
 
 
-class BumpyboxValidateSceneVersion(pyblish.api.Validator):
-    """Validates the existence of version number on the scene
-    """
+class BumpyboxValidateSceneVersion(pyblish.api.ContextPlugin):
+    """ Validates the existence of version number on the scene. """
 
-    families = ["scene"]
+    order = pyblish.api.ValidatorOrder
     label = "Scene Version"
 
-    def process(self, instance, context):
+    def process(self, context):
 
         msg = "Could not find a version number in the scene name."
         assert context.has_data("version"), msg
