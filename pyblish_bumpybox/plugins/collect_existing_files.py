@@ -13,7 +13,7 @@ class BumpyboxCollectExistingFiles(pyblish.api.ContextPlugin):
     def process(self, context):
 
         # Validate instance based on support families.
-        valid_families = ["local", "farm"]
+        valid_families = ["img", "cache", "scene"]
         valid_instances = []
         for instance in context:
             families = instance.data.get("families", [])
@@ -23,7 +23,7 @@ class BumpyboxCollectExistingFiles(pyblish.api.ContextPlugin):
 
         # Create existing output instance.
         for instance in valid_instances:
-            collection = instance.data["collection"]
+            collection = instance.data.get("collection", None)
 
             if not collection:
                 continue
