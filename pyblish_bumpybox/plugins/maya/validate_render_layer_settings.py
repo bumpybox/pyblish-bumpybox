@@ -49,17 +49,17 @@ class BumpyboxMayaRepairRenderLayerSettings(pyblish.api.Action):
         pymel.core.mel.eval("setProject \"{0}\"".format(expected))
 
 
-class BumpyboxMayaValidateRenderLayerSettings(pyblish.api.ContextPlugin):
+class BumpyboxMayaValidateRenderLayerSettings(pyblish.api.InstancePlugin):
     """ Validates render layer settings. """
 
     order = pyblish.api.ValidatorOrder
-    families = ["renderlayer"]
     optional = True
+    families = ["renderlayer"]
     label = "Render Layer Settings"
     actions = [BumpyboxMayaRepairRenderLayerSettings]
     hosts = ["maya"]
 
-    def process(self, context):
+    def process(self, instance):
 
         render_globals = pymel.core.PyNode("defaultRenderGlobals")
 
@@ -103,7 +103,9 @@ class BumpyboxMayaValidateRenderLayerSettings(pyblish.api.ContextPlugin):
         assert expected == current, msg.format(current, expected)
 
         # Validate project directory.
-        expected = os.path.join(os.path.dirname(context.data["currentFile"]))
+        expected = os.path.join(
+            os.path.dirname(instance.context.data["currentFile"])
+        )
         expected = expected.replace("\\", "/")
 
         current = pymel.core.system.Workspace.getPath().expand()
