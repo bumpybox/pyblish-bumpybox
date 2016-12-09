@@ -1,3 +1,5 @@
+import os
+
 import pymel
 import pyblish.api
 import pyblish_maya
@@ -16,6 +18,10 @@ class BumpyboxMayaExtractMayaFormats(pyblish.api.InstancePlugin):
 
         # Export to file.
         path = list(instance.data["collection"])[0]
+
+        if not os.path.exists(os.path.dirname(path)):
+            os.makedirs(os.path.dirname(path))
+
         with pyblish_maya.maintained_selection():
 
             pymel.core.select(instance[0].members())
