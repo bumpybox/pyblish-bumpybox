@@ -1,9 +1,11 @@
+import imp
+
 import maya.cmds as cmds
 
 import pyblish.api
 
 
-# disabling debug logging, cause of FTrack constant stream of print outs
+# Disabling debug logging, cause of FTrack constant stream of print outs.
 def disableDebug():
     import logging
     logging.getLogger().setLevel(logging.INFO)
@@ -12,7 +14,7 @@ def disableDebug():
 cmds.evalDeferred('disableDebug()', lowestPriority=True)
 
 
-# Pyblish callbacks for presisting instance states to the scene
+# Pyblish callbacks for presisting instance states to the scene.
 def toggle_instance(instance, new_value, old_value):
 
     node = instance[0]
@@ -35,5 +37,15 @@ def toggle_instance(instance, new_value, old_value):
 
 pyblish.api.register_callback("instanceToggled", toggle_instance)
 
-# register pyblish_qml
+# Register pyblish_lite.
 pyblish.api.register_gui("pyblish_lite")
+
+# Adding ftrack assets if import is available.
+try:
+    imp.find_module("ftrack_connect")
+    imp.find_module("ftrack_connect_maya")
+
+    import ftrack_assets
+    ftrack_assets.register_assets()
+except ImportError as error:
+    print "Could not find ftrack modules: " + str(error)
