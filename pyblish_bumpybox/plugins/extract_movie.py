@@ -8,13 +8,15 @@ import clique
 class BumpyboxExtractMovie(pyblish.api.InstancePlugin):
     """ Extracts movie from image sequence. """
 
-    families = ["img", "local"]
+    families = ["local", "output"]
     order = pyblish.api.ExtractorOrder + 0.1
     label = "Movie"
     optional = True
-    match = pyblish.api.Subset
 
     def process(self, instance):
+
+        if "farm" in instance.data.get("families", []):
+            return
 
         if not self.check_executable("ffmpeg"):
             msg = "Skipping movie extraction because \"ffmpeg\" wasn't found."
@@ -64,9 +66,21 @@ class BumpyboxExtractMovie(pyblish.api.InstancePlugin):
         )
         output_collection.add(output_file)
 
-        collections = instance.data.get("collections", [])
-        collections.append(output_collection)
-        instance.data["collections"] = collections
+        components = instance.data.get("ftrackComponentsList", [])
+        components.append({
+            "assettype_data": {"short": "mov"},
+            "assetversion_data": {
+                "version": instance.context.data["version"]
+            },
+            "component_data": {
+                "name": instance.data.get(
+                    "component_name", instance.data["name"]
+                ),
+            },
+            "component_path": output_collection.format(),
+            "component_overwrite": True,
+        })
+        instance.data["ftrackComponentsList"] = components
 
     def check_executable(self, executable):
         """ Checks to see if an executable is available.
