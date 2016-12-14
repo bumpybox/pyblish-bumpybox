@@ -1,65 +1,38 @@
 import os
-import platform
 
 import pyblish.api
 import ftrack_api
+import ftrack_template
 
 
-class StandardStructure(ftrack_api.structure.standard.StandardStructure):
+class Structure(ftrack_api.structure.base.Structure):
 
-    def _get_parts(self, entity):
-        '''Return resource identifier parts from *entity*.'''
-        session = entity.session
+    def get_resource_identifier(self, entity, context=None):
 
-        version = entity['version']
+        templates = ftrack_template.discover_templates()
 
-        if version is ftrack_api.symbol.NOT_SET and entity['version_id']:
-            version = session.get('AssetVersion', entity['version_id'])
+        path = ftrack_template.format(
+            {}, templates, entity=entity
+        )[0].replace("\\", "/").replace("//", "/")
 
-        error_message = (
-            'Component {0!r} must be attached to a committed '
-            'version and a committed asset with a parent context.'.format(
-                entity
+        if entity.entity_type == "SequenceComponent":
+
+            padding = entity["padding"]
+            if padding:
+                expression = "%0{0}d".format(padding)
+            else:
+                expression = "%d"
+
+            filetype = entity["file_type"]
+            path = path.replace(
+                filetype, "/{0}.{1}{2}".format(
+                    os.path.splitext(os.path.basename(path))[0],
+                    expression,
+                    filetype
+                )
             )
-        )
 
-        if (
-            version is ftrack_api.symbol.NOT_SET or
-            version in session.created
-        ):
-            raise ftrack_api.exception.StructureError(error_message)
-
-        link = version['link']
-
-        if not link:
-            raise ftrack_api.exception.StructureError(error_message)
-
-        structure_names = [
-            item['name']
-            for item in link[1:-1]
-        ]
-
-        project_id = link[0]['id']
-        project = session.get('Project', project_id)
-        asset = version['asset']
-
-        version_number = self._format_version(version['version'])
-
-        parts = []
-        parts.append(project['name'])
-
-        if structure_names:
-            parts.extend(structure_names)
-        elif self.project_versions_prefix:
-            # Add *project_versions_prefix* if configured and the version is
-            # published directly under the project.
-            parts.append(self.project_versions_prefix)
-
-        parts.append(asset['name'])
-        parts.append(asset["type"]["short"])
-        parts.append(version_number)
-
-        return [self.sanitise_for_filesystem(part) for part in parts]
+        return path
 
 
 class BumpyboxFtrackExtractComponents(pyblish.api.InstancePlugin):
@@ -113,21 +86,8 @@ class BumpyboxFtrackExtractLocation(pyblish.api.InstancePlugin):
         location = session.ensure(
             "Location", {"name": "project.disk.root"}
         )
-        location.structure = StandardStructure()
-
-        parents = []
-        task = instance.context.data["ftrackTask"]
-        for item in task['link'][:-1]:
-            parents.append(session.get(item['type'], item['id']))
-        project = parents[0]
-
-        system = platform.system().lower()
-        if system != "windows":
-            system = "unix"
-
-        location.accessor = ftrack_api.accessor.disk.DiskAccessor(
-            prefix=os.path.join(project["disk"][system], project["root"])
-        )
+        location.structure = Structure()
+        location.accessor = ftrack_api.accessor.disk.DiskAccessor(prefix="")
 
         for data in instance.data.get("ftrackComponentsList", []):
             data["component_location"] = location
