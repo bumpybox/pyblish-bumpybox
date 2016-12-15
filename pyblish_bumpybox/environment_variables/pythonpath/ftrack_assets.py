@@ -1,3 +1,5 @@
+import os
+
 import maya.cmds as mc
 
 from ftrack_connect_maya.connector.mayaassets import GenericAsset
@@ -8,6 +10,9 @@ from ftrack_connect.connector import FTAssetHandlerInstance
 class CacheAsset(GenericAsset):
 
     def importAsset(self, iAObj=None):
+        if os.path.splitext(iAObj.filePath)[1] not in [".abc"]:
+            raise ValueError("Uncognized file type.")
+
         namespace = iAObj.componentName
 
         if iAObj.options["mayaNamespace"] and iAObj.options["nameSpaceStr"]:
