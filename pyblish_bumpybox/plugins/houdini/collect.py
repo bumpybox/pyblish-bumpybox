@@ -110,11 +110,12 @@ class BumpyboxHoudiniCollect(pyblish.api.ContextPlugin):
 
             # Assigning families.
             families = [node_type, category, ext[1:]]
+            label = node.name() + " - " + category
             if node in nodes_local:
                 families += ["local"]
-                instance.data["label"] = node.name() + " - local"
+                instance.data["label"] = label + " - local"
             else:
                 families += ["farm"]
-                instance.data["label"] = node.name() + " - farm"
+                instance.data["label"] = label + " - farm"
 
             instance.data["families"] = families
