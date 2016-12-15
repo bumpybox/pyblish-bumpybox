@@ -1,38 +1,5 @@
-import os
-
 import pyblish.api
-import ftrack_api
-import ftrack_template
-
-
-class Structure(ftrack_api.structure.base.Structure):
-
-    def get_resource_identifier(self, entity, context=None):
-
-        templates = ftrack_template.discover_templates()
-
-        path = ftrack_template.format(
-            {}, templates, entity=entity
-        )[0].replace("\\", "/").replace("//", "/")
-
-        if entity.entity_type == "SequenceComponent":
-
-            padding = entity["padding"]
-            if padding:
-                expression = "%0{0}d".format(padding)
-            else:
-                expression = "%d"
-
-            filetype = entity["file_type"]
-            path = path.replace(
-                filetype, "/{0}.{1}{2}".format(
-                    os.path.splitext(os.path.basename(path))[0],
-                    expression,
-                    filetype
-                )
-            )
-
-        return path
+from ftrack_locations import ftrack_template_disk
 
 
 class BumpyboxFtrackExtractComponents(pyblish.api.InstancePlugin):
@@ -83,11 +50,7 @@ class BumpyboxFtrackExtractLocation(pyblish.api.InstancePlugin):
 
         # Setup location
         session = instance.context.data["ftrackSession"]
-        location = session.ensure(
-            "Location", {"name": "project.disk.root"}
-        )
-        location.structure = Structure()
-        location.accessor = ftrack_api.accessor.disk.DiskAccessor(prefix="")
+        location = ftrack_template_disk.get_new_location(session)
 
         for data in instance.data.get("ftrackComponentsList", []):
             data["component_location"] = location
