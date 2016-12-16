@@ -24,8 +24,7 @@ class BumpyboxHoudiniRepairMantraSettings(pyblish.api.Action):
 
             # background vs. foreground rendering
             soho_foreground = 1
-            if (instance.data["family"].endswith("ifd") or
-               instance.data["family"].startswith("img.farm")):
+            if "farm" in instance.data["families"]:
                 soho_foreground = 0
 
             # setting parms
