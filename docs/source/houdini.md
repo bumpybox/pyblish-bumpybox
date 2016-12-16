@@ -14,27 +14,27 @@ When publishing you will be presented with all the instances that were found in 
 
 #### ```local```
 
-This instance represents any node that will be processed on the local machine ei. the machine you publish from. They will be labelled with the name of the node like this; ```node_name - local```.
+This instance represents any node that will be processed on the local machine ei. the machine you publish from. They will be labelled with the name of the node like this; ```name - type - local```.
 
 Examples:
 
-- ```mantra1 - local```
-- ```alembic1 - local```
-- ```geometry - local```
+- ```mantra1 - mantra - local```
+- ```alembic1 - alembic - local```
+- ```geometry1 - geometry - local```
 
 #### ```farm```
 
-This instance represents any node that will be processed remotely ei. by a render farm or other computing management like cloud computing. They will be labelled with the name of the node like this; ```node_name - farm```.
+This instance represents any node that will be processed remotely ei. by a render farm or other computing management like cloud computing. They will be labelled with the name of the node like this; ```name - type - farm```.
 
 Examples:
 
-- ```mantra1 - farm```
-- ```alembic1 - farm```
-- ```geometry - farm```
+- ```mantra1 - mantra - farm```
+- ```alembic1 - alembic - farm```
+- ```geometry1 - geometry - farm```
 
 #### ```output```
 
-This instance represents any nodes output that already exists ei. alembic files from an alembic node or image files from a mantra node. They will be labelled with the name of the node and the collection of files like this; ```node_name - collection```.
+This instance represents any nodes output that already exists ei. alembic files from an alembic node or image files from a mantra node. They will be labelled with the name of the node and the collection of files like this; ```node - collection```.
 
 Examples:
 
