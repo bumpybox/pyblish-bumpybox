@@ -10,7 +10,6 @@ This package is dependent on:
 - [pyblish-nuke](https://github.com/pyblish/pyblish-nuke)
 - [pyblish-houdini](https://github.com/pyblish/pyblish-houdini)
 - [pyblish-standalone](https://github.com/pyblish/pyblish-standalone)
-- [pipeline-schema](https://github.com/Bumpybox/pipeline-schema)
 - [clique](https://gitlab.com/4degrees/clique)
 - [pyperclip](https://github.com/asweigart/pyperclip)
 
@@ -33,9 +32,30 @@ PYBLISHPLUGINPATH = "[pyblish-bumpybox repository path]/pyblish_bumpybox/plugins
 
 ### Workflow
 
-The usage documentation is split into each application;
+#### Scene
+
+Publishing a scene is the same workflow across all applications.
+
+Once the application is open, go to ```File > Publish```, which will bring up the UI for publishing.
+
+![pyblish_ui](pyblish_ui.png "Pyblish UI screengrab")
+
+Hit the ```Publish``` button (play icon) and wait for Pyblish to finish working.
+
+![pyblish_finished](pyblish_finished.png "Pyblish UI screengrab")
+
+The scene path will be validated, and if its the first time publishing the validation will most likely fail as shown above. When this happens just right-click and choose ```Repair``` to fix the scene path. The repairing will process for a little while, and then turn the icon next to "Scene" green. If this doesn't happen or the icon turns red, please contact your pipeline person.
+
+Finally you hit ```Reset``` (refresh icon) and try to publish again. Once all the checkboxes have turned green, you will have done a successful publish.
+
+#### Output
+
+The workflow for outputting from each application is slighly different, but generally follow "Try'n'Repair".
+
+Each supported application is listed below;
 
 - [Houdini](houdini.md)
+- [Maya](maya.md)
 
 ### Reporting
 
