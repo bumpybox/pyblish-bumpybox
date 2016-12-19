@@ -1,5 +1,5 @@
 import pyblish.api
-from ftrack_locations import ftrack_template_disk
+import ftrack_locations
 
 
 class BumpyboxFtrackExtractComponents(pyblish.api.InstancePlugin):
@@ -50,7 +50,7 @@ class BumpyboxFtrackExtractLocation(pyblish.api.InstancePlugin):
 
         # Setup location
         session = instance.context.data["ftrackSession"]
-        location = ftrack_template_disk.get_new_location(session)
+        location = ftrack_locations.get_new_location(session)
 
         for data in instance.data.get("ftrackComponentsList", []):
             data["component_location"] = location
