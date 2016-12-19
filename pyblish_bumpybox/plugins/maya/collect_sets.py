@@ -29,17 +29,33 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
                 "mayaAscii": "scene", "mayaBinary": "scene", "alembic": "cache"
             }
 
+            # Checking instance type. If object has attribute "remote" set to
+            # true, its considered a "remote" instance.
+            instance_type = "local"
+            if hasattr(object_set, "remote"):
+                attr = pymel.core.Attribute(object_set.name() + ".remote")
+                if attr.get():
+                    instance_type = "remote"
+            else:
+                pymel.core.addAttr(object_set,
+                                   longName="remote",
+                                   defaultValue=False,
+                                   attributeType="bool")
+                attr = pymel.core.Attribute(object_set.name() + ".remote")
+                pymel.core.setAttr(attr, channelBox=True)
+
             # Add an instance per format supported.
             for fmt in ["mayaBinary", "mayaAscii", "alembic"]:
 
                 name = object_set.name() + "_" + fmt
+
                 instance = context.create_instance(name=name)
                 instance.add(object_set)
-                instance.data["families"] = [
-                    fmt, "local", family_mappings[fmt]
-                ]
 
-                label = "{0} - {1}".format(object_set.name(), fmt)
+                families = [fmt, family_mappings[fmt], instance_type]
+                instance.data["families"] = families
+
+                label = "{0} - {1} - {2}".format(name, fmt, instance_type)
                 instance.data["label"] = label
 
                 # Adding/Checking publish attribute
@@ -63,7 +79,7 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
                     os.path.dirname(context.data["currentFile"]),
                     "workspace", filename
                 )
-                head = "{0}_{1}.".format(path, object_set.name())
+                head = "{0}_{1}.".format(path, name)
                 tail = "." + extensions[fmt]
                 collection = clique.Collection(head=head, padding=4, tail=tail)
 

@@ -59,16 +59,33 @@ class BumpyboxMayaCollectRenderlayers(pyblish.api.ContextPlugin):
         # Create instances
         for layer in data:
 
+            node = pymel.core.PyNode(layer)
+
+            # Checking instance type. If object has attribute "remote" set to
+            # true, its considered a "remote" instance.
+            instance_type = "local"
+            if hasattr(node, "remote"):
+                attr = pymel.core.Attribute(node.name() + ".remote")
+                if attr.get():
+                    instance_type = "remote"
+            else:
+                pymel.core.addAttr(node,
+                                   longName="remote",
+                                   defaultValue=False,
+                                   attributeType="bool")
+                attr = pymel.core.Attribute(node.name() + ".remote")
+                pymel.core.setAttr(attr, channelBox=True)
+
             instance = context.create_instance(name=layer)
-            instance.data["families"] = ["renderlayer", "local", "img"]
+            instance.data["families"] = ["renderlayer", instance_type, "img"]
 
             instance.data.update(data[layer])
-            instance.add(pymel.core.PyNode(layer))
+            instance.add(node)
 
             publish_state = pymel.core.PyNode(layer).renderable.get()
             instance.data["publish"] = publish_state
 
-            label = "{0} - renderlayer".format(layer)
+            label = "{0} - renderlayer - {1}".format(layer, instance_type)
             instance.data["label"] = label
 
             # Generate collection
