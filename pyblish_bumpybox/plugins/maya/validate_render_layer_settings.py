@@ -103,9 +103,7 @@ class BumpyboxMayaValidateRenderLayerSettings(pyblish.api.InstancePlugin):
         assert expected == current, msg.format(current, expected)
 
         # Validate project directory.
-        expected = os.path.join(
-            os.path.dirname(instance.context.data["currentFile"])
-        )
+        expected = os.path.dirname(instance.context.data["currentFile"])
         expected = expected.replace("\\", "/")
 
         current = pymel.core.system.Workspace.getPath().expand()
@@ -113,3 +111,12 @@ class BumpyboxMayaValidateRenderLayerSettings(pyblish.api.InstancePlugin):
 
         msg = "Project path is incorrect. Current: {0}. Expected: {1}"
         assert expected == current, msg.format(current, expected)
+
+        # Validate existence of workspace.mel
+        expected = os.path.join(
+            os.path.dirname(instance.context.data["currentFile"]),
+            "workspace.mel"
+        )
+
+        msg = "\"{0}\" does not exist.".format(expected)
+        assert os.path.exists(expected), msg
