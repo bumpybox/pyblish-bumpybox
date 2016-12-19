@@ -71,4 +71,5 @@ To copy the report right-click on the ```Report``` plugin, and select ```Copy To
    :hidden:
 
    houdini
+   maya
 ```
