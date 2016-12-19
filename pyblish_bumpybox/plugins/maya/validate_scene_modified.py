@@ -12,6 +12,6 @@ class BumpyboxMayaValidateSceneModified(pyblish.api.ContextPlugin):
 
     def process(self, context):
 
-        if pymel.core.dgmodified():
+        if pymel.core.dgmodified() and pymel.core.system.sceneName():
             self.log.info("Scene modified. Saving scene...")
             pymel.core.saveFile()
