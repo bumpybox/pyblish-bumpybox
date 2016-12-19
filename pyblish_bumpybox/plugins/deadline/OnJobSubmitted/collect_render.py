@@ -31,7 +31,7 @@ class BumpyboxDeadlineOnJobSubmittedCollectRender(pyblish.api.ContextPlugin):
         for key in instance_data.keys():
             instance.data[key] = instance_data[key]
 
-        instance.data["families"] = ["img", "farm", "deadline"]
+        instance.data["families"] = ["img", "remote", "deadline"]
 
         # setting job data
         job_data = {}

@@ -62,7 +62,7 @@ class CollectMovie(pyblish.api.ContextPlugin):
 
             name = data["name"]
             instance = context.create_instance(name=name)
-            instance.data["families"] = ["mov", "farm", "deadline"]
+            instance.data["families"] = ["mov", "remote", "deadline"]
 
             for key in data:
                 data[key] = data[key]

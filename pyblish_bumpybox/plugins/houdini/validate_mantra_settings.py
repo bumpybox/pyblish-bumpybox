@@ -24,7 +24,7 @@ class BumpyboxHoudiniRepairMantraSettings(pyblish.api.Action):
 
             # background vs. foreground rendering
             soho_foreground = 1
-            if "farm" in instance.data["families"]:
+            if "remote" in instance.data["families"]:
                 soho_foreground = 0
 
             # setting parms
@@ -51,9 +51,9 @@ class BumpyboxHoudiniValidateMantraSettings(pyblish.api.InstancePlugin):
             return
 
         # When rendering locally we need to block, so Pyblish doesn"t execute
-        # other plugins. When render on a farm, the block needs to be lifted.
-        if "farm" in instance.data["families"]:
-            msg = "Mantra needs to render in the background for farm "
+        # other plugins. When render on a remote, the block needs to be lifted.
+        if "remote" in instance.data["families"]:
+            msg = "Mantra needs to render in the background for remote "
             msg += "rendering. Disable \"Block Until Render Complete\" in "
             msg += "\"Driver\"."
             assert not node.parm("soho_foreground").eval(), msg

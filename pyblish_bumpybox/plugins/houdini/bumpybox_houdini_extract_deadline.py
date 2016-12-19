@@ -5,7 +5,7 @@ import pyblish.api
 
 
 class BumpyboxHoudiniExtractDeadline(pyblish.api.InstancePlugin):
-    """ Appending Deadline data to farm related instances. """
+    """ Appending Deadline data to remote related instances. """
 
     families = ["deadline"]
     order = pyblish.api.ExtractorOrder
@@ -43,7 +43,7 @@ class BumpyboxHoudiniExtractDeadline(pyblish.api.InstancePlugin):
                                                   step_frame)
 
         # chunk size
-        job_data["ChunkSize"] = instance.data["farmChunkSize"]
+        job_data["ChunkSize"] = instance.data["remoteChunkSize"]
         if "%" not in collection.format(fmt):
             job_data["ChunkSize"] = str(end_frame)
         else:

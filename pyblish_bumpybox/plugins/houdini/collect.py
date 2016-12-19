@@ -31,10 +31,10 @@ class BumpyboxHoudiniCollect(pyblish.api.ContextPlugin):
         nodes.extend(node_type.instances())
 
         # Categorize nodes based on whether they are in a network box starting
-        # with "farm".
+        # with "remote".
         nodes_local = list(nodes)
         for box in hou.node("out").networkBoxes():
-            if box.name().startswith("farm"):
+            if box.name().startswith("remote"):
                 for node in box.nodes():
                     if node in nodes_local:
                         nodes_local.remove(node)
@@ -115,7 +115,7 @@ class BumpyboxHoudiniCollect(pyblish.api.ContextPlugin):
                 families += ["local"]
                 instance.data["label"] = label + " - local"
             else:
-                families += ["farm"]
-                instance.data["label"] = label + " - farm"
+                families += ["remote"]
+                instance.data["label"] = label + " - remote"
 
             instance.data["families"] = families

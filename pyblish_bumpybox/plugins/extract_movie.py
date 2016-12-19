@@ -15,7 +15,7 @@ class BumpyboxExtractMovie(pyblish.api.InstancePlugin):
 
     def process(self, instance):
 
-        if "farm" in instance.data.get("families", []):
+        if "remote" in instance.data.get("families", []):
             return
 
         if not self.check_executable("ffmpeg"):
