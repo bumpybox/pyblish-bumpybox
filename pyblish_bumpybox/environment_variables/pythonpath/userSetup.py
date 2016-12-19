@@ -3,6 +3,7 @@ import imp
 import maya.cmds as cmds
 
 import pyblish.api
+import pyblish_lite
 
 
 # Disabling debug logging, cause of FTrack constant stream of print outs.
@@ -39,6 +40,9 @@ pyblish.api.register_callback("instanceToggled", toggle_instance)
 
 # Register pyblish_lite.
 pyblish.api.register_gui("pyblish_lite")
+
+# pyblish_lite settings
+pyblish_lite.settings.InitialTab = "overview"
 
 # Adding ftrack assets if import is available.
 try:
