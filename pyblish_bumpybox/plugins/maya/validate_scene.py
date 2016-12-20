@@ -74,20 +74,40 @@ class BumpyboxMayaRepairScene(pyblish.api.Action):
         )
 
         version = None
+        component = None
         if asset.getVersions():
             version = asset.getVersions()[-1]
+            try:
+                component = version.getComponent(name=component_name)
+            except:
+                version = asset.createVersion(taskid=task.getId())
         else:
             version = asset.createVersion(taskid=task.getId())
 
-        component = version.createComponent(
-            name=component_name, path=file_path,
-            location=location
-        )
+        if not component:
+            component = version.createComponent(
+                name=component_name, path=file_path,
+                location=location
+            )
         component = location.getComponent(component.getId())
 
         asset.publish()
 
-        pymel.core.system.openFile(component.getFilesystemPath(), force=True)
+        if os.path.exists(component.getFilesystemPath()):
+            pymel.core.system.openFile(
+                component.getFilesystemPath(), force=True
+            )
+        else:
+            version = asset.createVersion(taskid=task.getId())
+            component = version.createComponent(
+                name=component_name, path=file_path,
+                location=location
+            )
+            component = location.getComponent(component.getId())
+            asset.publish()
+            pymel.core.system.openFile(
+                component.getFilesystemPath(), force=True
+            )
 
 
 class BumpyboxMayaValidateScene(pyblish.api.ContextPlugin):
