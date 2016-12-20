@@ -70,6 +70,7 @@ To copy the report right-click on the ```Report``` plugin, and select ```Copy To
    :maxdepth: 2
    :hidden:
 
+   instances
    houdini
    maya
 ```
