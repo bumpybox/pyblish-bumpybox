@@ -20,14 +20,13 @@ class BumpyboxFtrackCollectVersion(pyblish.api.ContextPlugin):
             task["name"]
         )).first()
 
-        # getting current version
-        current_version = 1
-        if "version" in context.data:
-            current_version = context.data["version"]
+        # Get current version
+        current_version = context.data.get("version", 1)
 
-        for version in asset["versions"]:
-            if current_version < version["version"]:
-                current_version = version["version"]
+        if asset:
+            for version in asset["versions"]:
+                if current_version < version["version"]:
+                    current_version = version["version"]
 
         context.data["version"] = current_version
 
