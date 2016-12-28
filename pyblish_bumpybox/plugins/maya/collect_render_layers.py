@@ -94,6 +94,14 @@ class BumpyboxMayaCollectRenderlayers(pyblish.api.ContextPlugin):
                 layer=layer
             )
 
+            # Special case for vray that has it own extention setting
+            renderer = drg.currentRenderer.get()
+            if renderer == "vray":
+                render_settings = pymel.core.PyNode("vraySettings")
+                ext = "." + render_settings.imageFormatStr.get().split(" ")[0]
+
+                first_image = os.path.splitext(first_image)[0] + ext
+
             collections = clique.assemble([first_image], minimum_items=1)[0]
             ext = os.path.splitext(first_image)[1]
             collection = collections[0]
