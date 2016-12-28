@@ -24,7 +24,7 @@ You can submit output nodes to a remote, for remote processing. Create a network
 
 *NOTE: Distributed simulation with ```Dynamics``` nodes are not currently supported.*
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/IgsguXI_IqM" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/sGYEApiuoh4" frameborder="0" allowfullscreen></iframe>
 
 You can have multiple network boxes that submits to the remote, as long as their name all starts with ```remote```.
 
