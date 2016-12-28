@@ -93,6 +93,10 @@ class BumpyboxHoudiniCollect(pyblish.api.ContextPlugin):
                 for frame in range(int(start), int(end) + 1, int(step)):
                     files.append(node.parm(output_parm).evalAtFrame(frame))
 
+            # Except for alembic output that only ever outputs to a single file
+            if node_type == "alembic":
+                files = [files[0]]
+
             # Get extension
             ext = os.path.splitext(files[0])[1]
             # Special case for *.bgeo.sc files since it was two "extensions".
