@@ -2,10 +2,14 @@ import pyblish.api
 
 
 class BumpyboxDeadlineIntegrateCollection(pyblish.api.InstancePlugin):
-    """ Convert clique collection to string. """
+    """ Convert clique collection to string.
 
-    order = pyblish.api.IntegratorOrder
+    Negative offset to come before Deadine submission.
+    """
+
+    order = pyblish.api.IntegratorOrder - 0.1
     label = "Collection"
+    families = ["deadline"]
 
     def process(self, instance):
 
