@@ -98,7 +98,13 @@ class BumpyboxMayaCollectRenderlayers(pyblish.api.ContextPlugin):
             renderer = drg.currentRenderer.get()
             if renderer == "vray":
                 render_settings = pymel.core.PyNode("vraySettings")
-                ext = "." + render_settings.imageFormatStr.get().split(" ")[0]
+
+                # Assuming ".png" if nothing is set.
+                # This happens when vray is initialized with the scene.
+                ext = ".png"
+                if render_settings.imageFormatStr.get():
+                    ext = "."
+                    ext += render_settings.imageFormatStr.get().split(" ")[0]
 
                 first_image = os.path.splitext(first_image)[0] + ext
 
