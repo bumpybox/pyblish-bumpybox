@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class BumpyboxDeadlineCollectHoudiniParameters(pyblish.api.ContextPlugin):
+class BumpyboxDeadlineCollectMayaParameters(pyblish.api.ContextPlugin):
     """ Add optional parameters to remote instances.
 
     A ContextPlugin because if remote instance is unpublishable,
@@ -10,8 +10,8 @@ class BumpyboxDeadlineCollectHoudiniParameters(pyblish.api.ContextPlugin):
     """
 
     order = pyblish.api.CollectorOrder + 0.1
-    label = "Houdini Parameters"
-    hosts = ["houdini"]
+    label = "Maya Parameters"
+    hosts = ["maya"]
 
     def process(self, context):
 
@@ -25,32 +25,32 @@ class BumpyboxDeadlineCollectHoudiniParameters(pyblish.api.ContextPlugin):
 
             # Gettng chunk size
             try:
-                value = node.parm("deadlineChunkSize").eval()
+                value = node.deadlineChunkSize.get()
                 instance.data["deadlineChunkSize"] = value
             except:
                 msg = "No existing \"deadlineChunkSize\" parameter."
-                self.log.info(msg)
+                self.log.warning(msg)
 
             # Gettng priority
             try:
-                value = node.parm("deadlinePriority").eval()
+                value = node.deadlinePriority.get()
                 instance.data["deadlinePriority"] = value
             except:
                 msg = "No existing \"deadlinePriority\" parameter."
-                self.log.info(msg)
+                self.log.warning(msg)
 
             # Gettng pool
             try:
-                value = node.parm("deadlinePool").eval()
+                value = node.deadlinePool.get()
                 instance.data["deadlinePool"] = value
             except:
                 msg = "No existing \"deadlinePool\" parameter."
-                self.log.info(msg)
+                self.log.warning(msg)
 
             # Gettng concurrent tasks
             try:
-                value = node.parm("deadlineConcurrentTasks").eval()
+                value = node.deadlineConcurrentTasks.get()
                 instance.data["deadlineConcurrentTasks"] = value
             except:
                 msg = "No existing \"deadlineConcurrentTasks\" parameter."
-                self.log.info(msg)
+                self.log.warning(msg)
