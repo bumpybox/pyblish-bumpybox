@@ -11,10 +11,11 @@ class BumpyboxMayaExtractRenderLayer(pyblish.api.InstancePlugin):
     """ Extracts the renderlayer to image output. """
 
     order = pyblish.api.ExtractorOrder
-    families = ["renderlayer"]
+    families = ["renderlayer", "local"]
     optional = True
     label = "Render Layer"
     hosts = ["maya"]
+    match = pyblish.api.Subset
 
     def process(self, instance):
 
