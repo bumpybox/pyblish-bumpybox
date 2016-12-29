@@ -18,6 +18,9 @@ class BumpyboxMayaRepairRenderLayerSettings(pyblish.api.Action):
         layer = pymel.core.PyNode("defaultRenderLayer")
         pymel.core.nodetypes.RenderLayer.setCurrent(layer)
 
+        # Repairing masterlayer
+        layer.renderable.set(False)
+
         # Repairing frame/animation extension.
         render_globals.animation.set(1)
         render_globals.outFormatControl.set(0)
@@ -32,7 +35,7 @@ class BumpyboxMayaRepairRenderLayerSettings(pyblish.api.Action):
         render_globals.extensionPadding.set(frame_padding)
 
         # Repairing file name prefix
-        expected_prefix = "<Scene>_<RenderLayer>"
+        expected_prefix = "<RenderLayer>/<Scene>"
         render_globals.imageFilePrefix.set(expected_prefix)
 
         # Repairing workspace path.
@@ -79,15 +82,21 @@ class BumpyboxMayaValidateRenderLayerSettings(pyblish.api.InstancePlugin):
 
         # Validate file name prefix.
         current = render_globals.imageFilePrefix.get()
-        expected = "<Scene>_<RenderLayer>"
+        expected = "<RenderLayer>/<Scene>"
 
-        msg = "File name prefix is incorrect. Current: {0}. Expected: {1}"
+        msg = "File name prefix is incorrect. Current: \"{0}\"."
+        msg += " Expected: \"{1}\""
         assert expected == current, msg.format(current, expected)
 
         # Validate current render layer.
         msg = "Current layer needs to be \"masterLayer\""
         currentLayer = pymel.core.nodetypes.RenderLayer.currentLayer()
         assert currentLayer == "defaultRenderLayer", msg
+
+        # Validate masterLayer is turned off
+        msg = "\"masterLayer\" must be turned off."
+        layer = pymel.core.PyNode("defaultRenderLayer")
+        assert not layer.renderable.get(), msg
 
         # Validate workspace path.
         path = os.path.dirname(pymel.core.system.sceneName()).lower()
