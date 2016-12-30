@@ -94,6 +94,7 @@ class CollectMovie(pyblish.api.ContextPlugin):
             input_file = collection.format("{head}{padding}{tail}")
             plugin_data["InputFile0"] = input_file
             plugin_data["ReplacePadding"] = False
+            plugin_data["ReplacePadding0"] = False
             plugin_data["UseSameInputArgs"] = False
 
             path = collection.format("{head}{padding}.mov") % 1
