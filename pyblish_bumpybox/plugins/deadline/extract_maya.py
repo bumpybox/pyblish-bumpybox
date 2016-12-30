@@ -1,6 +1,7 @@
 import math
 
 import pymel.core
+from pymel import versions
 
 import pyblish.api
 
@@ -56,6 +57,7 @@ class BumpyboxDeadlineExtractMaya(pyblish.api.InstancePlugin):
 
         # Setting plugin data
         plugin_data["SceneFile"] = instance.context.data["currentFile"]
+        plugin_data["Version"] = versions.flavor()
 
         # Setting data
         data = {"job": job_data, "plugin": plugin_data}
