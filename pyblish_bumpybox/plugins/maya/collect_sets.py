@@ -36,6 +36,9 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
                 attr = pymel.core.Attribute(object_set.name() + ".remote")
                 if attr.get():
                     instance_type = "remote"
+                # Remote cache/formats are currently disabled as no
+                # remotes (Deadline) submission are setup to handle them.
+                continue
             else:
                 pymel.core.addAttr(object_set,
                                    longName="remote",
