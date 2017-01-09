@@ -16,6 +16,10 @@ class BumpyboxMayaExtractMayaFormats(pyblish.api.InstancePlugin):
 
     def process(self, instance):
 
+        # Skip any remote instances
+        if "remote" in instance.data["families"]:
+            return
+
         # Export to file.
         path = list(instance.data["collection"])[0]
 
