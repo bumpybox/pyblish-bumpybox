@@ -2,7 +2,7 @@ import pyblish.api
 import pymel.core as pm
 
 
-class RepairPoints(pyblish.api.Action):
+class BumpyboxMayaModelingRepairPoints(pyblish.api.Action):
     label = "Repair"
     icon = "wrench"
     on = "failed"
@@ -20,21 +20,22 @@ class RepairPoints(pyblish.api.Action):
         instances = pyblish.api.instances_by_plugin(failed, plugin)
 
         for instance in instances:
-            for node in instance:
+            for node in instance[0].members():
                 pm.delete(pm.cluster(node))
 
 
-class ValidatePoints(pyblish.api.InstancePlugin):
-    """ Ensures all points in mesh are zero'ed out """
+class BumpyboxMayaModelingValidatePoints(pyblish.api.InstancePlugin):
+    """ Ensures all points in mesh are zero"ed out """
 
-    families = ['geometry']
-    label = 'Points'
+    families = ["mayaAscii", "mayaBinary", "alembic"]
+    label = "Points"
     order = pyblish.api.ValidatorOrder
-    actions = [RepairPoints]
+    actions = [BumpyboxMayaModelingRepairPoints]
+    optional = True
 
     def process(self, instance):
 
-        for node in instance:
+        for node in instance[0].members():
             for p in node.getShape().pnts:
                 position = 0
                 position += p.pntx.get()

@@ -1,21 +1,21 @@
 import pyblish.api
-import pymel
 
 
-class ValidateHierarchy(pyblish.api.Validator):
+class BumpyboxMayaModeligValidateHierarchy(pyblish.api.Validator):
     """ Ensures a flat hierarchy """
 
-    families = ['geometry']
-    label = 'Hierarchy'
+    families = ["mayaAscii", "mayaBinary", "alembic"]
+    label = "Hierarchy"
+    optional = True
 
     def process(self, instance):
 
         check = True
-        for node in instance:
+        for node in instance[0].members():
             if node.getParent():
-                msg = '"%s" is parented to "%s"' % (node, node.getParent())
-                msg += ' Please unparent %s' % node
+                msg = "\"%s\" is parented to \"%s\"" % (node, node.getParent())
+                msg += " Please unparent %s" % node
                 self.log.error(msg)
                 check = False
 
-        assert check, 'Wrong hierarchy in the scene.'
+        assert check, "Wrong hierarchy in the scene."

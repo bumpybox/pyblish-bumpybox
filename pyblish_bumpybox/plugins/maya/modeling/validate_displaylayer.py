@@ -2,13 +2,13 @@ import pyblish.api
 import pymel
 
 
-class RepairDisplayLayer(pyblish.api.Action):
+class BumpyboxMayaModeligRepairDisplayLayer(pyblish.api.Action):
 
     label = "Repair"
     icon = "wrench"
     on = "failed"
 
-    def process(self, context):
+    def process(self, context, plugin):
 
         for layer in pymel.core.ls(type='displayLayer'):
             try:
@@ -17,11 +17,13 @@ class RepairDisplayLayer(pyblish.api.Action):
                 pass
 
 
-class ValidateDisplaylayer(pyblish.api.ContextPlugin):
+class BumpyboxMayaModelingValidateDisplaylayer(pyblish.api.ContextPlugin):
     """ Ensure no displays layers are present in the scene """
+
     order = pyblish.api.ValidatorOrder
     optional = True
     label = 'Display Layers'
+    actions = [BumpyboxMayaModeligRepairDisplayLayer]
 
     def process(self, context):
         """Process all the nodes in the instance """

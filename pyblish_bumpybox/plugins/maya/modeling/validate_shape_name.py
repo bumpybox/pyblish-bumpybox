@@ -3,7 +3,7 @@ import pyblish.api
 import pymel.core
 
 
-class RepairShapeName(pyblish.api.Action):
+class BumpyboxMayaModelingRepairShapeName(pyblish.api.Action):
     label = "Repair"
     icon = "wrench"
     on = "failed"
@@ -11,25 +11,28 @@ class RepairShapeName(pyblish.api.Action):
     def process(self, context, plugin):
 
         invalid_shapes = []
-        for shp in pymel.core.ls(type='mesh'):
-            if '|' in shp.name():
+        for shp in pymel.core.ls(type="mesh"):
+            if "|" in shp.name():
                 invalid_shapes.append(shp)
 
         for shp in invalid_shapes:
-            pymel.core.rename(shp, shp.getParent().name() + 'Shape')
+            pymel.core.rename(shp, shp.getParent().name() + "Shape")
 
 
-class ValidateShapeName(pyblish.api.ContextPlugin):
+class BumpyboxMayaModelingValidateShapeName(pyblish.api.ContextPlugin):
     """ No two shapes can have the same name. """
+
     order = pyblish.api.ValidatorOrder
-    label = 'Shape Name'
-    actions = [RepairShapeName]
+    label = "Shape Name"
+    actions = [BumpyboxMayaModelingRepairShapeName]
+    optional = True
 
     def process(self, context):
 
         validate = False
+        valid_families = set(["mayaAscii", "mayaBinary", "alembic"])
         for instance in context:
-            if instance.data["family"] == "geometry":
+            if set(instance.data["families"]) & valid_families:
                 if instance.data.get("publish", True):
                     validate = True
 
@@ -37,10 +40,10 @@ class ValidateShapeName(pyblish.api.ContextPlugin):
             return
 
         invalid_shapes = []
-        msg = 'Duplicate shape names:'
-        for shp in pymel.core.ls(type='mesh'):
-            if '|' in shp.name():
+        msg = "Duplicate shape names:"
+        for shp in pymel.core.ls(type="mesh"):
+            if "|" in shp.name():
                 invalid_shapes.append(shp)
-                msg += '\n\n' + shp.name()
+                msg += "\n\n" + shp.name()
 
         assert not invalid_shapes, msg
