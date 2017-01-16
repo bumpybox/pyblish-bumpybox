@@ -2,23 +2,29 @@ import os
 
 import pyblish.api
 import hiero
-import pipeline_schema
 
 
 class ExtractNuke(pyblish.api.InstancePlugin):
-    """ Extract nuke script """
+    """ Extract Nuke script """
 
     families = ["nuke"]
     label = "Nuke Script"
-    order = pyblish.api.ExtractorOrder + 0.1
+    order = pyblish.api.ExtractorOrder
 
     def process(self, instance):
 
         item = instance[0]
         file_path = item.source().mediaSource().fileinfos()[0].filename()
         fps = item.sequence().framerate().toFloat()
-        handles = instance.data["handles"]
 
+        # Get handles.
+        handles = 0
+        if "handles" in instance.data["families"]:
+            for tag in instance.data["tagsData"]:
+                if "handles" == tag.get("tag.family", ""):
+                    handles = int(tag["tag.value"])
+
+        # Get reverse, retime, first and last frame
         reverse = False
         if item.playbackSpeed() < 0:
             reverse = True
@@ -37,88 +43,45 @@ class ExtractNuke(pyblish.api.InstancePlugin):
             last_frame = int(item.sourceIn() + 1)
             last_frame_offset = last_frame - first_frame + 1
 
-        # creating exr transcode nuke script
-        nukeWriter = hiero.core.nuke.ScriptWriter()
-
-        root_node = hiero.core.nuke.RootNode(first_frame_offset,
-                                             last_frame_offset)
-        nukeWriter.addNode(root_node)
-
+        # Get resolution
         width = item.parent().parent().format().width()
         height = item.parent().parent().format().height()
 
-        item.addToNukeScript(script=nukeWriter, firstFrame=first_frame_offset,
-                             includeRetimes=True, retimeMethod="Frame",
-                             startHandle=handles, endHandle=handles)
-
-        # get version data
-        version = 1
-        if "version" in instance.context.data:
-            version = instance.context.data["version"]
-
-        # expected path
-        data = pipeline_schema.get_data()
-        data["version"] = version
-        data["extension"] = "exr"
-        data["output_type"] = "img"
-        data["name"] = instance.data["name"]
-        write_path = pipeline_schema.get_path("output_sequence", data)
-
-        frame_padding = len(str(last_frame))
-        if frame_padding < 4:
-            frame_padding = 4
-        padding_string = "%{0}d".format(str(frame_padding).zfill(2))
-        write_path = write_path.replace("%04d", padding_string)
-
-        write_node = hiero.core.nuke.WriteNode(write_path)
-        write_node.setKnob("file_type", "exr")
-        write_node.setKnob("metadata", "all metadata")
-        nukeWriter.addNode(write_node)
-
-        data["extension"] = "nk"
-        script_path = pipeline_schema.get_path("temp_file", data)
-        nukeWriter.writeToDisk(script_path)
-
-        # adding deadline data
-        job_data = {"Group": "nuke_9", "Pool": "medium", "Plugin": "Nuke",
-                    "OutputFilename0": write_path, "ChunkSize": 10,
-                    "Frames": "{0}-{1}".format(first_frame_offset,
-                                               last_frame_offset),
-                    "LimitGroups": "nuke"}
-
-        name = os.path.basename(instance.context.data["currentFile"])
-        name = "{0} - {1}".format(os.path.splitext(name)[0], instance.data["name"])
-        job_data["Name"] = name
-
-        plugin_data = {"NukeX": False, "Version": "9.0",
-                       "EnforceRenderOrder": True}
-
-        instance.data["deadlineData"] = {"job": job_data,
-                                         "plugin": plugin_data,
-                                         "auxiliaryFiles": [script_path]}
-
-        # creating shot nuke script
+        # Creating shot nuke script
         nukeWriter = hiero.core.nuke.ScriptWriter()
 
-        # root node
-        root_node = hiero.core.nuke.RootNode(first_frame_offset,
-                                             last_frame_offset, fps=fps)
+        # Root node
+        root_node = hiero.core.nuke.RootNode(
+            first_frame_offset,
+            last_frame_offset,
+            fps=fps
+        )
         if retime:
-            last_frame = abs(int(round(last_frame_offset /
-                                       item.playbackSpeed())))
-            root_node = hiero.core.nuke.RootNode(first_frame_offset,
-                                                 last_frame, fps=fps)
+            last_frame = abs(int(round(
+                last_frame_offset / item.playbackSpeed()
+            )))
+            root_node = hiero.core.nuke.RootNode(
+                first_frame_offset,
+                last_frame,
+                fps=fps
+            )
         fmt = item.parent().parent().format()
-        root_node.setKnob("format", "{0} {1}".format(fmt.width(),
-                                                     fmt.height()))
+        root_node.setKnob("format", "{0} {1}".format(
+            fmt.width(),
+            fmt.height()
+        ))
         nukeWriter.addNode(root_node)
 
-        # primary read node
-        read_node = hiero.core.nuke.ReadNode(write_path,
-                                             width=width,
-                                             height=height,
-                                             firstFrame=first_frame_offset,
-                                             lastFrame=last_frame_offset)
+        # Primary read node
+        read_node = hiero.core.nuke.ReadNode(
+            file_path,
+            width=width,
+            height=height,
+            firstFrame=first_frame,
+            lastFrame=last_frame + 1
+        )
+        read_node.setKnob("frame_mode", 2)
+        read_node.setKnob("frame", str(first_frame))
         nukeWriter.addNode(read_node)
         last_node = read_node
 
@@ -126,81 +89,57 @@ class ExtractNuke(pyblish.api.InstancePlugin):
 
             last_frame = last_frame_offset
             if retime:
-                last_frame = abs(int(round(last_frame_offset /
-                                           item.playbackSpeed())))
-            retime_node = hiero.core.nuke.RetimeNode(first_frame_offset,
-                                                     last_frame_offset,
-                                                     first_frame_offset,
-                                                     last_frame,
-                                                     reverse=reverse)
+                last_frame = abs(int(round(
+                    last_frame_offset / item.playbackSpeed()
+                )))
+            retime_node = hiero.core.nuke.RetimeNode(
+                first_frame_offset,
+                last_frame_offset,
+                first_frame_offset,
+                last_frame,
+                reverse=reverse
+            )
             retime_node.setKnob("shutter", 0)
             retime_node.setInputNode(0, read_node)
             nukeWriter.addNode(retime_node)
             last_node = retime_node
 
-        data["extension"] = "exr"
-        temp_file = pipeline_schema.get_path("temp_file", data)
-        write_node = hiero.core.nuke.WriteNode(temp_file, inputNode=last_node)
+        # Create write node
+        write_path = os.path.join(
+            os.path.dirname(instance.context.data["currentFile"]),
+            "workspace",
+            item.parent().parent().name(),
+            item.parent().name(),
+            item.name() + ".%04d.exr"
+        )
+
+        frame_padding = len(str(last_frame))
+        if frame_padding < 4:
+            frame_padding = 4
+        padding_string = "%{0}d".format(str(frame_padding).zfill(2))
+        write_path = write_path.replace("%04d", padding_string)
+
+        write_node = hiero.core.nuke.WriteNode(write_path, inputNode=last_node)
         write_node.setKnob("file_type", "exr")
         write_node.setKnob("metadata", "all metadata")
         write_node.setName(instance.data["name"])
         nukeWriter.addNode(write_node)
 
-        # secondary read nodes
-        seq = item.parent().parent()
-        time_in = item.timelineIn()
-        time_out = item.timelineOut()
+        # Get file path
+        file_path = os.path.join(
+            os.path.dirname(instance.context.data["currentFile"]),
+            "workspace",
+            item.parent().parent().name(),
+            item.parent().name(),
+            item.name() + ".nk"
+        )
 
-        items = []
-        for count in range(time_in, time_out):
-            items.extend(seq.trackItemsAt(count))
-
-        items = list(set(items))
-        items.remove(item)
-
-        last_frame = abs(int(round(last_frame_offset /
-                                   item.playbackSpeed())))
-
-        for i in items:
-            src = i.source().mediaSource().fileinfos()[0].filename()
-            in_frame = i.mapTimelineToSource(time_in) + 1 - handles
-            out_frame = i.mapTimelineToSource(time_out) + 1 + handles
-            read_node = hiero.core.nuke.ReadNode(src, width=width,
-                                                 height=height,
-                                                 firstFrame=in_frame,
-                                                 lastFrame=out_frame)
-            nukeWriter.addNode(read_node)
-
-            retime_node = hiero.core.nuke.RetimeNode(in_frame, out_frame,
-                                                     first_frame_offset,
-                                                     last_frame)
-            retime_node.setKnob("shutter", 0)
-            retime_node.setInputNode(0, read_node)
-            nukeWriter.addNode(retime_node)
-
-        # get file path
-        data["extension"] = "nk"
-        data["output_type"] = "scene"
-        file_path = pipeline_schema.get_path("output_file", data)
-
-        # create directories
+        # Create directories
         if not os.path.exists(os.path.dirname(file_path)):
             os.makedirs(os.path.dirname(file_path))
 
-        # create nuke script
+        # Create nuke script
         nukeWriter.writeToDisk(file_path)
         self.log.info("Writing Nuke script to: \"%s\"" % file_path)
 
-        # publishing to ftrack
-        asset = instance.data["ftrackShot"].createAsset(instance.data["name"], "scene")
-
-        # removing existing version
-        for v in asset.getVersions():
-            if v.getVersion() == instance.context.data["version"]:
-                v.delete()
-
-        # creating new version
-        version = asset.createVersion()
-        version.set("version", instance.context.data["version"])
-        version.createComponent(name="nuke", path=file_path)
-        version.publish()
+        instance.data["nukeScene"] = file_path

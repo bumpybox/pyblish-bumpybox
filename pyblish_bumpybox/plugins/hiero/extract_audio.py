@@ -1,22 +1,26 @@
 import os
 
 import pyblish.api
-import pipeline_schema
 
 
-class ExtractAudio(pyblish.api.InstancePlugin):
+class BumpyboxHieroExtractAudio(pyblish.api.InstancePlugin):
     """ Extracting audio """
 
-    families = ['trackItem']
-    label = 'Audio'
-    order = pyblish.api.Extractor.order - 0.5
+    families = ["audio"]
+    label = "Audio"
+    hosts = ["hiero"]
+    order = pyblish.api.ExtractorOrder
 
     def process(self, instance):
 
         item = instance[0]
-        data = pipeline_schema.get_data()
-        data['extension'] = 'wav'
-        output_file = pipeline_schema.get_path('temp_file', data=data)
+        output_file = os.path.join(
+            os.path.dirname(instance.context.data["currentFile"]),
+            "workspace",
+            item.parent().parent().name(),
+            item.parent().name(),
+            item.name() + ".wav"
+        )
 
         output_dir = os.path.dirname(output_file)
         if not os.path.exists(output_dir):
@@ -25,4 +29,4 @@ class ExtractAudio(pyblish.api.InstancePlugin):
         item.sequence().writeAudioToFile(output_file, item.timelineIn(),
                                          item.timelineOut())
 
-        instance.set_data('audio', value=output_file)
+        instance.data["audio"] = output_file

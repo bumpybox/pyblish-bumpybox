@@ -1,9 +1,16 @@
 import pyblish.api
 
 
-class CollectItems(pyblish.api.Collector):
+class BumpyboxHieroCollectItems(pyblish.api.ContextPlugin):
+    """ Collect Hiero instances.
 
-    order = pyblish.api.Collector.order + 0.2
+    Collects all trackitem tagged with the preset tags. If a tag has "family"
+    in its meta data, this family will also be added to the instance.
+    """
+
+    order = pyblish.api.CollectorOrder
+    label = "Collect"
+    hosts = ["hiero"]
 
     def process(self, context):
         project = context.data("activeProject")
@@ -14,8 +21,6 @@ class CollectItems(pyblish.api.Collector):
         except:
             pass
 
-        valid_tags = ["ftrack", "png", "prores", "dpx", "copy", "h264", "nuke"]
-
         video_tracks = []
         for seq in project.sequences():
             for vid in seq.videoTracks():
@@ -25,40 +30,30 @@ class CollectItems(pyblish.api.Collector):
         for vid in video_tracks:
             for item in vid.items():
 
-                check = False
-                for tag in (item.tags() + vid.tags()):
-                    if tag.name() in valid_tags:
-                        check = True
-                    data = tag.metadata()
-                    if data.hasKey("type") and data.value("type") == "task":
-                        check = True
+                tags = list(set(item.tags() + vid.tags()))
 
-                if not check:
+                if not tags:
                     continue
 
-                publish_state = item.isEnabled()
+                instance = context.create_instance(name=item.name())
+                instance.add(item)
+
+                # Assigning families from tags.
+                families = []
+                tag_data = []
+                for tag in tags:
+                    data = tag.metadata().dict()
+                    tag_data.append(data)
+                    if "tag.family" in data:
+                        families.append(data["tag.family"])
+
+                    families.append(tag.name())
+
+                instance.data["families"] = list(set(families))
+                instance.data["tagsData"] = tag_data
+
+                # Publishable state
+                instance.data["publish"] = item.isEnabled()
                 if selection:
                     if item not in selection:
-                        publish_state = False
-
-                instance = context.create_instance(name=item.name())
-                families = ["deadline"]
-                task_types = []
-                for tag in (item.tags() + vid.tags()):
-                    data = tag.metadata()
-                    if data.hasKey("type") and data.value("type") == "task":
-                        families.append("task")
-                        task_types.append(tag.name())
-                    else:
-                        families.append(tag.name())
-
-                    instance.data["handles"] = 0
-                    if data.hasKey("type") and data.value("type") == "handles":
-                        instance.data["handles"] = int(data.value("value"))
-
-                instance.data["taskTypes"] = task_types
-                instance.data["families"] = list(set(families))
-                instance.add(item)
-                instance.data["videoTrack"] = vid
-                instance.data["publish"] = publish_state
-                instance.data["family"] = "trackItem"
+                        instance.data["publish"] = False
