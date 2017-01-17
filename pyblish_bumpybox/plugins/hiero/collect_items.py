@@ -39,7 +39,7 @@ class BumpyboxHieroCollectItems(pyblish.api.ContextPlugin):
                 instance.add(item)
 
                 # Assigning families from tags.
-                families = []
+                families = ["trackItem"]
                 tag_data = []
                 for tag in tags:
                     data = tag.metadata().dict()

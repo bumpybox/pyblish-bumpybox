@@ -125,6 +125,44 @@ class ExtractNuke(pyblish.api.InstancePlugin):
         write_node.setName(instance.data["name"])
         nukeWriter.addNode(write_node)
 
+        # Secondary read nodes
+        seq = item.parent().parent()
+        time_in = item.timelineIn()
+        time_out = item.timelineOut()
+
+        items = []
+        for count in range(time_in, time_out):
+            items.extend(seq.trackItemsAt(count))
+
+        items = list(set(items))
+        items.remove(item)
+
+        last_frame = abs(int(round(last_frame_offset /
+                                   item.playbackSpeed())))
+
+        for i in items:
+            src = i.source().mediaSource().fileinfos()[0].filename()
+            in_frame = i.mapTimelineToSource(time_in) + 1 - handles
+            out_frame = i.mapTimelineToSource(time_out) + 1 + handles
+            read_node = hiero.core.nuke.ReadNode(
+                src,
+                width=width,
+                height=height,
+                firstFrame=in_frame,
+                lastFrame=out_frame
+            )
+            nukeWriter.addNode(read_node)
+
+            retime_node = hiero.core.nuke.RetimeNode(
+                in_frame,
+                out_frame,
+                first_frame_offset,
+                last_frame
+            )
+            retime_node.setKnob("shutter", 0)
+            retime_node.setInputNode(0, read_node)
+            nukeWriter.addNode(retime_node)
+
         # Get file path
         file_path = os.path.join(
             os.path.dirname(instance.context.data["currentFile"]),

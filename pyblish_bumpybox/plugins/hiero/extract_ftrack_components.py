@@ -61,3 +61,27 @@ class BumpyboxHieroExtractFtrackComponents(pyblish.api.InstancePlugin):
                 "component_overwrite": True,
                 "component_path": instance.data["nukeScene"]
             })
+
+        # Transcodes components
+        if "transcodes" in instance.data:
+
+            for collection in instance.data["transcodes"]:
+                instance.data["ftrackComponentsList"].append({
+                    "assettype_data": {
+                        "short": "img",
+                    },
+                    "asset_data": {
+                        "name": instance.data["name"],
+                        "parent": session.get(
+                            "Shot", instance.data["ftrackShotId"]
+                        ),
+                    },
+                    "assetversion_data": {
+                        "version": instance.context.data["version"],
+                    },
+                    "component_data": {
+                        "name": collection.tail[1:],
+                    },
+                    "component_overwrite": True,
+                    "component_path": collection.format()
+                })

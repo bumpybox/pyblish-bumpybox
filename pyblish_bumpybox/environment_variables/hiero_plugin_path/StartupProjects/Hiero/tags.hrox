@@ -546,6 +546,24 @@
       <BinViewType>2</BinViewType>
       <BinViewZoom>70</BinViewZoom>
      </BinProjectItem>
+     <BinProjectItem editable="1" guid="{f3320cdd-f16a-6a4b-ae2e-58350e17fe9a}" name="transcode">
+      <items>
+       <TagClassProjectItem editable="1" guid="{01c5b973-e538-7846-ae6f-e2f394209d97}" name="jpeg">
+        <TagClass editable="1" objName="tag" guid="bc82d0cb-0a45-154a-9b5b-0eaf4441de05" visible="1" icon="Y:/bumpybox-conda-git-deployment/repositories/bumpybox-environment/pyblish-bumpybox/pyblish_bumpybox/environment_variables/hiero_plugin_path/StartupProjects/Hiero/transcode.png" name="jpeg">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="jpeg" name="tag.label"/>
+            <StringValue default="1" value="transcode" name="tag.family"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+      </items>
+      <BinViewType>2</BinViewType>
+      <BinViewZoom>70</BinViewZoom>
+     </BinProjectItem>
     </items>
     <BinViewType>2</BinViewType>
     <BinViewZoom>70</BinViewZoom>

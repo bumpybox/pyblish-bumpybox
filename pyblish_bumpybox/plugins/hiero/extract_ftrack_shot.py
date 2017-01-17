@@ -12,7 +12,8 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
     """ Creates ftrack shots by the name of the shot. """
 
     order = pyblish.api.ExtractorOrder
-    families = ["ftrack"]
+    families = ["ftrack", "trackItem"]
+    match = pyblish.api.Subset
     label = "Ftrack Shot"
     optional = True
 
@@ -133,15 +134,22 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
 
         handles = instance.data["handles"]
 
-        item.addToNukeScript(script=nukeWriter, firstFrame=1,
-                             includeRetimes=True, retimeMethod="Frame",
-                             startHandle=handles, endHandle=handles)
+        item.addToNukeScript(
+            script=nukeWriter,
+            firstFrame=1,
+            includeRetimes=True,
+            retimeMethod="Frame",
+            startHandle=handles,
+            endHandle=handles
+        )
 
         input_path = item.source().mediaSource().fileinfos()[0].filename()
         output_path = os.path.splitext(input_path)[0]
         output_path += "_thumbnail.png"
-        output_path = os.path.join(tempfile.gettempdir(),
-                                   os.path.basename(output_path))
+        output_path = os.path.join(
+            tempfile.gettempdir(),
+            os.path.basename(output_path)
+        )
 
         fmt = hiero.core.Format(300, 200, 1, "thumbnail")
         fmt.addToNukeScript(script=nukeWriter)
@@ -152,10 +160,11 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
 
         script_path = output_path.replace(".png", ".nk")
         nukeWriter.writeToDisk(script_path)
-        self.log.info(script_path)
         logFileName = output_path.replace(".png", ".log")
-        process = hiero.core.nuke.executeNukeScript(script_path,
-                                                    open(logFileName, "w"))
+        process = hiero.core.nuke.executeNukeScript(
+            script_path,
+            open(logFileName, "w")
+        )
 
         while process.poll() is None:
             time.sleep(0.5)
