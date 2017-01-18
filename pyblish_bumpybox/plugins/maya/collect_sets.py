@@ -12,14 +12,21 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
     label = "Sets"
     hosts = ["maya"]
 
+    def transform_set(self, object_set):
+        if not object_set.members():
+            return False
+
+        for member in object_set.members():
+            if member.nodeType() != "transform":
+                return False
+
+        return True
+
     def process(self, context):
 
         for object_set in pymel.core.ls(type="objectSet"):
 
-            # Skip all default sets.
-            default_sets = ["defaultLightSet", "defaultObjectSet",
-                            "initialParticleSE", "initialShadingGroup"]
-            if str(object_set) in default_sets:
+            if not self.transform_set(object_set):
                 continue
 
             extensions = {
