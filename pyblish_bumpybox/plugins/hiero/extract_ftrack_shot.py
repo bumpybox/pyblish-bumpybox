@@ -103,11 +103,13 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
             instance.data["ftrackShot"] = shot
 
         # Assign attributes to shot.
+        sequence = hiero.selection[0].parent().parent()
         shot.set("fstart", value=1)
         shot.set("fend", value=duration)
+        shot.set("fps", value=sequence.framerate().toFloat())
 
         try:
-            fmt = hiero.selection[0].parent().parent().format()
+            fmt = sequence.format()
             shot.set("width", value=fmt.width())
             shot.set("height", value=fmt.height())
         except Exception as e:
