@@ -99,7 +99,7 @@ class BumpyboxHieroExtractTranscode(pyblish.api.InstancePlugin):
             tail=split[1],
             padding=frame_padding
         )
-        for count in range(first_frame_offset, last_frame_offset):
+        for count in range(first_frame_offset, last_frame_offset + 1):
             collection.add(write_path % count)
 
         # Validate output and clean up
