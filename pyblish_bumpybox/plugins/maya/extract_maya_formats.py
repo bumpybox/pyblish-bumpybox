@@ -32,6 +32,8 @@ class BumpyboxMayaExtractMayaFormats(pyblish.api.InstancePlugin):
 
             export_type = set(self.families) & set(instance.data["families"])
             pymel.core.system.exportSelected(
-                path, force=True, type=list(export_type)[0],
-                preserveReferences=True
+                path,
+                force=True,
+                type=list(export_type)[0],
+                preserveReferences=True,
             )
