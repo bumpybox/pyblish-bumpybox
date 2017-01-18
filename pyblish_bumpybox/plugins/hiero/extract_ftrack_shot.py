@@ -106,6 +106,13 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
         shot.set("fstart", value=1)
         shot.set("fend", value=duration)
 
+        try:
+            fmt = hiero.selection[0].parent().parent().format()
+            shot.set("width", value=fmt.width())
+            shot.set("height", value=fmt.height())
+        except Exception as e:
+            self.log.warning("Could not set the resolution: " + e)
+
         # Get handles.
         handles = 0
         if "handles" in instance.data["families"]:
