@@ -17,7 +17,8 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
             return False
 
         for member in object_set.members():
-            if member.nodeType() != "transform":
+            if (member.nodeType() != "transform" and
+               member.nodeType() != "objectSet"):
                 return False
 
         return True
@@ -57,7 +58,8 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
             # Add an instance per format supported.
             for fmt in ["mayaBinary", "mayaAscii", "alembic"]:
 
-                name = object_set.name() + "_" + fmt
+                # Remove illegal disk characters
+                name = object_set.name().replace(":", "_")
 
                 instance = context.create_instance(name=name)
                 instance.add(object_set)
