@@ -129,8 +129,13 @@ class ImageSequenceAsset(GenericAsset):
                 defaultResolution.height.set(height)
 
             # Create image plane
+            visibility = True
+            option = "Hidden from other cameras"
+            if iAObj.options["imagePlaneVisibility"] == option:
+                visibility = False
+
             image_plane_transform, image_plane_shape = pymel.core.imagePlane(
-                camera=cam, fileName=first_image
+                camera=cam, fileName=first_image, showInAllViews=visibility
             )
             image_plane_shape.useFrameExtension.set(1)
             image_plane_shape.depth.set(iAObj.options["imagePlaneDepth"])
@@ -190,6 +195,12 @@ class ImageSequenceAsset(GenericAsset):
             </row>
             <row name="Image plane depth" accepts="maya">
                 <option type="float" name="imagePlaneDepth" value="10000"/>
+            </row>
+            <row name="Visibility" accepts="maya">
+                <option type="radio" name="imagePlaneVisibility">
+                    <optionitem name="Hidden from other cameras" value="True"/>
+                    <optionitem name="Show in other cameras"/>
+                </option>
             </row>
             <row name="Resolution Gate" accepts="maya">
                 <option type="checkbox" name="resolutionGate" value="True"/>
