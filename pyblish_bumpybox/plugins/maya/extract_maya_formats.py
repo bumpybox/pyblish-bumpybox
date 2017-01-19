@@ -28,12 +28,12 @@ class BumpyboxMayaExtractMayaFormats(pyblish.api.InstancePlugin):
 
         with pyblish_maya.maintained_selection():
 
-            pymel.core.select(instance[0].members())
+            pymel.core.select(instance[0].members(), noExpand=True)
 
             export_type = set(self.families) & set(instance.data["families"])
             pymel.core.system.exportSelected(
                 path,
                 force=True,
                 type=list(export_type)[0],
-                preserveReferences=True,
+                preserveReferences=False,
             )
