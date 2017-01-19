@@ -76,10 +76,12 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
                     attr = pymel.core.Attribute(object_set.name() + "." + fmt)
                     instance.data["publish"] = attr.get()
                 else:
-                    pymel.core.addAttr(object_set,
-                                       longName=fmt,
-                                       defaultValue=False,
-                                       attributeType="bool")
+                    pymel.core.addAttr(
+                        object_set,
+                        longName=fmt,
+                        defaultValue=False,
+                        attributeType="bool"
+                    )
                     attr = pymel.core.Attribute(object_set.name() + "." + fmt)
                     pymel.core.setAttr(attr, channelBox=True)
 
