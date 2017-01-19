@@ -35,6 +35,10 @@ def toggle_instance(instance, new_value, old_value):
 
         node.renderable.set(new_value)
 
+    if "playblast" in instance.data.get("families", []):
+
+        node.getTransform().publish.set(new_value)
+
 
 pyblish.api.register_callback("instanceToggled", toggle_instance)
 
