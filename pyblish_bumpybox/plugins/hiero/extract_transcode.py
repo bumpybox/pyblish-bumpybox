@@ -22,9 +22,10 @@ class BumpyboxHieroExtractTranscode(pyblish.api.InstancePlugin):
         # Get handles.
         handles = 0
         if "handles" in instance.data["families"]:
-            for tag in instance.data["tagsData"]:
-                if "handles" == tag.get("tag.family", ""):
-                    handles = int(tag["tag.value"])
+            for tag in instance[0].tags():
+                data = tag.metadata().dict()
+                if "handles" == data.get("tag.family", ""):
+                    handles = int(data["tag.value"])
 
         # Get reverse, retime, first and last frame
         reverse = False

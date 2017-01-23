@@ -1,11 +1,7 @@
-import os
-import tempfile
 import traceback
-import time
 
 import pyblish.api
 import ftrack
-import hiero
 
 
 class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
@@ -27,7 +23,7 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
 
         return "%s:%s:%s" % (h, m, str(s).zfill(2))
 
-    def process(self, instance):
+    def create_shot(self, instance):
 
         ftrack_data = instance.context.data("ftrackData")
         task = ftrack.Task(ftrack_data["Task"]["id"])
@@ -71,8 +67,6 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
 
         # Creating shot.
         shot_name = item.name()
-        duration = item.sourceOut() - item.sourceIn()
-        duration = abs(int(round((abs(duration) + 1) / item.playbackSpeed())))
 
         if "--" in item.name():
             shot_name = item.name().split("--")[-1]
@@ -83,9 +77,6 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
 
             msg = "Creating new shot with name \"{0}\".".format(item.name())
             self.log.info(msg)
-
-            instance.data["ftrackShotId"] = shot.getId()
-            instance.data["ftrackShot"] = shot
         except:
             self.log.error(traceback.format_exc())
 
@@ -99,14 +90,40 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
             path.append(shot_name)
             shot = ftrack.getShot(path)
 
-            instance.data["ftrackShotId"] = shot.getId()
-            instance.data["ftrackShot"] = shot
+        return shot
+
+    def process(self, instance):
+
+        item = instance[0]
+
+        # Get/Create shot
+        shot = None
+        for tag in item.tags():
+            if tag.name() == "ftrack":
+                try:
+                    shot = ftrack.Shot(tag.metadata().dict()["tag.id"])
+                except:
+                    msg = "Existing shot not found. Creating new shot."
+                    self.log.info(msg)
+                    shot = self.create_shot(instance)
+
+        instance.data["ftrackShotId"] = shot.getId()
+        instance.data["ftrackShot"] = shot
+
+        # Store shot id on tag
+        for tag in item.tags():
+            if tag.name() == "ftrack":
+                tag.metadata().setValue("tag.id", shot.getId())
 
         # Assign attributes to shot.
-        sequence = hiero.selection[0].parent().parent()
+        sequence = item.parent().parent()
+
         shot.set("fstart", value=1)
-        shot.set("fend", value=duration)
         shot.set("fps", value=sequence.framerate().toFloat())
+
+        duration = item.sourceOut() - item.sourceIn()
+        duration = abs(int(round((abs(duration) + 1) / item.playbackSpeed())))
+        shot.set("fend", value=duration)
 
         try:
             fmt = sequence.format()
@@ -124,66 +141,3 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
         instance.data["handles"] = handles
 
         shot.set("handles", value=handles)
-
-        # Generate_thumbnail.
-        try:
-            self.generate_thumbnail(instance, item, shot)
-        except:
-            self.log.error(traceback.format_exc())
-
-    def generate_thumbnail(self, instance, item, shot):
-        nukeWriter = hiero.core.nuke.ScriptWriter()
-
-        # Getting top most track with media.
-        seq = item.parent().parent()
-        item = seq.trackItemAt(item.timelineIn())
-
-        root_node = hiero.core.nuke.RootNode(1, 1, fps=seq.framerate())
-        nukeWriter.addNode(root_node)
-
-        handles = instance.data["handles"]
-
-        item.addToNukeScript(
-            script=nukeWriter,
-            firstFrame=1,
-            includeRetimes=True,
-            retimeMethod="Frame",
-            startHandle=handles,
-            endHandle=handles
-        )
-
-        input_path = item.source().mediaSource().fileinfos()[0].filename()
-        output_path = os.path.splitext(input_path)[0]
-        output_path += "_thumbnail.png"
-        output_path = os.path.join(
-            tempfile.gettempdir(),
-            os.path.basename(output_path)
-        )
-
-        fmt = hiero.core.Format(300, 200, 1, "thumbnail")
-        fmt.addToNukeScript(script=nukeWriter)
-
-        write_node = hiero.core.nuke.WriteNode(output_path)
-        write_node.setKnob("file_type", "png")
-        nukeWriter.addNode(write_node)
-
-        script_path = output_path.replace(".png", ".nk")
-        nukeWriter.writeToDisk(script_path)
-        logFileName = output_path.replace(".png", ".log")
-        process = hiero.core.nuke.executeNukeScript(
-            script_path,
-            open(logFileName, "w")
-        )
-
-        while process.poll() is None:
-            time.sleep(0.5)
-
-        if os.path.exists(output_path):
-            self.log.info("Thumbnail rendered successfully!")
-
-            # creating thumbnails
-            thumb = shot.createThumbnail(output_path)
-            for t in shot.getTasks():
-                t.set("thumbid", value=thumb.get("entityId"))
-        else:
-            self.log.error("Thumbnail failed to render")

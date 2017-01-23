@@ -1,5 +1,3 @@
-import traceback
-
 import pyblish.api
 import ftrack
 
@@ -24,13 +22,24 @@ class BumpyboxHieroExtractFtrackTasks(pyblish.api.Extractor):
 
     def process(self, instance):
 
-        for tag in instance.data["tagsData"]:
-            if "task" == tag.get("tag.family", ""):
-                task_name = tag["tag.label"]
+        shot = instance.data["ftrackShot"]
+        tasks = shot.getTasks()
 
-                task_type = self.getTaskTypeByName(task_name)
+        for tag in instance[0].tags():
+            data = tag.metadata().dict()
+            if "task" == data.get("tag.family", ""):
+                task = None
                 try:
-                    shot = instance.data["ftrackShot"]
-                    shot.createTask(task_name.lower(), taskType=task_type)
+                    task = shot.createTask(
+                        tag.name().lower(),
+                        taskType=self.getTaskTypeByName(tag.name())
+                    )
                 except:
-                    self.log.error(traceback.format_exc())
+                    msg = "Could not create task \"{0}\"".format(tag.name())
+                    self.log.info(msg)
+                    for t in tasks:
+                        if t.getName().lower() == tag.name().lower():
+                            task = t
+
+                # Store task id on tag
+                tag.metadata().setValue("tag.id", task.getId())

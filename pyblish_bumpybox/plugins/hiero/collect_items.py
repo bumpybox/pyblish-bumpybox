@@ -40,17 +40,14 @@ class BumpyboxHieroCollectItems(pyblish.api.ContextPlugin):
 
                 # Assigning families from tags.
                 families = ["trackItem"]
-                tag_data = []
                 for tag in tags:
                     data = tag.metadata().dict()
-                    tag_data.append(data)
                     if "tag.family" in data:
                         families.append(data["tag.family"])
 
                     families.append(tag.name())
 
                 instance.data["families"] = list(set(families))
-                instance.data["tagsData"] = tag_data
 
                 # Publishable state
                 instance.data["publish"] = item.isEnabled()
