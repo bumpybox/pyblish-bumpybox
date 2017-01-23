@@ -29,6 +29,7 @@ class BumpyboxMayaCollectPlayblasts(pyblish.api.ContextPlugin):
             # Remove illegal disk characters
             name = transform.name().replace(":", "_")
 
+            # Movie instance
             instance = context.create_instance(name=name)
             instance.add(camera)
             instance.data["families"] = ["local", "mov", "playblast"]
