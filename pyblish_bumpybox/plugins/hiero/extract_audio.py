@@ -10,6 +10,7 @@ class BumpyboxHieroExtractAudio(pyblish.api.InstancePlugin):
     label = "Audio"
     hosts = ["hiero"]
     order = pyblish.api.ExtractorOrder
+    optional = True
 
     def process(self, instance):
 
