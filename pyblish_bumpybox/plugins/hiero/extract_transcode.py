@@ -1,5 +1,4 @@
 import os
-import tempfile
 import time
 
 import pyblish.api
@@ -13,9 +12,36 @@ class BumpyboxHieroExtractTranscode(pyblish.api.InstancePlugin):
     order = pyblish.api.ExtractorOrder
     families = ["transcode"]
     label = "Transcode"
+    match = pyblish.api.Subset
     optional = True
 
     def process(self, instance):
+
+        collections = []
+        for tag in instance[0].tags():
+
+            write_path = os.path.join(
+                os.path.dirname(instance.context.data["currentFile"]),
+                "workspace",
+                instance[0].parent().parent().name(),
+                instance[0].parent().name(),
+                "{0}_{1}.%04d.".format(instance[0].name(), tag.name())
+            )
+
+            if tag.name() == "jpeg":
+                write_path += "jpeg"
+
+            if tag.name() in ["h264", "h264_half"]:
+                write_path += "mov"
+
+            if tag.name() in ["jpeg", "h264", "h264_half"]:
+                collections.append(
+                    self.transcode(instance, write_path, tag.name())
+                )
+
+        instance.data["transcodes"] = collections
+
+    def transcode(self, instance, write_path, tag_type):
 
         item = instance[0]
 
@@ -61,14 +87,6 @@ class BumpyboxHieroExtractTranscode(pyblish.api.InstancePlugin):
         )
 
         # Create Nuke script
-        write_path = os.path.join(
-            os.path.dirname(instance.context.data["currentFile"]),
-            "workspace",
-            item.parent().parent().name(),
-            item.parent().name(),
-            item.name() + ".%04d.jpeg"
-        )
-
         frame_padding = len(str(last_frame))
         if frame_padding < 4:
             frame_padding = 4
@@ -76,11 +94,29 @@ class BumpyboxHieroExtractTranscode(pyblish.api.InstancePlugin):
         write_path = write_path.replace("%04d", padding_string)
 
         write_node = hiero.core.nuke.WriteNode(write_path)
-        write_node.setKnob("file_type", "jpeg")
-        write_node.setKnob("_jpeg_quality", "1")
+
+        if tag_type == "jpeg":
+            write_node.setKnob("file_type", "jpeg")
+            write_node.setKnob("_jpeg_quality", "1")
+        if tag_type in ["h264", "h264_half"]:
+            write_node.setKnob("file_type", "mov")
+            write_node.setKnob("meta_codec", "avc1")
+            write_node.setKnob(
+                "mov32_fps", item.parent().parent().framerate().toFloat()
+            )
+        if tag_type.endswith("_half"):
+            reformat_node = hiero.core.nuke.ReformatNode(
+                scale=0.5, to_type="scale"
+            )
+            nukeWriter.addNode(reformat_node)
+
         nukeWriter.addNode(write_node)
 
-        script_path = os.path.join(tempfile.gettempdir(), item.name() + ".nk")
+        script_path = os.path.join(
+            os.path.dirname(instance.context.data["currentFile"]),
+            "workspace",
+            "{0}_{1}.nk".format(item.name(), tag_type)
+        )
         nukeWriter.writeToDisk(script_path)
 
         # Execute Nuke script
@@ -100,12 +136,14 @@ class BumpyboxHieroExtractTranscode(pyblish.api.InstancePlugin):
             tail=split[1],
             padding=frame_padding
         )
-        for count in range(first_frame_offset, last_frame_offset + 1):
-            collection.add(write_path % count)
+
+        if write_path.endswith(".mov"):
+            collection.add(write_path % last_frame_offset)
+        else:
+            for count in range(first_frame_offset, last_frame_offset + 1):
+                collection.add(write_path % count)
 
         # Validate output and clean up
-        os.remove(script_path)
-
         missing_files = []
         for f in collection:
             if not os.path.exists(f):
@@ -115,5 +153,8 @@ class BumpyboxHieroExtractTranscode(pyblish.api.InstancePlugin):
             msg = "Files were not transcoded: {0}".format(missing_files)
             raise ValueError(msg)
 
-        instance.data["transcodes"] = [collection]
         os.remove(logFileName)
+        os.remove(script_path)
+        collection.tag_type = tag_type
+
+        return collection

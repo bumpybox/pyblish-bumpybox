@@ -66,9 +66,14 @@ class BumpyboxHieroExtractFtrackComponents(pyblish.api.InstancePlugin):
         if "transcodes" in instance.data:
 
             for collection in instance.data["transcodes"]:
+
+                assettype = "img"
+                if list(collection)[0].endswith(".mov"):
+                    assettype = "mov"
+
                 instance.data["ftrackComponentsList"].append({
                     "assettype_data": {
-                        "short": "img",
+                        "short": assettype,
                     },
                     "asset_data": {
                         "name": instance.data["name"],
@@ -80,7 +85,7 @@ class BumpyboxHieroExtractFtrackComponents(pyblish.api.InstancePlugin):
                         "version": instance.context.data["version"],
                     },
                     "component_data": {
-                        "name": collection.tail[1:],
+                        "name": collection.tag_type,
                     },
                     "component_overwrite": True,
                     "component_path": collection.format()
