@@ -6,7 +6,10 @@ import hiero
 
 
 class BumpyboxHieroExtractFtrackThumbnail(pyblish.api.InstancePlugin):
-    """ Creates thumbnails for ftrack shots and uploads them. """
+    """ Creates thumbnails for ftrack shots and uploads them.
+
+    Offset to get shot from "extract_ftrack_shot"
+    """
 
     order = pyblish.api.ExtractorOrder + 0.1
     families = ["ftrack", "trackItem"]
