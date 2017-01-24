@@ -1,5 +1,7 @@
 import pyblish.api
 
+import hiero
+
 
 class BumpyboxHieroCollectItems(pyblish.api.ContextPlugin):
     """ Collect Hiero instances.
@@ -17,7 +19,7 @@ class BumpyboxHieroCollectItems(pyblish.api.ContextPlugin):
 
         selection = None
         try:
-            selection = context.data("selection")
+            selection = hiero.selection
         except:
             pass
 
