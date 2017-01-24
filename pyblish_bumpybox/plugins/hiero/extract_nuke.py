@@ -10,6 +10,7 @@ class ExtractNuke(pyblish.api.InstancePlugin):
     families = ["nuke"]
     label = "Nuke Script"
     order = pyblish.api.ExtractorOrder
+    optional = True
 
     def process(self, instance):
 
