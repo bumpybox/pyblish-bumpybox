@@ -294,7 +294,8 @@ class MovieAsset(GenericAsset):
             image_plane_shape.depth.set(iAObj.options["imagePlaneDepth"])
             # Need to get "type" by string, because its a method as well.
             pymel.core.Attribute(image_plane_shape + ".type").set(2)
-            image_plane_shape.fileName.set(movie_path)
+            image_plane_shape.imageName.set(movie_path)
+            image_plane_shape.useFrameExtension.set(1)
 
             new_nodes.extend([
                 image_plane_transform.name(),
