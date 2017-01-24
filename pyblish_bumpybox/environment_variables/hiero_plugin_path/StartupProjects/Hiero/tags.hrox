@@ -223,8 +223,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="25 frames" name="tag.label"/>
-            <StringValue default="1" value="25" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="25" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -236,8 +236,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="24 frames" name="tag.label"/>
-            <StringValue default="1" value="24" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="24" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -249,8 +249,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="23 frames" name="tag.label"/>
-            <StringValue default="1" value="23" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="23" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -262,8 +262,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="22 frames" name="tag.label"/>
-            <StringValue default="1" value="22" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="22" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -275,8 +275,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="21 frames" name="tag.label"/>
-            <StringValue default="1" value="21" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="21" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -288,8 +288,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="20 frames" name="tag.label"/>
-            <StringValue default="1" value="20" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="20" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -301,8 +301,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="19 frames" name="tag.label"/>
-            <StringValue default="1" value="19" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="19" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -314,8 +314,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="18 frames" name="tag.label"/>
-            <StringValue default="1" value="18" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="18" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -327,8 +327,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="17 frames" name="tag.label"/>
-            <StringValue default="1" value="17" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="17" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -340,8 +340,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="16 frames" name="tag.label"/>
-            <StringValue default="1" value="16" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="16" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -353,8 +353,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="15 frames" name="tag.label"/>
-            <StringValue default="1" value="15" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="15" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -366,8 +366,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="14 frames" name="tag.label"/>
-            <StringValue default="1" value="14" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="14" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -379,8 +379,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="13 frames" name="tag.label"/>
-            <StringValue default="1" value="13" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="13" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -392,8 +392,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="12 frames" name="tag.label"/>
-            <StringValue default="1" value="12" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="12" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -405,8 +405,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="11 frames" name="tag.label"/>
-            <StringValue default="1" value="11" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="11" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -418,8 +418,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="10 frames" name="tag.label"/>
-            <StringValue default="1" value="10" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="10" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -431,8 +431,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="9 frames" name="tag.label"/>
-            <StringValue default="1" value="9" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="9" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -444,8 +444,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="8 frames" name="tag.label"/>
-            <StringValue default="1" value="8" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="8" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -457,8 +457,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="7 frames" name="tag.label"/>
-            <StringValue default="1" value="7" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="7" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -470,8 +470,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="6 frames" name="tag.label"/>
-            <StringValue default="1" value="6" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="6" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -483,8 +483,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="5 frames" name="tag.label"/>
-            <StringValue default="1" value="5" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="5" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -496,8 +496,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="4 frames" name="tag.label"/>
-            <StringValue default="1" value="4" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="4" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -509,8 +509,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="3 frames" name="tag.label"/>
-            <StringValue default="1" value="3" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="3" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -522,8 +522,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="2 frames" name="tag.label"/>
-            <StringValue default="1" value="2" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="2" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -535,8 +535,8 @@
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="1 frame" name="tag.label"/>
-            <StringValue default="1" value="1" name="tag.value"/>
             <StringValue default="1" value="handles" name="tag.family"/>
+            <StringValue default="1" value="1" name="tag.value"/>
            </values>
           </Set>
          </sets>
@@ -548,12 +548,36 @@
      </BinProjectItem>
      <BinProjectItem editable="1" guid="{f3320cdd-f16a-6a4b-ae2e-58350e17fe9a}" name="transcode">
       <items>
+       <TagClassProjectItem editable="1" guid="{e4a631ee-be17-214d-bf72-3230a00d02ac}" name="h264_half">
+        <TagClass editable="1" objName="tag" guid="6bb52592-589c-fe4e-afdc-19858b0c01c3" visible="1" icon="Y:/bumpybox-conda-git-deployment/repositories/bumpybox-environment/pyblish-bumpybox/pyblish_bumpybox/environment_variables/hiero_plugin_path/StartupProjects/Hiero/transcode.png" name="h264_half">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="h264_half" name="tag.label"/>
+            <StringValue default="1" value="transcode" name="tag.family"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
        <TagClassProjectItem editable="1" guid="{b590b130-46f0-5540-90b8-ae69053bd645}" name="h264">
         <TagClass editable="1" objName="tag" guid="85039e21-0143-cf45-8fa3-ae8d36d21c49" visible="1" icon="Y:/bumpybox-conda-git-deployment/repositories/bumpybox-environment/pyblish-bumpybox/pyblish_bumpybox/environment_variables/hiero_plugin_path/StartupProjects/Hiero/transcode.png" name="h264">
          <sets>
           <Set title="" domainroot="tag">
            <values>
             <StringValue default="1" value="h264" name="tag.label"/>
+            <StringValue default="1" value="transcode" name="tag.family"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
+       <TagClassProjectItem editable="1" guid="{e1d38f65-97a5-0244-a35f-478575481aa7}" name="jpeg_half">
+        <TagClass editable="1" objName="tag" guid="9cbff13b-6828-dc48-9c0f-7b5eb0badc4e" visible="1" icon="Y:/bumpybox-conda-git-deployment/repositories/bumpybox-environment/pyblish-bumpybox/pyblish_bumpybox/environment_variables/hiero_plugin_path/StartupProjects/Hiero/transcode.png" name="jpeg_half">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="jpeg_half" name="tag.label"/>
             <StringValue default="1" value="transcode" name="tag.family"/>
            </values>
           </Set>
