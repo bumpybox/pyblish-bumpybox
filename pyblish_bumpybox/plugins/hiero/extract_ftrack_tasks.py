@@ -12,6 +12,7 @@ class BumpyboxHieroExtractFtrackTasks(pyblish.api.Extractor):
     label = "Ftrack Tasks"
     optional = True
     order = pyblish.api.ExtractorOrder + 0.1
+    optional = True
 
     def getTaskTypeByName(self, name):
         for t in ftrack.getTaskTypes():
