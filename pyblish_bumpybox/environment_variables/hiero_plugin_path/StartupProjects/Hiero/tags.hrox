@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hieroXML>
-<hieroXML version="10" revision="1367" release="10.0v1" name="Hiero">
- <Project guid="{ba9eb7de-26cc-7146-a12b-b59ab35d5469}" floatLut="linear" logLut="Cineon" workingSpace="linear" name="tags" timedisplayformat="0" starttimecode="86400" shotPresetName="Basic Nuke Shot With Annotations" redVideoDecodeMode="0" sixteenBitLut="sRGB" nukeUseOCIO="0" samplerate="48000/1" framerate="24/1" viewerLut="sRGB" ocioConfigCustom="0" thumbnailLut="sRGB" buildTrackName="VFX" ocioconfigpath="" useViewColors="0" editable="1" eightBitLut="sRGB">
+<hieroXML version="10" revision="159" release="10.5v1" name="Hiero">
+ <Project guid="{ba9eb7de-26cc-7146-a12b-b59ab35d5469}" floatLut="linear" ocioConfigName="custom" logLut="Cineon" workingSpace="linear" name="tags" timedisplayformat="0" starttimecode="86400" shotPresetName="Basic Nuke Shot With Annotations" redVideoDecodeMode="0" sixteenBitLut="sRGB" nukeUseOCIO="0" samplerate="48000/1" framerate="24/1" timelineReformatType="To Format" viewerLut="sRGB" ocioConfigCustom="0" thumbnailLut="sRGB" buildTrackName="VFX" ocioconfigpath="" timelineReformatCenter="1" useViewColors="0" editable="1" timelineReformatResizeType="Width" eightBitLut="sRGB">
   <items>
    <RootBinProjectItem editable="1" guid="{a3ba3ce5-8d61-6240-a7b3-b99e4a8bbe9d}" name="Sequences">
     <BinViewType>2</BinViewType>
@@ -548,6 +548,18 @@
      </BinProjectItem>
      <BinProjectItem editable="1" guid="{f3320cdd-f16a-6a4b-ae2e-58350e17fe9a}" name="transcode">
       <items>
+       <TagClassProjectItem editable="1" guid="{b590b130-46f0-5540-90b8-ae69053bd645}" name="h264">
+        <TagClass editable="1" objName="tag" guid="85039e21-0143-cf45-8fa3-ae8d36d21c49" visible="1" icon="Y:/bumpybox-conda-git-deployment/repositories/bumpybox-environment/pyblish-bumpybox/pyblish_bumpybox/environment_variables/hiero_plugin_path/StartupProjects/Hiero/transcode.png" name="h264">
+         <sets>
+          <Set title="" domainroot="tag">
+           <values>
+            <StringValue default="1" value="h264" name="tag.label"/>
+            <StringValue default="1" value="transcode" name="tag.family"/>
+           </values>
+          </Set>
+         </sets>
+        </TagClass>
+       </TagClassProjectItem>
        <TagClassProjectItem editable="1" guid="{01c5b973-e538-7846-ae6f-e2f394209d97}" name="jpeg">
         <TagClass editable="1" objName="tag" guid="bc82d0cb-0a45-154a-9b5b-0eaf4441de05" visible="1" icon="Y:/bumpybox-conda-git-deployment/repositories/bumpybox-environment/pyblish-bumpybox/pyblish_bumpybox/environment_variables/hiero_plugin_path/StartupProjects/Hiero/transcode.png" name="jpeg">
          <sets>
