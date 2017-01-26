@@ -118,16 +118,6 @@ class ImageSequenceAsset(GenericAsset):
 
             cam.farClipPlane.set(iAObj.options["imagePlaneDepth"] * 10)
 
-            # Setup scene
-            if iAObj.options["changeResolution"]:
-                defaultResolution = pymel.core.PyNode("defaultResolution")
-                task = ftrack.Task(os.environ["FTRACK_TASKID"])
-
-                width = task.getParent().get("width")
-                defaultResolution.width.set(width)
-                height = task.getParent().get("height")
-                defaultResolution.height.set(height)
-
             # Create image plane
             visibility = True
             option = "Hidden from other cameras"
@@ -205,9 +195,6 @@ class ImageSequenceAsset(GenericAsset):
             <row name="Resolution Gate" accepts="maya">
                 <option type="checkbox" name="resolutionGate" value="True"/>
             </row>
-            <row name="Change Resolution" accepts="maya">
-                <option type="checkbox" name="changeResolution" value="True"/>
-            </row>
             <row name="Create Ground Plane" accepts="maya">
                 <option type="checkbox" name="createGround" value="False"/>
             </row>
@@ -271,16 +258,6 @@ class MovieAsset(GenericAsset):
                 cam.displayResolution.set(1)
 
             cam.farClipPlane.set(iAObj.options["imagePlaneDepth"] * 10)
-
-            # Setup scene
-            if iAObj.options["changeResolution"]:
-                defaultResolution = pymel.core.PyNode("defaultResolution")
-                task = ftrack.Task(os.environ["FTRACK_TASKID"])
-
-                width = task.getParent().get("width")
-                defaultResolution.width.set(width)
-                height = task.getParent().get("height")
-                defaultResolution.height.set(height)
 
             # Create image plane
             visibility = True
@@ -361,9 +338,6 @@ class MovieAsset(GenericAsset):
             </row>
             <row name="Resolution Gate" accepts="maya">
                 <option type="checkbox" name="resolutionGate" value="True"/>
-            </row>
-            <row name="Change Resolution" accepts="maya">
-                <option type="checkbox" name="changeResolution" value="True"/>
             </row>
             <row name="Create Ground Plane" accepts="maya">
                 <option type="checkbox" name="createGround" value="False"/>
