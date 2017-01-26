@@ -54,6 +54,8 @@ try:
     imp.find_module("ftrack_connect_maya")
 
     import ftrack_assets
+    import ftrack_init
     ftrack_assets.register_assets()
+    ftrack_init.init()
 except ImportError as error:
     print "Could not find ftrack modules: " + str(error)
