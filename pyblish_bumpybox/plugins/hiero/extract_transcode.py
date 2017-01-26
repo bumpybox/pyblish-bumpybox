@@ -12,13 +12,16 @@ class BumpyboxHieroExtractTranscode(pyblish.api.InstancePlugin):
     order = pyblish.api.ExtractorOrder
     families = ["transcode"]
     label = "Transcode"
-    match = pyblish.api.Subset
     optional = True
 
     def process(self, instance):
 
         collections = []
+        transcode_tags = instance.data.get("transcodeTags", [])
         for tag in instance[0].tags():
+
+            if tag.name() not in transcode_tags:
+                continue
 
             write_path = os.path.join(
                 os.path.dirname(instance.context.data["currentFile"]),
@@ -158,3 +161,33 @@ class BumpyboxHieroExtractTranscode(pyblish.api.InstancePlugin):
         collection.tag_type = tag_type
 
         return collection
+
+
+class BumpyboxHieroExtractTranscodeJPEG(pyblish.api.InstancePlugin):
+    """ Enable/Disable JPEG transcoding. """
+
+    order = BumpyboxHieroExtractTranscode.order - 0.1
+    families = ["jpeg", "jpeg_half"]
+    label = "Transcode JPEG"
+    optional = True
+
+    def process(self, instance):
+
+        data = instance.data.get("transcodeTags", [])
+        data.extend(["jpeg", "jpeg_half"])
+        instance.data["transcodeTags"] = data
+
+
+class BumpyboxHieroExtractTranscodeH264(pyblish.api.InstancePlugin):
+    """ Enable/Disable h264 transcoding. """
+
+    order = BumpyboxHieroExtractTranscode.order - 0.1
+    families = ["h264", "h264_half"]
+    label = "Transcode H264"
+    optional = True
+
+    def process(self, instance):
+
+        data = instance.data.get("transcodeTags", [])
+        data.extend(["h264", "h264_half"])
+        instance.data["transcodeTags"] = data
