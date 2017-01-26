@@ -30,17 +30,21 @@ class BumpyboxHieroExtractFtrackTasks(pyblish.api.Extractor):
             data = tag.metadata().dict()
             if "task" == data.get("tag.family", ""):
                 task = None
-                try:
-                    task = shot.createTask(
-                        tag.name().lower(),
-                        taskType=self.getTaskTypeByName(tag.name())
-                    )
-                except:
-                    msg = "Could not create task \"{0}\"".format(tag.name())
-                    self.log.info(msg)
-                    for t in tasks:
-                        if t.getName().lower() == tag.name().lower():
-                            task = t
 
-                # Store task id on tag
-                tag.metadata().setValue("tag.id", task.getId())
+                for t in tasks:
+                    if t.getName().lower() == tag.name().lower():
+                        task = t
+
+                if not task:
+                    try:
+                        task = shot.createTask(
+                            tag.name().lower(),
+                            taskType=self.getTaskTypeByName(tag.name())
+                        )
+                    except Exception as e:
+                        msg = "Could not create task \"{0}\": {1}"
+                        self.log.error(msg.format(tag.name(), e))
+
+                if task:
+                    # Store task id on tag
+                    tag.metadata().setValue("tag.id", task.getId())
