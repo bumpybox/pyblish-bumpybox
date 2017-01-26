@@ -31,7 +31,6 @@ class BumpyboxHieroCollectItems(pyblish.api.ContextPlugin):
 
         for vid in video_tracks:
             for item in vid.items():
-
                 tags = list(set(item.tags() + vid.tags()))
 
                 if not tags:
@@ -51,8 +50,14 @@ class BumpyboxHieroCollectItems(pyblish.api.ContextPlugin):
 
                 instance.data["families"] = list(set(families))
 
-                # Publishable state
+                # Publishable state from whether the track/item is enabled, and
+                # whether its in the selection if there is a selection.
                 instance.data["publish"] = item.isEnabled()
                 if selection:
-                    if item not in selection:
+                    track_items = False
+                    for track_item in hiero.selection:
+                        if isinstance(item, hiero.core.TrackItem):
+                            track_items = True
+
+                    if track_items and item not in selection:
                         instance.data["publish"] = False
