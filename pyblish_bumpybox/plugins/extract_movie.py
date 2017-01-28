@@ -23,7 +23,7 @@ class BumpyboxExtractMovie(pyblish.api.InstancePlugin):
             self.log.info(msg)
             return
 
-        collection = instance.data["collection"]
+        collection = instance.data.get("collection", [])
 
         if not list(collection):
             msg = "Skipping \"{0}\" because no frames was found."
