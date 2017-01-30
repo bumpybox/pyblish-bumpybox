@@ -12,6 +12,8 @@ from ftrack_connect.connector import FTAssetHandlerInstance, HelpFunctions
 class CacheAsset(GenericAsset):
 
     def importAsset(self, iAObj=None):
+        selection = pymel.core.ls(selection=True)
+
         if os.path.splitext(iAObj.filePath)[1] not in [".abc"]:
             raise ValueError("Uncognized file type.")
 
@@ -46,6 +48,39 @@ class CacheAsset(GenericAsset):
 
         self.linkToFtrackNode(iAObj)
 
+        if iAObj.options["connectSelection"]:
+
+            alembic_node = pymel.core.ls(self.newData, type="AlembicNode")[0]
+            mapping = {}
+            for node in pymel.core.ls(selection, dagObjects=True):
+                mapping[node.name().split(":")[-1]] = node
+
+            alembic_connections = alembic_node.connections(
+                skipConversionNodes=True,
+                shapes=True,
+                destination=True,
+                source=False,
+                connections=True,
+                plugs=True
+            )
+            for src, dst in alembic_connections:
+                name = dst.plugNode().name().split(":")[-1]
+                node = mapping.get(name, None)
+                if node:
+                    attr = pymel.core.Attribute(
+                        "{0}.{1}".format(
+                            node.name(),
+                            dst.name(includeNode=False)
+                        )
+                    )
+                    dst_attr = dst.connections(
+                        destination=False, source=True, plugs=True
+                    )[0]
+                    dst_attr.connect(attr, force=True)
+                else:
+                    msg = "No destination found for {0}"
+                    pymel.core.warning(msg.format(dst))
+
     def changeVersion(self, iAObj=None, applicationObject=None):
         result = GenericAsset.changeVersion(self, iAObj, applicationObject)
         return result
@@ -56,6 +91,9 @@ class CacheAsset(GenericAsset):
         <tab name="Options">
             <row name="{0}" accepts="maya">
                 <option type="checkbox" name="mayaNamespace" value="True"/>
+            </row>
+            <row name="Connect to selection" accepts="maya">
+                <option type="checkbox" name="connectSelection" value="False"/>
             </row>
             <row name="Custom Namespace" accepts="maya">
                 <option type="string" name="nameSpaceStr" value=""/>
