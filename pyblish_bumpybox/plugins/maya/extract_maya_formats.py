@@ -36,4 +36,7 @@ class BumpyboxMayaExtractMayaFormats(pyblish.api.InstancePlugin):
                 force=True,
                 type=list(export_type)[0],
                 preserveReferences=False,
+                constructionHistory=instance.data.get(
+                    "constructionHistory", True
+                )
             )

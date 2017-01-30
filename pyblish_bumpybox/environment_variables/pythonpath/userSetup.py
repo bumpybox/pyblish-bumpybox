@@ -39,6 +39,10 @@ def toggle_instance(instance, new_value, old_value):
 
         node.getTransform().publish.set(new_value)
 
+    if "file" in instance.data.get("families", []):
+
+        node.publish.set(new_value)
+
 
 pyblish.api.register_callback("instanceToggled", toggle_instance)
 
