@@ -13,11 +13,8 @@ class BumpyboxFtrackExtractComponents(pyblish.api.InstancePlugin):
 
         if "collection" in instance.data:
 
-            # Add ftrack family
-            families = instance.data.get("families", [])
-            instance.data["families"] = families + ["ftrack"]
-
             # Add component
+            families = instance.data.get("families", [])
             valid_families = ["img", "scene", "cache", "mov"]
 
             components = instance.data.get("ftrackComponentsList", [])
