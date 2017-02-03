@@ -2,11 +2,11 @@ import nuke
 import pyblish.api
 
 
-class RepairCrop(pyblish.api.Action):
+class BumpyboxNukeRepairCrop(pyblish.api.Action):
 
-    label = 'Repair'
-    icon = 'wrench'
-    on = 'failed'
+    label = "Repair"
+    icon = "wrench"
+    on = "failed"
 
     def process(self, context, plugin):
 
@@ -21,29 +21,26 @@ class RepairCrop(pyblish.api.Action):
         instances = pyblish.api.instances_by_plugin(failed, plugin)
 
         for instance in instances:
-            node = nuke.toNode(instance.data["name"])
 
-            input = node.input(0)
+            crop = nuke.nodes.Crop(inputs=[instance[0].input(0)])
+            crop["box"].setValue(instance[0].input(0).width(), 2)
+            crop["box"].setValue(instance[0].input(0).height(), 3)
 
-            crop = nuke.nodes.Crop(inputs=[node.input(0)])
-            crop['box'].setValue(input.width(), 2)
-            crop['box'].setValue(input.height(), 3)
+            crop.setXYpos(instance[0].xpos(), instance[0].ypos() - 26)
 
-            node.setInput(0, crop)
+            instance[0].setInput(0, crop)
 
 
-class ValidateCrop(pyblish.api.Validator):
-    """Validates the existence of crop node before write node
-    """
+class BumpyboxNukeValidateCrop(pyblish.api.InstancePlugin):
+    """ Validates the existence of crop node before write node. """
 
-    families = ['deadline.render']
-    label = 'Crop Output'
+    order = pyblish.api.ValidatorOrder
+    families = ["write"]
+    label = "Crop"
     optional = True
-    actions = [RepairCrop]
+    actions = [BumpyboxNukeRepairCrop]
 
     def process(self, instance):
 
-        node = nuke.toNode(instance.data["name"])
-
         msg = "Couldn't find a crop node before %s" % instance
-        assert node.dependencies()[0].Class() == 'Crop', msg
+        assert instance[0].dependencies()[0].Class() == "Crop", msg

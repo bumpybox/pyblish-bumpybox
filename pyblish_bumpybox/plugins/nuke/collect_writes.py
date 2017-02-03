@@ -1,0 +1,78 @@
+import os
+
+import nuke
+import pyblish.api
+import clique
+
+
+class BumpyboxNukeCollectWrites(pyblish.api.ContextPlugin):
+    """ Collect all write nodes.
+
+    Offset to get context.data["currentFile"]
+    """
+
+    order = pyblish.api.CollectorOrder + 0.1
+    label = "Writes"
+    hosts = ["nuke"]
+
+    def process(self, context):
+
+        # Get remote nodes
+        remote_nodes = []
+        for node in nuke.allNodes():
+            if node.Class() == "BackdropNode":
+                if node.name().startswith("remote"):
+                    remote_nodes.extend(node.getNodes())
+
+        remote_nodes = list(set(remote_nodes))
+
+        # creating instances per write node
+        for node in nuke.allNodes():
+            if node.Class() != "Write":
+                continue
+
+            # Determine output type
+            output_type = "img"
+            if node["file_type"].value() == "mov":
+                output_type = "mov"
+
+            # Determine processing location from backdrops
+            process_place = "local"
+            if node in remote_nodes:
+                process_place = "remote"
+
+            # Create instance
+            instance = context.create_instance(name=node.name())
+            instance.data["families"] = ["write", process_place, output_type]
+            instance.add(node)
+
+            label = "{0} - write - {1}"
+            instance.data["label"] = label.format(node.name(), process_place)
+
+            instance.data["publish"] = not node["disable"].getValue()
+
+            # Get frame range
+            start_frame = int(nuke.root()["first_frame"].getValue())
+            end_frame = int(nuke.root()["last_frame"].getValue())
+            if node["use_limit"].getValue():
+                start_frame = int(node["first"].getValue())
+                end_frame = int(node["last"].getValue())
+
+            # Add collection
+            collection = None
+            try:
+                path = os.path.abspath(
+                    node["file"].getValue().replace(
+                        "[python {nuke.script_directory()}]",
+                        os.path.dirname(context.data["currentFile"])
+                    )
+                )
+                if node["file_type"].value() == "mov":
+                    path += " [{0}]".format(start_frame)
+                else:
+                    path += " [{0}-{1}]".format(start_frame, end_frame)
+                collection = clique.parse(path)
+            except Exception as e:
+                self.log.warning(e)
+
+            instance.data["collection"] = collection

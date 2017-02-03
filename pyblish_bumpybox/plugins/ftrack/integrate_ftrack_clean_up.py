@@ -12,7 +12,7 @@ class BumpyboxIntegrateFtrackCleanUp(pyblish.api.InstancePlugin):
 
     order = pyblish.api.IntegratorOrder + 0.1
     label = "Ftrack Clean Up"
-    families = ["ftrack"]
+    families = ["ftrack", "img", "mov", "cache"]
     optional = True
 
     def process(self, instance):
