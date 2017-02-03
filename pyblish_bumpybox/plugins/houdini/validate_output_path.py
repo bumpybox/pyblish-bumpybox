@@ -61,9 +61,10 @@ class BumpyboxHoudiniValidateOutputPath(pyblish.api.InstancePlugin):
                 current = parm.unexpandedString()
 
                 msg = "Output path for parameter \"{0}\"."
-                msg += "Current: {1}. Expected: {2}"
-                assert current == expected, msg.format(parm.name(), current,
-                                                       expected)
+                msg += "Current: \"{1}\". Expected: \"{2}\""
+                assert current == expected, msg.format(
+                    parm.name(), current, expected
+                )
 
     def get_expected_path(self, instance, parameter_name):
 
@@ -90,5 +91,6 @@ class BumpyboxHoudiniValidateOutputPath(pyblish.api.InstancePlugin):
         # Generate padding string
         padding_string = ".$F{0}".format(padding)
 
-        return "{0}_{1}_{2}{3}{4}".format(root, instance.data["name"], parameter_name,
-                                          padding_string, ext)
+        return "{0}_{1}_{2}{3}{4}".format(
+            root, instance.data["name"], parameter_name, padding_string, ext
+        )
