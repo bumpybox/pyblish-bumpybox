@@ -7,6 +7,8 @@ import pymel
 class BumpyboxMayaCollectFiles(pyblish.api.Collector):
     """ Collects file nodes from the scene. """
 
+    label = "Files"
+
     def process(self, context):
 
         for node in pymel.core.ls(type="file"):
