@@ -27,7 +27,12 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
 
         for object_set in pymel.core.ls(type="objectSet"):
 
+            # Exclude any sets without any transforms in.
             if not self.transform_set(object_set):
+                continue
+
+            # Exclude specific sets
+            if object_set.name() in ["lightEditorRoot"]:
                 continue
 
             extensions = {
