@@ -42,11 +42,11 @@ class BumpyboxMayaRepairRenderLayerSettings(pyblish.api.Action):
         path = os.path.dirname(pymel.core.system.sceneName())
         pymel.core.system.Workspace.open(path)
 
-        # repairing image path
+        # Repairing image path
         pymel.core.system.Workspace.fileRules["images"] = "workspace"
         pymel.core.system.Workspace.save()
 
-        # repairing project directory
+        # Rsepairing project directory
         expected = os.path.join(os.path.dirname(context.data["currentFile"]))
         expected = expected.replace("\\", "/")
         pymel.core.mel.eval("setProject \"{0}\"".format(expected))
