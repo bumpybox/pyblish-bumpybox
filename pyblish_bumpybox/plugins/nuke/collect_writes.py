@@ -67,10 +67,7 @@ class BumpyboxNukeCollectWrites(pyblish.api.ContextPlugin):
                         os.path.dirname(context.data["currentFile"])
                     )
                 )
-                if node["file_type"].value() == "mov":
-                    path += " [{0}]".format(start_frame)
-                else:
-                    path += " [{0}-{1}]".format(start_frame, end_frame)
+                path += " [{0}-{1}]".format(start_frame, end_frame)
                 collection = clique.parse(path)
             except Exception as e:
                 self.log.warning(e)
