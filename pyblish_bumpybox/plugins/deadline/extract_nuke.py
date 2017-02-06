@@ -5,7 +5,10 @@ import pyblish.api
 
 
 class BumpyboxDeadlineExtractNuke(pyblish.api.InstancePlugin):
-    """ Appending Deadline data to deadline instances. """
+    """ Appending Deadline data to deadline instances.
+
+    Important that Path Mapping is turned off in the Nuke plugin.
+    """
 
     families = ["deadline"]
     order = pyblish.api.ExtractorOrder
@@ -17,21 +20,19 @@ class BumpyboxDeadlineExtractNuke(pyblish.api.InstancePlugin):
         node = instance[0]
         collection = instance.data["collection"]
 
-        job_data = {}
-        plugin_data = {}
-        if "deadlineData" in instance.data:
-            job_data = instance.data["deadlineData"]["job"].copy()
-            plugin_data = instance.data["deadlineData"]["plugin"].copy()
+        data = instance.data.get("deadlineData", {"job": {}, "plugin": {}})
 
         # Setting job data.
-        job_data["Plugin"] = "Nuke"
+        data["job"]["Plugin"] = "Nuke"
+        data["job"]["Priority"] = int(instance.data["deadlinePriority"])
+        data["job"]["Pool"] = instance.data["deadlinePool"]
+        data["job"]["ConcurrentTasks"] = int(
+            instance.data["deadlineConcurrentTasks"]
+        )
 
         # Replace houdini frame padding with Deadline padding
         fmt = "{head}" + "#" * collection.padding + "{tail}"
-        job_data["OutputFilename0"] = collection.format(fmt)
-        job_data["Priority"] = instance.data["deadlinePriority"]
-        job_data["Pool"] = instance.data["deadlinePool"]
-        job_data["ConcurrentTasks"] = instance.data["deadlineConcurrentTasks"]
+        data["job"]["OutputFilename0"] = collection.format(fmt)
 
         # Get frame range
         node = instance[0]
@@ -42,26 +43,29 @@ class BumpyboxDeadlineExtractNuke(pyblish.api.InstancePlugin):
             first_frame = node["first"].value()
             last_frame = node["last"].value()
 
-        job_data["Frames"] = "{0}-{1}".format(first_frame, last_frame)
+        data["job"]["Frames"] = "{0}-{1}".format(
+            int(first_frame), int(last_frame)
+        )
 
         # Chunk size
-        job_data["ChunkSize"] = instance.data["deadlineChunkSize"]
+        data["job"]["ChunkSize"] = int(instance.data["deadlineChunkSize"])
         if len(list(collection)) == 1:
-            job_data["ChunkSize"] = str(last_frame)
+            data["job"]["ChunkSize"] = str(int(last_frame))
         else:
             tasks = last_frame - first_frame + 1.0
-            chunks = (last_frame - first_frame + 1.0) / job_data["ChunkSize"]
+            chunks = last_frame - first_frame + 1.0
+            chunks /= data["job"]["ChunkSize"]
             # Deadline can only handle 5000 tasks maximum
             if tasks > 5000 and chunks > 5000:
-                job_data["ChunkSize"] = str(int(math.ceil(tasks / 5000.0)))
+                data["job"]["ChunkSize"] = str(int(math.ceil(tasks / 5000.0)))
 
         # Setting plugin data
-        plugin_data["SceneFile"] = instance.context.data["currentFile"]
+        data["plugin"]["SceneFile"] = instance.context.data["currentFile"]
+        data["plugin"]["EnforceRenderOrder"] = True
+        data["plugin"]["WriteNode"] = node.name()
+        data["plugin"]["NukeX"] = nuke.env["nukex"]
+        data["plugin"]["Version"] = nuke.NUKE_VERSION_STRING.split("v")[0]
+        data["plugin"]["EnablePathMapping"] = False
 
         # Setting data
-        data = {
-            "job": job_data,
-            "plugin": plugin_data,
-            "auxiliaryFiles": instance.context.data["currentFile"]
-        }
         instance.data["deadlineData"] = data
