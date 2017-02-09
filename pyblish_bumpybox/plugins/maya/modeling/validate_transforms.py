@@ -1,3 +1,5 @@
+import pymel.core as pm
+
 import pyblish.api
 
 
@@ -14,6 +16,18 @@ class BumpyboxMayaModelingValidateTransforms(pyblish.api.InstancePlugin):
     optional = True
 
     def process(self, instance):
+
+        attributes = {
+            "tx": 0,
+            "ty": 0,
+            "tz": 0,
+            "rx": 0,
+            "ry": 0,
+            "rz": 0,
+            "sx": 1,
+            "sy": 1,
+            "sz": 1
+        }
 
         check = True
         for node in instance[0].members():
@@ -33,6 +47,13 @@ class BumpyboxMayaModelingValidateTransforms(pyblish.api.InstancePlugin):
                 msg = "\"{0}\" scale is not neutral."
                 self.log.error(msg.format(node.name()))
                 check = False
+
+            for key, value in attributes.iteritems():
+                attr = pm.PyNode("{0}.{1}".format(node.name(), key))
+                if attr.get() != value:
+                    msg = "Expected \"{0}\" value \"{1}\". Current \"{2}\""
+                    self.log.error(msg.format(attr, value, attr.get()))
+                    check = False
 
         msg = "Transforms in the scene aren't reset."
         msg += " Please reset by \"Modify\" > \"Freeze Transformations\","
