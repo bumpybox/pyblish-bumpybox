@@ -1,6 +1,6 @@
 import os
 
-import pymel
+import pymel.core as pm
 
 import pyblish.api
 import clique
@@ -15,11 +15,18 @@ class BumpyboxMayaCollectRenderlayers(pyblish.api.ContextPlugin):
 
     def process(self, context):
 
+        # Collect sets named starting with "remote".
+        remote_members = []
+        for object_set in pm.ls(type="objectSet"):
+
+            if object_set.name().startswith("remote"):
+                remote_members.extend(object_set.members())
+
         # Getting render layers data.
         data = {}
         render_cams = []
-        drg = pymel.core.PyNode("defaultRenderGlobals")
-        for layer in pymel.core.ls(type="renderLayer"):
+        drg = pm.PyNode("defaultRenderGlobals")
+        for layer in pm.ls(type="renderLayer"):
 
             # skipping defaultRenderLayers
             if layer.name().endswith("defaultRenderLayer"):
@@ -45,7 +52,7 @@ class BumpyboxMayaCollectRenderlayers(pyblish.api.ContextPlugin):
                         layer_value = layer.adjustments[count].value.get()
                         if renderable and layer_value == 1.0:
                             name = cam_attr.split(".")[0]
-                            render_cams.append(pymel.core.PyNode(name))
+                            render_cams.append(pm.PyNode(name))
 
                 render_pass = layer.connections(type="renderPass")
                 layer_data["renderpasses"] = render_pass
@@ -59,22 +66,12 @@ class BumpyboxMayaCollectRenderlayers(pyblish.api.ContextPlugin):
         # Create instances
         for layer in data:
 
-            node = pymel.core.PyNode(layer)
+            node = pm.PyNode(layer)
 
-            # Checking instance type. If object has attribute "remote" set to
-            # true, its considered a "remote" instance.
+            # Checking instance type.
             instance_type = "local"
-            if hasattr(node, "remote"):
-                attr = pymel.core.Attribute(node.name() + ".remote")
-                if attr.get():
-                    instance_type = "remote"
-            else:
-                pymel.core.addAttr(node,
-                                   longName="remote",
-                                   defaultValue=False,
-                                   attributeType="bool")
-                attr = pymel.core.Attribute(node.name() + ".remote")
-                pymel.core.setAttr(attr, channelBox=True)
+            if node in remote_members:
+                instance_type = "remote"
 
             instance = context.create_instance(name=layer)
             instance.data["families"] = ["renderlayer", instance_type, "img"]
@@ -82,22 +79,24 @@ class BumpyboxMayaCollectRenderlayers(pyblish.api.ContextPlugin):
             instance.data.update(data[layer])
             instance.add(node)
 
-            publish_state = pymel.core.PyNode(layer).renderable.get()
+            publish_state = pm.PyNode(layer).renderable.get()
             instance.data["publish"] = publish_state
 
             label = "{0} - renderlayer - {1}".format(layer, instance_type)
             instance.data["label"] = label
 
             # Generate collection
-            first_image, last_image = pymel.core.renderSettings(
-                firstImageName=True, lastImageName=True, fullPath=True,
+            first_image, last_image = pm.renderSettings(
+                firstImageName=True,
+                lastImageName=True,
+                fullPath=True,
                 layer=layer
             )
 
             # Special case for vray that has it own extention setting
             renderer = drg.currentRenderer.get()
             if renderer == "vray":
-                render_settings = pymel.core.PyNode("vraySettings")
+                render_settings = pm.PyNode("vraySettings")
 
                 # Assuming ".png" if nothing is set.
                 # This happens when vray is initialized with the scene.
@@ -115,7 +114,7 @@ class BumpyboxMayaCollectRenderlayers(pyblish.api.ContextPlugin):
                 if col.tail == ext:
                     collection = col
 
-            render_globals = pymel.core.PyNode("defaultRenderGlobals")
+            render_globals = pm.PyNode("defaultRenderGlobals")
             start_frame = int(render_globals.startFrame.get())
             end_frame = int(render_globals.endFrame.get())
             step_frame = int(render_globals.byFrameStep.get())
@@ -137,6 +136,6 @@ class BumpyboxMayaCollectRenderlayers(pyblish.api.ContextPlugin):
         options = {"pal": 25, "game": 15, "film": 24, "ntsc": 30, "show": 48,
                    "palf": 50, "ntscf": 60}
 
-        option = pymel.core.general.currentUnit(q=True, t=True)
+        option = pm.general.currentUnit(q=True, t=True)
 
         return options[option]
