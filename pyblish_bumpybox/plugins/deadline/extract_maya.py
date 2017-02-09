@@ -1,4 +1,5 @@
 import math
+import os
 
 import pymel.core
 from pymel import versions
@@ -18,21 +19,20 @@ class BumpyboxDeadlineExtractMaya(pyblish.api.InstancePlugin):
 
         collection = instance.data["collection"]
 
-        job_data = {}
-        plugin_data = {}
-        if "deadlineData" in instance.data:
-            job_data = instance.data["deadlineData"]["job"].copy()
-            plugin_data = instance.data["deadlineData"]["plugin"].copy()
+        data = instance.data.get(
+            "deadlineData", {"job": {}, "plugin": {}}
+        )
 
         # Setting job data.
-        job_data["Plugin"] = "MayaBatch"
+        data["job"]["Plugin"] = "MayaBatch"
 
         # Replace houdini frame padding with Deadline padding
         fmt = "{head}" + "#" * collection.padding + "{tail}"
-        job_data["OutputFilename0"] = collection.format(fmt)
-        job_data["Priority"] = instance.data["deadlinePriority"]
-        job_data["Pool"] = instance.data["deadlinePool"]
-        job_data["ConcurrentTasks"] = instance.data["deadlineConcurrentTasks"]
+        data["job"]["OutputFilename0"] = collection.format(fmt)
+        data["job"]["Priority"] = instance.data["deadlinePriority"]
+        data["job"]["Pool"] = instance.data["deadlinePool"]
+        value = instance.data["deadlineConcurrentTasks"]
+        data["job"]["ConcurrentTasks"] = value
 
         # Frame range
         render_globals = pymel.core.PyNode("defaultRenderGlobals")
@@ -40,25 +40,37 @@ class BumpyboxDeadlineExtractMaya(pyblish.api.InstancePlugin):
         end_frame = int(render_globals.endFrame.get())
         step_frame = int(render_globals.byFrameStep.get())
 
-        job_data["Frames"] = "{0}-{1}x{2}".format(start_frame,
-                                                  end_frame,
-                                                  step_frame)
+        data["job"]["Frames"] = "{0}-{1}x{2}".format(
+            start_frame, end_frame, step_frame
+        )
 
         # Chunk size
-        job_data["ChunkSize"] = instance.data["deadlineChunkSize"]
+        data["job"]["ChunkSize"] = instance.data["deadlineChunkSize"]
         if len(list(collection)) == 1:
-            job_data["ChunkSize"] = str(end_frame)
+            data["job"]["ChunkSize"] = str(end_frame)
         else:
             tasks = (end_frame - start_frame + 1.0) / step_frame
-            chunks = (end_frame - start_frame + 1.0) / job_data["ChunkSize"]
+            chunks = (end_frame - start_frame + 1.0) / data["job"]["ChunkSize"]
             # Deadline can only handle 5000 tasks maximum
             if tasks > 5000 and chunks > 5000:
-                job_data["ChunkSize"] = str(int(math.ceil(tasks / 5000.0)))
+                data["job"]["ChunkSize"] = str(int(math.ceil(tasks / 5000.0)))
 
         # Setting plugin data
-        plugin_data["SceneFile"] = instance.context.data["currentFile"]
-        plugin_data["Version"] = versions.flavor()
+        data["plugin"]["Animation"] = 1
+        data["plugin"]["Renderer"] = "arnold"
+        data["plugin"]["UsingRenderLayers"] = 1
+        data["plugin"]["RenderLayer"] = instance[0].name()
+        data["plugin"]["ArnoldVerbose"] = 1
+        data["plugin"]["Version"] = versions.flavor()
+        data["plugin"]["UseLegacyRenderLayers"] = 1
+
+        scene_file = instance.context.data["currentFile"]
+        data["plugin"]["SceneFile"] = scene_file
+        data["plugin"]["ProjectPath"] = os.path.dirname(scene_file)
+        data["plugin"]["OutputFilePath"] = os.path.join(
+            os.path.dirname(scene_file), "workspace"
+        )
 
         # Setting data
-        data = {"job": job_data, "plugin": plugin_data}
+        data = {"job": data["job"], "plugin": data["plugin"]}
         instance.data["deadlineData"] = data
