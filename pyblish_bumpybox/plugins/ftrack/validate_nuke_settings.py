@@ -31,6 +31,7 @@ class BumpyboxFtrackValidateNukeSettings(pyblish.api.Validator):
     optional = True
     label = "Settings"
     actions = [BumpyboxFtrackRepairNukeSettings]
+    hosts = ["nuke"]
 
     def process(self, context):
 
