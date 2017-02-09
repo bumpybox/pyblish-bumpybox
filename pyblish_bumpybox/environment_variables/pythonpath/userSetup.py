@@ -1,9 +1,94 @@
 import imp
+import os
 
+import pymel.core as pm
 import maya.cmds as cmds
 
 import pyblish.api
 import pyblish_lite
+
+
+# Quiet load alembic plugins
+pm.loadPlugin('AbcExport.mll', quiet=True)
+pm.loadPlugin('AbcImport.mll', quiet=True)
+
+
+# Set project to workspace next to scene file.
+def set_workspace():
+    work_dir = os.path.dirname(os.path.abspath(pm.system.sceneName()))
+    workspace = os.path.join(work_dir, "workspace")
+
+    if not os.path.exists(workspace):
+        os.makedirs(workspace)
+
+    pm.system.Workspace.open(work_dir)
+
+    rules = [
+        "3dPaintTextures",
+        "ASS",
+        "ASS Export",
+        "Alembic",
+        "BIF",
+        "CATIAV4_ATF",
+        "CATIAV5_ATF",
+        "DAE_FBX",
+        "DAE_FBX export",
+        "Fbx",
+        "IGES_ATF",
+        "INVENTOR_ATF",
+        "JT_ATF",
+        "NX_ATF",
+        "OBJ",
+        "OBJexport",
+        "PROE_ATF",
+        "SAT_ATF",
+        "STEP_ATF",
+        "STL_ATF",
+        "alembicCache",
+        "audio",
+        "autoSave",
+        "bifrostCache",
+        "clips",
+        "depth",
+        "diskCache",
+        "eps",
+        "fileCache",
+        "fluidCache",
+        "furAttrMap",
+        "furEqualMap",
+        "furFiles",
+        "furImages",
+        "furShadowMap",
+        "illustrator",
+        "images",
+        "iprImages",
+        "mayaAscii",
+        "mayaBinary",
+        "mel",
+        "move",
+        "movie",
+        "offlineEdit",
+        "particles",
+        "renderData",
+        "scene",
+        "sceneAssembly",
+        "scripts",
+        "shaders",
+        "sound",
+        "sourceImages",
+        "teClipExports",
+        "templates",
+        "timeEditor",
+        "translatorData"
+    ]
+
+    for item in rules:
+        pm.Workspace.fileRules[item] = "workspace"
+
+    pm.system.Workspace.save()
+
+
+pm.evalDeferred("set_workspace()")
 
 
 # Disabling debug logging, cause of FTrack constant stream of print outs.
