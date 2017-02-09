@@ -1,7 +1,7 @@
 import os
 
 import pyblish.api
-import pymel.core
+import pymel.core as pm
 import clique
 
 
@@ -14,7 +14,14 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
 
     def process(self, context):
 
-        for object_set in pymel.core.ls(type="objectSet"):
+        # Collect sets named starting with "remote".
+        remote_members = []
+        for object_set in pm.ls(type="objectSet"):
+
+            if object_set.name().startswith("remote"):
+                remote_members.extend(object_set.members())
+
+        for object_set in pm.ls(type="objectSet"):
 
             if object_set.nodeType() != "objectSet":
                 continue
@@ -33,23 +40,10 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
                 "mayaAscii": "scene", "mayaBinary": "scene", "alembic": "cache"
             }
 
-            # Checking instance type. If object has attribute "remote" set to
-            # true, its considered a "remote" instance.
+            # Checking instance type.
             instance_type = "local"
-            if hasattr(object_set, "remote"):
-                attr = pymel.core.Attribute(object_set.name() + ".remote")
-                if attr.get():
-                    instance_type = "remote"
-                    # Remote cache/formats are currently disabled as no
-                    # remotes (Deadline) submission are setup to handle them.
-                    continue
-            else:
-                pymel.core.addAttr(object_set,
-                                   longName="remote",
-                                   defaultValue=False,
-                                   attributeType="bool")
-                attr = pymel.core.Attribute(object_set.name() + ".remote")
-                pymel.core.setAttr(attr, channelBox=True)
+            if object_set in remote_members:
+                instance_type = "remote"
 
             # Add an instance per format supported.
             for fmt in ["mayaBinary", "mayaAscii", "alembic"]:
@@ -69,17 +63,17 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
                 # Adding/Checking publish attribute
                 instance.data["publish"] = False
                 if hasattr(object_set, fmt):
-                    attr = pymel.core.Attribute(object_set.name() + "." + fmt)
+                    attr = pm.Attribute(object_set.name() + "." + fmt)
                     instance.data["publish"] = attr.get()
                 else:
-                    pymel.core.addAttr(
+                    pm.addAttr(
                         object_set,
                         longName=fmt,
                         defaultValue=False,
                         attributeType="bool"
                     )
-                    attr = pymel.core.Attribute(object_set.name() + "." + fmt)
-                    pymel.core.setAttr(attr, channelBox=True)
+                    attr = pm.Attribute(object_set.name() + "." + fmt)
+                    pm.setAttr(attr, channelBox=True)
 
                 # Generate collection
                 filename = os.path.splitext(
@@ -94,7 +88,7 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
                 collection = clique.Collection(head=head, padding=4, tail=tail)
 
                 frame_start = int(
-                    pymel.core.playbackOptions(query=True, minTime=True)
+                    pm.playbackOptions(query=True, minTime=True)
                 )
                 collection.add(head + str(frame_start).zfill(4) + tail)
 
