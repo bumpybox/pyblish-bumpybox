@@ -12,6 +12,14 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
     label = "Sets"
     hosts = ["maya"]
 
+    def validate_set(self, object_set):
+
+        for member in object_set.members():
+            if member.nodeType() in ["transform", "renderLayer"]:
+                return True
+
+        return False
+
     def process(self, context):
 
         # Collect sets named starting with "remote".
@@ -24,6 +32,9 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
         for object_set in pm.ls(type="objectSet"):
 
             if object_set.nodeType() != "objectSet":
+                continue
+
+            if not self.validate_set(object_set):
                 continue
 
             # Exclude specific sets
