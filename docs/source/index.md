@@ -61,7 +61,7 @@ Each supported application is listed below;
 
 ### Reporting
 
-If anything goes wrong with a publish you can copy a report and send it or post it on the issues page; https://github.com/Bumpybox/pyblish-bumpybox/issues
+If anything goes wrong with a publish you can copy a report and send it to your pipeline person.
 
 To copy the report right-click on the ```Report``` plugin, and select ```Copy To Clipboard```.
 
