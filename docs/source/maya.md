@@ -30,10 +30,4 @@ Please read about the instances you can encounter [here](instances.md)
 
 ### Remote Rendering/Processing
 
-To send a scene off to be processed on another machine, with a render farm or cloud computing, you'll need to enable the ```Remote``` attribute. You can either add this attribute manually or once opening the Pyblish UI it'll add this attrbute.
-
-On ```Set```s you will find this easily in the channelbox, once the ```Set``` is selected.
-
-On ```RenderLayer```s (legacy) you will have to select the ```RenderLayer``` first to access the ```Remote``` attribute. To select a ```RenderLayer``` either select it in the renderlayers overview and go to ```Layers > Attributes```, or select it in the ```Outliner``` by disabling ```Display > DAG Objects Only``` whereby you can select the renderlayer in the ```Outliner```.
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/_CtifGbiOQ4" frameborder="0" allowfullscreen></iframe>
+Coming soon...
