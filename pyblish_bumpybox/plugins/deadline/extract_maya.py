@@ -72,5 +72,4 @@ class BumpyboxDeadlineExtractMaya(pyblish.api.InstancePlugin):
         )
 
         # Setting data
-        data = {"job": data["job"], "plugin": data["plugin"]}
         instance.data["deadlineData"] = data
