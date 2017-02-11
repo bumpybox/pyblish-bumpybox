@@ -44,7 +44,9 @@ Hit the ```Publish``` button (play icon) and wait for Pyblish to finish working.
 
 ![pyblish_finished](pyblish_finished.png "Pyblish UI screengrab")
 
-The scene path will be validated, and if its the first time publishing the validation will most likely fail as shown above. When this happens just right-click and choose ```Repair``` to fix the scene path. The repairing will process for a little while, and then turn the icon next to "Scene" green. If this doesn't happen or the icon turns red, please contact your pipeline person.
+This package relies on the scene file to be in the right place, since all pubishing will be relative to the scene file.
+
+The general workflow is to try and publish and repair any failed validations by right-clicking and choosing "Repair".
 
 Finally you hit ```Reset``` (refresh icon) and try to publish again. Once all the checkboxes have turned green, you will have done a successful publish.
 
@@ -59,7 +61,7 @@ Each supported application is listed below;
 
 ### Reporting
 
-If anything goes wrong with a publish you can copy a report and send it or post it on the issues page; https://github.com/Bumpybox/pyblish-bumpybox/issues
+If anything goes wrong with a publish you can copy a report and send it to your pipeline person.
 
 To copy the report right-click on the ```Report``` plugin, and select ```Copy To Clipboard```.
 
