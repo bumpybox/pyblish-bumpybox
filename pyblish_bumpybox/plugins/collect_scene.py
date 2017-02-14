@@ -14,6 +14,10 @@ class BumpyboxCollectScene(pyblish.api.ContextPlugin):
 
         current_file = context.data("currentFile")
 
+        # Skip if current file is directory
+        if os.path.isdir(current_file):
+            return
+
         # create instance
         instance = context.create_instance(name=os.path.basename(current_file))
 
