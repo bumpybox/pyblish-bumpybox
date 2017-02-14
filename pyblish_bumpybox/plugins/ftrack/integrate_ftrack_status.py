@@ -4,7 +4,7 @@ import pyblish.api
 class BumpyboxIntegrateFtrackStatus(pyblish.api.ContextPlugin):
     """ Sets the task to "In Progress". """
 
-    order = pyblish.api.IntegratorOrder
+    order = pyblish.api.ExtractorOrder
     label = "Ftrack Status"
     optional = True
 
