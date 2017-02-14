@@ -9,11 +9,12 @@ class BumpyboxCollectExistingFiles(pyblish.api.ContextPlugin):
 
     order = pyblish.api.CollectorOrder + 0.1
     label = "Existing Files"
+    hosts = ["maya", "houdini", "nuke"]
 
     def process(self, context):
 
         # Validate instance based on support families.
-        valid_families = ["img", "cache", "scene"]
+        valid_families = ["img", "cache", "scene", "mov"]
         valid_instances = []
         for instance in context:
             families = instance.data.get("families", [])

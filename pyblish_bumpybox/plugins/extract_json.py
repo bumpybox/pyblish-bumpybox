@@ -10,6 +10,7 @@ class BumpyboxExtractJSON(pyblish.api.ContextPlugin):
 
     order = pyblish.api.IntegratorOrder + 1
     label = "JSON"
+    hosts = ["maya", "houdini", "nuke"]
 
     def process(self, context):
 
