@@ -28,5 +28,6 @@ class BumpyboxMayaExtractPlayblast(pyblish.api.InstancePlugin):
             viewport_options={"rendererName": "vp2Renderer"},
             viewport2_options={
                 "multiSampleEnable": True, "multiSampleCount": 8
-            }
+            },
+            camera_options={"panZoomEnabled": False},
         )
