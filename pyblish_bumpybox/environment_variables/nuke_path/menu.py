@@ -1,3 +1,5 @@
+import imp
+
 import pyblish.api
 
 
@@ -15,3 +17,13 @@ pyblish.api.register_callback("instanceToggled", custom_toggle_instance)
 
 # register pyblish_qml
 pyblish.api.register_gui("pyblish_lite")
+
+# Adding ftrack assets if import is available.
+try:
+    imp.find_module("ftrack_connect")
+    imp.find_module("ftrack_connect_nuke")
+
+    import ftrack_assets
+    ftrack_assets.register_assets()
+except ImportError as error:
+    print "Could not find ftrack modules: " + str(error)
