@@ -12,6 +12,7 @@ class BumpyboxExtractMovie(pyblish.api.InstancePlugin):
     order = pyblish.api.ExtractorOrder + 0.1
     label = "Movie"
     optional = True
+    active = False
 
     def process(self, instance):
 
