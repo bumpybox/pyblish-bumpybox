@@ -40,7 +40,8 @@ class BumpyboxHieroExtractFtrackComponents(pyblish.api.InstancePlugin):
             })
 
         # Nuke scene component
-        if "nuke" in instance.data.get("families", []):
+        if ("nuke" in instance.data.get("families", []) and
+           "collection" in instance.data):
 
             instance.data["ftrackComponentsList"].append({
                 "assettype_data": {
