@@ -1,7 +1,7 @@
 import os
 
 import maya.cmds as mc
-import pymel.core
+import pymel.core as pm
 
 import ftrack
 from ftrack_connect_maya.connector.mayaassets import GenericAsset
@@ -12,7 +12,7 @@ from ftrack_connect.connector import FTAssetHandlerInstance, HelpFunctions
 class CacheAsset(GenericAsset):
 
     def importAsset(self, iAObj=None):
-        selection = pymel.core.ls(selection=True)
+        selection = pm.ls(selection=True)
 
         if os.path.splitext(iAObj.filePath)[1] not in [".abc"]:
             raise ValueError("Uncognized file type.")
@@ -50,9 +50,9 @@ class CacheAsset(GenericAsset):
 
         if iAObj.options["connectSelection"]:
 
-            alembic_node = pymel.core.ls(self.newData, type="AlembicNode")[0]
+            alembic_node = pm.ls(self.newData, type="AlembicNode")[0]
             mapping = {}
-            for node in pymel.core.ls(selection, dagObjects=True):
+            for node in pm.ls(selection, dagObjects=True):
                 mapping[node.name().split(":")[-1]] = node
 
             alembic_connections = alembic_node.connections(
@@ -67,7 +67,7 @@ class CacheAsset(GenericAsset):
                 name = dst.plugNode().name().split(":")[-1]
                 node = mapping.get(name, None)
                 if node:
-                    attr = pymel.core.Attribute(
+                    attr = pm.Attribute(
                         "{0}.{1}".format(
                             node.name(),
                             dst.name(includeNode=False)
@@ -79,7 +79,7 @@ class CacheAsset(GenericAsset):
                     dst_attr.connect(attr, force=True)
                 else:
                     msg = "No destination found for {0}"
-                    pymel.core.warning(msg.format(dst))
+                    pm.warning(msg.format(dst))
 
     def changeVersion(self, iAObj=None, applicationObject=None):
         result = GenericAsset.changeVersion(self, iAObj, applicationObject)
@@ -126,24 +126,23 @@ class ImageSequenceAsset(GenericAsset):
     def importAsset(self, iAObj=None):
         component = ftrack.Component(iAObj.componentId)
         start, end = self.getStartEndFrames(component, iAObj)
+        first_image = iAObj.filePath % start
         new_nodes = []
 
         # Image plane
         if iAObj.options["importType"] == "Image Plane":
 
-            first_image = iAObj.filePath % start
-
             # Getting camera
             new_camera = False
             if iAObj.options["attachCamera"]:
-                cam = pymel.core.ls(selection=True)[0]
+                cam = pm.ls(selection=True)[0]
             else:
-                cam = pymel.core.createNode("camera")
+                cam = pm.createNode("camera")
                 new_camera = True
 
             if iAObj.options["renameCamera"]:
                 asset_name = component.getVersion().getAsset().getName()
-                pymel.core.rename(cam.getTransform(), asset_name)
+                pm.rename(cam.getTransform(), asset_name)
 
             if new_camera:
                 new_nodes.extend([
@@ -162,7 +161,7 @@ class ImageSequenceAsset(GenericAsset):
             if iAObj.options["imagePlaneVisibility"] == option:
                 visibility = False
 
-            image_plane_transform, image_plane_shape = pymel.core.imagePlane(
+            image_plane_transform, image_plane_shape = pm.imagePlane(
                 camera=cam, fileName=first_image, showInAllViews=visibility
             )
             image_plane_shape.useFrameExtension.set(1)
@@ -175,25 +174,88 @@ class ImageSequenceAsset(GenericAsset):
 
             # Create ground plane
             if iAObj.options["createGround"]:
-                ground_transform, ground_shape = pymel.core.polyPlane(
+                ground_transform, ground_shape = pm.polyPlane(
                     name="ground",
                     height=iAObj.options["groundSize"],
                     width=iAObj.options["groundSize"]
                 )
 
-                ground_shader = pymel.core.shadingNode(
+                ground_shader = pm.shadingNode(
                     "lambert", asShader=True
                 )
                 visiblity = iAObj.options["groundVisibility"] / 100
                 ground_shader.transparency.set(visiblity, visiblity, visiblity)
-                pymel.core.select(ground_transform)
-                pymel.core.hyperShade(assign=ground_shader.name())
+                pm.select(ground_transform)
+                pm.hyperShade(assign=ground_shader.name())
 
                 new_nodes.extend([
                     ground_transform.name(),
                     ground_shape.name(),
                     ground_shader.name()
                 ])
+
+        # File Node
+        if iAObj.options["importType"] == "File Node":
+
+            file_node = pm.shadingNode("file", asTexture=True)
+            file_node.fileTextureName.set(first_image)
+            file_node.useFrameExtension.set(1)
+
+            exp = pm.shadingNode("expression", asUtility=True)
+            exp.expression.set(file_node.name() + ".frameExtension=frame")
+
+            new_nodes.extend([file_node.name(), exp.name()])
+
+            texture = None
+            if iAObj.options["fileNodeType"] != "Single Node":
+
+                texture = pm.shadingNode("place2dTexture", asUtility=True)
+
+                src_name = texture.name() + ".outUV"
+                dst_name = file_node.name() + ".uvCoord"
+                pm.PyNode(src_name) >> pm.PyNode(dst_name)
+                src_name = texture.name() + ".outUvFilterSize"
+                dst_name = file_node.name() + ".uvFilterSize"
+                pm.PyNode(src_name) >> pm.PyNode(dst_name)
+
+                connections = [
+                    "rotateUV",
+                    "offset",
+                    "noiseUV",
+                    "vertexCameraOne",
+                    "vertexUvThree",
+                    "vertexUvTwo",
+                    "vertexUvOne",
+                    "repeatUV",
+                    "wrapV",
+                    "wrapU",
+                    "stagger",
+                    "mirrorU",
+                    "mirrorV",
+                    "rotateFrame",
+                    "translateFrame",
+                    "coverage"
+                ]
+                for connection in connections:
+                    src_name = texture.name() + "." + connection
+                    dst_name = file_node.name() + "." + connection
+                    pm.PyNode(src_name) >> pm.PyNode(dst_name)
+
+                new_nodes.append(texture.name())
+
+            if iAObj.options["fileNodeType"] == "Projection":
+                projection = pm.shadingNode("projection", asUtility=True)
+                texture3d = pm.shadingNode("place3dTexture", asUtility=True)
+
+                src_name = file_node.name() + ".outColor"
+                dst_name = projection.name() + ".image"
+                pm.PyNode(src_name) >> pm.PyNode(dst_name)
+
+                src_name = texture3d.name() + ".worldInverseMatrix"
+                dst_name = projection.name() + ".placementMatrix"
+                pm.PyNode(src_name) >> pm.PyNode(dst_name)
+
+                new_nodes.extend([projection.name(), texture3d.name()])
 
         self.newData = set(new_nodes)
         self.oldData = set()
@@ -213,8 +275,15 @@ class ImageSequenceAsset(GenericAsset):
                     <optionitem name="File Node"/>
                 </option>
             </row>
-            <row name="Image Plane Settings" accepts="maya">
+            <row name="File Node Type" accepts="maya">
+                <option type="radio" name="fileNodeType">
+                    <optionitem name="Texture" value="True"/>
+                    <optionitem name="Projection"/>
+                    <optionitem name="Single Node"/>
+                </option>
             </row>
+        </tab>
+        <tab name="Image Plane Settings">
             <row name="Attach to selected camera" accepts="maya">
                 <option type="checkbox" name="attachCamera" value="False"/>
             </row>
@@ -277,14 +346,14 @@ class MovieAsset(GenericAsset):
             # Getting camera
             new_camera = False
             if iAObj.options["attachCamera"]:
-                cam = pymel.core.ls(selection=True)[0]
+                cam = pm.ls(selection=True)[0]
             else:
-                cam = pymel.core.createNode("camera")
+                cam = pm.createNode("camera")
                 new_camera = True
 
             if iAObj.options["renameCamera"]:
                 asset_name = component.getVersion().getAsset().getName()
-                pymel.core.rename(cam.getTransform(), asset_name)
+                pm.rename(cam.getTransform(), asset_name)
 
             if new_camera:
                 new_nodes.extend([
@@ -303,12 +372,12 @@ class MovieAsset(GenericAsset):
             if iAObj.options["imagePlaneVisibility"] == option:
                 visibility = False
 
-            image_plane_transform, image_plane_shape = pymel.core.imagePlane(
+            image_plane_transform, image_plane_shape = pm.imagePlane(
                 camera=cam, showInAllViews=visibility
             )
             image_plane_shape.depth.set(iAObj.options["imagePlaneDepth"])
             # Need to get "type" by string, because its a method as well.
-            pymel.core.Attribute(image_plane_shape + ".type").set(2)
+            pm.Attribute(image_plane_shape + ".type").set(2)
             image_plane_shape.imageName.set(movie_path)
             image_plane_shape.useFrameExtension.set(1)
 
@@ -319,19 +388,19 @@ class MovieAsset(GenericAsset):
 
             # Create ground plane
             if iAObj.options["createGround"]:
-                ground_transform, ground_shape = pymel.core.polyPlane(
+                ground_transform, ground_shape = pm.polyPlane(
                     name="ground",
                     height=iAObj.options["groundSize"],
                     width=iAObj.options["groundSize"]
                 )
 
-                ground_shader = pymel.core.shadingNode(
+                ground_shader = pm.shadingNode(
                     "lambert", asShader=True
                 )
                 visiblity = iAObj.options["groundVisibility"] / 100
                 ground_shader.transparency.set(visiblity, visiblity, visiblity)
-                pymel.core.select(ground_transform)
-                pymel.core.hyperShade(assign=ground_shader.name())
+                pm.select(ground_transform)
+                pm.hyperShade(assign=ground_shader.name())
 
                 new_nodes.extend([
                     ground_transform.name(),
