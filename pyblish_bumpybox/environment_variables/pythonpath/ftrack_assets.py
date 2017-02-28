@@ -50,36 +50,39 @@ class CacheAsset(GenericAsset):
 
         if iAObj.options["connectSelection"]:
 
-            alembic_node = pm.ls(self.newData, type="AlembicNode")[0]
+            # Collect base names of nodes.
             mapping = {}
             for node in pm.ls(selection, dagObjects=True):
                 mapping[node.name().split(":")[-1]] = node
 
+            # Connect alembic nodes to selection.
+            alembic_node = pm.ls(self.newData, type="AlembicNode")[0]
             alembic_connections = alembic_node.connections(
                 skipConversionNodes=True,
                 shapes=True,
                 destination=True,
-                source=False,
-                connections=True,
-                plugs=True
             )
-            for src, dst in alembic_connections:
-                name = dst.plugNode().name().split(":")[-1]
-                node = mapping.get(name, None)
-                if node:
-                    attr = pm.Attribute(
-                        "{0}.{1}".format(
-                            node.name(),
-                            dst.name(includeNode=False)
-                        )
-                    )
-                    dst_attr = dst.connections(
-                        destination=False, source=True, plugs=True
-                    )[0]
-                    dst_attr.connect(attr, force=True)
-                else:
-                    msg = "No destination found for {0}"
-                    pm.warning(msg.format(dst))
+            attrs = ["translate", "rotate", "scale"]
+            skip_nodes = []
+            for src_node in alembic_connections:
+                dst_node = mapping.get(src_node.name().split(":")[-1], None)
+
+                # If nodes has been processed, skip it.
+                if dst_node in skip_nodes:
+                    continue
+
+                if dst_node:
+                    if dst_node.nodeType() == "transform":
+                        for name in attrs:
+                            src_attr = pm.PyNode(src_node.name() + "." + name)
+                            dst_attr = pm.PyNode(dst_node.name() + "." + name)
+                            src_attr >> dst_attr
+                    if dst_node.nodeType() == "mesh":
+                        src_attr = pm.PyNode(src_node.name() + ".outMesh")
+                        dst_attr = pm.PyNode(dst_node.name() + ".inMesh")
+                        src_attr >> dst_attr
+
+                    skip_nodes.append(dst_node)
 
     def changeVersion(self, iAObj=None, applicationObject=None):
         result = GenericAsset.changeVersion(self, iAObj, applicationObject)
