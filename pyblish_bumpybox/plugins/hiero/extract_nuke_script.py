@@ -84,7 +84,7 @@ class BumpyboxHieroExtractNukeScript(pyblish.api.InstancePlugin):
             lastFrame=last_frame + 1
         )
         read_node.setKnob("frame_mode", 2)
-        read_node.setKnob("frame", str(first_frame))
+        read_node.setKnob("frame", str(first_frame - 1))
         nukeWriter.addNode(read_node)
         last_node = read_node
 
