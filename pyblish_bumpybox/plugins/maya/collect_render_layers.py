@@ -107,6 +107,10 @@ class BumpyboxMayaCollectRenderlayers(pyblish.api.ContextPlugin):
 
                 first_image = os.path.splitext(first_image)[0] + ext
 
+            # Adding renderer as family
+            instance.data["families"] += [renderer]
+
+            # Adding collection
             collections = clique.assemble([first_image], minimum_items=1)[0]
             ext = os.path.splitext(first_image)[1]
             collection = collections[0]
