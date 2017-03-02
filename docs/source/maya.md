@@ -30,4 +30,8 @@ Please read about the instances you can encounter [here](instances.md)
 
 ### Remote Rendering/Processing
 
-Coming soon...
+To send instances off to remote machines for processing like rendering on a farm or in the cloud, you'll need to setup the scene.
+
+For renderlayers you add the renderlayer to a set starting with ```remote```.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/-_MbOSqJKMs" frameborder="0" allowfullscreen></iframe>
