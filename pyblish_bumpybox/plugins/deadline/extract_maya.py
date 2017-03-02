@@ -56,11 +56,9 @@ class BumpyboxDeadlineExtractMaya(pyblish.api.InstancePlugin):
                 data["job"]["ChunkSize"] = str(int(math.ceil(tasks / 5000.0)))
 
         # Setting plugin data
-        data["plugin"]["Animation"] = 1
-        data["plugin"]["Renderer"] = "arnold"
+        data["plugin"]["Renderer"] = "file"
         data["plugin"]["UsingRenderLayers"] = 1
         data["plugin"]["RenderLayer"] = instance[0].name()
-        data["plugin"]["ArnoldVerbose"] = 1
         data["plugin"]["Version"] = versions.flavor()
         data["plugin"]["UseLegacyRenderLayers"] = 1
 
@@ -70,6 +68,12 @@ class BumpyboxDeadlineExtractMaya(pyblish.api.InstancePlugin):
         data["plugin"]["OutputFilePath"] = os.path.join(
             os.path.dirname(scene_file), "workspace"
         )
+
+        # Arnold plugin settings
+        if "arnold" in instance.data.get("families", []):
+            data["plugin"]["Renderer"] = "arnold"
+            data["plugin"]["ArnoldVerbose"] = 1
+            data["plugin"]["Animation"] = 1
 
         # Setting data
         instance.data["deadlineData"] = data
