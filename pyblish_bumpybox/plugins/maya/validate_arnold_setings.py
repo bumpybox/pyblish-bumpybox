@@ -19,7 +19,7 @@ class BumpyboxMayaValidateArnoldSettings(pyblish.api.InstancePlugin):
 
     order = pyblish.api.ValidatorOrder
     optional = True
-    families = ["renderlayer"]
+    families = ["arnold"]
     label = "Arnold Settings"
     actions = [BumpyboxMayaRepairArnoldSettings]
     hosts = ["maya"]
