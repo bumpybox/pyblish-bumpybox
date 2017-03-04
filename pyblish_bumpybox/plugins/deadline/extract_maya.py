@@ -61,6 +61,7 @@ class BumpyboxDeadlineExtractMaya(pyblish.api.InstancePlugin):
         data["plugin"]["RenderLayer"] = instance[0].name()
         data["plugin"]["Version"] = versions.flavor()
         data["plugin"]["UseLegacyRenderLayers"] = 1
+        data["plugin"]["LocalRendering"] = True
 
         scene_file = instance.context.data["currentFile"]
         data["plugin"]["SceneFile"] = scene_file
