@@ -29,7 +29,7 @@ class BumpyboxCollectJSON(pyblish.api.ContextPlugin):
                         for data in json.load(json_data):
                             instances.append(data)
 
-        # Validate instance based on support families.
+        # Validate instance based on supported families.
         valid_families = ["img", "cache", "scene", "mov"]
         valid_data = []
         for data in instances:
@@ -43,10 +43,21 @@ class BumpyboxCollectJSON(pyblish.api.ContextPlugin):
             if "collection" not in data.keys() or "output" in data["families"]:
                 continue
 
-            collection = clique.parse(data["collection"])
-            for f in collection:
-                if not os.path.exists(f):
-                    collection.remove(f)
+            files = clique.parse(data["collection"])
+            try:
+                files = clique.parse(
+                    data["collection"],
+                    pattern="{head}{padding}{tail} [{range}]"
+                )
+            except:
+                pass
+
+            collection = clique.Collection(
+                head=files.head, padding=files.padding, tail=files.tail
+            )
+            for f in files:
+                if os.path.exists(f):
+                    collection.add(f)
 
             if list(collection):
                 instance = context.create_instance(name=data["name"])
