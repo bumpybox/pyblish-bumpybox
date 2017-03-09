@@ -1,4 +1,6 @@
-import pymel
+import pymel.core
+import maya.cmds as cmds
+
 import pyblish.api
 
 
@@ -12,6 +14,9 @@ class BumpyboxMayaValidateSceneModified(pyblish.api.ContextPlugin):
 
     def process(self, context):
 
-        if pymel.core.dgmodified() and pymel.core.system.sceneName():
+        # Using "pymel.core.dgmodified()" seems to crash in 2017,
+        # when using the time Editor.
+        if (cmds.file(query=True, modified=True) and
+           pymel.core.system.sceneName()):
             self.log.info("Scene modified. Saving scene...")
             pymel.core.saveFile()
