@@ -70,14 +70,19 @@ class BumpyboxMayaExtractRenderLayer(pyblish.api.InstancePlugin):
             subprocess.call(args)
 
         # Check output files.
+        output_collection = instance.data["collection"]
+        collection = clique.Collection(
+            head=output_collection.head,
+            padding=output_collection.padding,
+            tail=output_collection.tail
+        )
         for f in instance.data["collection"]:
-            if not os.path.exists(f):
-                instance.data["collection"].remove(f)
+            if os.path.exists(f):
+                collection.add(f)
 
         # Check tmp directory. Maya can sometimes render to the wrong folder.
         # Don't know why, and can't replicate.
-        if not list(instance.data["collection"]):
-            output_collection = instance.data["collection"]
+        if not list(collection):
             collection = clique.Collection(
                 head=output_collection.head.replace(
                     "workspace", "workspace/tmp"
@@ -93,5 +98,4 @@ class BumpyboxMayaExtractRenderLayer(pyblish.api.InstancePlugin):
                 if collection.match(f):
                     collection.add(f)
 
-            if list(collection):
-                instance.data["collection"] = collection
+        instance.data["collection"] = collection
