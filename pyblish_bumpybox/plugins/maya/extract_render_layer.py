@@ -6,6 +6,7 @@ import pymel.core as pm
 import maya.cmds as cmds
 
 import pyblish.api
+import clique
 
 
 class BumpyboxMayaExtractRenderLayer(pyblish.api.InstancePlugin):
@@ -72,3 +73,25 @@ class BumpyboxMayaExtractRenderLayer(pyblish.api.InstancePlugin):
         for f in instance.data["collection"]:
             if not os.path.exists(f):
                 instance.data["collection"].remove(f)
+
+        # Check tmp directory. Maya can sometimes render to the wrong folder.
+        # Don't know why, and can't replicate.
+        if not list(instance.data["collection"]):
+            output_collection = instance.data["collection"]
+            collection = clique.Collection(
+                head=output_collection.head.replace(
+                    "workspace", "workspace/tmp"
+                ),
+                padding=output_collection.padding,
+                tail=output_collection.tail
+            )
+            for f in os.listdir(os.path.dirname(collection.format())):
+                f = os.path.join(
+                    os.path.dirname(collection.format()), f
+                ).replace("\\", "/")
+
+                if collection.match(f):
+                    collection.add(f)
+
+            if list(collection):
+                instance.data["collection"] = collection
