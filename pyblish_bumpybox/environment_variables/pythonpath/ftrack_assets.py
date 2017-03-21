@@ -209,6 +209,20 @@ class ImageSequenceAsset(GenericAsset):
 
             new_nodes.extend([file_node.name(), exp.name()])
 
+            # Connecting file node to color management in 2016+
+            if pm.objExists("defaultColorMgtGlobals"):
+                colMgmtGlob = pm.PyNode("defaultColorMgtGlobals")
+                mapping = {
+                    "cmEnabled": "colorManagementEnabled",
+                    "configFileEnabled": "colorManagementConfigFileEnabled",
+                    "configFilePath": "colorManagementConfigFilePath",
+                    "workingSpaceName": "workingSpace"
+                }
+                for key, value in mapping.iteritems():
+                    src_name = colMgmtGlob.name() + "." + key
+                    dst_name = file_node.name() + "." + value
+                    pm.PyNode(src_name) >> pm.PyNode(dst_name)
+
             texture = None
             if iAObj.options["fileNodeType"] != "Single Node":
 
