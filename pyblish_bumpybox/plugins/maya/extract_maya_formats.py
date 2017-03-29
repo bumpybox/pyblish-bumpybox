@@ -63,6 +63,11 @@ class BumpyboxMayaExtractMayaFormats(pyblish.api.InstancePlugin):
             dst = connection.connections(
                 destination=True, source=False, plugs=True
             )[0]
+
+            # Skip locked attributes
+            if dst.get(lock=True):
+                continue
+
             connections.append({"source": src, "destination": dst})
             connection // dst
 
