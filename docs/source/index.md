@@ -30,49 +30,13 @@ The plugins needs to be added to ```PYBLISHPLUGINPATH``` before launching any ap
 PYBLISHPLUGINPATH = "[pyblish-bumpybox repository path]/pyblish_bumpybox/plugins;[pyblish-bumpybox repository path]/pyblish_bumpybox/plugins/maya;[pyblish-bumpybox repository path]/pyblish_bumpybox/plugins/maya/modeling"
 ```
 
-### Workflow
-
-#### Scene
-
-Publishing a scene is the same workflow across all applications.
-
-Once the application is open, go to ```File > Publish```, which will bring up the UI for publishing.
-
-![pyblish_ui](pyblish_ui.png "Pyblish UI screengrab")
-
-Hit the ```Publish``` button (play icon) and wait for Pyblish to finish working.
-
-![pyblish_finished](pyblish_finished.png "Pyblish UI screengrab")
-
-This package relies on the scene file to be in the right place, since all pubishing will be relative to the scene file.
-
-The general workflow is to try and publish and repair any failed validations by right-clicking and choosing "Repair".
-
-Finally you hit ```Reset``` (refresh icon) and try to publish again. Once all the checkboxes have turned green, you will have done a successful publish.
-
-#### Output
-
-The workflow for outputting from each application is slighly different, but generally follow "Try'n'Repair".
-
-Each supported application is listed below;
-
-- [Houdini](houdini.md)
-- [Maya](maya.md)
-
-### Reporting
-
-If anything goes wrong with a publish you can copy a report and send it to your pipeline person.
-
-To copy the report right-click on the ```Report``` plugin, and select ```Copy To Clipboard```.
-
-![report](report.png "Report screengrab")
-
 ```eval_rst
 .. toctree::
    :maxdepth: 2
    :hidden:
 
-   instances
-   houdini
+   workflow
    maya
+   houdini
+   instances
 ```
