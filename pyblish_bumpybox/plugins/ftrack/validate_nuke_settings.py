@@ -39,13 +39,15 @@ class BumpyboxFtrackValidateNukeSettings(pyblish.api.Validator):
 
         task = ftrack.Task(ftrack_data["Task"]["id"])
         project = task.getParents()[-1]
-        shot = task.getParent()
+        parent = task.getParent()
 
         # skipping all non shot related tasks
-        if shot.getObjectType() != "Shot":
+        if parent.get("entityType") == "show":
+            return
+        if parent.getObjectType() != "Shot":
             return
 
-        handles = shot.get("handles")
+        handles = parent.get("handles")
 
         # validating fps
         local_fps = nuke.root()["fps"].value()
@@ -60,7 +62,7 @@ class BumpyboxFtrackValidateNukeSettings(pyblish.api.Validator):
         # validating first frame
         local_first_frame = nuke.root()["first_frame"].value()
 
-        online_first_frame = shot.getFrameStart()
+        online_first_frame = parent.getFrameStart()
 
         msg = "First frame is incorrect."
         msg += "\n\nLocal last frame: %s" % local_first_frame
@@ -70,7 +72,7 @@ class BumpyboxFtrackValidateNukeSettings(pyblish.api.Validator):
         # validating last frame
         local_last_frame = nuke.root()["last_frame"].value()
 
-        online_last_frame = shot.getFrameEnd() + (handles * 2)
+        online_last_frame = parent.getFrameEnd() + (handles * 2)
 
         msg = "Last frame is incorrect."
         msg += "\n\nLocal last frame: %s" % local_last_frame
