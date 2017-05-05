@@ -1,5 +1,7 @@
 import os
 import json
+import datetime
+import time
 
 import pyblish.api
 import clique
@@ -40,5 +42,10 @@ class BumpyboxExtractJSON(pyblish.api.ContextPlugin):
 
             output_data.append(data)
 
-        with open(os.path.join(workspace, "instances.json"), "w") as outfile:
+        timestamp = datetime.datetime.fromtimestamp(
+            time.time()
+        ).strftime("%S%M%H%d%m%Y")
+        filename = timestamp + "_instances.json"
+
+        with open(os.path.join(workspace, filename), "w") as outfile:
             outfile.write(json.dumps(output_data, indent=4, sort_keys=True))
