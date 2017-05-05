@@ -21,7 +21,7 @@ class BumpyboxReportCopyToClipboard(pyblish.api.Action):
 
             # Format log records
             for lr in r["records"]:
-                lines = lr.msg.split("\n")
+                lines = str(lr.msg).split("\n")
                 msg = lines[0]
                 for line in lines[1:]:
                     msg += "\t\t\t\t\t" + line
