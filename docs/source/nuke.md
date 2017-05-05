@@ -14,6 +14,8 @@ If you want a different output format, you just need to input the extension and 
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/_qvu4VfbUC8" frameborder="0" allowfullscreen></iframe>
 
+Disabling a write node will disable it for publishing. Similarly if you disable a write node instances in the UI, it will get disabled in the Nuke script.
+
 ## Remote Rendering/Processing
 
 To send the processing of a node to a farm or the cloud, you need to encapsulate the write nodes with a backdrop, that has a name starting with ```remote```. You can have multiple backdrops in the Nuke script.
