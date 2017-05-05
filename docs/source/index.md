@@ -38,5 +38,5 @@ PYBLISHPLUGINPATH = "[pyblish-bumpybox repository path]/pyblish_bumpybox/plugins
    workflow
    maya
    houdini
-   instances
+   nuke
 ```
