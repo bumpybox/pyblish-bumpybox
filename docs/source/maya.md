@@ -2,6 +2,7 @@
 
 From Maya you can publish various output formats. To publish an output format, you'll need to setup the scene first. Different output formats has different workflows for setting up the scene:
 
+<!--table-->
 | Output Format | Section |
 | --- | --- |
 | ```Alembic``` | ```Set``` |
@@ -9,6 +10,7 @@ From Maya you can publish various output formats. To publish an output format, y
 | ```MayaBinary``` | ```Set``` |
 | Movie | ```Playblast``` |
 | Image Sequence | ```RenderLayer (legacy)``` |
+<!--endtable-->
 
 ## Set
 
