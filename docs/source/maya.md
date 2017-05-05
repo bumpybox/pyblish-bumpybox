@@ -2,15 +2,17 @@
 
 From Maya you can publish various output formats. To publish an output format, you'll need to setup the scene first. Different output formats has different workflows for setting up the scene:
 
-<!--table-->
-| Output Format | Section |
-| --- | --- |
-| ```Alembic``` | ```Set``` |
-| ```MayaAscii``` | ```Set``` |
-| ```MayaBinary``` | ```Set``` |
-| Movie | ```Playblast``` |
-| Image Sequence | ```RenderLayer (legacy)``` |
-<!--endtable-->
+```eval_rst
+==============  =======
+Output Format   Section
+==============  =======
+Alembic         `Set <http://pyblish-bumpybox.readthedocs.io/en/latest/maya.html#set>`_
+MayaAscii       `Set <http://pyblish-bumpybox.readthedocs.io/en/latest/maya.html#set>`_
+MayaBinary      `Set <http://pyblish-bumpybox.readthedocs.io/en/latest/maya.html#set>`_
+Movie           `Playblast <http://pyblish-bumpybox.readthedocs.io/en/latest/maya.html#playblast>`_
+Image Sequence  `Renderlayer (legacy) <http://pyblish-bumpybox.readthedocs.io/en/latest/maya.html#renderlayer-legacy>`_
+==============  =======
+```
 
 ## Set
 
