@@ -24,7 +24,7 @@ Which output format you decide on, is stored in the scene so you don't have to s
 
 To publish a movie of the viewport, you'll need to have a non-default camera in the scene. The default cameras; ```persp```, ```front```, ```side``` and ```top```, will not be considered for publishing.
 
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uXaxpw9XuQU" frameborder="0" allowfullscreen></iframe>
 
 ## RenderLayer (Legacy)
 

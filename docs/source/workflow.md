@@ -46,7 +46,7 @@ The different outputs you publish can be viewed in the UI on the left side. Thes
 
 Each instance is a different output, and will result in a file on disk once successfully published. There are three different types of instances, you will encounter; ```local```, ```remote``` and ```output```.
 
-#### ```local```
+### ```local```
 
 This instance represents any node that will be processed on the local machine ei. the machine you publish from. They will be labelled with the name of the node like this; ```name - type - local```.
 
@@ -60,7 +60,7 @@ Examples:
 - ```set1_mayaBinary - mayaBinary - local```
 - ```defaultRenderLayer1 - renderlayer - local```
 
-#### ```remote```
+### ```remote```
 
 This instance represents any node that will be processed remotely ei. by a render remote or other computing management like cloud computing. They will be labelled with the name of the node like this; ```name - type - remote```.
 
@@ -74,7 +74,7 @@ Examples:
 - ```set1_mayaBinary - mayaBinary - remote```
 - ```defaultRenderLayer1 - renderlayer - remote```
 
-#### ```output```
+### ```output```
 
 This instance represents any nodes output that already exists ei. alembic files from an alembic node or image files from a mantra node. They will be labelled with the name of the node and the collection of files like this; ```node - collection```.
 
@@ -94,3 +94,4 @@ The workflow for setting up a scene for outputting different formats, varies in 
 
 - [Maya](maya.md)
 - [Houdini](houdini.md)
+- [Nuke](nuke.md)

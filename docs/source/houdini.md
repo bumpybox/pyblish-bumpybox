@@ -8,17 +8,13 @@ You can disable a node for publishing by bypassing it, or hitting ```Shift + B``
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/245hB9_QSWk" frameborder="0" allowfullscreen></iframe>
 
-### Instances
-
-Please read about the instances you can encounter [here](instances.md)
-
-### Takes
+## Takes
 
 You can render specific takes in a scene, by pointing the output node to the take. Find the ```Render With Take``` parameter and choose which take to render.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/yvjXr78FdyY" frameborder="0" allowfullscreen></iframe>
 
-### Remote Rendering
+## Remote Rendering
 
 You can submit output nodes to a remote, for remote processing. Create a network box, add the output nodes and name the network box starting with ```remote```. All nodes for remote submission will have ```remote``` in their name, ei. ```mantra1 - remote```.
 
