@@ -1,20 +1,32 @@
 # Maya
 
-The Maya publishing pipeline includes the following nodes; ```Set```, ```RenderLayer``` (legacy).
+From Maya you can publish various output formats. To publish an output format, you'll need to setup the scene first. Different output formats has different workflows for setting up the scene:
 
-To publish any nodes output you have to first setup the scene, and then go to ```File > Publish```. Please see the individual node's setup section below.
+| Output Format | Section |
+| --- | --- |
+| ```Alembic``` | ```Set``` |
+| ```MayaAscii``` | ```Set``` |
+| ```MayaBinary``` | ```Set``` |
+| Movie | ```Playblast``` |
+| Image Sequence | ```RenderLayer (legacy)``` |
 
-### Set
+## Set
 
-To publish any objects in there scene (DAG nodes), you first have to collect what you want to publish in a set. The name of the set will determine the name of the output.
+To publish any objects in the scene (DAG nodes), you first have to collect what you want to publish in a set. The name of the set will determine the name of the output.
 
-Once you have collected some nodes in a set, you can publish and choose what output format you want published. The current supported output formats are; ```Alembic```, ```MayaAscii``` and ```MayaBinary```.
+Once you have collected some nodes in a set, you can publish and choose what output format you want published.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/F6_4sVSxHGg" frameborder="0" allowfullscreen></iframe>
 
 Which output format you decide on, is stored in the scene so you don't have to setup the scene again. This data is stored as attributes on the set.
 
-### RenderLayer (Legacy)
+## Playblast
+
+To publish a movie of the viewport, you'll need to have a non-default camera in the scene. The default cameras; ```persp```, ```front```, ```side``` and ```top```, will not be considered for publishing.
+
+
+
+## RenderLayer (Legacy)
 
 To publish any renderlayer's output, you have to create a renderlayer. The default ```masterLayer``` will not be considered for publishing.
 
@@ -24,11 +36,7 @@ Currently you can only render a single camera per renderlayer. You will be promp
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/lC0IJKjP3iw" frameborder="0" allowfullscreen></iframe>
 
-### Instances
-
-Please read about the instances you can encounter [here](instances.md)
-
-### Remote Rendering/Processing
+## Remote Rendering/Processing
 
 To send instances off to remote machines for processing like rendering on a farm or in the cloud, you'll need to setup the scene.
 
