@@ -25,5 +25,7 @@ try:
 
     import ftrack_assets
     ftrack_assets.register_assets()
+    import ftrack_init
+    ftrack_init.init()
 except ImportError as error:
     print "Could not find ftrack modules: " + str(error)
