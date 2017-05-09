@@ -39,7 +39,7 @@ class BumpyboxMayaExtractRenderLayer(pyblish.api.InstancePlugin):
             settings = {
                 "renderSequenceRegion": 0,
                 "renderSequenceAllLayers": 1,
-                "renderSequenceAllCameras": 0,
+                "renderSequenceAllCameras": 1,
                 "renderSequenceAddToRenderView": 0,
                 "renderSequenceAddAllLayers": 0,
                 "renderSequenceAddAllCameras": 0
