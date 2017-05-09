@@ -70,7 +70,6 @@ def set_workspace():
         "offlineEdit",
         "particles",
         "renderData",
-        "scene",
         "sceneAssembly",
         "scripts",
         "shaders",
@@ -84,6 +83,10 @@ def set_workspace():
 
     for item in rules:
         pm.Workspace.fileRules[item] = "workspace"
+
+    # Scene is needs to be directly in the project folder,
+    # so people can open old versions and save as new versions.
+    pm.Workspace.fileRules["scene"] = ""
 
     pm.system.Workspace.save()
 
