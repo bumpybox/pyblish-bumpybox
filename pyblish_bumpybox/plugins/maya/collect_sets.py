@@ -15,7 +15,7 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
     def validate_set(self, object_set):
 
         for member in object_set.members():
-            if member.nodeType() in ["transform", "renderLayer"]:
+            if member.nodeType() in ["transform"]:
                 return True
 
         return False
