@@ -44,7 +44,7 @@ class BumpyboxRoyalRenderExtractMaya(pyblish.api.InstancePlugin):
             "SceneName": instance.context.data["currentFile"],
             "IsActive": False,
             "ImageDir": os.path.join(
-                pm.Workspace.getPath(), pm.Workspace.fileRules["images"], ""
+                pm.Workspace.getPath(), pm.Workspace.fileRules["images"]
             ),
             "ImageFilename": file_prefix.replace("<RenderLayer>", "<Layer>"),
             "ImageExtension": instance.data["collection"].tail,
@@ -53,7 +53,7 @@ class BumpyboxRoyalRenderExtractMaya(pyblish.api.InstancePlugin):
             "SceneOS": scene_os,
             "Camera": camera.getTransform(),
             "Layer": instance.data["name"],
-            "SceneDatabaseDir": os.path.join(pm.Workspace.getPath(), ""),
+            "SceneDatabaseDir": pm.Workspace.getPath(),
             "ImageFramePadding": instance.data["collection"].padding
         }
 
