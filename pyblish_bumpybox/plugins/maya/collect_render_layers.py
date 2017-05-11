@@ -109,6 +109,7 @@ class BumpyboxMayaCollectRenderlayers(pyblish.api.ContextPlugin):
 
             # Adding renderer as family
             instance.data["families"] += [renderer]
+            instance.data["renderer"] = renderer
 
             # Adding collection
             collections = clique.assemble([first_image], minimum_items=1)[0]
@@ -133,6 +134,9 @@ class BumpyboxMayaCollectRenderlayers(pyblish.api.ContextPlugin):
                 f = fmt % count
                 collection.add(f)
 
+            instance.data["endFrame"] = end_frame
+            instance.data["startFrame"] = start_frame
+            instance.data["stepFrame"] = step_frame
             instance.data["collection"] = collection
 
     def getFPS(self):
