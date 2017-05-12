@@ -1,6 +1,7 @@
 import os
 
 import ftrack_api
+from ftrack_connect_nuke.ui.legacy import scan_for_new_assets
 import nuke
 
 
@@ -135,3 +136,8 @@ def init():
     nuke.addOnScriptLoad(fpsInit)
     nuke.addOnScriptLoad(resolutionInit)
     nuke.addOnScriptLoad(frameRangeInit)
+
+    # Scan explicitly for new assets on startup,
+    # since Ftrack native implementation only scans
+    # when loading a script within Nuke.
+    nuke.addOnScriptLoad(scan_for_new_assets)
