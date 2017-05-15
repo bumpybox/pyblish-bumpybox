@@ -39,6 +39,7 @@ class BumpyboxCollectJSON(pyblish.api.ContextPlugin):
                 valid_data.append(data)
 
         # Create existing output instance.
+        collections = []
         for data in valid_data:
             if "collection" not in data.keys() or "output" in data["families"]:
                 continue
@@ -59,6 +60,10 @@ class BumpyboxCollectJSON(pyblish.api.ContextPlugin):
                 if os.path.exists(f):
                     collection.add(f)
 
+            # Checking against existing collections
+            if collection in collections:
+                continue
+
             if list(collection):
                 instance = context.create_instance(name=data["name"])
 
@@ -70,3 +75,5 @@ class BumpyboxCollectJSON(pyblish.api.ContextPlugin):
                 families = set(valid_families) & set(data["families"])
                 instance.data["families"] = list(families) + ["output"]
                 instance.data["collection"] = collection
+
+                collections.append(collection)
