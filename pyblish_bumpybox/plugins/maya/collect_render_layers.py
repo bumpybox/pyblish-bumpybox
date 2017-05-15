@@ -95,6 +95,10 @@ class BumpyboxMayaCollectRenderlayers(pyblish.api.ContextPlugin):
 
             # Special case for vray that has it own extention setting
             renderer = drg.currentRenderer.get()
+
+            if "currentRenderer" in data[layer]:
+                renderer = data[layer]["currentRenderer"]
+
             if renderer == "vray":
                 render_settings = pm.PyNode("vraySettings")
 
