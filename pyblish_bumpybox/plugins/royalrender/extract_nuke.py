@@ -48,6 +48,12 @@ class BumpyboxRoyalRenderExtractNuke(pyblish.api.InstancePlugin):
             "ImageSingleOutputFile": False,
             "SceneOS": scene_os,
             "Layer": instance.data["name"],
+            "SubmitterParameter": [
+                "Priority=1~{0}".format(
+                    int(instance.data["royalRenderPriority"])
+                ),
+                "OverwriteExistingFiles=1~1"
+            ]
         }
 
         # Setting data

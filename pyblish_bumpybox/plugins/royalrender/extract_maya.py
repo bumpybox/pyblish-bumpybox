@@ -54,7 +54,13 @@ class BumpyboxRoyalRenderExtractMaya(pyblish.api.InstancePlugin):
             "Camera": camera.getTransform(),
             "Layer": instance.data["name"],
             "SceneDatabaseDir": pm.Workspace.getPath(),
-            "ImageFramePadding": instance.data["collection"].padding
+            "ImageFramePadding": instance.data["collection"].padding,
+            "SubmitterParameter": [
+                "Priority=1~{0}".format(
+                    int(instance.data["royalRenderPriority"])
+                ),
+                "OverwriteExistingFiles=1~1"
+            ]
         }
 
         # Vray
