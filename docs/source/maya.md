@@ -48,6 +48,8 @@ For renderlayers you add the renderlayer to a set starting with ```remote```.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/-_MbOSqJKMs" frameborder="0" allowfullscreen></iframe>
 
+You can read more about the supported remote processing solutions here: http://pyblish-bumpybox.readthedocs.io/en/latest/remote.html
+
 ## Ftrack
 
 When launching Maya from Ftrack there will be an initial setup of the scene, depending on the custom attributes that are available. These custom attributes will be queried from the parent entity of the task.

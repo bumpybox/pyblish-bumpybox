@@ -39,4 +39,5 @@ PYBLISHPLUGINPATH = "[pyblish-bumpybox repository path]/pyblish_bumpybox/plugins
    maya
    houdini
    nuke
+   remote
 ```

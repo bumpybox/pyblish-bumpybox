@@ -22,6 +22,8 @@ To send the processing of a node to a farm or the cloud, you need to encapsulate
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/exfn1nCQTYI" frameborder="0" allowfullscreen></iframe>
 
+You can read more about the supported remote processing solutions here: http://pyblish-bumpybox.readthedocs.io/en/latest/remote.html
+
 ## Ftrack
 
 When launching Nuke from Ftrack there will be an initial setup of the script, depending on the custom attributes that are available. These custom attributes will be queried from the parent entity of the task.
