@@ -47,3 +47,21 @@ To send instances off to remote machines for processing like rendering on a farm
 For renderlayers you add the renderlayer to a set starting with ```remote```.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/-_MbOSqJKMs" frameborder="0" allowfullscreen></iframe>
+
+## Ftrack
+
+When launching Maya from Ftrack there will be an initial setup of the scene, depending on the custom attributes that are available. These custom attributes will be queried from the parent entity of the task.
+
+```eval_rst
+==========================  =================
+Description                 Ftrack Attributes
+==========================  =================
+First frame of frame range  fstart           
+Last frame of frame range   fend             
+Frame rate                  fps              
+Resolution width            width            
+Resolution height           height           
+==========================  =================
+```
+
+The resolution will only be set once, when initially launching Maya. You can force the settings to be applied on start up, by unchecking the attribute ```Ftrack Resolution Set``` on the ```defaultResolution``` node.
