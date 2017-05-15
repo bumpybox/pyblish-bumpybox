@@ -48,7 +48,7 @@ For renderlayers you add the renderlayer to a set starting with ```remote```.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/-_MbOSqJKMs" frameborder="0" allowfullscreen></iframe>
 
-You can read more about the supported remote processing solutions here: http://pyblish-bumpybox.readthedocs.io/en/latest/remote.html
+You can read more about the supported remote processing solutions `here <http://pyblish-bumpybox.readthedocs.io/en/latest/remote.html>`_
 
 ## Ftrack
 
