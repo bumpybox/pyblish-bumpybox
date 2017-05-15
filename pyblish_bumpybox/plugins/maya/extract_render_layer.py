@@ -24,12 +24,16 @@ class BumpyboxMayaExtractRenderLayer(pyblish.api.InstancePlugin):
         # Use RenderSequence if in 2017+
         if cmds.about(version=True) >= 2017:
 
+            # Store current layer for later
+            current_layer = pm.nodetypes.RenderLayer.currentLayer()
+
             # Disble all render layer apart from the one that needs to render
             layers_state = []
             for layer in pm.ls(type="renderLayer"):
                 layers_state.append((layer.renderable, layer.renderable.get()))
                 if layer == instance[0]:
                     layer.renderable.set(True)
+                    layer.setCurrent()
                 else:
                     layer.renderable.set(False)
 
@@ -54,6 +58,9 @@ class BumpyboxMayaExtractRenderLayer(pyblish.api.InstancePlugin):
             # Restore layers state
             for attr, value in layers_state:
                 attr.set(value)
+
+            # Restore current layer
+            current_layer.setCurrent()
         else:
             # Execute render in separate process.
             exe = os.path.dirname(sys.executable)
