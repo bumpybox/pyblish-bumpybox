@@ -40,4 +40,5 @@ PYBLISHPLUGINPATH = "[pyblish-bumpybox repository path]/pyblish_bumpybox/plugins
    houdini
    nuke
    remote
+   ftrack
 ```
