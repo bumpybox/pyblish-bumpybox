@@ -132,10 +132,69 @@ def frameRangeInit():
             print msg.format(__file__, fstart, last_frame)
 
 
+def scan_for_unused_assets():
+
+    # Get scene data
+    component_names = []
+    asset_ids = []
+    for node in nuke.allNodes():
+        knobs = node.knobs()
+        if "assetId" in knobs:
+            asset_ids.append(node["assetId"].getValue())
+        if "componentName" in knobs:
+            component_names.append(node["componentName"].getValue())
+
+    # Get all online components
+    query = "Component where version.asset.id in ("
+    for id in asset_ids:
+        query += "\"{0}\",".format(id)
+    query = query[:-1] + ")"
+
+    data = {}
+    components = {}
+    session = ftrack_api.Session()
+    for component in session.query(query):
+        name = component["name"]
+
+        # Skip components used in scene
+        if name in component_names:
+            continue
+
+        # Skip versions that are lower than existing ones
+        version = component["version"]["version"]
+        if name in data and version < data[name]:
+            continue
+
+        data[name] = version
+        components[name] = component
+
+    # Warn user of unused components
+    if data:
+        msg = "Components not used in scene:"
+        msg_template = "\n\ntask: {0}\nasset: {1}\nversion: {2}"
+        msg_template += "\ncomponent: {3}"
+        for key, value in data.iteritems():
+            if key not in component_names:
+                # Getting Ftrack task path
+                path = ""
+                component = components[key]
+                task = component["version"]["task"]
+                for item in component["version"]["task"]["link"][:-1]:
+                    path += session.get(item["type"], item["id"])["name"] + "/"
+                path += task["name"]
+                msg += msg_template.format(
+                    path, component["version"]["asset"]["name"], value, key
+                )
+
+        nuke.message(msg)
+
+
 def init():
     nuke.addOnScriptLoad(fpsInit)
     nuke.addOnScriptLoad(resolutionInit)
     nuke.addOnScriptLoad(frameRangeInit)
+
+    nuke.addOnScriptLoad(scan_for_unused_assets)
 
     # Scan explicitly for new assets on startup,
     # since Ftrack native implementation only scans
