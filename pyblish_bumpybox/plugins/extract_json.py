@@ -17,7 +17,9 @@ class BumpyboxExtractJSON(pyblish.api.ContextPlugin):
     def process(self, context):
 
         workspace = os.path.join(
-            os.path.dirname(context.data["currentFile"]), "workspace"
+            os.path.dirname(context.data["currentFile"]),
+            "workspace",
+            "instances"
         )
 
         if not os.path.exists(workspace):
