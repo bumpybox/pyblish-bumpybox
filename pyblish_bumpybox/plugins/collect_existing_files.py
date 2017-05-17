@@ -1,4 +1,5 @@
 import os
+import re
 
 import pyblish.api
 import clique
@@ -10,6 +11,21 @@ class BumpyboxCollectExistingFiles(pyblish.api.ContextPlugin):
     order = pyblish.api.CollectorOrder + 0.1
     label = "Existing Files"
     hosts = ["maya", "houdini", "nuke"]
+
+    def version_get(self, string, prefix):
+        """ Extract version information from filenames.  Code from Foundry"s
+        nukescripts.version_get()
+        """
+
+        if string is None:
+            raise ValueError("Empty version string - no match")
+
+        regex = "[/_.]"+prefix+"\d+"
+        matches = re.findall(regex, string, re.IGNORECASE)
+        if not len(matches):
+            msg = "No \"_"+prefix+"#\" found in \""+string+"\""
+            raise ValueError(msg)
+        return matches[-1:][0][1], re.search("\d+", matches[-1:][0]).group()
 
     def process(self, context):
 
@@ -23,34 +39,66 @@ class BumpyboxCollectExistingFiles(pyblish.api.ContextPlugin):
                 valid_instances.append(instance)
 
         # Create existing output instance.
+        scanned_dirs = []
+        files = []
         for instance in valid_instances:
-            collection = instance.data.get("collection", None)
+            instance_collection = instance.data.get("collection", None)
 
-            if not collection:
+            if not instance_collection:
                 continue
 
-            existing_collection = clique.Collection(
-                head=collection.head, padding=collection.padding,
-                tail=collection.tail
-            )
-            for f in collection:
-                if os.path.exists(f):
-                    existing_collection.add(f)
+            version = self.version_get(
+                os.path.basename(instance_collection.format()), "v"
+            )[1]
 
-            if list(existing_collection):
-                name = instance.data["name"]
-                new_instance = instance.context.create_instance(name=name)
+            # Getting collections of all previous versions and current version
+            collections = []
+            for count in range(1, int(version) + 1):
 
-                label = instance.data["label"].split("-")[0] + "- "
-                fmt = "{head}{padding}{tail}"
-                label += os.path.basename(existing_collection.format(fmt))
-                label += existing_collection.format(" [{ranges}]")
-                new_instance.data["label"] = label
+                # Generate collection
+                version_string = "v" + str(count).zfill(len(version))
+                head = instance_collection.head.replace(
+                    "v" + version, version_string
+                )
+                collection = clique.Collection(
+                    head=head,
+                    padding=instance_collection.padding,
+                    tail=instance_collection.tail
+                )
+                collection.version = count
 
+                # Scan collection directory
+                scan_dir = os.path.dirname(collection.head)
+                if scan_dir not in scanned_dirs:
+                    for f in os.listdir(scan_dir):
+                        file_path = os.path.join(scan_dir, f)
+                        files.append(file_path.replace("\\", "/"))
+                    scanned_dirs.append(scan_dir)
+
+                # Match files to collection and add
+                for f in files:
+                    if collection.match(f):
+                        collection.add(f)
+
+                if list(collection):
+                    collections.append(collection)
+
+            if collections:
                 families = set(valid_families) & set(instance.data["families"])
-                new_instance.data["families"] = list(families) + ["output"]
-                new_instance.data["publish"] = False
-                new_instance.data["collection"] = existing_collection
+                for collection in collections:
+                    name = instance.data["name"]
+                    new_instance = instance.context.create_instance(name=name)
 
-                for node in instance:
-                    new_instance.add(node)
+                    label = instance.data["label"].split("-")[0] + "- "
+                    fmt = "{head}{padding}{tail}"
+                    label += os.path.basename(collection.format(fmt))
+                    label += collection.format(" [{ranges}]")
+                    new_instance.data["label"] = label
+
+                    new_instance.data["families"] = list(families) + ["output"]
+                    new_instance.data["publish"] = False
+                    new_instance.data["collection"] = collection
+                    new_instance.data["version"] = collection.version
+
+                    for node in instance:
+                        new_instance.add(node)
