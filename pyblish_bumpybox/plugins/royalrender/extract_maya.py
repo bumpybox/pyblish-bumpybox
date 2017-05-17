@@ -33,7 +33,9 @@ class BumpyboxRoyalRenderExtractMaya(pyblish.api.InstancePlugin):
 
         file_prefix = defaultRenderGlobals.imageFilePrefix.get()
 
-        data = {
+        data = instance.data.get("royalrenderData", {})
+
+        data.update({
             "Software": "Maya",
             "Renderer": instance.data["renderer"],
             "SeqStart": instance.data["startFrame"],
@@ -55,13 +57,15 @@ class BumpyboxRoyalRenderExtractMaya(pyblish.api.InstancePlugin):
             "Layer": instance.data["name"],
             "SceneDatabaseDir": pm.Workspace.getPath(),
             "ImageFramePadding": instance.data["collection"].padding,
-            "SubmitterParameter": [
-                "Priority=1~{0}".format(
-                    int(instance.data["royalRenderPriority"])
-                ),
-                "OverwriteExistingFiles=1~1"
-            ]
-        }
+        })
+
+        # SubmitterParameter
+        submit_params = data.get("SubmitterParameter", [])
+        submit_params.append(
+            "Priority=1~{0}".format(int(instance.data["royalRenderPriority"]))
+        )
+        submit_params.append("OverwriteExistingFiles=1~1")
+        data["SubmitterParameter"] = submit_params
 
         # Vray
         renderer = defaultRenderGlobals.currentRenderer.get()
