@@ -69,7 +69,7 @@ class BumpyboxCollectExistingFiles(pyblish.api.ContextPlugin):
 
                 # Scan collection directory
                 scan_dir = os.path.dirname(collection.head)
-                if scan_dir not in scanned_dirs:
+                if scan_dir not in scanned_dirs and os.path.exists(scan_dir):
                     for f in os.listdir(scan_dir):
                         file_path = os.path.join(scan_dir, f)
                         files.append(file_path.replace("\\", "/"))
