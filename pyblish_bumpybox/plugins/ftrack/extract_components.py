@@ -23,7 +23,9 @@ class BumpyboxFtrackExtractComponents(pyblish.api.InstancePlugin):
                     "short": list(set(families) & set(valid_families))[0]
                 },
                 "assetversion_data": {
-                    "version": instance.context.data["version"]
+                    "version": instance.data.get(
+                        "version", instance.context.data["version"]
+                    )
                 },
                 "component_data": {
                     "name": instance.data.get(

@@ -1,5 +1,6 @@
 import os
 import json
+import re
 
 import pyblish.api
 import clique
@@ -11,6 +12,21 @@ class BumpyboxCollectJSON(pyblish.api.ContextPlugin):
     label = "JSON"
     order = pyblish.api.CollectorOrder + 0.1
     hosts = ["ftrack"]
+
+    def version_get(self, string, prefix):
+        """ Extract version information from filenames.  Code from Foundry"s
+        nukescripts.version_get()
+        """
+
+        if string is None:
+            raise ValueError("Empty version string - no match")
+
+        regex = "[/_.]"+prefix+"\d+"
+        matches = re.findall(regex, string, re.IGNORECASE)
+        if not len(matches):
+            msg = "No \"_"+prefix+"#\" found in \""+string+"\""
+            raise ValueError(msg)
+        return matches[-1:][0][1], re.search("\d+", matches[-1:][0]).group()
 
     def process(self, context):
 
@@ -66,6 +82,9 @@ class BumpyboxCollectJSON(pyblish.api.ContextPlugin):
 
             if list(collection):
                 instance = context.create_instance(name=data["name"])
+                version = self.version_get(
+                    os.path.basename(collection.format()), "v"
+                )[1]
 
                 basename = os.path.basename(collection.format())
                 instance.data["label"] = "{0} - {1}".format(
@@ -75,5 +94,6 @@ class BumpyboxCollectJSON(pyblish.api.ContextPlugin):
                 families = set(valid_families) & set(data["families"])
                 instance.data["families"] = list(families) + ["output"]
                 instance.data["collection"] = collection
+                instance.data["version"] = int(version)
 
                 collections.append(collection)
