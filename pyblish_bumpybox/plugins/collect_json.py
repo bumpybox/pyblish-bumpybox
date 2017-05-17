@@ -55,32 +55,55 @@ class BumpyboxCollectJSON(pyblish.api.ContextPlugin):
                 valid_data.append(data)
 
         # Create existing output instance.
+        scanned_dirs = []
+        files = []
         collections = []
         for data in valid_data:
             if "collection" not in data.keys() or "output" in data["families"]:
                 continue
 
-            files = clique.parse(data["collection"])
-            try:
-                files = clique.parse(
-                    data["collection"],
-                    pattern="{head}{padding}{tail} [{range}]"
+            instance_collection = clique.parse(data["collection"])
+
+            version = self.version_get(
+                os.path.basename(instance_collection.format()), "v"
+            )[1]
+
+            # Getting collections of all previous versions and current version
+            for count in range(1, int(version) + 1):
+
+                # Generate collection
+                version_string = "v" + str(count).zfill(len(version))
+                head = instance_collection.head.replace(
+                    "v" + version, version_string
                 )
-            except:
-                pass
+                collection = clique.Collection(
+                    head=head,
+                    padding=instance_collection.padding,
+                    tail=instance_collection.tail
+                )
+                collection.version = count
 
-            collection = clique.Collection(
-                head=files.head, padding=files.padding, tail=files.tail
-            )
-            for f in files:
-                if os.path.exists(f):
-                    collection.add(f)
+                # Scan collection directory
+                scan_dir = os.path.dirname(collection.head)
+                if scan_dir not in scanned_dirs and os.path.exists(scan_dir):
+                    for f in os.listdir(scan_dir):
+                        file_path = os.path.join(scan_dir, f)
+                        files.append(file_path.replace("\\", "/"))
+                    scanned_dirs.append(scan_dir)
 
-            # Checking against existing collections
-            if collection in collections:
-                continue
+                # Match files to collection and add
+                for f in files:
+                    if collection.match(f):
+                        collection.add(f)
 
-            if list(collection):
+                # Skip if no files were found in the collection
+                if not list(collection):
+                    continue
+
+                # Skip existing collections
+                if collection in collections:
+                    continue
+
                 instance = context.create_instance(name=data["name"])
                 version = self.version_get(
                     os.path.basename(collection.format()), "v"
