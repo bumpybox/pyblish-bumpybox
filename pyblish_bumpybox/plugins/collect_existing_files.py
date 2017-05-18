@@ -28,7 +28,7 @@ class BumpyboxCollectExistingFiles(pyblish.api.ContextPlugin):
         return matches[-1:][0][1], re.search("\d+", matches[-1:][0]).group()
 
     def process(self, context):
-
+        self.log.info(context)
         # Validate instance based on support families.
         valid_families = ["img", "cache", "scene", "mov"]
         valid_instances = []
@@ -61,7 +61,7 @@ class BumpyboxCollectExistingFiles(pyblish.api.ContextPlugin):
                     "v" + version, version_string
                 )
                 collection = clique.Collection(
-                    head=head,
+                    head=head.replace("\\", "/"),
                     padding=instance_collection.padding,
                     tail=instance_collection.tail
                 )
