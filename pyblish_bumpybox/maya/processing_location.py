@@ -14,7 +14,7 @@ def application_function(selection, localProcessing):
 
     # Create remote set is none is present
     if not remote_set:
-        remote_set = pc.sets()
+        remote_set = pc.sets(name="remote")
 
     # Add\Remove from remote set
     for item in selection:
