@@ -2,15 +2,16 @@ import imp
 import os
 
 import pymel.core as pm
-import maya.cmds as cmds
+import maya.cmds as mc
+import maya.mel as mm
 
 import pyblish.api
 import pyblish_lite
 
 
 # Quiet load alembic plugins
-pm.loadPlugin('AbcExport.mll', quiet=True)
-pm.loadPlugin('AbcImport.mll', quiet=True)
+pm.loadPlugin("AbcExport.mll", quiet=True)
+pm.loadPlugin("AbcImport.mll", quiet=True)
 
 
 # Set project to workspace next to scene file.
@@ -94,15 +95,6 @@ def set_workspace():
 pm.evalDeferred("set_workspace()")
 
 
-# Disabling debug logging, cause of FTrack constant stream of print outs.
-def disableDebug():
-    import logging
-    logging.getLogger().setLevel(logging.INFO)
-
-
-cmds.evalDeferred('disableDebug()', lowestPriority=True)
-
-
 # Pyblish callbacks for presisting instance states to the scene.
 def toggle_instance(instance, new_value, old_value):
 
@@ -139,6 +131,34 @@ pyblish.api.register_gui("pyblish_lite")
 
 # pyblish_lite settings
 pyblish_lite.settings.InitialTab = "overview"
+
+
+# Adding pyblish-bumpybox menu
+def menuInit():
+
+    gMainWindow = mm.eval("$temp1=$gMainWindow")
+    if mc.menu("pyblish-bumpybox", exists=True):
+        mc.deleteUI("pyblish-bumpybox")
+
+    menu = mc.menu(
+        "pyblish-bumpybox",
+        parent=gMainWindow,
+        tearOff=False,
+        label="pyblish-bumpybox"
+    )
+
+    mc.menuItem(
+        "processingLocation",
+        label="Processing Location",
+        parent=menu,
+        command=(
+            "from pyblish_bumpybox.maya import processing_location;" +
+            "processing_location.show()"
+        )
+    )
+
+
+mc.evalDeferred("menuInit()")
 
 # Adding ftrack assets if import is available.
 try:

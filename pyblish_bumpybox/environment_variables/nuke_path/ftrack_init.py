@@ -136,10 +136,9 @@ def frameRangeInit():
 
 def init():
 
-    # Create menu
-    menubar = nuke.menu("Nuke")
-    menu = menubar.addMenu("pyblish-bumpybox")
-
+    # Adding scan_for_unused_components
+    menubar = nuke.menu('Nuke')
+    menu = menubar.menu("pyblish-bumpybox")
     cmd = "from pyblish_bumpybox.nuke import utils;"
     cmd += "utils.scan_for_unused_components()"
     menu.addCommand("Scan for unused components", cmd)

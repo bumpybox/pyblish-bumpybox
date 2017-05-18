@@ -1,5 +1,7 @@
 import imp
 
+import nuke
+
 import pyblish.api
 
 
@@ -15,8 +17,16 @@ def custom_toggle_instance(instance, new_value, old_value):
 
 pyblish.api.register_callback("instanceToggled", custom_toggle_instance)
 
-# register pyblish_qml
+# Register pyblish_qml
 pyblish.api.register_gui("pyblish_lite")
+
+# Create menu
+menubar = nuke.menu("Nuke")
+menu = menubar.addMenu("pyblish-bumpybox")
+
+cmd = "from pyblish_bumpybox.nuke import processing_location;"
+cmd += "processing_location.show()"
+menu.addCommand("Processing Location", cmd)
 
 # Adding ftrack assets if import is available.
 try:

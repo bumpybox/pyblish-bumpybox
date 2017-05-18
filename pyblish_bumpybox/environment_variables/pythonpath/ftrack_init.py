@@ -1,6 +1,7 @@
 import os
 
 import pymel.core as pm
+import maya.cmds as mc
 import ftrack
 
 
@@ -30,5 +31,13 @@ def resolutionInit():
         pm.warning("Changed resolution height to: {0}".format(height))
 
 
+def disableDebug():
+    import logging
+    logging.getLogger().setLevel(logging.INFO)
+
+
 def init():
     pm.evalDeferred("ftrack_init.resolutionInit()")
+
+    # Disabling debug logging, cause of FTrack constant stream of print outs.
+    mc.evalDeferred('disableDebug()', lowestPriority=True)
