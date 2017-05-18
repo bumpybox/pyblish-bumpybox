@@ -148,6 +148,10 @@ def get_unused_components(session):
         if "componentName" in knobs:
             component_names.append(node["componentName"].getValue())
 
+    # Skip if no existing assets are found
+    if not component_names:
+        return
+
     # Get all online components
     query = "Component where version.asset.id in ("
     for id in asset_ids:
