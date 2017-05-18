@@ -22,6 +22,8 @@ To send the processing of a node to a farm or the cloud, you need to encapsulate
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/exfn1nCQTYI" frameborder="0" allowfullscreen></iframe>
 
+You can also use the ```Processing Location``` tool to setup the write nodes. You'll the ```Processing Location``` tool under the ```pyblish-bumpybox``` menu.
+
 You can read more about the supported remote processing solutions [here](http://pyblish-bumpybox.readthedocs.io/en/latest/remote.html)
 
 ## Ftrack
@@ -41,3 +43,5 @@ Resolution height           height             format
 ```
 
 Once these settings are set, they will not be set again. You can force the settings to be applied on start up, by unchecking the attributes in the ```Ftrack``` tab of Project Settings.
+
+If you are launching a script that has assets already imported, the script will be checked if you are not using some components from the asset and prompt you to import them.
