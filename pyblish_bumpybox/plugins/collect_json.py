@@ -77,7 +77,7 @@ class BumpyboxCollectJSON(pyblish.api.ContextPlugin):
                     "v" + version, version_string
                 )
                 collection = clique.Collection(
-                    head=head,
+                    head=head.replace("\\", "/"),
                     padding=instance_collection.padding,
                     tail=instance_collection.tail
                 )
