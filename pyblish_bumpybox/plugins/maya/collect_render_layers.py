@@ -19,7 +19,7 @@ class BumpyboxMayaCollectRenderlayers(pyblish.api.ContextPlugin):
         remote_members = []
         for object_set in pm.ls(type="objectSet"):
 
-            if object_set.name().startswith("remote"):
+            if object_set.name().lower().startswith("remote"):
                 remote_members.extend(object_set.members())
 
         # Getting render layers data.

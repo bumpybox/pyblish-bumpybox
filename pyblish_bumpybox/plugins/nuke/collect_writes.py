@@ -21,7 +21,7 @@ class BumpyboxNukeCollectWrites(pyblish.api.ContextPlugin):
         remote_nodes = []
         for node in nuke.allNodes():
             if node.Class() == "BackdropNode":
-                if node.name().startswith("remote"):
+                if node.name().lower().startswith("remote"):
                     remote_nodes.extend(node.getNodes())
 
         remote_nodes = list(set(remote_nodes))

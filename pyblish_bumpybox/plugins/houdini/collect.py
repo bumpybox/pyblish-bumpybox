@@ -34,7 +34,7 @@ class BumpyboxHoudiniCollect(pyblish.api.ContextPlugin):
         # with "remote".
         nodes_local = list(nodes)
         for box in hou.node("out").networkBoxes():
-            if box.name().startswith("remote"):
+            if box.name().lower().startswith("remote"):
                 for node in box.nodes():
                     if node in nodes_local:
                         nodes_local.remove(node)
