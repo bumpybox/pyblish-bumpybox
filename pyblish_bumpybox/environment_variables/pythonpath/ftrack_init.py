@@ -40,4 +40,4 @@ def init():
     pm.evalDeferred("ftrack_init.resolutionInit()")
 
     # Disabling debug logging, cause of FTrack constant stream of print outs.
-    mc.evalDeferred('disableDebug()', lowestPriority=True)
+    mc.evalDeferred("ftrack_init.disableDebug()", lowestPriority=True)
