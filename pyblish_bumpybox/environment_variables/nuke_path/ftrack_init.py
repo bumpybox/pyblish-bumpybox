@@ -7,9 +7,11 @@ from ftrack_connect_nuke.ui.legacy import scan_for_new_assets
 from pyblish_bumpybox.nuke import utils
 
 
-def fpsInit():
+def fps_init():
     """
-    Extecting a "fps" custom attribute on the parent entity of the task.
+    Sets the frame rate on first launch.
+
+    Extracting a "fps" custom attribute on the parent entity of the task.
 
     Adds a "ftrackFPSSet" knob to the root node in Nuke,
     which indicates whether to set the FPS on startup.
@@ -38,9 +40,11 @@ def fpsInit():
             nuke.root()["fps"].setValue(fps)
 
 
-def resolutionInit():
+def resolution_init():
     """
-    Extecting a "width" and "height" custom attributes,
+    Sets the resolution on first launch.
+
+    Extracting a "width" and "height" custom attributes,
     on the parent entity of the task.
 
     Adds a "ftrackResolutionSet" knob to the root node in Nuke,
@@ -87,9 +91,11 @@ def resolutionInit():
             nuke.root()['format'].setValue("FtrackDefault")
 
 
-def frameRangeInit():
+def frame_range_init():
     """
-    Extecting a "fstart" and "fend" custom attributes,
+    Sets the frame range on first launch.
+
+    Extracting a "fstart" and "fend" custom attributes,
     on the parent entity of the task.
     An "handles" optional custom attribute is also queried.
 
@@ -144,9 +150,9 @@ def init():
     menu.addCommand("Scan for unused components", cmd)
 
     # pyblish-bumpybox callbacks
-    nuke.addOnScriptLoad(fpsInit)
-    nuke.addOnScriptLoad(resolutionInit)
-    nuke.addOnScriptLoad(frameRangeInit)
+    nuke.addOnScriptLoad(fps_init)
+    nuke.addOnScriptLoad(resolution_init)
+    nuke.addOnScriptLoad(frame_range_init)
     nuke.addOnScriptLoad(utils.scan_for_unused_components)
 
     # Scan explicitly for new assets on startup,

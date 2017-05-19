@@ -15,7 +15,7 @@ pm.loadPlugin("AbcImport.mll", quiet=True)
 
 
 # Set project to workspace next to scene file.
-def set_workspace():
+def pyblish_bumpybox_set_workspace():
     work_dir = os.path.dirname(os.path.abspath(pm.system.sceneName()))
     workspace = os.path.join(work_dir, "workspace")
 
@@ -92,7 +92,7 @@ def set_workspace():
     pm.system.Workspace.save()
 
 
-pm.evalDeferred("set_workspace()")
+pm.evalDeferred("pyblish_bumpybox_set_workspace()")
 
 
 # Pyblish callbacks for presisting instance states to the scene.
@@ -134,7 +134,7 @@ pyblish_lite.settings.InitialTab = "overview"
 
 
 # Adding pyblish-bumpybox menu
-def menuInit():
+def pyblish_bumpybox_menu_init():
 
     gMainWindow = mm.eval("$temp1=$gMainWindow")
     if mc.menu("pyblish-bumpybox", exists=True):
@@ -158,7 +158,7 @@ def menuInit():
     )
 
 
-mc.evalDeferred("menuInit()")
+mc.evalDeferred("pyblish_bumpybox_menu_init()")
 
 # Adding ftrack assets if import is available.
 try:

@@ -5,7 +5,17 @@ import maya.cmds as mc
 import ftrack
 
 
-def resolutionInit():
+def resolution_init():
+    """
+    Sets the resolution on first launch.
+
+    Extracting a "width" and "height" custom attributes,
+    on the parent entity of the task.
+
+    Adds a "ftrackResolutionSet" attribute to the defaultResolution node,
+    which indicates whether to set the resolution on startup.
+    """
+
     defaultResolution = pm.PyNode("defaultResolution")
     task = ftrack.Task(os.environ["FTRACK_TASKID"])
 
@@ -39,7 +49,16 @@ def resolutionInit():
             pm.warning("Changed vray resolution height to: {0}".format(height))
 
 
-def renderRangeInit():
+def render_range_init():
+    """
+    Sets the render settings frame range on first launch.
+
+    Extracting a "fstart", "fend" and "handles" custom attributes,
+    from the parent entity of the task.
+
+    Adds a "ftrackFrameRangeSet" attribute to the defaultRenderGlobals node,
+    which indicates whether to set the resolution on startup.
+    """
 
     # Adding/Checking ftrack render range attribute
     defaultRenderGlobals = pm.PyNode("defaultRenderGlobals")
@@ -83,14 +102,14 @@ def renderRangeInit():
             vray_settings.animType.set(1)
 
 
-def disableDebug():
+def disable_debug():
     import logging
     logging.getLogger().setLevel(logging.INFO)
 
 
 def init():
-    pm.evalDeferred("ftrack_init.resolutionInit()", lowestPriority=True)
-    pm.evalDeferred("ftrack_init.renderRangeInit()", lowestPriority=True)
+    pm.evalDeferred("ftrack_init.resolution_init()", lowestPriority=True)
+    pm.evalDeferred("ftrack_init.render_range_init()", lowestPriority=True)
 
     # Disabling debug logging, cause of FTrack constant stream of print outs.
-    mc.evalDeferred("ftrack_init.disableDebug()", lowestPriority=True)
+    mc.evalDeferred("ftrack_init.disable_debug()", lowestPriority=True)
