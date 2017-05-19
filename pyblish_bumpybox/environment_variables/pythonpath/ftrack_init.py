@@ -39,6 +39,50 @@ def resolutionInit():
             pm.warning("Changed vray resolution height to: {0}".format(height))
 
 
+def renderRangeInit():
+
+    # Adding/Checking ftrack render range attribute
+    defaultRenderGlobals = pm.PyNode("defaultRenderGlobals")
+    render_range_set = False
+    if hasattr(defaultRenderGlobals, "ftrackRenderRangeSet"):
+        attr = pm.Attribute("defaultRenderGlobals.ftrackRenderRangeSet")
+        render_range_set = attr.get()
+    else:
+        pm.addAttr(
+            defaultRenderGlobals,
+            longName="ftrackRenderRangeSet",
+            defaultValue=True,
+            attributeType="bool"
+        )
+
+    if not render_range_set:
+
+        task = ftrack.Task(os.environ["FTRACK_TASKID"])
+
+        startFrame = float(task.getParent().get("fstart"))
+        endFrame = float(task.getParent().get("fend"))
+
+        handles = float(task.getParent().get("handles"))
+
+        mc.warning(
+            "Setting render range to {0} {1} ".format(startFrame, endFrame)
+        )
+
+        # Add handles to start and end frame
+        hsf = startFrame - handles
+        hef = endFrame + handles
+
+        defaultRenderGlobals.animation.set(True)
+        defaultRenderGlobals.animationRange.set(1)
+        defaultRenderGlobals.startFrame.set(hsf)
+        defaultRenderGlobals.endFrame.set(hef)
+
+        # Vray specific resolution
+        if pm.objExists("vraySettings"):
+            vray_settings = pm.PyNode("vraySettings")
+            vray_settings.animType.set(1)
+
+
 def disableDebug():
     import logging
     logging.getLogger().setLevel(logging.INFO)
@@ -46,6 +90,7 @@ def disableDebug():
 
 def init():
     pm.evalDeferred("ftrack_init.resolutionInit()", lowestPriority=True)
+    pm.evalDeferred("ftrack_init.renderRangeInit()", lowestPriority=True)
 
     # Disabling debug logging, cause of FTrack constant stream of print outs.
     mc.evalDeferred("ftrack_init.disableDebug()", lowestPriority=True)
