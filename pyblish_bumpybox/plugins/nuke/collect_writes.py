@@ -1,5 +1,3 @@
-import os
-
 import nuke
 import pyblish.api
 import clique
