@@ -61,7 +61,9 @@ class BumpyboxNukeCollectWrites(pyblish.api.ContextPlugin):
             # Add collection
             collection = None
             try:
-                path = nuke.filename(instance[0])
+                path = ""
+                if nuke.filename(instance[0]):
+                    path = nuke.filename(instance[0])
                 path += " [{0}-{1}]".format(start_frame, end_frame)
                 collection = clique.parse(path)
             except Exception as e:
