@@ -30,6 +30,14 @@ def resolutionInit():
         defaultResolution.height.set(height)
         pm.warning("Changed resolution height to: {0}".format(height))
 
+        # Vray specific resolution
+        if pm.objExists("vraySettings"):
+            vray_settings = pm.PyNode("vraySettings")
+            vray_settings.width.set(width)
+            pm.warning("Changed vray resolution width to: {0}".format(width))
+            vray_settings.height.set(height)
+            pm.warning("Changed vray resolution height to: {0}".format(height))
+
 
 def disableDebug():
     import logging
@@ -37,7 +45,7 @@ def disableDebug():
 
 
 def init():
-    pm.evalDeferred("ftrack_init.resolutionInit()")
+    pm.evalDeferred("ftrack_init.resolutionInit()", lowestPriority=True)
 
     # Disabling debug logging, cause of FTrack constant stream of print outs.
     mc.evalDeferred("ftrack_init.disableDebug()", lowestPriority=True)
