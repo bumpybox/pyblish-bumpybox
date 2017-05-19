@@ -61,9 +61,6 @@ class BumpyboxRoyalRenderExtractMaya(pyblish.api.InstancePlugin):
 
         # SubmitterParameter
         submit_params = data.get("SubmitterParameter", [])
-        submit_params.append(
-            "Priority=1~{0}".format(int(instance.data["royalRenderPriority"]))
-        )
         submit_params.append("OverwriteExistingFiles=1~1")
         data["SubmitterParameter"] = submit_params
 

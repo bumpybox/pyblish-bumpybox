@@ -29,6 +29,9 @@ class BumpyboxRoyalRenderExtractNuke(pyblish.api.InstancePlugin):
             first_frame = node["first"].value()
             last_frame = node["last"].value()
 
+        # Generate data
+        data = instance.data.get("royalrenderData", {})
+
         data = {
             "Software": "Nuke",
             "Renderer": "",
@@ -47,14 +50,13 @@ class BumpyboxRoyalRenderExtractNuke(pyblish.api.InstancePlugin):
             "ImagePreNumberLetter": ".",
             "ImageSingleOutputFile": False,
             "SceneOS": scene_os,
-            "Layer": instance.data["name"],
-            "SubmitterParameter": [
-                "Priority=1~{0}".format(
-                    int(instance.data["royalRenderPriority"])
-                ),
-                "OverwriteExistingFiles=1~1"
-            ]
+            "Layer": instance.data["name"]
         }
+
+        # SubmitterParameter
+        submit_params = data.get("SubmitterParameter", [])
+        submit_params.append("OverwriteExistingFiles=1~1")
+        data["SubmitterParameter"] = submit_params
 
         # Setting data
         instance.data["royalrenderData"] = data
