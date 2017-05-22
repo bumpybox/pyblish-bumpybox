@@ -32,6 +32,28 @@ cmd = "from pyblish_bumpybox.nuke import workspace_loader;"
 cmd += "workspace_loader.show()"
 menu.addCommand("Workspace Loader", cmd)
 
+
+# pyblish-bumpybox callbacks
+# Nuke callback for modifying the write nodes on creation
+def modify_write_node():
+
+    # Setting the file path
+    file_path = "[python {nuke.script_directory()}]/workspace/"
+    file_path += "[python {nuke.thisNode()[\"name\"].getValue()}]/"
+    file_path += "[python {os.path.splitext(os.path.basename("
+    file_path += "nuke.scriptName()))[0]}].%04d.exr"
+
+    nuke.thisNode()["file"].setValue(file_path)
+
+    # Setting the file type
+    nuke.thisNode()["file_type"].setValue("exr")
+
+    # Setting metadata
+    nuke.thisNode()["metadata"].setValue("all metadata")
+
+
+nuke.addOnUserCreate(modify_write_node, nodeClass="Write")
+
 # Adding ftrack assets if import is available.
 try:
     imp.find_module("ftrack_connect")

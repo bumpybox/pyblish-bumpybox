@@ -6,7 +6,7 @@ From Nuke you can publish image sequences with the write node.
 
 To publish an image sequence from a write node, you just need to create one. The name of the write node will be the name of the output.
 
-By default the image format will be validated to EXR.
+When you create a write node, some default settings and file path will be setup. By default the image format will be validated to EXR.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/NXydycPNzwk" frameborder="0" allowfullscreen></iframe>
 
