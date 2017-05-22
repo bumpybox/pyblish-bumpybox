@@ -26,6 +26,11 @@ You can also use the ```Processing Location``` tool to setup the write nodes. Yo
 
 You can read more about the supported remote processing solutions [here](http://pyblish-bumpybox.readthedocs.io/en/latest/remote.html)
 
+## Workspace Loader
+
+When you have processed a node, you can load the resulting work files into Nuke with the ```Workspace Loader```.   
+You can find the ```Workspace Loader``` under the ```pyblish-bumpybox``` file menu.
+
 ## Ftrack
 
 When launching Nuke from Ftrack there will be an initial setup of the script, depending on the custom attributes that are available. These custom attributes will be queried from the parent entity of the task.

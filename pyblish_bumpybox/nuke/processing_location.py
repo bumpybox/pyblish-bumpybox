@@ -1,6 +1,7 @@
 import nuke
 import nukescripts.autobackdrop as na
 
+from Qt import QtGui
 from pyblish_bumpybox.tools import processing_location
 
 
@@ -23,7 +24,8 @@ def application_function(selection, localProcessing):
 
 def show():
 
-    win = processing_location.Window()
+    main_window = QtGui.QApplication.activeWindow()
+    win = processing_location.Window(main_window)
 
     # Get remote nodes
     remote_nodes = []

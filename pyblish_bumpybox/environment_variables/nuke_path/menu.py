@@ -28,6 +28,10 @@ cmd = "from pyblish_bumpybox.nuke import processing_location;"
 cmd += "processing_location.show()"
 menu.addCommand("Processing Location", cmd)
 
+cmd = "from pyblish_bumpybox.nuke import workspace_loader;"
+cmd += "workspace_loader.show()"
+menu.addCommand("Workspace Loader", cmd)
+
 # Adding ftrack assets if import is available.
 try:
     imp.find_module("ftrack_connect")
