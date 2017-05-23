@@ -51,6 +51,11 @@ def modify_write_node():
     # Setting metadata
     nuke.thisNode()["metadata"].setValue("all metadata")
 
+    # Enable create directories if it exists.
+    # Older version of Nuke does not have this option.
+    if "create_directories" in nuke.thisNode().knobs():
+        nuke.thisNode()["create_directories"].setValue(True)
+
 
 nuke.addOnUserCreate(modify_write_node, nodeClass="Write")
 
