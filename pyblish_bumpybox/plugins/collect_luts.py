@@ -23,10 +23,13 @@ class BumpyboxCollectLUT(pyblish.api.ContextPlugin):
         # Traverse directory and collect collections from json files.
         file_types = [".3dl", ".csp", ".cube", ".vf", ".lut"]
         lut_files = []
+        gizmos = []
         for root, dirs, files in os.walk(current_file):
             for f in files:
                 if os.path.splitext(f)[1] in file_types:
                     lut_files.append(os.path.join(root, f))
+                if os.path.splitext(f)[1] == ".gizmo":
+                    gizmos.append(os.path.join(root, f))
 
         colorspaces = [
             "linear",
@@ -67,7 +70,7 @@ class BumpyboxCollectLUT(pyblish.api.ContextPlugin):
                 label = "{0} ({1})".format(name, os.path.basename(f))
                 instance.data["label"] = label
 
-                instance.data["families"] = ["ftrack", "lut"]
+                instance.data["families"] = ["lut"]
                 instance.data["publish"] = False
 
                 # Get location
@@ -82,14 +85,36 @@ class BumpyboxCollectLUT(pyblish.api.ContextPlugin):
                         "version": 1
                     },
                     "component_data": {
-                        "name": "main",
-                        "metadata": {
-                            "colorspace_in": combination[0],
-                            "colorspace_out": combination[1]
-                        }
+                        "name": "main"
                     },
                     "component_path": f,
                     "component_overwrite": True,
                     "component_location": location
                 })
                 instance.data["ftrackComponentsList"] = components
+
+        for f in gizmos:
+            instance = context.create_instance(name=os.path.basename(f))
+
+            instance.data["families"] = ["lut"]
+            instance.data["publish"] = False
+
+            # Get location
+            session = context.data["ftrackSession"]
+            location = ftrack_locations.get_new_location(session)
+
+            # Add component
+            components = []
+            components.append({
+                "assettype_data": {"short": "lut"},
+                "assetversion_data": {
+                    "version": 1
+                },
+                "component_data": {
+                    "name": "main"
+                },
+                "component_path": f,
+                "component_overwrite": True,
+                "component_location": location
+            })
+            instance.data["ftrackComponentsList"] = components

@@ -168,51 +168,57 @@ def lut_init():
 
     # Collect component data and Nuke display name.
     path = component["component_locations"][0]["resource_identifier"]
-    colorspace_in = component["metadata"]["colorspace_in"]
-    colorspace_out = component["metadata"]["colorspace_out"]
 
     display_name = ""
     for item in component["version"]["task"]["link"][:]:
         display_name += session.get(item['type'], item['id'])["name"] + "/"
     display_name = display_name[:-1]
-    display_name += ": {0} > {1}".format(colorspace_in, colorspace_out)
 
-    # Register the lut.
-    values_syntax = {
-        "linear": "linear",
-        "srgb": "sRGB",
-        "rec709": "rec709",
-        "cineon": "Cineon",
-        "gamma1.8": "Gamma1.8",
-        "gamma2.2": "Gamma2.2",
-        "gamma2.4": "Gamma2.4",
-        "panalog": "Panalog",
-        "redlog": "REDLog",
-        "viperlog": "ViperLog",
-        "alexav3logc": "AlexaV3LogC",
-        "ploglin": "PLogLin",
-        "slog": "SLog",
-        "slog1": "SLog1",
-        "slog2": "SLog2",
-        "slog3": "SLog3",
-        "clog": "CLog",
-        "protune": "Protune",
-        "redspace": "REDSpace"
-    }
+    # Register the lut file.
+    if component["file_type"] == ".gizmo":
+        nuke.ViewerProcess.register(
+            display_name, nuke.createNode, (path.replace("\\", "/"), "")
+        )
+    else:
+        colorspace_in = component["metadata"].get("colorspace_in", "linear")
+        colorspace_out = component["metadata"].get("colorspace_out", "linear")
+        display_name += ": {0} > {1}".format(colorspace_in, colorspace_out)
 
-    node_data = "vfield_file {0} colorspaceIn {1} colorspaceOut {2}"
-    nuke.ViewerProcess.register(
-        display_name,
-        nuke.createNode,
-        (
-            "Vectorfield",
-            node_data.format(
-                path.replace("\\", "/"),
-                values_syntax[colorspace_in],
-                values_syntax[colorspace_out]
+        values_syntax = {
+            "linear": "linear",
+            "srgb": "sRGB",
+            "rec709": "rec709",
+            "cineon": "Cineon",
+            "gamma1.8": "Gamma1.8",
+            "gamma2.2": "Gamma2.2",
+            "gamma2.4": "Gamma2.4",
+            "panalog": "Panalog",
+            "redlog": "REDLog",
+            "viperlog": "ViperLog",
+            "alexav3logc": "AlexaV3LogC",
+            "ploglin": "PLogLin",
+            "slog": "SLog",
+            "slog1": "SLog1",
+            "slog2": "SLog2",
+            "slog3": "SLog3",
+            "clog": "CLog",
+            "protune": "Protune",
+            "redspace": "REDSpace"
+        }
+
+        node_data = "vfield_file {0} colorspaceIn {1} colorspaceOut {2}"
+        nuke.ViewerProcess.register(
+            display_name,
+            nuke.createNode,
+            (
+                "Vectorfield",
+                node_data.format(
+                    path.replace("\\", "/"),
+                    values_syntax[colorspace_in],
+                    values_syntax[colorspace_out]
+                )
             )
         )
-    )
 
     # Adding viewerprocess callback
     nuke.addOnCreate(
