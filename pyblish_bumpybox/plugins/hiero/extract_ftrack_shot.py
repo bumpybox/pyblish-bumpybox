@@ -18,18 +18,48 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
         h = str(int(frames / (3600 * framerate))).zfill(2)
         m = str(int(frames / (60 * framerate) % 60)).zfill(2)
         s = int(float(frames) / framerate % 60)
-        f = float("0." + str((float(frames) / framerate) - s).split(".")[1])
-        f = int(f / (1.0 / framerate))
 
         return "%s:%s:%s" % (h, m, str(s).zfill(2))
 
-    def create_shot(self, instance):
+    def create_shot(self, parent, shot_name):
+        shot = None
 
-        ftrack_data = instance.context.data("ftrackData")
-        task = ftrack.Task(ftrack_data["Task"]["id"])
-        parents = task.getParents()
-        item = instance[0]
+        try:
+            shot = parent.createShot(shot_name)
 
+            msg = "Creating new shot with name \"{}{}\".".format(parent, shot_name)
+            self.log.info(msg)
+        except:
+            self.log.error(traceback.format_exc())
+
+            path = []
+            try:
+                for p in reversed(parent.getParents()):
+                    path.append(p.getName())
+            except:
+                pass
+            path.append(parent.getName())
+            path.append(shot_name)
+            shot = ftrack.getShot(path)
+
+        return shot
+
+    def get_shot(self, path):
+        path_str = "/".join(path)
+
+        try:
+            shot = ftrack.getShot(path)
+            msg = "Found shot with id {} at path \"{}\".".format(shot.getId(), path_str)
+            self.log.info(msg)
+
+            return shot
+        except:
+            msg = "Didn't find shot with path \"{}\".".format(path_str)
+            self.log.info(msg)
+
+        return False
+
+    def path_to_shot(self, parents, item):
         path = []
         for p in parents:
             path.append(p.getName())
@@ -39,6 +69,7 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
         parent = parents[0]
         if "--" in item.name():
             name_split = item.name().split("--")
+
             if len(name_split) == 2:
                 try:
                     copy_path = list(path)
@@ -47,6 +78,7 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
                 except:
                     self.log.error(traceback.format_exc())
                     parent = parents[0].createSequence(name_split[0])
+
             if len(name_split) == 3:
                 try:
                     copy_path = list(path)
@@ -65,30 +97,26 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
                     self.log.error(traceback.format_exc())
                     parent = parents[0].createSequence(name_split[1])
 
-        # Creating shot.
+        return copy_path, parent
+
+    def get_or_create_shot(self, instance):
+
+        ftrack_data = instance.context.data("ftrackData")
+        task = ftrack.Task(ftrack_data["Task"]["id"])
+        parents = task.getParents()
+        item = instance[0]
+
+        path, parent = self.path_to_shot(parents, item)
+
         shot_name = item.name()
 
-        if "--" in item.name():
-            shot_name = item.name().split("--")[-1]
+        if "--" in shot_name:
+            shot_name = shot_name.split("--")[-1]
 
-        shot = None
-        try:
-            shot = parent.createShot(shot_name)
+        shot = self.get_shot(path + [shot_name])
 
-            msg = "Creating new shot with name \"{0}\".".format(item.name())
-            self.log.info(msg)
-        except:
-            self.log.error(traceback.format_exc())
-
-            path = []
-            try:
-                for p in reversed(parent.getParents()):
-                    path.append(p.getName())
-            except:
-                pass
-            path.append(parent.getName())
-            path.append(shot_name)
-            shot = ftrack.getShot(path)
+        if not shot:
+            shot = self.create_shot(parent, shot_name)
 
         return shot
 
@@ -100,12 +128,12 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
         shot = None
         for tag in item.tags():
             if tag.name() == "ftrack":
-                try:
-                    shot = ftrack.Shot(tag.metadata().dict()["tag.id"])
-                except:
-                    msg = "Existing shot not found. Creating new shot."
-                    self.log.info(msg)
-                    shot = self.create_shot(instance)
+                metadata = tag.metadata()
+
+                if 'tag.id' in metadata:
+                    shot = ftrack.Shot(metadata["tag.id"])
+                else:
+                    shot = self.get_or_create_shot(instance)
 
         instance.data["ftrackShotId"] = shot.getId()
         instance.data["ftrackShot"] = shot
@@ -130,7 +158,7 @@ class BumpyboxHieroExtractFtrackShot(pyblish.api.InstancePlugin):
             shot.set("width", value=fmt.width())
             shot.set("height", value=fmt.height())
         except Exception as e:
-            self.log.warning("Could not set the resolution: " + e)
+            self.log.warning("Could not set the resolution: " + str(e))
 
         # Get handles.
         handles = 0
