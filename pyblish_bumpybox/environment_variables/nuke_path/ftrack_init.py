@@ -76,6 +76,12 @@ def resolution_init():
         if "height" in task["parent"]["custom_attributes"]:
             height = task["parent"]["custom_attributes"]["height"]
 
+        if not width or not height:
+            msg = "{0}: Could not find required custom attributes "
+            msg += "\"width\" and \"height\" on {1}."
+            print msg.format(__file__, task["parent"]["name"])
+            return
+
         msg = "{0}: Setting Resolution to {1}x{2}."
         print msg.format(__file__, width, height)
         fmt = None
