@@ -140,6 +140,92 @@ def frame_range_init():
             print msg.format(__file__, fstart, last_frame)
 
 
+def lut_init():
+
+    # Get published LUT, either on the current task or through parents.
+    session = ftrack_api.Session()
+
+    query = "Component where version.task_id is \"{0}\""
+    query += " and version.asset.type.short is \"lut\""
+    component = session.query(
+        query.format(os.environ["FTRACK_TASKID"])
+    ).first()
+
+    if not component:
+        task = session.get("Task", os.environ["FTRACK_TASKID"])
+        query = "Component where version.asset.type.short is \"lut\""
+        query += " and version.asset.parent.id is \"{0}\""
+        for item in reversed(task["link"][:-2]):
+            component = session.query(
+                query.format(item["id"])
+            ).first()
+            if component:
+                break
+
+    if not component:
+        print "{0}: Could not find any published LUTs.".format(__file__)
+        return
+
+    # Collect component data and Nuke display name.
+    path = component["component_locations"][0]["resource_identifier"]
+    colorspace_in = component["metadata"]["colorspace_in"]
+    colorspace_out = component["metadata"]["colorspace_out"]
+
+    display_name = ""
+    for item in component["version"]["task"]["link"][:]:
+        display_name += session.get(item['type'], item['id'])["name"] + "/"
+    display_name = display_name[:-1]
+    display_name += ": {0} > {1}".format(colorspace_in, colorspace_out)
+
+    # Register the lut.
+    values_syntax = {
+        "linear": "linear",
+        "srgb": "sRGB",
+        "rec709": "rec709",
+        "cineon": "Cineon",
+        "gamma1.8": "Gamma1.8",
+        "gamma2.2": "Gamma2.2",
+        "gamma2.4": "Gamma2.4",
+        "panalog": "Panalog",
+        "redlog": "REDLog",
+        "viperlog": "ViperLog",
+        "alexav3logc": "AlexaV3LogC",
+        "ploglin": "PLogLin",
+        "slog": "SLog",
+        "slog1": "SLog1",
+        "slog2": "SLog2",
+        "slog3": "SLog3",
+        "clog": "CLog",
+        "protune": "Protune",
+        "redspace": "REDSpace"
+    }
+
+    node_data = "vfield_file {0} colorspaceIn {1} colorspaceOut {2}"
+    nuke.ViewerProcess.register(
+        display_name,
+        nuke.createNode,
+        (
+            "Vectorfield",
+            node_data.format(
+                path.replace("\\", "/"),
+                values_syntax[colorspace_in],
+                values_syntax[colorspace_out]
+            )
+        )
+    )
+
+    # Adding viewerprocess callback
+    nuke.addOnCreate(
+        modify_viewer_node, args=(display_name), nodeClass="Viewer"
+    )
+
+
+# Nuke callback for modifying the viewer node on creation
+def modify_viewer_node(viewerprocess):
+
+    nuke.thisNode()["viewerProcess"].setValue(str(viewerprocess))
+
+
 def init():
 
     # Adding scan_for_unused_components
@@ -148,6 +234,9 @@ def init():
     cmd = "from pyblish_bumpybox.nuke import utils;"
     cmd += "utils.scan_for_unused_components()"
     menu.addCommand("Scan for unused components", cmd)
+
+    # Adding published LUT
+    lut_init()
 
     # pyblish-bumpybox callbacks
     nuke.addOnScriptLoad(fps_init)
