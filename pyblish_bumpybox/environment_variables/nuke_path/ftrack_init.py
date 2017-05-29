@@ -161,7 +161,7 @@ def lut_init():
         task = session.get("Task", os.environ["FTRACK_TASKID"])
         query = "Component where version.asset.type.short is \"lut\""
         query += " and version.asset.parent.id is \"{0}\""
-        for item in reversed(task["link"][:-2]):
+        for item in reversed(task["link"][:-1]):
             components = session.query(
                 query.format(item["id"])
             )
