@@ -8,6 +8,14 @@ import pyblish.api
 # Pyblish callbacks for presisting instance states to the scene
 def custom_toggle_instance(instance, new_value, old_value):
 
+    if "gizmo" in instance.data["families"]:
+        instance[0]["gizmo"].setValue(bool(new_value))
+        return
+
+    if "lut" in instance.data["families"]:
+        instance[0]["lut"].setValue(bool(new_value))
+        return
+
     # All instances are nodes, except for the scene instance
     try:
         instance[0]["disable"].setValue(not bool(new_value))

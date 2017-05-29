@@ -185,7 +185,7 @@ def lut_init():
     display_name = ""
     for item in component["version"]["task"]["link"][:]:
         display_name += session.get(item['type'], item['id'])["name"] + "/"
-    display_name = display_name[:-1]
+    display_name += "v" + str(version).zfill(3)
 
     # Register the lut file.
     nuke.ViewerProcess.register(

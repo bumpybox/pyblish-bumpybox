@@ -11,31 +11,57 @@ class BumpyboxFtrackExtractComponents(pyblish.api.InstancePlugin):
 
     def process(self, instance):
 
+        if not instance.data["publish"]:
+            return
+
         if "collection" in instance.data:
 
             # Add component
             families = instance.data.get("families", [])
             valid_families = ["img", "scene", "cache", "mov"]
 
-            components = instance.data.get("ftrackComponentsList", [])
-            components.append({
-                "assettype_data": {
-                    "short": list(set(families) & set(valid_families))[0]
-                },
-                "assetversion_data": {
-                    "version": instance.data.get(
-                        "version", instance.context.data["version"]
-                    )
-                },
-                "component_data": {
-                    "name": instance.data.get(
-                        "component_name", instance.data["name"]
-                    ),
-                },
-                "component_path": instance.data["collection"].format(),
-                "component_overwrite": True,
-            })
-            instance.data["ftrackComponentsList"] = components
+            self.add_ftrack_components(
+                instance,
+                list(set(families) & set(valid_families))[0],
+                instance.data["collection"].format()
+            )
+
+        if "gizmo" in instance.data["families"]:
+
+            self.add_ftrack_components(
+                instance,
+                "nuke_gizmo",
+                instance.data["outputPath"]
+            )
+
+        if "lut" in instance.data["families"]:
+
+            instance.data["component_name"] = "main"
+            self.add_ftrack_components(
+                instance,
+                "lut",
+                instance.data["outputPath"]
+            )
+
+    def add_ftrack_components(self, instance, assettype_short, component_path):
+
+        components = instance.data.get("ftrackComponentsList", [])
+        components.append({
+            "assettype_data": {"short": assettype_short},
+            "assetversion_data": {
+                "version": instance.data.get(
+                    "version", instance.context.data["version"]
+                )
+            },
+            "component_data": {
+                "name": instance.data.get(
+                    "component_name", instance.data["name"]
+                ),
+            },
+            "component_path": component_path,
+            "component_overwrite": True,
+        })
+        instance.data["ftrackComponentsList"] = components
 
 
 class BumpyboxFtrackExtractLocation(pyblish.api.InstancePlugin):

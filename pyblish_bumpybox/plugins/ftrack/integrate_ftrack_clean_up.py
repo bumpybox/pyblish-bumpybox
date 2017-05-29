@@ -20,7 +20,12 @@ class BumpyboxIntegrateFtrackCleanUp(pyblish.api.InstancePlugin):
         for data in instance.data.get("ftrackComponentsList", []):
             path = data["component_path"]
             if "component" in data and "workspace" in path:
-                collection = clique.parse(path)
-                for f in collection:
-                    os.remove(f)
-                    self.log.info("Deleted: \"{0}\"".format(f))
+
+                try:
+                    collection = clique.parse(path)
+                    for f in collection:
+                        os.remove(f)
+                        self.log.info("Deleted: \"{0}\"".format(f))
+                except:
+                    os.remove(path)
+                    self.log.info("Deleted: \"{0}\"".format(path))
