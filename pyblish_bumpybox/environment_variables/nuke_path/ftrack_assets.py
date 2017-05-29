@@ -1,7 +1,6 @@
 import nuke
 
 import ftrack
-import ftrack_api
 from ftrack_connect_nuke.connector.nukeassets import GenericAsset
 from ftrack_connect.connector import FTAssetHandlerInstance, HelpFunctions
 
@@ -52,101 +51,6 @@ class SceneAsset(GenericAsset):
         return xml
 
 
-class LUTAsset(GenericAsset):
-
-    def importAsset(self, iAObj=None):
-
-        session = ftrack_api.Session()
-        component = session.get("Component", iAObj.componentId)
-
-        # Collect component data and Nuke display name.
-        path = component["component_locations"][0]["resource_identifier"]
-
-        display_name = ""
-        for item in component["version"]["task"]["link"][:]:
-            display_name += session.get(item['type'], item['id'])["name"] + "/"
-        display_name = display_name[:-1]
-
-        # Register the lut file.
-        if component["file_type"] == ".gizmo":
-            if iAObj.options["importType"] == "ViewerProcess":
-                nuke.ViewerProcess.register(
-                    display_name,
-                    nuke.createNode,
-                    (path.replace("\\", "/"), "")
-                )
-            if iAObj.options["importType"] == "Node":
-                nuke.createNode(path.replace("\\", "/"))
-        else:
-            colorspace_in = component["metadata"].get(
-                "colorspace_in", "linear"
-            )
-            colorspace_out = component["metadata"].get(
-                "colorspace_out", "linear"
-            )
-            display_name += ": {0} > {1}".format(colorspace_in, colorspace_out)
-
-            values_syntax = {
-                "linear": "linear",
-                "srgb": "sRGB",
-                "rec709": "rec709",
-                "cineon": "Cineon",
-                "gamma1.8": "Gamma1.8",
-                "gamma2.2": "Gamma2.2",
-                "gamma2.4": "Gamma2.4",
-                "panalog": "Panalog",
-                "redlog": "REDLog",
-                "viperlog": "ViperLog",
-                "alexav3logc": "AlexaV3LogC",
-                "ploglin": "PLogLin",
-                "slog": "SLog",
-                "slog1": "SLog1",
-                "slog2": "SLog2",
-                "slog3": "SLog3",
-                "clog": "CLog",
-                "protune": "Protune",
-                "redspace": "REDSpace"
-            }
-
-            node_data = "vfield_file {0} colorspaceIn {1} colorspaceOut {2}"
-            if iAObj.options["importType"] == "ViewerProcess":
-                nuke.ViewerProcess.register(
-                    display_name,
-                    nuke.createNode,
-                    (
-                        "Vectorfield",
-                        node_data.format(
-                            path.replace("\\", "/"),
-                            values_syntax[colorspace_in],
-                            values_syntax[colorspace_out]
-                        )
-                    )
-                )
-            if iAObj.options["importType"] == "Node":
-                nuke.nodes.Vectorfield(
-                    vfield_file=path.replace("\\", "/"),
-                    colorspaceIn=values_syntax[colorspace_in],
-                    colorspaceOut=values_syntax[colorspace_out]
-                )
-
-        return
-
-    @staticmethod
-    def importOptions():
-        xml = """
-        <tab name="Options">
-            <row name="Import As" accepts="nuke">
-                <option type="radio" name="importType">
-                    <optionitem name="ViewerProcess" value="True"/>
-                    <optionitem name="Node"/>
-                </option>
-            </row>
-        </tab>
-        """
-        return xml
-
-
 def register_assets():
     assetHandler = FTAssetHandlerInstance.instance()
     assetHandler.registerAssetType(name="scene", cls=SceneAsset)
-    assetHandler.registerAssetType(name="lut", cls=LUTAsset)

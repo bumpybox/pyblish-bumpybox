@@ -147,20 +147,27 @@ def lut_init():
 
     query = "Component where version.task_id is \"{0}\""
     query += " and version.asset.type.short is \"lut\""
-    component = session.query(
+    components = session.query(
         query.format(os.environ["FTRACK_TASKID"])
-    ).first()
+    )
 
-    if not component:
+    if not components:
         task = session.get("Task", os.environ["FTRACK_TASKID"])
         query = "Component where version.asset.type.short is \"lut\""
         query += " and version.asset.parent.id is \"{0}\""
         for item in reversed(task["link"][:-2]):
-            component = session.query(
+            components = session.query(
                 query.format(item["id"])
-            ).first()
-            if component:
+            )
+            if components:
                 break
+
+    version = 0
+    component = None
+    for c in components:
+        if c["version"]["version"] > version:
+            component = c
+            version = c["version"]["version"]
 
     if not component:
         print "{0}: Could not find any published LUTs.".format(__file__)
@@ -175,50 +182,9 @@ def lut_init():
     display_name = display_name[:-1]
 
     # Register the lut file.
-    if component["file_type"] == ".gizmo":
-        nuke.ViewerProcess.register(
-            display_name, nuke.createNode, (path.replace("\\", "/"), "")
-        )
-    else:
-        colorspace_in = component["metadata"].get("colorspace_in", "linear")
-        colorspace_out = component["metadata"].get("colorspace_out", "linear")
-        display_name += ": {0} > {1}".format(colorspace_in, colorspace_out)
-
-        values_syntax = {
-            "linear": "linear",
-            "srgb": "sRGB",
-            "rec709": "rec709",
-            "cineon": "Cineon",
-            "gamma1.8": "Gamma1.8",
-            "gamma2.2": "Gamma2.2",
-            "gamma2.4": "Gamma2.4",
-            "panalog": "Panalog",
-            "redlog": "REDLog",
-            "viperlog": "ViperLog",
-            "alexav3logc": "AlexaV3LogC",
-            "ploglin": "PLogLin",
-            "slog": "SLog",
-            "slog1": "SLog1",
-            "slog2": "SLog2",
-            "slog3": "SLog3",
-            "clog": "CLog",
-            "protune": "Protune",
-            "redspace": "REDSpace"
-        }
-
-        node_data = "vfield_file {0} colorspaceIn {1} colorspaceOut {2}"
-        nuke.ViewerProcess.register(
-            display_name,
-            nuke.createNode,
-            (
-                "Vectorfield",
-                node_data.format(
-                    path.replace("\\", "/"),
-                    values_syntax[colorspace_in],
-                    values_syntax[colorspace_out]
-                )
-            )
-        )
+    nuke.ViewerProcess.register(
+        display_name, nuke.createNode, (path.replace("\\", "/"), "")
+    )
 
     # Adding viewerprocess callback
     nuke.addOnCreate(
