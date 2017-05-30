@@ -29,6 +29,7 @@ class BumpyboxDeadlineExtractNuke(pyblish.api.InstancePlugin):
         data["job"]["ConcurrentTasks"] = int(
             instance.data["deadlineConcurrentTasks"]
         )
+        data["job"]["LimitGroups"] = instance.data["deadlineLimits"]
 
         # Replace houdini frame padding with Deadline padding
         fmt = "{head}" + "#" * collection.padding + "{tail}"
