@@ -42,6 +42,7 @@ class BumpyboxNukeCollectWrites(pyblish.api.ContextPlugin):
             # Create instance
             instance = context.create_instance(name=node.name())
             instance.data["families"] = ["write", process_place, output_type]
+            instance.data["family"] = output_type
             instance.add(node)
 
             label = "{0} - write - {1}"

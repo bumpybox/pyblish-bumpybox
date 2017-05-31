@@ -123,3 +123,4 @@ class BumpyboxHoudiniCollect(pyblish.api.ContextPlugin):
                 instance.data["label"] = label + " - remote"
 
             instance.data["families"] = families
+            instance.data["family"] = category

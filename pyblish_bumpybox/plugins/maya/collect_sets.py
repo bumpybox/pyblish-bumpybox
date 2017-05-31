@@ -67,6 +67,7 @@ class BumpyboxMayaCollectSets(pyblish.api.ContextPlugin):
 
                 families = [fmt, family_mappings[fmt], instance_type]
                 instance.data["families"] = families
+                instance.data["family"] = family_mappings[fmt]
 
                 label = "{0} - {1} - {2}".format(name, fmt, instance_type)
                 instance.data["label"] = label

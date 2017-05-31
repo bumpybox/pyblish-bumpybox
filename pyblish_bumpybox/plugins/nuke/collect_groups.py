@@ -30,6 +30,7 @@ class BumpyboxNukeCollectGroups(pyblish.api.ContextPlugin):
                 instance.add(node)
 
                 instance.data["families"] = [fmt, "group", "local"]
+                instance.data["family"] = fmt
 
                 label = "{0} - {1} - {2}".format(name, fmt, "local")
                 instance.data["label"] = label

@@ -75,6 +75,7 @@ class BumpyboxMayaCollectRenderlayers(pyblish.api.ContextPlugin):
 
             instance = context.create_instance(name=layer)
             instance.data["families"] = ["renderlayer", instance_type, "img"]
+            instance.data["family"] = "img"
 
             instance.data.update(data[layer])
             instance.add(node)

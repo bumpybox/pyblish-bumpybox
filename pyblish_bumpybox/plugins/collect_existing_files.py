@@ -96,6 +96,7 @@ class BumpyboxCollectExistingFiles(pyblish.api.ContextPlugin):
                     new_instance.data["label"] = label
 
                     new_instance.data["families"] = list(families) + ["output"]
+                    new_instance.data["family"] = list(families)[0]
                     new_instance.data["publish"] = False
                     new_instance.data["collection"] = collection
                     new_instance.data["version"] = collection.version

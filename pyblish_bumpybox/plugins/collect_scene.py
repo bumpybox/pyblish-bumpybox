@@ -22,6 +22,7 @@ class BumpyboxCollectScene(pyblish.api.ContextPlugin):
         instance = context.create_instance(name=os.path.basename(current_file))
 
         instance.data["families"] = ["scene"]
+        instance.data["family"] = "scene"
         instance.data["path"] = current_file
         label = "{0} - scene".format(os.path.basename(current_file))
         instance.data["label"] = label

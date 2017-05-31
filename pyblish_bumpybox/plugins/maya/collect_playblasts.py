@@ -33,6 +33,7 @@ class BumpyboxMayaCollectPlayblasts(pyblish.api.ContextPlugin):
             instance = context.create_instance(name=name)
             instance.add(camera)
             instance.data["families"] = ["local", "mov", "playblast"]
+            instance.data["family"] = "mov"
             label = "{0} - {1} - {2}".format(name, "playblast", "local")
             instance.data["label"] = label
 

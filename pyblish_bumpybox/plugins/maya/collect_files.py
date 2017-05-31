@@ -27,6 +27,7 @@ class BumpyboxMayaCollectFiles(pyblish.api.Collector):
             instance = context.create_instance(name=name)
             instance.add(node)
             instance.data["families"] = ["local", "img", "file"]
+            instance.data["family"] = "img"
             label = "{0} - {1} - {2}".format(name, "file", "local")
             instance.data["label"] = label
 
