@@ -126,11 +126,18 @@ def toggle_instance(instance, new_value, old_value):
 
 pyblish.api.register_callback("instanceToggled", toggle_instance)
 
-# Register pyblish_lite.
+# Register GUI
 pyblish.api.register_gui("pyblish_lite")
+pyblish.api.register_gui("pyblish_qml")
 
-# pyblish_lite settings
-pyblish_lite.settings.InitialTab = "overview"
+# pyblish-qml settings
+try:
+    __import__("pyblish_qml")
+except ImportError as e:
+    print("pyblish-bumpybox: Could not load pyblish-qml: %s " % e)
+else:
+    from pyblish_qml import settings
+    settings.WindowSize = (800, 600)
 
 
 # Adding pyblish-bumpybox menu

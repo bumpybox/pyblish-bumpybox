@@ -3,6 +3,7 @@ import os
 import pymel.core as pm
 import maya.cmds as mc
 import ftrack
+import ftrack_api
 
 
 def resolution_init():
@@ -113,3 +114,19 @@ def init():
 
     # Disabling debug logging, cause of FTrack constant stream of print outs.
     mc.evalDeferred("ftrack_init.disable_debug()", lowestPriority=True)
+
+    # pyblish-qml settings
+    try:
+        __import__("pyblish_qml")
+    except ImportError as e:
+        print("pyblish-bumpybox: Could not load pyblish-qml: %s " % e)
+    else:
+        from pyblish_qml import settings
+
+        session = ftrack_api.Session()
+        task = session.get("Task", os.environ["FTRACK_TASKID"])
+        ftrack_path = ""
+        for item in task["link"]:
+            ftrack_path += session.get(item["type"], item["id"])["name"]
+            ftrack_path += " / "
+        settings.WindowTitle = ftrack_path[:-3]

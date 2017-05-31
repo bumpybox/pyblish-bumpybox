@@ -226,3 +226,19 @@ def init():
     # since Ftrack native implementation only scans
     # when loading a script within Nuke.
     nuke.addOnScriptLoad(scan_for_new_assets)
+
+    # pyblish-qml settings
+    try:
+        __import__("pyblish_qml")
+    except ImportError as e:
+        print("pyblish-bumpybox: Could not load pyblish-qml: %s " % e)
+    else:
+        from pyblish_qml import settings
+
+        session = ftrack_api.Session()
+        task = session.get("Task", os.environ["FTRACK_TASKID"])
+        ftrack_path = ""
+        for item in task["link"]:
+            ftrack_path += session.get(item["type"], item["id"])["name"]
+            ftrack_path += " / "
+        settings.WindowTitle = ftrack_path[:-3]

@@ -25,8 +25,19 @@ def custom_toggle_instance(instance, new_value, old_value):
 
 pyblish.api.register_callback("instanceToggled", custom_toggle_instance)
 
-# Register pyblish_qml
+# Register GUI
 pyblish.api.register_gui("pyblish_lite")
+pyblish.api.register_gui("pyblish_qml")
+
+# pyblish-qml settings
+try:
+    __import__("pyblish_qml")
+except ImportError as e:
+    print("pyblish-bumpybox: Could not load pyblish-qml: %s " % e)
+else:
+    from pyblish_qml import settings
+    settings.WindowSize = (800, 600)
+    settings.WindowTitle = "Something"
 
 # Create menu
 menubar = nuke.menu("Nuke")
