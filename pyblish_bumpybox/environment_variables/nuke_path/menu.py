@@ -37,7 +37,6 @@ except ImportError as e:
 else:
     from pyblish_qml import settings
     settings.WindowSize = (800, 600)
-    settings.WindowTitle = "Something"
 
 # Create menu
 menubar = nuke.menu("Nuke")
