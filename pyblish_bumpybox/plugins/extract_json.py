@@ -7,7 +7,7 @@ import pyblish.api
 import clique
 
 
-class BumpyboxExtractJSON(pyblish.api.ContextPlugin):
+class ExtractJSON(pyblish.api.ContextPlugin):
     """ Extract all instances to a serialized json file. """
 
     order = pyblish.api.IntegratorOrder + 1

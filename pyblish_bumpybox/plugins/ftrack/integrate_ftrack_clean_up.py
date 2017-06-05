@@ -4,7 +4,7 @@ import pyblish.api
 import clique
 
 
-class BumpyboxIntegrateFtrackCleanUp(pyblish.api.InstancePlugin):
+class IntegrateFtrackCleanUp(pyblish.api.InstancePlugin):
     """ Clean up any workspace files that has been integrated.
 
     Offset to get component from pyblish-ftrack

@@ -6,7 +6,7 @@ import pyblish.api
 import pyblish_maya
 
 
-class BumpyboxMayaExtractMayaFormats(pyblish.api.InstancePlugin):
+class ExtractMayaFormats(pyblish.api.InstancePlugin):
     """ Extracts Maya ascii and binary files. """
 
     order = pyblish.api.ExtractorOrder

@@ -5,7 +5,7 @@ import traceback
 import pyblish.api
 
 
-class BumpyboxCollectSceneVersion(pyblish.api.ContextPlugin):
+class CollectSceneVersion(pyblish.api.ContextPlugin):
     """ Collects scene version from filename or passes the one found in
     the context.
     """

@@ -5,7 +5,7 @@ import pyblish.api
 import clique
 
 
-class BumpyboxCollectExistingFiles(pyblish.api.ContextPlugin):
+class CollectExistingFiles(pyblish.api.ContextPlugin):
     """ Collect all existing files from the collection. """
 
     order = pyblish.api.CollectorOrder + 0.1
