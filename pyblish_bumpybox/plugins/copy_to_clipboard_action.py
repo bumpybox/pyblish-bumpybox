@@ -2,7 +2,7 @@ import pyblish.api
 import pyperclip
 
 
-class BumpyboxReportCopyToClipboard(pyblish.api.Action):
+class CopyToClipboardAction(pyblish.api.Action):
 
     label = "Copy To Clipboard"
     on = "all"
@@ -42,11 +42,11 @@ class BumpyboxReportCopyToClipboard(pyblish.api.Action):
         pyperclip.copy(report)
 
 
-class BumpyboxReport(pyblish.api.ContextPlugin):
+class Report(pyblish.api.ContextPlugin):
     """ Report plugin. """
 
     label = "Report"
-    actions = [BumpyboxReportCopyToClipboard]
+    actions = [CopyToClipboardAction]
 
     def process(self, context):
 
