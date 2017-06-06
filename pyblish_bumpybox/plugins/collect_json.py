@@ -6,7 +6,7 @@ import pyblish.api
 import clique
 
 
-class BumpyboxCollectJSON(pyblish.api.ContextPlugin):
+class CollectJSON(pyblish.api.ContextPlugin):
     """ Collecting the json files in current directory. """
 
     label = "JSON"

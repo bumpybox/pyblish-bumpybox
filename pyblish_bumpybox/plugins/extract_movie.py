@@ -5,7 +5,7 @@ import pyblish.api
 import clique
 
 
-class BumpyboxExtractMovie(pyblish.api.InstancePlugin):
+class ExtractMovie(pyblish.api.InstancePlugin):
     """ Extracts movie from image sequence. """
 
     families = ["img"]
