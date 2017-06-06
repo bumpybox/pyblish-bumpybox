@@ -24,9 +24,9 @@ Disabling a write node will disable it for publishing. Similarly if you disable 
 
 ## Group
 
-To publish a gizmo, you'll need to setup a group. Please read about creating groups here: http://help.thefoundry.co.uk/nuke/8.0/content/user_guide/configuring_nuke/creating_sourcing_gizmos.html
+To publish a gizmo, you'll need to setup a group. Please read about creating groups [here](http://help.thefoundry.co.uk/nuke/8.0/content/user_guide/configuring_nuke/creating_sourcing_gizmos.html)
 
-To publish a LUT, you'll need to setup a group. Please read the ```To Create a Viewer Process Gizmo``` section here: http://help.thefoundry.co.uk/nuke/8.0/content/user_guide/configuring_nuke/using_gizmo_viewer_process.html
+To publish a LUT, you'll need to setup a group. Please read the ```To Create a Viewer Process Gizmo``` section [here](http://help.thefoundry.co.uk/nuke/8.0/content/user_guide/configuring_nuke/using_gizmo_viewer_process.html)
 
 ## Remote Rendering/Processing
 

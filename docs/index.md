@@ -22,7 +22,7 @@ PYBLISHPLUGINPATH = "[pyblish-grill repository path]/pyblish_grill/plugins;[pybl
 
 ## Workflows
 
-- [Cross Application Workflow](workflow.md)
+- [General Workflow](general_workflow.md)
 - [Maya](maya.md)
 - [Houdini](houdini.md)
 - [Nuke](nuke.md)
