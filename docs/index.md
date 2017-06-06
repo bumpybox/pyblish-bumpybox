@@ -1,6 +1,4 @@
-# Welcome to pyblish-grill documentation.
-
-## Installation
+# Installation
 
 This package is dependent on:
 
@@ -20,7 +18,7 @@ The plugins needs to be added to ```PYBLISHPLUGINPATH``` before launching any ap
 PYBLISHPLUGINPATH = "[pyblish-grill repository path]/pyblish_grill/plugins;[pyblish-grill repository path]/pyblish_grill/plugins/maya;[pyblish-grill repository path]/pyblish_grill/plugins/maya/modeling"
 ```
 
-## Workflows
+# Workflows
 
 - [General Workflow](general_workflow.md)
 - [Maya](maya.md)
