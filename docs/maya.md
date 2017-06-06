@@ -45,7 +45,7 @@ For renderlayers you add the renderlayer to a set starting with ```remote```.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/-_MbOSqJKMs" frameborder="0" allowfullscreen></iframe>
 
-You can also use the ```Processing Location``` tool to setup the renderlayers. You'll the ```Processing Location``` tool under the ```pyblish-bumpybox``` menu.
+You can also use the ```Processing Location``` tool to setup the renderlayers. You'll the ```Processing Location``` tool under the ```pyblish-grill``` menu.
 
 You can read more about the supported remote processing solutions [here](remote.md)
 

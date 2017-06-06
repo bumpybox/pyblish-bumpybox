@@ -1,6 +1,6 @@
 # Remote
 
-pyblish-bumpybox currently supports two remote processing solutions; ```Deadline```and ```RoyalRender```.
+pyblish-bumpybox currently supports two remote processing solutions; ```Deadline``` and ```RoyalRender```.
 
 Please follow each applications workflow for settings up the scenes for remote processing.
 
