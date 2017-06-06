@@ -2,17 +2,14 @@
 
 From Maya you can publish various output formats. To publish an output format, you'll need to setup the scene first. Different output formats has different workflows for setting up the scene:
 
-```eval_rst
-==============  =======
-Output Format   Section
-==============  =======
-Alembic         `Set <http://pyblish-bumpybox.readthedocs.io/en/latest/maya.html#set>`_
-MayaAscii       `Set <http://pyblish-bumpybox.readthedocs.io/en/latest/maya.html#set>`_
-MayaBinary      `Set <http://pyblish-bumpybox.readthedocs.io/en/latest/maya.html#set>`_
-Movie           `Playblast <http://pyblish-bumpybox.readthedocs.io/en/latest/maya.html#playblast>`_
-Image Sequence  `Renderlayer (legacy) <http://pyblish-bumpybox.readthedocs.io/en/latest/maya.html#renderlayer-legacy>`_
-==============  =======
-```
+Output Format | Section
+--- | ---
+Alembic | [Set](#set)
+MayaAscii | [Set](#set)
+MayaBinary | [Set](#set)
+Movie | [Playblast](#playblast)
+Image Sequence | [Renderlayer (legacy)](#renderlayer-legacy)
+
 
 ## Set
 
@@ -50,22 +47,20 @@ For renderlayers you add the renderlayer to a set starting with ```remote```.
 
 You can also use the ```Processing Location``` tool to setup the renderlayers. You'll the ```Processing Location``` tool under the ```pyblish-bumpybox``` menu.
 
-You can read more about the supported remote processing solutions [here](http://pyblish-bumpybox.readthedocs.io/en/latest/remote.html)
+You can read more about the supported remote processing solutions [here](remote.md)
 
 ## Ftrack
 
 When launching Maya from Ftrack there will be an initial setup of the scene, depending on the custom attributes that are available. These custom attributes will be queried from the parent entity of the task.
 
-```eval_rst
-==========================  =================
-Description                 Ftrack Attributes
-==========================  =================
-First frame of frame range  fstart           
-Last frame of frame range   fend             
-Frame rate                  fps              
-Resolution width            width            
-Resolution height           height           
-==========================  =================
-```
+Description | Ftrack Attributes
+--- | ---
+First frame of frame range | fstart
+Last frame of frame range | fend
+Frame rate | fps
+Resolution width | width
+Resolution height | height
 
 The resolution will only be set once, when initially launching Maya. You can force the settings to be applied on start up, by unchecking the attribute ```Ftrack Resolution Set``` on the ```defaultResolution``` node.
+
+# [BACK](index.md)

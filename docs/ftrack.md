@@ -11,3 +11,5 @@ Common Workflow:
 - Publish from Ftrack.
  - Launch Actions in Ftrack on the task.
  - Select the <img width="40" alt="portfolio_view" src="https://raw.githubusercontent.com/pyblish/pyblish-ftrack/master/pyblish_ftrack/ftrack_event_plugin_path/icon.png"> action.
+
+[**BACK**](index.md)

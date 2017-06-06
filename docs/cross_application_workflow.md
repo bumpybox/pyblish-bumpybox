@@ -88,10 +88,4 @@ Examples:
 - ```set1_mayaAscii - maya_set1_mayaAscii.%04d.abc [1]```
 - ```set1_mayaBinary - maya_set1_mayaBinary.%04d.abc [1]```
 
-### Application workflows
-
-The workflow for setting up a scene for outputting different formats, varies in each application. See the links below for how each application is supported.
-
-- [Maya](maya.md)
-- [Houdini](houdini.md)
-- [Nuke](nuke.md)
+# [BACK](index.md)

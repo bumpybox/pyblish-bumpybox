@@ -2,15 +2,11 @@
 
 From Nuke you can publish various output formats. To publish an output format, you'll need to setup the scene first. Different output formats has different workflows for setting up the scene:
 
-```eval_rst
-==============  =======
-Output Format   Section
-==============  =======
-Image Sequence  `Write Node <http://pyblish-bumpybox.readthedocs.io/en/latest/nuke.html#write-node>`_
-Gizmo           `Group <http://pyblish-bumpybox.readthedocs.io/en/latest/nuke.html#group>`_
-LUT             `Group <http://pyblish-bumpybox.readthedocs.io/en/latest/nuke.html#group>`_
-==============  =======
-```
+Output Format | Section
+--- | ---
+Image Sequence | [Write Node](#write-node)
+Gizmo | [Group](#group)
+LUT | [Group](#group)
 
 ## Write Node
 
@@ -38,30 +34,26 @@ To send the processing of a node to a farm or the cloud, you need to encapsulate
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/exfn1nCQTYI" frameborder="0" allowfullscreen></iframe>
 
-You can also use the ```Processing Location``` tool to setup the write nodes. You'll the ```Processing Location``` tool under the ```pyblish-bumpybox``` menu.
+You can also use the ```Processing Location``` tool to setup the write nodes. You'll the ```Processing Location``` tool under the ```pyblish-grill``` menu.
 
-You can read more about the supported remote processing solutions [here](http://pyblish-bumpybox.readthedocs.io/en/latest/remote.html)
+You can read more about the supported remote processing solutions [here](remote.md)
 
 ## Workspace Loader
 
 When you have processed a node, you can load the resulting work files into Nuke with the ```Workspace Loader```.   
-You can find the ```Workspace Loader``` under the ```pyblish-bumpybox``` file menu.
+You can find the ```Workspace Loader``` under the ```pyblish-grill``` file menu.
 
 ## Ftrack
 
 When launching Nuke from Ftrack there will be an initial setup of the script, depending on the custom attributes that are available. These custom attributes will be queried from the parent entity of the task.
 
-```eval_rst
-==========================  =================  ==========================
-Description                 Ftrack Attributes  Nuke Project Settings Knob
-==========================  =================  ==========================
-First frame of frame range  fstart             first_frame
-Last frame of frame range   fend               last_frame
-Frame rate                  fps                fps
-Resolution width            width              format
-Resolution height           height             format
-==========================  =================  ==========================
-```
+Description | Ftrack Attributes | Nuke Project Settings Knob
+--- | ---
+First frame of frame range | fstart | first_frame
+Last frame of frame range | fend | last_frame
+Frame rate | fps | fps
+Resolution width | width | format
+Resolution height | height | format
 
 Once these settings are set, they will not be set again. You can force the settings to be applied on start up, by unchecking the attributes in the ```Ftrack``` tab of Project Settings.
 
@@ -74,3 +66,7 @@ If a LUT is published to any of the launched tasks parents, ei. its shot, sequen
 ### Scan for unused components
 
 If you are launching a script that has assets already imported, the script will be checked if you are not using some components from the asset and prompt you to import them.
+
+You can also manually invoke this from the ```pyblish-grill``` menu.
+
+# [BACK](index.md)

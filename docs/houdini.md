@@ -26,4 +26,6 @@ You can have multiple network boxes that submits to the remote, as long as their
 
 *NOTE: Copy/pasting nodes can unassign them from a network box. Just drag'n'drop the output node out of the network box, and back inside to reassign.*
 
-You can read more about the supported remote processing solutions [here](http://pyblish-bumpybox.readthedocs.io/en/latest/remote.html)
+You can read more about the supported remote processing solutions [here](remote.md)
+
+# [BACK](index.md)
