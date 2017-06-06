@@ -1,5 +1,6 @@
 ---
-title: Nuke
+title: This is my title
+layout: post
 ---
 # Nuke
 
