@@ -2,7 +2,7 @@
 
 It is possible to publish existing output instances directly from Ftrack, without having to launch an application like Maya or Nuke.
 
-For an output instance to be available in Ftrack, you will have to have published the local or remote instance first. You can read more about the different instances [here](http://pyblish-bumpybox.readthedocs.io/en/latest/workflow.html#output).
+For an output instance to be available in Ftrack, you will have to have published the local or remote instance first. You can read more about the different instances [here](workflow.md#output).
 
 Common Workflow:
 
