@@ -6,9 +6,12 @@ import clique
 
 
 class CollectExistingFiles(pyblish.api.ContextPlugin):
-    """ Collect all existing files from the collection. """
+    """Collect all existing files from the collection.
 
-    order = pyblish.api.CollectorOrder + 0.1
+    Offset to iterate over all collected instances.
+    """
+
+    order = pyblish.api.CollectorOrder + 0.49
     label = "Existing Files"
     hosts = ["maya", "houdini", "nuke"]
 
