@@ -11,7 +11,7 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
     Offset to iterate over all collected instances.
     """
 
-    order = pyblish.api.CollectorOrder + 0.49
+    order = pyblish.api.CollectorOrder + 0.25
     label = "Existing Files"
     hosts = ["maya", "houdini", "nuke"]
 
