@@ -4,12 +4,9 @@ import clique
 
 
 class CollectNukeWrites(pyblish.api.ContextPlugin):
-    """ Collect all write nodes.
+    """Collect all write nodes."""
 
-    Offset to get context.data["currentFile"]
-    """
-
-    order = pyblish.api.CollectorOrder + 0.1
+    order = pyblish.api.CollectorOrder
     label = "Writes"
     hosts = ["nuke"]
 
@@ -61,8 +58,8 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
             collection = None
             try:
                 path = ""
-                if nuke.filename(instance[0]):
-                    path = nuke.filename(instance[0])
+                if nuke.filename(node):
+                    path = nuke.filename(node)
                 path += " [{0}-{1}]".format(start_frame, end_frame)
                 collection = clique.parse(path)
             except Exception as e:
