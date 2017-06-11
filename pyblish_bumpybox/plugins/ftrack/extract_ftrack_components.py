@@ -48,6 +48,11 @@ class ExtractFtrackComponents(pyblish.api.InstancePlugin):
         components = instance.data.get("ftrackComponentsList", [])
         components.append({
             "assettype_data": {"short": assettype_short},
+            "asset_data": {
+                "name": instance.data.get(
+                    "asset_name", instance.context.data["ftrackTask"]["name"]
+                )
+            },
             "assetversion_data": {
                 "version": instance.data.get(
                     "version", instance.context.data["version"]
