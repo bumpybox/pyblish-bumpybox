@@ -13,6 +13,9 @@ class CollectFtrackVersion(pyblish.api.ContextPlugin):
         session = context.data["ftrackSession"]
         task = context.data["ftrackTask"]
 
+        if not task:
+            return
+
         query = "select versions.version from Asset where parent.id is \"{0}\""
         query += " and type.short is \"scene\" and name is \"{1}\""
         asset = session.query(query.format(
