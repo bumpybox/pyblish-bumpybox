@@ -13,6 +13,7 @@ class ExtractHieroTranscode(pyblish.api.InstancePlugin):
     families = ["transcode"]
     label = "Transcode"
     optional = True
+    hosts = ["hiero", "nukestudio"]
 
     def process(self, instance):
 

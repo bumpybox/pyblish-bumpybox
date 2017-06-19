@@ -12,7 +12,7 @@ class CollectHieroItems(pyblish.api.ContextPlugin):
 
     order = pyblish.api.CollectorOrder
     label = "Collect"
-    hosts = ["hiero"]
+    hosts = ["hiero", "nukestudio"]
 
     def process(self, context):
         project = context.data("activeProject")
@@ -42,12 +42,14 @@ class CollectHieroItems(pyblish.api.ContextPlugin):
                 # Assigning families from tags.
                 families = ["trackItem"]
                 for tag in tags:
+
                     data = tag.metadata().dict()
                     if "tag.family" in data:
                         families.append(data["tag.family"])
 
                     families.append(tag.name())
 
+                instance.data["family"] = "trackItem"
                 instance.data["families"] = list(set(families))
 
                 # Publishable state from whether the track/item is enabled, and

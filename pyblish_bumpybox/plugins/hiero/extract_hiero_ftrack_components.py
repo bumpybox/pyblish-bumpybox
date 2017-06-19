@@ -11,6 +11,7 @@ class ExtractHieroFtrackComponents(pyblish.api.InstancePlugin):
     label = "Ftrack Components"
     hosts = ["hiero"]
     order = pyblish.api.ExtractorOrder + 0.1
+    hosts = ["hiero", "nukestudio"]
 
     def process(self, instance):
 

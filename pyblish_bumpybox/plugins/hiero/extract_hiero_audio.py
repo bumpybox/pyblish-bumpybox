@@ -8,7 +8,7 @@ class ExtractHeiroAudio(pyblish.api.InstancePlugin):
 
     families = ["audio"]
     label = "Audio"
-    hosts = ["hiero"]
+    hosts = ["hiero", "nukestudio"]
     order = pyblish.api.ExtractorOrder
     optional = True
 
