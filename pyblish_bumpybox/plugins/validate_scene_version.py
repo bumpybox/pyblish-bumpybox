@@ -13,7 +13,8 @@ class ValidateSceneVersion(pyblish.api.ContextPlugin):
     def process(self, context):
 
         name, ext = os.path.splitext(context.data("currentFile"))
-        msg = "Could not find a version number in the scene name. Please add "
-        msg += "v[number] to the scene name, for example: "
-        msg += "\"{0}_v001{1}\".".format(name, ext)
-        assert "version" in context.data, msg
+        failure_message = (
+            'Could not find a version number in the scene name. Please add ' +
+            'v[number] to the scene name, for example: "{0}_v001{1}".'
+        ).format(name, ext)
+        assert "version" in context.data, failure_message
