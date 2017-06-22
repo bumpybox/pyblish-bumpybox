@@ -12,7 +12,7 @@ class ExtractHieroFtrackShot(pyblish.api.InstancePlugin):
     match = pyblish.api.Subset
     label = "Ftrack Shot"
     optional = True
-    hosts = ["hiero", "nukestudio"]
+    hosts = ["hiero"]
 
     def frames_to_timecode(self, frames, framerate):
 

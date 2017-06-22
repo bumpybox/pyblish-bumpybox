@@ -12,7 +12,7 @@ class CollectHieroItems(pyblish.api.ContextPlugin):
 
     order = pyblish.api.CollectorOrder
     label = "Collect"
-    hosts = ["hiero", "nukestudio"]
+    hosts = ["hiero"]
 
     def process(self, context):
         project = context.data("activeProject")

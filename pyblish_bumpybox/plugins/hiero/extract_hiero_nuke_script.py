@@ -12,7 +12,7 @@ class ExtractHieroNukeScript(pyblish.api.InstancePlugin):
     label = "Nuke Script"
     order = pyblish.api.ExtractorOrder
     optional = True
-    hosts = ["hiero", "nukestudio"]
+    hosts = ["hiero"]
 
     def process(self, instance):
 

@@ -11,7 +11,7 @@ class ValidateHieroNames(pyblish.api.InstancePlugin):
     order = pyblish.api.ValidatorOrder
     families = ["trackItem"]
     label = "Names"
-    hosts = ["hiero", "nukestudio"]
+    hosts = ["hiero"]
 
     def process(self, instance):
 
