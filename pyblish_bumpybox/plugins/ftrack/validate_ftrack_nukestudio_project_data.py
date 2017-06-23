@@ -6,7 +6,7 @@ class ValidateFtrackHieroNukeStudioProjectName(pyblish.api.ContextPlugin):
 
     order = pyblish.api.ValidatorOrder
     label = "Ftrack Project Data"
-    hosts = ["hiero", "nukestudio"]
+    hosts = ["nukestudio"]
 
     def process(self, context):
 

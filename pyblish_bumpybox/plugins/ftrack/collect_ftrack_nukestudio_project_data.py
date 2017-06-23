@@ -23,7 +23,7 @@ class CollectFtrackHieroNukeStudioProjectData(pyblish.api.ContextPlugin):
 
     order = pyblish.api.CollectorOrder
     label = "Ftrack Project Data"
-    hosts = ["hiero", "nukestudio"]
+    hosts = ["nukestudio"]
 
     def process(self, context):
 
@@ -221,7 +221,7 @@ class Window(QtGui.QDialog):
         self.close()
 
 
-class CollectFtrackHieroNukeStudioProjectUI(pyblish.api.ContextPlugin):
+class CollectFtrackNukeStudioProjectUI(pyblish.api.ContextPlugin):
     """Collects the Ftrack project data with a user friendly UI.
 
     Only run if tag on sequence does not exist.
@@ -229,7 +229,7 @@ class CollectFtrackHieroNukeStudioProjectUI(pyblish.api.ContextPlugin):
 
     order = CollectFtrackHieroNukeStudioProjectData.order - 0.1
     label = "Ftrack Project UI"
-    hosts = ["hiero", "nukestudio"]
+    hosts = ["nukestudio"]
 
     def process(self, context):
 
