@@ -6,7 +6,7 @@ class ExtractFtrackProject(pyblish.api.ContextPlugin):
 
     order = pyblish.api.ExtractorOrder
     label = "Ftrack Project"
-    host = ["hiero", "nukestudio"]
+    hosts = ["nukestudio"]
 
     def process(self, context):
 
