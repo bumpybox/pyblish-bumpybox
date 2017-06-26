@@ -9,5 +9,7 @@ class CollectSorting(pyblish.api.Collector):
     def process(self, context):
 
         context[:] = sorted(
-            context, key=lambda instance: (instance.data["name"])
+            context, key=lambda instance: (
+                instance.data("family"), instance.data("name")
+            )
         )
