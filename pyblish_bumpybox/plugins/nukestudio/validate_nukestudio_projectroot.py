@@ -15,6 +15,9 @@ class RepairProjectRoot(pyblish.api.Action):
             "workspace"
         ).replace("\\", "/")
 
+        if not os.path.exists(workspace):
+            os.makedirs(workspace)
+
         context.data["activeProject"].setProjectRoot(workspace)
 
 
