@@ -70,8 +70,11 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
 
         return files
 
-    def match_files_collection(self, files, collection):
-        """Match files to collection and return filled collection."""
+    def populate_collection(self, files, collection):
+        """Match and add files to collection.
+
+        Returns populated collection.
+        """
 
         for f in files:
             if collection.match(f):
@@ -125,7 +128,7 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
         # Generate instances from collections
         for collection in collections:
 
-            collection = self.match_files_collection(
+            collection = self.populate_collection(
                 files, collection
             )
 
