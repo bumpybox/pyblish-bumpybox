@@ -10,6 +10,7 @@ class CollectHieroNukeStudioTasks(pyblish.api.ContextPlugin):
 
     def process(self, context):
         import os
+        import re
 
         import hiero.exporters as he
         import clique
@@ -42,16 +43,20 @@ class CollectHieroNukeStudioTasks(pyblish.api.ContextPlugin):
                 continue
 
             resolved_path = task.resolvedExportPath()
-            name = os.path.splitext(os.path.basename(resolved_path))[0]
+
+            # Formatting the basename to not include frame padding or "."
+            name = os.path.basename(resolved_path)
+            name = name.replace("#", "").replace(".", "_")
+            name = re.sub(r"%.*d", "_", name)
+            name = re.sub(r"_{2,}", "_", name)
             instance = context.create_instance(name=name)
+
             instance.add(task)
 
             instance.data["family"] = "task"
             instance.data["families"] = [asset_type, "local"]
 
-            project_root = context.data["activeProject"].projectRoot()
-            relative_path = resolved_path.replace(project_root, "")
-            label = "{0} - {1} - local".format(relative_path, asset_type)
+            label = "{0} - {1} - local".format(name, asset_type)
             instance.data["label"] = label
 
             # Add collection or output
@@ -75,4 +80,4 @@ class CollectHieroNukeStudioTasks(pyblish.api.ContextPlugin):
                 if collection:
                     instance.data["collection"] = collection
             else:
-                instance.data["output"] = resolved_path
+                instance.data["output_path"] = resolved_path
