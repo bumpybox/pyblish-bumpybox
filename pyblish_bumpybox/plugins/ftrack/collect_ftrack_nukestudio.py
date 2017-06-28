@@ -44,7 +44,7 @@ class CollectFtrackHieroNukeStudioProjectData(pyblish.api.ContextPlugin):
 
         # Get project name from existing tag
         for tag in hiero.ui.activeSequence().tags():
-            if tag.name().lower() != "ftrack.project":
+            if ("tag.ftrack") not in tag.metadata().keys():
                 continue
 
             for key in data:
@@ -236,7 +236,7 @@ class CollectFtrackNukeStudioProjectUI(pyblish.api.ContextPlugin):
         # Get project name from existing tag
         show_gui = True
         for tag in hiero.ui.activeSequence().tags():
-            if tag.name().lower() == "ftrack.project":
+            if ("tag.ftrack") in tag.metadata().keys():
                 show_gui = False
 
         if show_gui:

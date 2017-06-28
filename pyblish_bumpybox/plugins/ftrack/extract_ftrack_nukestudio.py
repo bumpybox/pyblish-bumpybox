@@ -1,13 +1,45 @@
 import pyblish.api
 
 
+class ExtractFtrackProject(pyblish.api.ContextPlugin):
+    """Extract an Ftrack project from context.data["ftrackProjectData"]"""
+
+    order = pyblish.api.ExtractorOrder
+    label = "Ftrack Project"
+    hosts = ["nukestudio"]
+
+    def process(self, context):
+
+        session = context.data["ftrackSession"]
+
+        data = {}
+        for key, value in context.data["ftrackProjectData"].iteritems():
+            if not value:
+                continue
+
+            data[key] = value
+
+        # Get project from data
+        query = "Project where "
+        for key, value in data.iteritems():
+            query += "{0} is \"{1}\" and ".format(key, value)
+        query = query[:-5]
+
+        project = session.query(query).first()
+
+        # Create project if it does not exist
+        if not project:
+            self.log.info("Creating project with data: {0}".format(data))
+            project = session.create("Project", data)
+            session.commit()
+
+        context.data["ftrackProject"] = project
+
+
 class ExtractFtrackNukeStudioShot(pyblish.api.InstancePlugin):
-    """Creates ftrack shots by the name of the shot.
+    """Creates ftrack shots by the name of the shot."""
 
-    Offset to get extracted Ftrack project.
-    """
-
-    order = pyblish.api.ExtractorOrder + 0.1
+    order = ExtractFtrackProject.order + 0.01
     families = ["ftrack", "trackItem"]
     match = pyblish.api.Subset
     label = "Ftrack Shot"
@@ -154,3 +186,59 @@ class ExtractFtrackNukeStudioTaskParent(pyblish.api.ContextPlugin):
                     task_instance.data["asset_parent"] = shot
                     name = task_instance.data["name"]
                     task_instance.data["asset_name"] = name.split("--")[-1]
+
+
+class ExtractFtrackNukeStudioTasks(pyblish.api.InstancePlugin):
+    """Creates ftrack tasks by tags."""
+
+    order = ExtractFtrackNukeStudioShot.order + 0.01
+    families = ["ftrack", "trackItem"]
+    match = pyblish.api.Subset
+    label = "Ftrack Tasks"
+    optional = True
+    hosts = ["nukestudio"]
+
+    def process(self, instance):
+
+        tasks_data = []
+        for tag in instance[0].tags():
+            if ("tag.ftrack") not in tag.metadata().keys():
+                continue
+
+            metadata = tag.metadata().dict()
+
+            if "tag.type" in metadata.keys():
+                tasks_data.append(
+                    {
+                        "type": metadata["tag.type"],
+                        "name": metadata.get(
+                            "tag.name", metadata["tag.type"].lower()
+                        )
+                    }
+                )
+
+        session = instance.context.data["ftrackSession"]
+        shot = instance.data["ftrackShot"]
+        tasks = []
+        for data in tasks_data:
+            task_type = session.query(
+                'Type where name is "{0}"'.format(data["type"])
+            ).one()
+
+            query = (
+                'Task where type.name is "{0}" and name is "{1}" and '
+                'parent.id is "{2}"'
+            )
+            task = session.query(
+                query.format(data["type"], data["name"], shot["id"])
+            ).first()
+
+            if not task:
+                task = session.create(
+                    "Task",
+                    {"name": data["name"], "type": task_type, "parent": shot}
+                )
+
+            tasks.append(task)
+
+        instance.data["ftrackTasks"] = tasks
