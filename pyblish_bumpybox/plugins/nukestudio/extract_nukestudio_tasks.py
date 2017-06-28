@@ -35,6 +35,15 @@ class ExtractHieroNukeStudioTask(pyblish.api.InstancePlugin):
                 os.remove(script_path)
                 os.remove(log_path)
 
+        # Fill collection with output
+        if "img" in families:
+            collection = instance.data["collection"]
+            path = os.path.dirname(collection.format())
+            for f in os.listdir(path):
+                file_path = os.path.join(path, f).replace("\\", "/")
+                if collection.match(file_path):
+                    collection.add(file_path)
+
     def poll(self, process):
         import time
 
