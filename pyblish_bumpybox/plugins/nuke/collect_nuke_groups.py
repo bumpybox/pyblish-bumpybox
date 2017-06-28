@@ -57,7 +57,7 @@ class CollectNukeGroups(pyblish.api.ContextPlugin):
                         instance.data["families"]
                     )
                 )[0]
-                instance.data["output"] = os.path.join(
+                instance.data["output_path"] = os.path.join(
                     directory,
                     "{0}_{1}_{2}.gizmo".format(
                         scene_name, instance.data["name"], family

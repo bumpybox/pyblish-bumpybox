@@ -19,7 +19,7 @@ class ExtractNukeGroup(pyblish.api.InstancePlugin):
         if not instance.data["publish"]:
             return
 
-        file_path = instance.data["output"]
+        file_path = instance.data["output_path"]
         directory = os.path.dirname(file_path)
 
         # Create workspace if necessary

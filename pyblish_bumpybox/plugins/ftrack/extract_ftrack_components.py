@@ -34,7 +34,7 @@ class ExtractFtrackComponents(pyblish.api.InstancePlugin):
                 instance.data["collection"].format()
             )
 
-        if "output" in instance.data:
+        if "output_path" in instance.data:
 
             # Add component
             families = instance.data.get("families", [])
@@ -42,7 +42,7 @@ class ExtractFtrackComponents(pyblish.api.InstancePlugin):
 
             self.add_ftrack_components(
                 instance,
-                instance.data["output"]
+                instance.data["output_path"]
             )
 
     def add_ftrack_components(self, instance, component_path):
