@@ -118,6 +118,10 @@ class ExtractFtrackNukeStudioShot(pyblish.api.InstancePlugin):
 
         shot = self.create_hierarchy(parent, hierarchy_data)
 
+        # Committing session so other instances can pick up on newly created
+        # entities.
+        self.session.commit()
+
         instance.data["ftrackShot"] = shot
 
         # Assign attributes to shot
