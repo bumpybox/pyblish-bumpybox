@@ -66,22 +66,7 @@ class ExtractMovie(pyblish.api.InstancePlugin):
             tail=".mov"
         )
         output_collection.add(output_file)
-
-        components = instance.data.get("ftrackComponentsList", [])
-        components.append({
-            "assettype_data": {"short": "mov"},
-            "assetversion_data": {
-                "version": instance.context.data["version"]
-            },
-            "component_data": {
-                "name": instance.data.get(
-                    "component_name", instance.data["name"]
-                ),
-            },
-            "component_path": output_collection.format(),
-            "component_overwrite": True,
-        })
-        instance.data["ftrackComponentsList"] = components
+        instance.data["collection"] = output_collection
 
     def check_executable(self, executable):
         """ Checks to see if an executable is available.
