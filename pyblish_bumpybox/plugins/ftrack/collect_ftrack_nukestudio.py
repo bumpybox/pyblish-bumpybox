@@ -9,6 +9,8 @@ import ftrack_api
 class CollectFtrackHieroNukeStudioProjectData(pyblish.api.ContextPlugin):
     """Collect the Ftrack project data.
 
+    Offset to get collected Ftrack data from pyblish-ftrack.
+
     Its assumed at tag is applied to the active sequence with these keys:
 
     name - The project"s code.
@@ -21,14 +23,16 @@ class CollectFtrackHieroNukeStudioProjectData(pyblish.api.ContextPlugin):
     disk_id - The id of the disk applied to the project.
     """
 
-    order = pyblish.api.CollectorOrder
+    order = pyblish.api.CollectorOrder + 0.1
     label = "Ftrack Project Data"
     hosts = ["nukestudio"]
 
     def process(self, context):
 
-        data = context.data.get("ftrackProjectData", {})
-        data.update(self.get_project_data(context))
+        data = (
+            self.get_project_data(context) +
+            context.data.get("ftrackProjectData", {})
+        )
         self.log.info("Found project data: {0}".format(data))
         context.data["ftrackProjectData"] = data
 
@@ -227,17 +231,21 @@ class CollectFtrackNukeStudioProjectUI(pyblish.api.ContextPlugin):
     Only run if tag on sequence does not exist.
     """
 
-    order = CollectFtrackHieroNukeStudioProjectData.order - 0.1
+    order = CollectFtrackHieroNukeStudioProjectData.order - 0.01
     label = "Ftrack Project UI"
     hosts = ["nukestudio"]
 
     def process(self, context):
 
-        # Get project name from existing tag
+        # Get project data from existing tag
         show_gui = True
         for tag in hiero.ui.activeSequence().tags():
             if ("tag.ftrack") in tag.metadata().keys():
                 show_gui = False
+
+        # Get project from launched task
+        if "ftrackProjectData" in context.data.keys():
+            show_gui = False
 
         if show_gui:
             win = Window()
@@ -251,3 +259,25 @@ class CollectFtrackNukeStudioProjectUI(pyblish.api.ContextPlugin):
             for key, value in win.data.iteritems():
                 metadata.setValue("tag." + key, value)
             hiero.ui.activeSequence().addTag(tag)
+
+
+class CollectFtrackNukeStudioTaskProject(pyblish.api.ContextPlugin):
+    """Collects the Ftrack project data from the launched task."""
+
+    order = CollectFtrackNukeStudioProjectUI.order - 0.01
+    label = "Ftrack Task Project"
+    hosts = ["nukestudio"]
+
+    def process(self, context):
+
+        task = context.data["ftrackTask"]
+
+        if task:
+            project = task["project"]
+            context.data["ftrackProjectData"] = {
+                "name": project["name"],
+                "full_name": project["full_name"],
+                "project_schema_id": project["project_schema_id"],
+                "root": project["root"],
+                "disk_id": project["disk_id"]
+            }
