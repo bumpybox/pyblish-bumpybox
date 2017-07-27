@@ -15,7 +15,11 @@ class CollectHieroNukeStudioTasks(pyblish.api.ContextPlugin):
         import hiero.exporters as he
         import clique
 
-        for task in context.data["submission"].getLeafTasks():
+        submission = context.data.get("submission", None)
+        if not submission:
+            return
+
+        for task in submission.getLeafTasks():
 
             # Skip audio track items
             media_type = "core.Hiero.Python.TrackItem.MediaType.kAudio"

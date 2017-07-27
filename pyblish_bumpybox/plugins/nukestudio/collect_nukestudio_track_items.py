@@ -10,8 +10,12 @@ class CollectHieroNukeStudioTrackItems(pyblish.api.ContextPlugin):
 
     def process(self, context):
 
+        submission = context.data.get("submission", None)
+        if not submission:
+            return
+
         data = {}
-        for task in context.data["submission"].getLeafTasks():
+        for task in submission.getLeafTasks():
 
             # Skip audio track items
             media_type = "core.Hiero.Python.TrackItem.MediaType.kAudio"
