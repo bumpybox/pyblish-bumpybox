@@ -125,19 +125,17 @@ class ExtractFtrackNukeStudioShot(pyblish.api.InstancePlugin):
         instance.data["ftrackShot"] = shot
 
         # Assign attributes to shot
-        start_frame = 1
         handles = 0
-        task = instance.data["tasks"][0]
-        if task._startFrame:
-            start_frame = task._startFrame
-        if task._cutHandles:
-            handles = task._cutHandles
-        shot["custom_attributes"]["fstart"] = start_frame
+        if instance.data["tasks"]:
+            task = instance.data["tasks"][0]
+            if task._cutHandles:
+                handles = task._cutHandles
+        shot["custom_attributes"]["fstart"] = item.sourceIn()
         shot["custom_attributes"]["handles"] = handles
 
         duration = item.sourceOut() - item.sourceIn()
         duration = abs(int(round((abs(duration) + 1) / item.playbackSpeed())))
-        end_frame = start_frame + duration
+        end_frame = item.sourceIn() + duration
         shot["custom_attributes"]["fend"] = end_frame
 
         sequence = item.parent().parent()

@@ -9,24 +9,30 @@ class CollectHieroNukeStudioTrackItems(pyblish.api.ContextPlugin):
     hosts = ["nukestudio"]
 
     def process(self, context):
-
         submission = context.data.get("submission", None)
-        if not submission:
-            return
-
         data = {}
-        for task in submission.getLeafTasks():
+        self.log.info(context.data["selection"])
+        if submission:
+            for task in submission.getLeafTasks():
 
-            # Skip audio track items
-            media_type = "core.Hiero.Python.TrackItem.MediaType.kAudio"
-            if str(task._item.mediaType()) == media_type:
-                continue
+                # Skip audio track items
+                media_type = "core.Hiero.Python.TrackItem.MediaType.kAudio"
+                if str(task._item.mediaType()) == media_type:
+                    continue
 
-            item = task._item
-            if item.name() not in data:
-                data[item.name()] = {"item": item, "tasks": [task]}
-            else:
-                data[item.name()]["tasks"].append(task)
+                item = task._item
+                if item.name() not in data:
+                    data[item.name()] = {"item": item, "tasks": [task]}
+                else:
+                    data[item.name()]["tasks"].append(task)
+        else:
+            for item in context.data.get("selection", []):
+                # Skip audio track items
+                media_type = "core.Hiero.Python.TrackItem.MediaType.kAudio"
+                if str(item.mediaType()) == media_type:
+                    continue
+
+                data[item.name()] = {"item": item, "tasks": []}
 
         for key, value in data.iteritems():
 
