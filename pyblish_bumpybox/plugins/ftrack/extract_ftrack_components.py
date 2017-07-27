@@ -33,15 +33,10 @@ class ExtractFtrackComponents(pyblish.api.InstancePlugin):
     def add_ftrack_components(self, instance, component_path):
 
         component = {
+            "assettype_data": {},
+            "asset_data": {},
             "component_metadata": instance.data.get("component_metadata", {}),
             "component_path": component_path,
-            "component_overwrite": instance.data.get(
-                "component_overwrite", True
-            ),
-            "component_location": instance.data.get(
-                "component_location",
-                instance.context.data["ftrackSession"].pick_location()
-            )
         }
 
         component["assettype_data"].update(
@@ -62,6 +57,16 @@ class ExtractFtrackComponents(pyblish.api.InstancePlugin):
         if "name" not in data.keys():
             data["name"] = instance.data["name"]
         component["component_data"] = data
+
+        if "component_overwrite" in instance.data.keys():
+            component["component_overwrite"] = instance.data[
+                "component_overwrite"
+            ]
+
+        if "component_location" in instance.data.keys():
+            component["component_location"] = instance.data[
+                "component_location"
+            ]
 
         components = instance.data.get("ftrackComponentsList", [])
         components.append(component)
