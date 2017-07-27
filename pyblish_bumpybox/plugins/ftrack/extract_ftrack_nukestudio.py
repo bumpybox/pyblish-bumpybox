@@ -191,14 +191,14 @@ class ExtractFtrackNukeStudioTaskParent(pyblish.api.ContextPlugin):
             for task_instance in task_instances:
                 task = task_instance[0]
                 if task in instance.data["tasks"]:
-                    data = instance.data.get("asset_data", {})
+                    data = task_instance.data.get("asset_data", {})
                     data.update(
                         {
                             "name": task_instance.data["name"].split("--")[-1],
                             "parent": shot
                         }
                     )
-                    instance.data["asset_data"] = data
+                    task_instance.data["asset_data"] = data
 
 
 class ExtractFtrackNukeStudioTasks(pyblish.api.InstancePlugin):
