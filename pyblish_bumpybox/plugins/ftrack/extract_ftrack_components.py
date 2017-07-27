@@ -33,6 +33,8 @@ class ExtractFtrackComponents(pyblish.api.InstancePlugin):
     def add_ftrack_components(self, instance, component_path):
 
         component = {
+            "assettype_data": {},
+            "asset_data": {},
             "component_metadata": instance.data.get("component_metadata", {}),
             "component_path": component_path,
             "component_overwrite": instance.data.get(
