@@ -183,7 +183,11 @@ class ExtractFtrackNukeStudioTaskParent(pyblish.api.ContextPlugin):
             if "ftrack" not in families:
                 continue
 
+            if "ftrackShot" not in instance.data.keys():
+                continue
+
             shot = instance.data["ftrackShot"]
+
             for task_instance in task_instances:
                 task = task_instance[0]
                 if task in instance.data["tasks"]:
