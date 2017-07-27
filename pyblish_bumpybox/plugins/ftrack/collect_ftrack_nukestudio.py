@@ -29,10 +29,8 @@ class CollectFtrackHieroNukeStudioProjectData(pyblish.api.ContextPlugin):
 
     def process(self, context):
 
-        data = (
-            self.get_project_data(context) +
-            context.data.get("ftrackProjectData", {})
-        )
+        data = context.data.get("ftrackProjectData", {})
+        data.update(self.get_project_data(context))
         self.log.info("Found project data: {0}".format(data))
         context.data["ftrackProjectData"] = data
 
@@ -55,7 +53,13 @@ class CollectFtrackHieroNukeStudioProjectData(pyblish.api.ContextPlugin):
                 if ("tag." + key) in tag.metadata().keys():
                     data[key] = tag.metadata().value(key)
 
-        return data
+        # Remove any empty key/value pairs.
+        results = {}
+        for key, value in data.iteritems():
+            if value:
+                results[key] = value
+
+        return results
 
 
 class Window(QtGui.QDialog):
