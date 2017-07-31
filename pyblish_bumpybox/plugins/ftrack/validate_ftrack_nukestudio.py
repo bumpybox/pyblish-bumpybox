@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class ValidateFtrackHieroNukeStudioProjectName(pyblish.api.ContextPlugin):
+class ValidateFtrackNukeStudioProjectData(pyblish.api.ContextPlugin):
     """Validate the project data."""
 
     order = pyblish.api.ValidatorOrder
