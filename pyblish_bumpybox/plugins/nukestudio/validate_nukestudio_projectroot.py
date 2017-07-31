@@ -21,7 +21,7 @@ class RepairProjectRoot(pyblish.api.Action):
         context.data["activeProject"].setProjectRoot(workspace)
 
 
-class ValidateHieroNukeStudioProjectRoot(pyblish.api.ContextPlugin):
+class ValidateNukeStudioProjectRoot(pyblish.api.ContextPlugin):
     """Validate the project root to the workspace directory."""
 
     order = pyblish.api.ValidatorOrder

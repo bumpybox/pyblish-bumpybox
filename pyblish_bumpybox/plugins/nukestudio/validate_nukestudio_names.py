@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class ValidateHieroNukeStudioNames(pyblish.api.InstancePlugin):
+class ValidateNukeStudioNames(pyblish.api.InstancePlugin):
     """ Validate sequence, video track and track item names.
 
     When creating output directories with the name of an item, ending with a
@@ -15,7 +15,10 @@ class ValidateHieroNukeStudioNames(pyblish.api.InstancePlugin):
 
     def process(self, instance):
 
-        item = instance[0]
+        if instance.data["family"] != "trackItem":
+            return
+
+        item = instance.data["item"]
 
         msg = "Track item \"{0}\" ends with a whitespace."
         assert not item.name().endswith(" "), msg.format(item.name())

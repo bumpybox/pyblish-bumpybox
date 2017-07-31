@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class ValidateHieroNukeStudioTask(pyblish.api.InstancePlugin):
+class ValidateNukeStudioTask(pyblish.api.InstancePlugin):
     """Validate the output range of the task.
 
     This compares the output range and clip associated with the task, so see
@@ -11,19 +11,19 @@ class ValidateHieroNukeStudioTask(pyblish.api.InstancePlugin):
     """
 
     order = pyblish.api.ValidatorOrder
-    families = ["task"]
+    families = ["taskItem.task"]
     label = "Task"
     hosts = ["nukestudio"]
     optional = True
 
     def process(self, instance):
 
-        task = instance[0]
+        task = instance.data["task"]
+        item = instance.data["parent"]
 
         output_range = task.outputRange()
-
-        first_frame = int(task._clip.sourceIn())
-        last_frame = int(task._clip.sourceOut())
+        first_frame = int(item.data["item"].source().sourceIn())
+        last_frame = int(item.data["item"].source().sourceOut())
         clip_duration = last_frame - first_frame + 1
 
         difference = clip_duration - output_range[1]

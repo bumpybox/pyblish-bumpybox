@@ -1,13 +1,13 @@
 import pyblish.api
 
 
-class ExtractHieroNukeStudioTask(pyblish.api.InstancePlugin):
+class ExtractNukeStudioTasks(pyblish.api.InstancePlugin):
     """Extract tasks."""
 
     order = pyblish.api.ExtractorOrder
     label = "Tasks"
     hosts = ["nukestudio"]
-    families = ["task"]
+    families = ["trackItem.task"]
 
     def process(self, instance):
         import time
@@ -15,14 +15,14 @@ class ExtractHieroNukeStudioTask(pyblish.api.InstancePlugin):
 
         import hiero.core.nuke as nuke
 
-        task = instance[0]
+        task = instance.data["task"]
         task.startTask()
         while task.taskStep():
             time.sleep(1)
 
         families = instance.data["families"]
         if "mov" in families or "img" in families:
-            script_path = instance[0]._scriptfile
+            script_path = task._scriptfile
             log_path = script_path.replace(".nk", ".log")
             log_file = open(log_path, "w")
             process = nuke.executeNukeScript(script_path, log_file, True)
@@ -31,7 +31,7 @@ class ExtractHieroNukeStudioTask(pyblish.api.InstancePlugin):
 
             log_file.close()
 
-            if not instance[0]._preset.properties()["keepNukeScript"]:
+            if not task._preset.properties()["keepNukeScript"]:
                 os.remove(script_path)
                 os.remove(log_path)
 
