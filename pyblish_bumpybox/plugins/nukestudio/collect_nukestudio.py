@@ -13,12 +13,12 @@ class CollectNukeStudioTrackItems(pyblish.api.ContextPlugin):
         data = {}
 
         # Set handles
-        context.data["handles"] = 0
+        handles = 0
         if submission:
             for task in submission.getLeafTasks():
 
                 if task._cutHandles:
-                    context.data["handles"] = task._cutHandles
+                    handles = task._cutHandles
 
                 # Skip audio track items
                 media_type = "core.Hiero.Python.TrackItem.MediaType.kAudio"
@@ -30,6 +30,9 @@ class CollectNukeStudioTrackItems(pyblish.api.ContextPlugin):
                     data[item.name()] = {"item": item, "tasks": [task]}
                 else:
                     data[item.name()]["tasks"].append(task)
+
+                data[item.name()]["startFrame"] = task.outputRange()[0]
+                data[item.name()]["endFrame"] = task.outputRange()[1]
         else:
             for item in context.data.get("selection", []):
                 # Skip audio track items
@@ -37,7 +40,12 @@ class CollectNukeStudioTrackItems(pyblish.api.ContextPlugin):
                 if str(item.mediaType()) == media_type:
                     continue
 
-                data[item.name()] = {"item": item, "tasks": []}
+                data[item.name()] = {
+                    "item": item,
+                    "tasks": [],
+                    "startFrame": item.timelineIn(),
+                    "endFrame": item.timelineOut()
+                }
 
         for key, value in data.iteritems():
 
@@ -45,7 +53,10 @@ class CollectNukeStudioTrackItems(pyblish.api.ContextPlugin):
                 name=key,
                 item=value["item"],
                 family="trackItem",
-                tasks=value["tasks"]
+                tasks=value["tasks"],
+                startFrame=value["startFrame"] + handles,
+                endFrame=value["endFrame"] - handles,
+                handles=handles
             )
 
 
