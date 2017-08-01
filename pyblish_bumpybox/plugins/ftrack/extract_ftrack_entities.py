@@ -109,7 +109,7 @@ class ExtractFtrackShot(pyblish.api.InstancePlugin):
 
         # Assign attributes to shot
         attributes = {
-            "handles": instance.context.data["handles"],
+            "handles": instance.data["handles"],
             "fstart": instance.data["fstart"],
             "fend": instance.data["fend"],
             "fps": instance.data["fps"],

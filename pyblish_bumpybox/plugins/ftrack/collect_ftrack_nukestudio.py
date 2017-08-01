@@ -345,13 +345,9 @@ class CollectFtrackNukeStudioEntities(pyblish.api.ContextPlugin):
                 shot.data["parent"] = parent_instance
                 parent.data["shotInstance"] = shot
 
-                first_frame = int(parent.data["item"].timelineIn())
-                duration = int(
-                    parent.data["item"].timelineOut() - first_frame + 1
-                )
-                last_frame = first_frame + duration
-                shot.data["fstart"] = first_frame
-                shot.data["fend"] = last_frame
+                shot.data["handles"] = parent.data["handles"]
+                shot.data["fstart"] = parent.data["startFrame"]
+                shot.data["fend"] = parent.data["endFrame"]
 
                 sequence = parent.data["item"].parent().parent()
                 shot.data["fps"] = sequence.framerate().toFloat()
