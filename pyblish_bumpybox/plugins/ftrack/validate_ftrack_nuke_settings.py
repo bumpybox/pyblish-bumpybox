@@ -13,14 +13,13 @@ class RepairFtrackNukeSettings(pyblish.api.Action):
 
         ftrack_data = context.data("ftrackData")
         task = ftrack.Task(ftrack_data["Task"]["id"])
-        project = task.getParents()[-1]
-        shot = task.getParent()
+        parent = task.getParent()
 
-        nuke.root()["fps"].setValue(project.get("fps"))
-        nuke.root()["first_frame"].setValue(shot.getFrameStart())
+        nuke.root()["fps"].setValue(parent.get("fps"))
+        nuke.root()["first_frame"].setValue(parent.getFrameStart())
 
-        handles = shot.get("handles")
-        last_frame = shot.getFrameEnd() + (handles * 2)
+        handles = parent.get("handles")
+        last_frame = parent.getFrameEnd() + (handles * 2)
         nuke.root()["last_frame"].setValue(last_frame)
 
 
@@ -38,7 +37,6 @@ class ValidateFtrackNukeSettings(pyblish.api.Validator):
         ftrack_data = context.data("ftrackData")
 
         task = ftrack.Task(ftrack_data["Task"]["id"])
-        project = task.getParents()[-1]
         parent = task.getParent()
 
         # skipping all non shot related tasks
@@ -52,7 +50,7 @@ class ValidateFtrackNukeSettings(pyblish.api.Validator):
         # validating fps
         local_fps = nuke.root()["fps"].value()
 
-        online_fps = project.get("fps")
+        online_fps = parent.get("fps")
 
         msg = "FPS is incorrect."
         msg += "\n\nLocal fps: %s" % local_fps
