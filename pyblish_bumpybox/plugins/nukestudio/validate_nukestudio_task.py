@@ -11,7 +11,7 @@ class ValidateNukeStudioTask(pyblish.api.InstancePlugin):
     """
 
     order = pyblish.api.ValidatorOrder
-    families = ["taskItem.task"]
+    families = ["trackItem.task"]
     label = "Task"
     hosts = ["nukestudio"]
     optional = True
