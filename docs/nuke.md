@@ -7,6 +7,7 @@ Output Format | Section
 Image Sequence | [Write Node](#write-node)
 Gizmo | [Group](#group)
 LUT | [Group](#group)
+Nuke Script | [Backdrop](#backdrop)
 
 ## Write Node
 
@@ -27,6 +28,10 @@ Disabling a write node will disable it for publishing. Similarly if you disable 
 To publish a gizmo, you'll need to setup a group. Please read about creating groups [here](http://help.thefoundry.co.uk/nuke/8.0/content/user_guide/configuring_nuke/creating_sourcing_gizmos.html)
 
 To publish a LUT, you'll need to setup a group. Please read the ```To Create a Viewer Process Gizmo``` section [here](http://help.thefoundry.co.uk/nuke/8.0/content/user_guide/configuring_nuke/using_gizmo_viewer_process.html)
+
+## Backdrop
+
+To publish a subset of nodes to a Nuke script, you'll need to setup a backdrop node. All nodes within the backdrop will be available for publishing.
 
 ## Remote Rendering/Processing
 
