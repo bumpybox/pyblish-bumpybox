@@ -77,6 +77,7 @@ class ExtractFtrackEpisode(pyblish.api.InstancePlugin):
     def process(self, instance):
 
         instance.data["entity"] = ensure_entity(instance, "Episode")
+        instance.data["item"] = instance.data["parent"].data["item"]
 
 
 class ExtractFtrackSequence(pyblish.api.InstancePlugin):
@@ -91,6 +92,7 @@ class ExtractFtrackSequence(pyblish.api.InstancePlugin):
     def process(self, instance):
 
         instance.data["entity"] = ensure_entity(instance, "Sequence")
+        instance.data["item"] = instance.data["parent"].data["item"]
 
 
 class ExtractFtrackShot(pyblish.api.InstancePlugin):
@@ -103,9 +105,9 @@ class ExtractFtrackShot(pyblish.api.InstancePlugin):
     optional = True
 
     def process(self, instance):
-
         entity = ensure_entity(instance, "Shot")
         instance.data["entity"] = entity
+        instance.data["item"] = instance.data["parent"].data["item"]
 
         # Assign attributes to shot
         attributes = {
@@ -121,7 +123,87 @@ class ExtractFtrackShot(pyblish.api.InstancePlugin):
             try:
                 entity["custom_attributes"][key] = value
             except Exception as e:
-                self.log.warning("Could not set the resolution: " + str(e))
+                self.log.warning("Could not set the attribute: " + str(e))
+
+
+class ExtractFtrackThumbnail(pyblish.api.InstancePlugin):
+    """Creates thumbnails from shots."""
+
+    order = ExtractFtrackShot.order + 0.01
+    families = ["ftrackEntity", "shot"]
+    match = pyblish.api.Subset
+    label = "Ftrack Thumbnail"
+    optional = True
+
+    def nukestudio(self, instance):
+        import os
+        import time
+        import hiero
+
+        item = instance.data["item"]
+
+        nukeWriter = hiero.core.nuke.ScriptWriter()
+
+        # Getting top most track with media.
+        seq = item.parent().parent()
+        item = seq.trackItemAt(item.timelineIn())
+
+        root_node = hiero.core.nuke.RootNode(1, 1, fps=seq.framerate())
+        nukeWriter.addNode(root_node)
+
+        handles = instance.data["handles"]
+
+        item.addToNukeScript(
+            script=nukeWriter,
+            firstFrame=1,
+            includeRetimes=True,
+            retimeMethod="Frame",
+            startHandle=handles,
+            endHandle=handles
+        )
+
+        input_path = item.source().mediaSource().fileinfos()[0].filename()
+        filename = os.path.splitext(input_path)[0]
+        filename += "_thumbnail.png"
+        output_path = os.path.join(
+            os.path.dirname(instance.context.data["currentFile"]),
+            "workspace",
+            os.path.basename(filename)
+        )
+
+        fmt = hiero.core.Format(300, 200, 1, "thumbnail")
+        fmt.addToNukeScript(script=nukeWriter)
+
+        write_node = hiero.core.nuke.WriteNode(output_path)
+        write_node.setKnob("file_type", "png")
+        nukeWriter.addNode(write_node)
+
+        script_path = output_path.replace(".png", ".nk")
+        nukeWriter.writeToDisk(script_path)
+        logFileName = output_path.replace(".png", ".log")
+        process = hiero.core.nuke.executeNukeScript(
+            script_path,
+            open(logFileName, "w")
+        )
+
+        while process.poll() is None:
+            time.sleep(0.5)
+
+        if os.path.exists(output_path):
+            self.log.info("Thumbnail rendered successfully!")
+            return output_path
+
+        self.log.error("Thumbnail failed to render")
+        return None
+
+    def process(self, instance):
+        import pyblish.api
+
+        # Extract thumbnail
+        methods = {"nukestudio": self.nukestudio}
+        instance.data["entity"].create_thumbnail(
+            methods[pyblish.api.current_host()](instance)
+        )
 
 
 class ExtractFtrackTasks(pyblish.api.InstancePlugin):
