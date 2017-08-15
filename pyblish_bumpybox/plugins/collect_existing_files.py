@@ -13,7 +13,7 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
 
     order = pyblish.api.CollectorOrder + 0.25
     label = "Existing Files"
-    hosts = ["maya", "houdini", "nuke"]
+    hosts = ["maya", "houdini", "nuke", "nukestudio"]
 
     def get_version(self, string, prefix):
         """ Extract version information from filenames.  Code from Foundry"s

@@ -17,6 +17,7 @@ class ExtractHieroFtrackThumbnail(pyblish.api.InstancePlugin):
     label = "Ftrack Thumbnail"
     optional = True
     active = False
+    hosts = ["hiero"]
 
     def process(self, instance):
 

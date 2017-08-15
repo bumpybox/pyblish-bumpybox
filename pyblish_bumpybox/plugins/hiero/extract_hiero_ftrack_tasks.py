@@ -13,6 +13,7 @@ class ExtractHieroFtrackTasks(pyblish.api.Extractor):
     optional = True
     order = pyblish.api.ExtractorOrder + 0.1
     optional = True
+    hosts = ["hiero"]
 
     def getTaskTypeByName(self, name):
         for t in ftrack.getTaskTypes():

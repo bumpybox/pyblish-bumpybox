@@ -13,6 +13,7 @@ class ExtractHieroTranscode(pyblish.api.InstancePlugin):
     families = ["transcode"]
     label = "Transcode"
     optional = True
+    hosts = ["hiero"]
 
     def process(self, instance):
 
