@@ -366,8 +366,10 @@ class CollectFtrackNukeStudioEntities(pyblish.api.ContextPlugin):
                     metadata = tag.metadata().dict()
 
                     if "tag.type" in metadata.keys():
+                        # Expect "task_name" instead of "name", because "name"
+                        # can't be edited by the user.
                         name = metadata.get(
-                            "tag.name", metadata["tag.type"].lower()
+                            "tag.task_name", metadata["tag.type"].lower()
                         )
                         task = context.create_instance(name=name)
                         label = shot.data["label"] + "/" + name
