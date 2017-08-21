@@ -344,6 +344,7 @@ class CollectFtrackNukeStudioEntities(pyblish.api.ContextPlugin):
                 shot.data["families"] = ["trackItem", "ftrackEntity", "shot"]
                 shot.data["parent"] = parent_instance
                 parent.data["shotInstance"] = shot
+                shot.data["item"] = parent.data["item"]
 
                 shot.data["handles"] = parent.data["handles"]
                 shot.data["fstart"] = parent.data["startFrame"]

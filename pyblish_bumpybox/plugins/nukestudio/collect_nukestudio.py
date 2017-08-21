@@ -110,6 +110,7 @@ class CollectNukeStudioTasks(pyblish.api.ContextPlugin):
                 instance = context.create_instance(name=name, parent=parent)
 
                 instance.data["task"] = task
+                instance.data["item"] = parent.data["item"]
 
                 instance.data["family"] = "trackItem.task"
                 instance.data["families"] = [asset_type, "local", "task"]
