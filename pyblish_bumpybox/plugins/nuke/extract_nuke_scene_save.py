@@ -8,7 +8,7 @@ class ExtractNukeSceneSave(pyblish.api.InstancePlugin):
     order = pyblish.api.ExtractorOrder - 0.49
     families = ["source"]
     label = "Scene Save"
-    targets = ["default", "processing"]
+    targets = ["default", "process"]
 
     def process(self, instance):
 

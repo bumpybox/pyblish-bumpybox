@@ -9,7 +9,7 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
     order = pyblish.api.CollectorOrder
     label = "Writes"
     hosts = ["nuke"]
-    targets = ["default", "processing"]
+    targets = ["default", "process"]
 
     def process(self, context):
 
@@ -65,7 +65,7 @@ class CollectNukeWritesLocal(pyblish.api.ContextPlugin):
     order = CollectNukeWrites.order + 0.01
     label = "Writes Local"
     hosts = ["nuke"]
-    targets = ["processing.local"]
+    targets = ["process.local"]
 
     def process(self, context):
 

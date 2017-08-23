@@ -7,7 +7,7 @@ class CollectNukeWritesRoyalRender(pyblish.api.ContextPlugin):
     order = pyblish.api.CollectorOrder + 0.1
     label = "Writes Royal Render"
     hosts = ["nuke"]
-    targets = ["processing.royalrender"]
+    targets = ["process.royalrender"]
 
     def process(self, context):
 

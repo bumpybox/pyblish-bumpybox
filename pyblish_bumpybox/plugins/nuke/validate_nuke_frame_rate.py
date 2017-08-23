@@ -9,7 +9,7 @@ class ValidateNukeFrameRate(pyblish.api.ContextPlugin):
     families = ["write"]
     label = "Frame Rate"
     optional = True
-    targets = ["default", "processing"]
+    targets = ["default", "process"]
 
     def process(self, context):
 
