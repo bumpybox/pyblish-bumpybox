@@ -9,18 +9,11 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
     order = pyblish.api.CollectorOrder
     label = "Writes"
     hosts = ["nuke"]
+    targets = ["default", "processing"]
 
     def process(self, context):
 
-        # Get remote nodes
-        remote_nodes = []
-        for node in nuke.allNodes():
-            if node.Class() == "BackdropNode":
-                if node.name().lower().startswith("remote"):
-                    remote_nodes.extend(node.getNodes())
-
-        remote_nodes = list(set(remote_nodes))
-
+        instances = context.data.get("instances", [])
         # creating instances per write node
         for node in nuke.allNodes():
             if node.Class() != "Write":
@@ -31,19 +24,13 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
             if node["file_type"].value() == "mov":
                 output_type = "mov"
 
-            # Determine processing location from backdrops
-            process_place = "local"
-            if node in remote_nodes:
-                process_place = "remote"
-
             # Create instance
-            instance = context.create_instance(name=node.name())
-            instance.data["families"] = ["write", process_place, output_type]
+            instance = pyblish.api.Instance(node.name())
+            instance.data["families"] = ["write", output_type]
             instance.data["family"] = output_type
             instance.add(node)
 
-            label = "{0} - write - {1}"
-            instance.data["label"] = label.format(node.name(), process_place)
+            instance.data["label"] = "{0} - write".format(node.name())
 
             instance.data["publish"] = not node["disable"].getValue()
 
@@ -66,3 +53,28 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
                 self.log.warning(e)
 
             instance.data["collection"] = collection
+
+            instances.append(instance)
+
+        context.data["instances"] = instances
+
+
+class CollectNukeWritesLocal(pyblish.api.ContextPlugin):
+    """Collect all local processing write instances."""
+
+    order = CollectNukeWrites.order + 0.01
+    label = "Writes Local"
+    hosts = ["nuke"]
+    targets = ["processing.local"]
+
+    def process(self, context):
+
+        for item in context.data["instances"]:
+            instance = context.create_instance(item.data["name"])
+            for key, value in item.data.iteritems():
+                instance.data[key] = value
+
+            instance.data["label"] += " - local"
+            instance.data["families"].append("local")
+            for node in item:
+                instance.add(node)

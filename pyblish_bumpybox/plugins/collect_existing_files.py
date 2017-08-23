@@ -87,7 +87,8 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
         # Gather all valid collections
         valid_families = ["img", "cache", "scene", "mov"]
         collections = []
-        for instance in context:
+        instances = context + context.data.get("instances", [])
+        for instance in instances:
             families = instance.data.get("families", [])
             family_type = list(set(families) & set(valid_families))
 

@@ -6,8 +6,9 @@ class ExtractNukeSceneSave(pyblish.api.InstancePlugin):
     """ Saves the scene before extraction. """
 
     order = pyblish.api.ExtractorOrder - 0.49
-    families = ["scene"]
+    families = ["source"]
     label = "Scene Save"
+    targets = ["default", "processing"]
 
     def process(self, instance):
 
