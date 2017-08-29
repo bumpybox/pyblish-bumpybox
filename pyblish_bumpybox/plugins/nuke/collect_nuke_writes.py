@@ -26,7 +26,6 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
 
             # Create instance
             instance = pyblish.api.Instance(node.name())
-            instance.data["families"] = ["write", output_type]
             instance.data["family"] = output_type
             instance.add(node)
 
@@ -75,6 +74,6 @@ class CollectNukeWritesLocal(pyblish.api.ContextPlugin):
                 instance.data[key] = value
 
             instance.data["label"] += " - local"
-            instance.data["families"].append("local")
+            instance.data["families"] = ["write", "local"]
             for node in item:
                 instance.add(node)

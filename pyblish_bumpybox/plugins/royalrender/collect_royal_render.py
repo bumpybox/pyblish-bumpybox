@@ -17,6 +17,6 @@ class CollectNukeWritesRoyalRender(pyblish.api.ContextPlugin):
                 instance.data[key] = value
 
             instance.data["label"] += " - royalrender"
-            instance.data["families"].append("royalrender")
+            instance.data["families"] = ["write", "royalrender"]
             for node in item:
                 instance.add(node)
