@@ -94,12 +94,16 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
             if not family_type:
                 continue
 
-            collection = instance.data.get("collection", None)
+            instance_collection = instance.data.get("collection", None)
 
-            if not collection:
+            if not instance_collection:
                 continue
 
-            collection.indexes.clear()
+            collection = clique.Collection(
+                head=instance_collection.head,
+                padding=instance_collection.padding,
+                tail=instance_collection.tail
+            )
 
             # Store instance data on collection for later usage
             collection.name = instance.data["name"]
