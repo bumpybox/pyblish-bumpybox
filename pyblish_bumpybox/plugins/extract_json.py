@@ -40,7 +40,7 @@ class ExtractJSON(pyblish.api.ContextPlugin):
                     msg = "\"{0}\"".format(value)
                     msg += " in instance.data[\"{0}\"]".format(key)
                     msg += " could not be serialized."
-                    self.log.warning(msg)
+                    self.log.debug(msg)
 
             output_data.append(data)
 
