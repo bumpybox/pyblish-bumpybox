@@ -90,6 +90,7 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
         instances = context + context.data.get("instances", [])
         for instance in instances:
             families = instance.data.get("families", [])
+            families += [instance.data["family"]]
             family_type = list(set(families) & set(valid_families))
 
             if not family_type:

@@ -11,6 +11,6 @@ class CollectSorting(pyblish.api.Collector):
 
         context[:] = sorted(
             context, key=lambda instance: (
-                instance.data("family"), instance.data("name")
+                instance.data("family"), instance.data("label")
             )
         )
