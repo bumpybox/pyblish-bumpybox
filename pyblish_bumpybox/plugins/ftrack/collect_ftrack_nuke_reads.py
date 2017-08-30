@@ -19,6 +19,10 @@ class CollectFtrackNukeReads(pyblish.api.ContextPlugin):
             if node.Class() != "Read":
                 continue
 
+            # Ignore asset Read nodes
+            if "assetVersionId" in node.knobs():
+                continue
+
             # Determine output type
             output_type = "img"
             movie_formats = ["ari", "avi", "gif", "mov", "r3d"]
