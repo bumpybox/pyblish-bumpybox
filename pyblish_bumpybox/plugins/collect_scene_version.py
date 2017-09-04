@@ -24,7 +24,7 @@ class CollectSceneVersion(pyblish.api.ContextPlugin):
         except:
             msg = "Could not collect scene version:\n\n"
             msg += traceback.format_exc()
-            self.log.warning(msg)
+            self.log.debug(msg)
 
     def version_get(self, string, prefix):
         """ Extract version information from filenames.  Code from Foundry"s
