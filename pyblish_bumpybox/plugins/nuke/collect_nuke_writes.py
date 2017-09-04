@@ -48,8 +48,10 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
                     path = nuke.filename(node)
                 path += " [{0}-{1}]".format(start_frame, end_frame)
                 collection = clique.parse(path)
-            except Exception as e:
-                self.log.warning(e)
+            except ValueError:
+                # Ignore the exception when the path does not match the
+                # collection.
+                pass
 
             instance.data["collection"] = collection
 
