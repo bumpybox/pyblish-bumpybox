@@ -31,8 +31,6 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
 
             instance.data["label"] = "{0} - write".format(node.name())
 
-            instance.data["publish"] = bool(not node["disable"].getValue())
-
             # Get frame range
             start_frame = int(nuke.root()["first_frame"].getValue())
             end_frame = int(nuke.root()["last_frame"].getValue())
@@ -48,8 +46,10 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
                     path = nuke.filename(node)
                 path += " [{0}-{1}]".format(start_frame, end_frame)
                 collection = clique.parse(path)
-            except Exception as e:
-                self.log.warning(e)
+            except ValueError:
+                # Ignore the exception when the path does not match the
+                # collection.
+                pass
 
             instance.data["collection"] = collection
 
@@ -77,3 +77,14 @@ class CollectNukeWritesLocal(pyblish.api.ContextPlugin):
             instance.data["families"] = ["write", "local"]
             for node in item:
                 instance.add(node)
+
+            # Adding/Checking publish attribute
+            if "process_local" not in node.knobs():
+                knob = nuke.Boolean_Knob(
+                    "process_local", "Process Local"
+                )
+                knob.setValue(False)
+                node.addKnob(knob)
+
+            value = bool(node["process_local"].getValue())
+            instance.data["publish"] = value
