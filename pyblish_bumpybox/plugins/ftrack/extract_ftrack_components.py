@@ -15,9 +15,6 @@ class ExtractFtrackComponents(pyblish.api.InstancePlugin):
 
     def process(self, instance):
 
-        if not instance.data.get("publish", True):
-            return
-
         if "collection" in instance.data:
             self.add_ftrack_components(
                 instance,
