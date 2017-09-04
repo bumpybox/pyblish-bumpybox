@@ -31,7 +31,7 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
 
             instance.data["label"] = "{0} - write".format(node.name())
 
-            instance.data["publish"] = not node["disable"].getValue()
+            instance.data["publish"] = bool(not node["disable"].getValue())
 
             # Get frame range
             start_frame = int(nuke.root()["first_frame"].getValue())
