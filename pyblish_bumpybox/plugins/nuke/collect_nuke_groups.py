@@ -36,13 +36,12 @@ class CollectNukeGroups(pyblish.api.ContextPlugin):
                 instance.data["label"] = label
 
                 # Adding/Checking publish attribute
-                instance.data["publish"] = False
                 if fmt not in node.knobs():
                     knob = nuke.Boolean_Knob(fmt, fmt.title())
                     knob.setValue(False)
                     node.addKnob(knob)
-                else:
-                    instance.data["publish"] = node[fmt].getValue()
+
+                instance.data["publish"] = bool(node[fmt].getValue())
 
                 # Generate output path
                 directory = os.path.join(

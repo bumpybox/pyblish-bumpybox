@@ -31,13 +31,12 @@ class CollectNukeBackdrops(pyblish.api.ContextPlugin):
             instance.data["label"] = label
 
             # Adding/Checking publish attribute
-            instance.data["publish"] = False
             if "publish" not in node.knobs():
                 knob = nuke.Boolean_Knob("publish", "Publish")
                 knob.setValue(False)
                 node.addKnob(knob)
-            else:
-                instance.data["publish"] = node["publish"].getValue()
+
+            instance.data["publish"] = bool(node["publish"].getValue())
 
             # Generate output path
             directory = os.path.join(
