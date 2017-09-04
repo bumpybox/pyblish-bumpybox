@@ -18,9 +18,6 @@ class CollectJSON(pyblish.api.ContextPlugin):
         nukescripts.version_get()
         """
 
-        if string is None:
-            raise ValueError("Empty version string - no match")
-
         regex = "[/_.]"+prefix+"\d+"
         matches = re.findall(regex, string, re.IGNORECASE)
         if not len(matches):
@@ -49,7 +46,7 @@ class CollectJSON(pyblish.api.ContextPlugin):
         valid_families = ["img", "cache", "scene", "mov"]
         valid_data = []
         for data in instances:
-            families = data.get("families", [])
+            families = data.get("families", []) + [data["family"]]
             family_type = list(set(families) & set(valid_families))
             if family_type:
                 valid_data.append(data)
@@ -59,14 +56,20 @@ class CollectJSON(pyblish.api.ContextPlugin):
         files = []
         collections = []
         for data in valid_data:
-            if "collection" not in data.keys() or "output" in data["families"]:
+            if "collection" not in data.keys():
+                continue
+            if data["collection"] is None:
                 continue
 
             instance_collection = clique.parse(data["collection"])
 
-            version = self.version_get(
-                os.path.basename(instance_collection.format()), "v"
-            )[1]
+            try:
+                version = self.version_get(
+                    os.path.basename(instance_collection.format()), "v"
+                )[1]
+            except:
+                # Ignore any output that is not versioned
+                continue
 
             # Getting collections of all previous versions and current version
             for count in range(1, int(version) + 1):
@@ -114,9 +117,12 @@ class CollectJSON(pyblish.api.ContextPlugin):
                     data["name"], basename
                 )
 
-                families = set(valid_families) & set(data["families"])
-                instance.data["families"] = list(families) + ["output"]
+                families = data["families"] + [data["family"]]
+                family = list(set(valid_families) & set(families))[0]
+                instance.data["family"] = family
+                instance.data["families"] = ["output"]
                 instance.data["collection"] = collection
                 instance.data["version"] = int(version)
+                instance.data["publish"] = False
 
                 collections.append(collection)
