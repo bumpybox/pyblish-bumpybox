@@ -10,6 +10,7 @@ class CollectNukeWritesRoyalRender(pyblish.api.ContextPlugin):
     targets = ["process.royalrender"]
 
     def process(self, context):
+        import nuke
 
         for item in context.data["instances"]:
             instance = context.create_instance(item.data["name"])
@@ -20,3 +21,14 @@ class CollectNukeWritesRoyalRender(pyblish.api.ContextPlugin):
             instance.data["families"] = ["write", "royalrender"]
             for node in item:
                 instance.add(node)
+
+            # Adding/Checking publish attribute
+            if "process_royalrender" not in node.knobs():
+                knob = nuke.Boolean_Knob(
+                    "process_royalrender", "Process RoyalRender"
+                )
+                knob.setValue(False)
+                node.addKnob(knob)
+
+            value = bool(node["process_royalrender"].getValue())
+            instance.data["publish"] = value
