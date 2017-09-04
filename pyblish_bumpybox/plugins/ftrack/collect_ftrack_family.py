@@ -6,7 +6,7 @@ class CollectFtrackFamily(pyblish.api.ContextPlugin):
 
     # Offset to get all instances
     order = pyblish.api.CollectorOrder + 0.4
-    label = "Family"
+    label = "Ftrack Family"
 
     def process(self, context):
 

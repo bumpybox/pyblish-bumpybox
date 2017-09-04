@@ -5,7 +5,7 @@ class CollectRoyalRenderFamily(pyblish.api.ContextPlugin):
     """ Append "royalrender" to instances of "remote" family """
 
     order = pyblish.api.CollectorOrder + 0.4
-    label = "Family"
+    label = "RoyalRender Family"
 
     def process(self, context):
 
