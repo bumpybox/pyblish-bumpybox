@@ -13,6 +13,7 @@ class ExtractNukeWrite(pyblish.api.InstancePlugin):
     label = "Write"
     hosts = ["nuke"]
     match = pyblish.api.Subset
+    targets = ["process.local"]
 
     def process(self, instance):
 

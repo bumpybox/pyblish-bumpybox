@@ -1,28 +1,22 @@
-import os
-import time
-
 import pyblish.api
-import hiero
 
 
-class ExtractHieroFtrackThumbnail(pyblish.api.InstancePlugin):
-    """ Creates thumbnails for ftrack shots and uploads them.
+class ExtractFtrackThumbnail(pyblish.api.InstancePlugin):
+    """Creates thumbnails from shots."""
 
-    Offset to get shot from "extract_ftrack_shot"
-    """
-
-    order = pyblish.api.ExtractorOrder + 0.1
-    families = ["ftrack", "trackItem"]
+    order = pyblish.api.ExtractorOrder
+    families = ["ftrackEntity", "shot"]
     match = pyblish.api.Subset
     label = "Ftrack Thumbnail"
     optional = True
-    active = False
-    hosts = ["hiero"]
+    hosts = ["nukestudio"]
 
     def process(self, instance):
+        import os
+        import time
+        import hiero
 
-        item = instance[0]
-        shot = instance.data["ftrackShot"]
+        item = instance.data["item"]
 
         nukeWriter = hiero.core.nuke.ScriptWriter()
 
@@ -71,10 +65,12 @@ class ExtractHieroFtrackThumbnail(pyblish.api.InstancePlugin):
         while process.poll() is None:
             time.sleep(0.5)
 
+        # Get first frame if its a sequence
+        if "%" in output_path:
+            output_path = output_path % 1
+
         if os.path.exists(output_path):
             self.log.info("Thumbnail rendered successfully!")
-
-            # Creating thumbnail
-            shot.createThumbnail(output_path)
+            instance.data["thumbnail"] = output_path
         else:
-            self.log.error("Thumbnail failed to render")
+            self.log.warning("Thumbnail failed to render")

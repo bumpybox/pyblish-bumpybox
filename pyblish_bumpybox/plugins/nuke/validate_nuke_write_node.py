@@ -49,6 +49,7 @@ class ValidateNukeWriteNode(pyblish.api.InstancePlugin):
     label = "Write Node"
     actions = [RepairNukeWriteNodeAction]
     hosts = ["nuke"]
+    targets = ["default", "process"]
 
     def process(self, instance):
 

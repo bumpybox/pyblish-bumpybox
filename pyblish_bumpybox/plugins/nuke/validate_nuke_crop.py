@@ -39,6 +39,7 @@ class ValidateNukeCrop(pyblish.api.InstancePlugin):
     label = "Crop"
     optional = True
     actions = [RepairNukeCropAction]
+    targets = ["process"]
 
     def process(self, instance):
 

@@ -9,6 +9,7 @@ class CollectScene(pyblish.api.ContextPlugin):
     # offset to get latest currentFile from context
     order = pyblish.api.CollectorOrder + 0.1
     label = "Scene"
+    targets = ["default", "process"]
 
     def process(self, context):
 
