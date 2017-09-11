@@ -31,6 +31,8 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
 
             instance.data["label"] = "{0} - write".format(node.name())
 
+            instance.data["publish"] = False
+
             # Get frame range
             start_frame = int(nuke.root()["first_frame"].getValue())
             end_frame = int(nuke.root()["last_frame"].getValue())
