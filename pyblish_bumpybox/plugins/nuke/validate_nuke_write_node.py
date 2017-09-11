@@ -84,10 +84,13 @@ class ValidateNukeWriteNode(pyblish.api.InstancePlugin):
 
     def get_expected_value(self, instance):
 
-        expected = "[python {nuke.script_directory()}]/workspace/"
-        expected += "[python {nuke.thisNode()[\"name\"].getValue()}]/"
-        expected += "[python {os.path.splitext(os.path.basename("
-        expected += "nuke.scriptName()))[0]}]"
+        expected = (
+            "[python {nuke.script_directory()}]/workspace/[python "
+            "{nuke.thisNode().name()}]/[python {os.path.splitext("
+            "os.path.basename(nuke.scriptName()))[0]}]/[python {"
+            "os.path.splitext(os.path.basename(nuke.scriptName()))[0]}]_"
+            "[python {nuke.thisNode().name()}]"
+        )
 
         # Default padding starting at 4 digits.
         padding = 4
