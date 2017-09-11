@@ -89,7 +89,7 @@ class ValidateNukeWriteNode(pyblish.api.InstancePlugin):
             "{nuke.thisNode().name()}]/[python {os.path.splitext("
             "os.path.basename(nuke.scriptName()))[0]}]/[python {"
             "os.path.splitext(os.path.basename(nuke.scriptName()))[0]}]_"
-            "[python {nuke.thisNode().name()}].%04d.exr"
+            "[python {nuke.thisNode().name()}]"
         )
 
         # Default padding starting at 4 digits.
