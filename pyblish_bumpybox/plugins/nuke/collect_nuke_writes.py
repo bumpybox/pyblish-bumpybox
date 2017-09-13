@@ -13,7 +13,7 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
 
     def process(self, context):
 
-        instances = context.data.get("instances", [])
+        instances = []
         # creating instances per write node
         for node in nuke.allNodes():
             if node.Class() != "Write":
@@ -57,7 +57,11 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
 
             instances.append(instance)
 
-        context.data["instances"] = instances
+        context.data["write_instances"] = instances
+
+        context.data["instances"] = (
+            context.data.get("instances", []) + instances
+        )
 
 
 class CollectNukeWritesLocal(pyblish.api.ContextPlugin):
@@ -70,7 +74,7 @@ class CollectNukeWritesLocal(pyblish.api.ContextPlugin):
 
     def process(self, context):
 
-        for item in context.data["instances"]:
+        for item in context.data["write_instances"]:
             instance = context.create_instance(item.data["name"])
             for key, value in item.data.iteritems():
                 instance.data[key] = value

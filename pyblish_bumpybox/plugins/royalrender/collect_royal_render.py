@@ -12,7 +12,7 @@ class CollectNukeWritesRoyalRender(pyblish.api.ContextPlugin):
     def process(self, context):
         import nuke
 
-        for item in context.data["instances"]:
+        for item in context.data["write_instances"]:
             instance = context.create_instance(item.data["name"])
             for key, value in item.data.iteritems():
                 instance.data[key] = value
