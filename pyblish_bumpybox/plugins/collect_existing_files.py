@@ -55,6 +55,32 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
 
         return collections
 
+    def single_file_instances(self, instance, version, family_type, context):
+
+        for count in range(1, int(version) + 1):
+            version_string = "v" + str(count).zfill(len(version))
+            filename = instance.data["output_path"].replace(
+                "v" + version, version_string
+            )
+
+            if not os.path.exists(filename):
+                continue
+
+            new_instance = context.create_instance(
+                name=instance.data["name"],
+                label="{0} - {1}".format(
+                    instance.data["name"], os.path.basename(filename)
+                ),
+                family="output",
+                families=family_type,
+                publish=False,
+                output_path=filename,
+                version=context.data["version"]
+            )
+
+            for node in instance:
+                new_instance.add(node)
+
     def scan_collections_files(self, collections):
         """Return all files in the directories of the collections."""
 
@@ -98,36 +124,49 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
 
             instance_collection = instance.data.get("collection", None)
 
-            if not instance_collection:
-                continue
+            if instance_collection:
 
-            collection = clique.Collection(
-                head=instance_collection.head,
-                padding=instance_collection.padding,
-                tail=instance_collection.tail
-            )
-
-            # Store instance data on collection for later usage
-            collection.name = instance.data["name"]
-            collection.label = instance.data["label"]
-            collection.family = family_type[0]
-            collection.version = context.data["version"]
-            collection.nodes = instance[:]
-
-            # Get older version collections
-            version = self.get_version(
-                os.path.basename(collection.format()), "v"
-            )
-            if version:
-                collections.extend(
-                    self.get_version_collections(
-                        collection, version[1]
-                    )
+                collection = clique.Collection(
+                    head=instance_collection.head,
+                    padding=instance_collection.padding,
+                    tail=instance_collection.tail
                 )
 
-            # Ensure original collection is gathered
-            if collection not in collections:
-                collections.append(collection)
+                # Store instance data on collection for later usage
+                collection.name = instance.data["name"]
+                collection.label = instance.data["label"]
+                collection.family = family_type[0]
+                collection.version = context.data["version"]
+                collection.nodes = instance[:]
+
+                # Get older version collections
+                version = self.get_version(
+                    os.path.basename(collection.format()), "v"
+                )
+                if version:
+                    collections.extend(
+                        self.get_version_collections(
+                            collection, version[1]
+                        )
+                    )
+
+                # Ensure original collection is gathered
+                if collection not in collections:
+                    collections.append(collection)
+
+            # Single file outputs
+            output_path = instance.data.get("output_path", "")
+
+            if output_path:
+
+                # Get older version collections
+                version = self.get_version(
+                    os.path.basename(output_path), "v"
+                )
+                if version:
+                    self.single_file_instances(
+                        instance, version[1], family_type, context
+                    )
 
         files = self.scan_collections_files(collections)
 
