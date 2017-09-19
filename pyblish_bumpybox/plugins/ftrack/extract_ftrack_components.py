@@ -65,6 +65,9 @@ class ExtractFtrackComponents(pyblish.api.InstancePlugin):
                 "component_location"
             ]
 
+        if "commit_members" in instance.data.keys():
+            component["commit_members"] = instance.data["commit_members"]
+
         components = instance.data.get("ftrackComponentsList", [])
         components.append(component)
         instance.data["ftrackComponentsList"] = components
