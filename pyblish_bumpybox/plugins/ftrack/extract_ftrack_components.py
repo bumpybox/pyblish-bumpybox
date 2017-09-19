@@ -18,7 +18,11 @@ class ExtractFtrackComponents(pyblish.api.InstancePlugin):
         if "collection" in instance.data:
             self.add_ftrack_components(
                 instance,
-                instance.data["collection"].format()
+                instance.data["collection"].format(
+                    pattern=instance.data.get(
+                        "pattern", "{head}{padding}{tail} [{ranges}]"
+                    )
+                )
             )
 
         if "output_path" in instance.data:
@@ -64,9 +68,6 @@ class ExtractFtrackComponents(pyblish.api.InstancePlugin):
             component["component_location"] = instance.data[
                 "component_location"
             ]
-
-        if "commit_members" in instance.data.keys():
-            component["commit_members"] = instance.data["commit_members"]
 
         components = instance.data.get("ftrackComponentsList", [])
         components.append(component)
