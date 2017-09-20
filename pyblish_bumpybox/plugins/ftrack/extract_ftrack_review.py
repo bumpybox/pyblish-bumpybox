@@ -35,12 +35,10 @@ class ExtractFtrackReview(pyblish.api.InstancePlugin):
             self.log.info(msg.format(instance.data["name"]))
             return
 
-        parent_entity = instance.context.data["ftrackTask"]["parent"]
-        framerate = parent_entity["custom_attributes"]["fps"]
-
         output_file = collection.format("{head}.mov")
         args = [
-            "ffmpeg", "-y", "-gamma", "2.2", "-framerate", str(framerate),
+            "ffmpeg", "-y", "-gamma", "2.2",
+            "-framerate", str(instance.context.data["framerate"]),
             "-start_number", str(list(collection.indexes)[0]),
             "-i", collection.format("{head}{padding}{tail}"),
             "-q:v", "0", "-pix_fmt", "yuv420p", "-vf",
@@ -82,7 +80,7 @@ class ExtractFtrackReview(pyblish.api.InstancePlugin):
                     "ftr_meta": json.dumps({
                         "frameIn": list(collection.indexes)[0],
                         "frameOut": list(collection.indexes)[-1],
-                        "frameRate": framerate
+                        "frameRate": instance.context.data["framerate"]
                     })
                 }
               },
