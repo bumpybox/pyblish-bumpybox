@@ -2,27 +2,21 @@ import os
 import subprocess
 
 import pyblish.api
-import clique
 
 
 class ExtractMovie(pyblish.api.InstancePlugin):
-    """ Extracts movie from image sequence. """
+    """Extracts movie from image sequence.
+
+    Offset to get images to transcode from.
+    """
 
     families = ["img"]
     order = pyblish.api.ExtractorOrder + 0.1
     label = "Movie"
     optional = True
-    active = False
+    targets = ["process.local"]
 
     def process(self, instance):
-
-        if "remote" in instance.data.get("families", []):
-            return
-
-        if not self.check_executable("ffmpeg"):
-            msg = "Skipping movie extraction because \"ffmpeg\" wasn't found."
-            self.log.info(msg)
-            return
 
         collection = instance.data.get("collection", [])
 
@@ -36,10 +30,21 @@ class ExtractMovie(pyblish.api.InstancePlugin):
             self.log.info(msg.format(instance.data["name"]))
             return
 
-        output_file = collection.format("{head}0001.mov")
+        # Start number needs to always be the first file of the existing
+        # frames, in order to ensure the full movie gets exported.
+        root = os.path.dirname(collection.format())
+        indexes = []
+        for f in os.listdir(root):
+            file_path = os.path.join(root, f).replace("\\", "/")
+            match = collection.match(file_path)
+            if match:
+                indexes.append(int(match.groupdict()["index"]))
+
+        output_file = collection.format("{head}.mov")
         args = [
-            "ffmpeg", "-y", "-gamma", "2.2", "-framerate", "25",
-            "-start_number", str(list(collection.indexes)[0]),
+            "ffmpeg", "-y", "-gamma", "2.2",
+            "-framerate", str(instance.context.data["framerate"]),
+            "-start_number", str(min(indexes)),
             "-i", collection.format("{head}{padding}{tail}"),
             "-q:v", "0", "-pix_fmt", "yuv420p", "-vf",
             "scale=trunc(iw/2)*2:trunc(ih/2)*2,colormatrix=bt601:bt709",
@@ -59,39 +64,3 @@ class ExtractMovie(pyblish.api.InstancePlugin):
             raise ValueError(output)
 
         self.log.debug(output)
-
-        output_collection = clique.Collection(
-            head=collection.format("{head}"),
-            padding=4,
-            tail=".mov"
-        )
-        output_collection.add(output_file)
-        instance.data["collection"] = output_collection
-
-    def check_executable(self, executable):
-        """ Checks to see if an executable is available.
-
-        Args:
-            executable (str): The name of executable without extension.
-
-        Returns:
-            bool: True for executable existance, False for non-existance.
-        """
-
-        def is_exe(fpath):
-            return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
-
-        fpath, fname = os.path.split(executable)
-        if fpath:
-            if is_exe(executable):
-                return True
-        else:
-            for path in os.environ["PATH"].split(os.pathsep):
-                path = path.strip('"')
-                exe_file = os.path.join(path, executable)
-                if is_exe(exe_file):
-                    return True
-                if is_exe(exe_file + ".exe"):
-                    return True
-
-        return False

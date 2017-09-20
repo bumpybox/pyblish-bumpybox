@@ -7,8 +7,9 @@ class CollectNukeFramerate(pyblish.api.ContextPlugin):
     """Collect framerate."""
 
     order = pyblish.api.CollectorOrder
-    label = "Nuke Framerate"
+    label = "Framerate"
     hosts = ["nuke"]
+    targets = ["default", "process"]
 
     def process(self, context):
 
