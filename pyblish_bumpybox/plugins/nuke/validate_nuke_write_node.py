@@ -62,13 +62,10 @@ class ValidateNukeWriteNode(pyblish.api.InstancePlugin):
             instance[0].name(), current, expected
         )
 
-        # Validate output directory exists, if not creating directories.
-        # The existence of the knob is queried because previous version
-        # of Nuke did not have this feature.
-        if "create_directories" not in instance[0].knobs():
-            path = os.path.dirname(self.get_current_value(instance))
-            msg = "Output directory doesn't exist: \"{0}\"".format(path)
-            assert os.path.exists(path), msg
+        # Validate output directory exists.
+        path = os.path.dirname(self.get_current_value(instance))
+        msg = "Output directory doesn't exist: \"{0}\"".format(path)
+        assert os.path.exists(path), msg
 
         # Validate metadata knob
         if "metadata" in instance[0].knobs().keys():
