@@ -40,7 +40,6 @@ class ExtractMovie(pyblish.api.InstancePlugin):
             if match:
                 indexes.append(int(match.groupdict()["index"]))
 
-        output_file = collection.format("{head}.mov")
         args = [
             "ffmpeg", "-y", "-gamma", "2.2",
             "-framerate", str(instance.context.data["framerate"]),
@@ -49,7 +48,7 @@ class ExtractMovie(pyblish.api.InstancePlugin):
             "-q:v", "0", "-pix_fmt", "yuv420p", "-vf",
             "scale=trunc(iw/2)*2:trunc(ih/2)*2,colormatrix=bt601:bt709",
             "-timecode", "00:00:00:01",
-            output_file
+            collection.format("{head}.mov")
         ]
 
         self.log.debug("Executing args: {0}".format(args))
