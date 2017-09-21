@@ -38,9 +38,7 @@ class ExtractFtrackThumbnail(pyblish.api.InstancePlugin):
             endHandle=handles
         )
 
-        input_path = item.source().mediaSource().fileinfos()[0].filename()
-        filename = os.path.splitext(input_path)[0]
-        filename += "_thumbnail.png"
+        filename = "{0}_thumbnail.png".format(item.name())
         output_path = os.path.join(
             os.path.dirname(instance.context.data["currentFile"]),
             "workspace",
