@@ -10,8 +10,8 @@ class ExtractRoyalRenderNuke(pyblish.api.InstancePlugin):
     """ Appending RoyalRender data to instances. """
 
     families = ["royalrender"]
-    order = pyblish.api.ValidatorOrder
-    label = "Royal Render"
+    order = pyblish.api.ExtractorOrder
+    label = "Royal Render Nuke"
     hosts = ["nuke"]
     targets = ["process"]
 
@@ -31,8 +31,6 @@ class ExtractRoyalRenderNuke(pyblish.api.InstancePlugin):
             last_frame = node["last"].value()
 
         # Generate data
-        data = instance.data.get("royalrenderData", {})
-
         data = {
             "Software": "Nuke",
             "Renderer": "",
@@ -42,7 +40,6 @@ class ExtractRoyalRenderNuke(pyblish.api.InstancePlugin):
             "SeqFileOffset": 0,
             "Version": nuke.NUKE_VERSION_STRING,
             "SceneName": instance.context.data["currentFile"],
-            "IsActive": False,
             "ImageDir": os.path.dirname(instance.data["collection"].format()),
             "ImageFilename": os.path.basename(
                 instance.data["collection"].head
@@ -51,7 +48,9 @@ class ExtractRoyalRenderNuke(pyblish.api.InstancePlugin):
             "ImagePreNumberLetter": ".",
             "ImageSingleOutputFile": False,
             "SceneOS": scene_os,
-            "Layer": instance.data["name"]
+            "Layer": instance.data["name"],
+            "PreID": 0,
+            "IsActive": True,
         }
 
         # SubmitterParameter
@@ -59,5 +58,7 @@ class ExtractRoyalRenderNuke(pyblish.api.InstancePlugin):
         submit_params.append("OverwriteExistingFiles=1~1")
         data["SubmitterParameter"] = submit_params
 
-        # Setting data
-        instance.data["royalrenderData"] = data
+        # Adding job
+        jobs = instance.data.get("royalrenderJobs", [])
+        jobs.append(data)
+        instance.data["royalrenderJobs"] = jobs
