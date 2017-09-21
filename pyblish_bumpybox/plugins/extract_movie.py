@@ -63,3 +63,13 @@ class ExtractMovie(pyblish.api.InstancePlugin):
             raise ValueError(output)
 
         self.log.debug(output)
+
+
+class ExtractReadMovie(ExtractMovie):
+    """Extracts movie from read nodes."""
+
+    families = ["read"]
+    order = pyblish.api.ExtractorOrder
+    label = "Read Movie"
+    optional = True
+    targets = ["default"]
