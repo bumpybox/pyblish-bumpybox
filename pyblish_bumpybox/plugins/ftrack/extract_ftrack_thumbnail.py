@@ -62,7 +62,9 @@ class ExtractFtrackThumbnail(pyblish.api.InstancePlugin):
               },
               "asset_data": instance.data.get("asset_data"),
               "assetversion_data": {
-                "version": instance.data["version"],
+                "version": instance.data.get(
+                    "version", instance.context.data["version"]
+                ),
               },
               "component_data": {
                 "name": "thumbnail",
