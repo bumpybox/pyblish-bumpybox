@@ -61,8 +61,12 @@ class ValidateNukeWriteGeoNode(pyblish.api.InstancePlugin):
         )
 
         # Validate file type
-        msg = "No file type selected."
-        assert instance[0]["file_type"].getValue(), msg
+        msg = "Wrong file type \"{0}\" selected for extension \"{1}\""
+        ext = os.path.splitext(current)[1][1:]
+        file_type = instance[0]["file_type"].enumName(
+            int(instance[0]["file_type"].getValue())
+        )
+        assert file_type == ext, msg.format(file_type, ext)
 
         # Validate output directory exists.
         path = os.path.dirname(self.get_current_value(instance))

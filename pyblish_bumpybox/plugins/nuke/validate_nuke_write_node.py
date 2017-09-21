@@ -72,6 +72,14 @@ class ValidateNukeWriteNode(pyblish.api.InstancePlugin):
             msg = "Metadata needs to be set to \"all metadata\"."
             assert instance[0]["metadata"].value() == "all metadata", msg
 
+        # Validate file type
+        msg = "Wrong file type \"{0}\" selected for extension \"{1}\""
+        ext = os.path.splitext(current)[1][1:]
+        file_type = instance[0]["file_type"].enumName(
+            int(instance[0]["file_type"].getValue())
+        )
+        assert file_type == ext, msg.format(file_type, ext)
+
     def get_current_value(self, instance):
 
         current = ""
