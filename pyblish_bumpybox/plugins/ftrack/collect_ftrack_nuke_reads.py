@@ -48,8 +48,11 @@ class CollectFtrackNukeReads(pyblish.api.ContextPlugin):
 
             instance.data["publish"] = bool(node["publish"].getValue())
 
+            first_frame = int(node["first"].getValue())
+            last_frame = int(node["last"].getValue())
+
             # Collecting file paths
-            if output_type == "img":
+            if output_type == "img" and first_frame != last_frame:
                 # This could be improved because it does not account for "#"
                 # being in a sequence.
                 if "#" in path:
@@ -58,8 +61,6 @@ class CollectFtrackNukeReads(pyblish.api.ContextPlugin):
                         "#" * padding, "%{0:0>2}d".format(padding)
                     )
 
-                first_frame = int(node["first"].getValue())
-                last_frame = int(node["last"].getValue())
                 path += " [{0}-{1}]".format(first_frame, last_frame)
                 instance.data["collection"] = clique.parse(path)
             else:
