@@ -2,21 +2,20 @@ import pyblish.api
 
 
 class ValidateNukeStudioNames(pyblish.api.InstancePlugin):
-    """ Validate sequence, video track and track item names.
+    """Validate sequence, video track and track item names.
 
     When creating output directories with the name of an item, ending with a
     whitespace will fail the extraction.
+    Exact matching to optimize processing.
     """
 
     order = pyblish.api.ValidatorOrder
     families = ["trackItem"]
+    match = pyblish.api.Exact
     label = "Names"
     hosts = ["nukestudio"]
 
     def process(self, instance):
-
-        if instance.data["family"] != "trackItem":
-            return
 
         item = instance.data["item"]
 
@@ -30,3 +29,12 @@ class ValidateNukeStudioNames(pyblish.api.InstancePlugin):
         msg = "Sequence \"{0}\" ends with a whitespace."
         msg = msg.format(item.parent().parent().name())
         assert not item.parent().parent().name().endswith(" "), msg
+
+
+class ValidateNukeStudioNamesFtrack(ValidateNukeStudioNames):
+    """Validate sequence, video track and track item names.
+
+    Because we are matching the families exactly, we need this plugin to
+    accommodate for the ftrack family addition.
+    """
+    families = ["trackItem", "ftrack"]

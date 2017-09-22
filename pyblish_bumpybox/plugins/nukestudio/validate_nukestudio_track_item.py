@@ -2,18 +2,19 @@ import pyblish.api
 
 
 class ValidateNukeStudioTrackItem(pyblish.api.InstancePlugin):
-    """Validate the track item to the sequence."""
+    """Validate the track item to the sequence.
+
+    Exact matching to optimize processing.
+    """
 
     order = pyblish.api.ValidatorOrder
     families = ["trackItem"]
+    match = pyblish.api.Exact
     label = "Track Item"
     hosts = ["nukestudio"]
     optional = True
 
     def process(self, instance):
-
-        if instance.data["family"] != "trackItem":
-            return
 
         item = instance.data["item"]
         media_source = item.source().mediaSource()
@@ -41,3 +42,12 @@ class ValidateNukeStudioTrackItem(pyblish.api.InstancePlugin):
         assert sequence.framerate() == source_framerate, msg.format(
             "framerate", sequence.framerate(), source_framerate
         )
+
+
+class ValidateNukeStudioTrackItemFtrack(ValidateNukeStudioTrackItem):
+    """Validate the track item to the sequence.
+
+    Because we are matching the families exactly, we need this plugin to
+    accommodate for the ftrack family addition.
+    """
+    families = ["trackItem", "ftrack"]
