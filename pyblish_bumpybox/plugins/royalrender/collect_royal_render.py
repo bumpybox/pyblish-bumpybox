@@ -31,4 +31,18 @@ class CollectNukeWritesRoyalRender(pyblish.api.ContextPlugin):
                 node.addKnob(knob)
 
             value = bool(node["process_royalrender"].getValue())
+
+            # Compare against selection
+            selection = instance.context.data.get("selection", [])
+            if selection:
+                if list(set(instance) & set(selection)):
+                    value = True
+                else:
+                    value = False
+
             instance.data["publish"] = value
+
+            def instanceToggled(instance, value):
+                instance[0]["process_royalrender"].setValue(value)
+
+            instance.data["instanceToggled"] = instanceToggled

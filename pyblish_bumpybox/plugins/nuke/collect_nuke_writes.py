@@ -93,4 +93,18 @@ class CollectNukeWritesLocal(pyblish.api.ContextPlugin):
                 node.addKnob(knob)
 
             value = bool(node["process_local"].getValue())
+
+            # Compare against selection
+            selection = instance.context.data.get("selection", [])
+            if selection:
+                if list(set(instance) & set(selection)):
+                    value = True
+                else:
+                    value = False
+
             instance.data["publish"] = value
+
+            def instanceToggled(instance, value):
+                instance[0]["process_local"].setValue(value)
+
+            instance.data["instanceToggled"] = instanceToggled

@@ -62,3 +62,12 @@ class CollectNukeGroups(pyblish.api.ContextPlugin):
                         scene_name, instance.data["name"], family
                     )
                 )
+
+                def instanceToggled(instance, value):
+                    if "gizmo" in instance.data["families"]:
+                        instance[0]["gizmo"].setValue(value)
+
+                    if "lut" in instance.data["families"]:
+                        instance[0]["lut"].setValue(value)
+
+                instance.data["instanceToggled"] = instanceToggled

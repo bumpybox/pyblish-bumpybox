@@ -5,7 +5,7 @@ import pyblish.api
 import clique
 
 
-class CollectFtrackNukeReads(pyblish.api.ContextPlugin):
+class CollectNukeReads(pyblish.api.ContextPlugin):
     """Collect all read nodes."""
 
     order = pyblish.api.CollectorOrder
@@ -17,10 +17,6 @@ class CollectFtrackNukeReads(pyblish.api.ContextPlugin):
         # creating instances per write node
         for node in nuke.allNodes():
             if node.Class() != "Read":
-                continue
-
-            # Ignore asset Read nodes
-            if "assetVersionId" in node.knobs():
                 continue
 
             # Determine output type
@@ -65,3 +61,8 @@ class CollectFtrackNukeReads(pyblish.api.ContextPlugin):
                 instance.data["collection"] = clique.parse(path)
             else:
                 instance.data["output_path"] = path
+
+            def instanceToggled(instance, value):
+                instance[0]["publish"].setValue(value)
+
+            instance.data["instanceToggled"] = instanceToggled

@@ -50,3 +50,9 @@ class CollectNukeBackdrops(pyblish.api.ContextPlugin):
                 directory,
                 "{0}_{1}.nk".format(scene_name, instance.data["name"])
             )
+
+            def instanceToggled(instance, value):
+                if instance[0].Class() == "BackdropNode":
+                    instance[0]["publish"].setValue(value)
+
+            instance.data["instanceToggled"] = instanceToggled
