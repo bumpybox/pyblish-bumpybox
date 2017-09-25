@@ -1,4 +1,3 @@
-import os
 import json
 
 import pyblish.api
@@ -19,9 +18,6 @@ class ExtractFtrackReview(pyblish.api.InstancePlugin):
 
         collection = instance.data.get("collection", [])
         output_file = collection.format("{head}.mov")
-
-        if not os.path.exists(output_file):
-            raise IOError("\"{0}\" was not found.".format(output_file))
 
         # Add Ftrack review component
         components = instance.data.get("ftrackComponentsList", [])
