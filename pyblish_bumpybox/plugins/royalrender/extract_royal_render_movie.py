@@ -18,7 +18,7 @@ class ExtractRoyalRenderMovie(pyblish.api.InstancePlugin):
 
         # Start number needs to always be the first file of the existing
         # frames, in order to ensure the full movie gets exported.
-        # This is support patch rendering.
+        # This is to support patch rendering.
         root = os.path.dirname(collection.format())
         indexes = []
         for f in os.listdir(root):
