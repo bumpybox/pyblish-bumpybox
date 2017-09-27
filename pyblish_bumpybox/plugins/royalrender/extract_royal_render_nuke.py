@@ -56,6 +56,7 @@ class ExtractRoyalRenderNuke(pyblish.api.InstancePlugin):
         # SubmitterParameter
         submit_params = data.get("SubmitterParameter", [])
         submit_params.append("OverwriteExistingFiles=1~1")
+        submit_params.append("AllowLocalSceneCopy=0~0")
         data["SubmitterParameter"] = submit_params
 
         # Adding job
