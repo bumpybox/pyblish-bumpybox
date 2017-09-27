@@ -33,9 +33,9 @@ class ExtractRoyalRenderMovie(pyblish.api.InstancePlugin):
             indexes = collection.indexes
 
         data = (
-            "{0} -y -gamma 2.2 -framerate {1} -start_number {2} -i {3} -q:v 0 "
-            "-pix_fmt yuv420p -vf scale=trunc(iw/2)*2:trunc(ih/2)*2,"
-            "colormatrix=bt601:bt709 -timecode 00:00:00:01 {4}".format(
+            "\"{0}\" -y -gamma 2.2 -framerate {1} -start_number {2} -i \"{3}\""
+            " -q:v 0 -pix_fmt yuv420p -vf scale=trunc(iw/2)*2:trunc(ih/2)*2,"
+            "colormatrix=bt601:bt709 -timecode 00:00:00:01 \"{4}\"".format(
                 self.get_executable_path("ffmpeg"),
                 instance.context.data["framerate"],
                 min(indexes),
