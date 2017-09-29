@@ -42,6 +42,49 @@ class ValidateMovie(pyblish.api.InstancePlugin):
         raise IOError("\"{0}\" executable not found.".format(executable))
 
 
+class ExtractViewerLut(pyblish.api.InstancePlugin):
+    """Extract the Nuke viewer LUT"""
+
+    order = pyblish.api.ExtractorOrder
+    label = "Viewer LUT"
+    families = ["img"]
+    hosts = ["nuke"]
+
+    def process(self, instance):
+        import nuke
+
+        # Deselect all nodes to prevent external connections
+        [i["selected"].setValue(False) for i in nuke.allNodes()]
+
+        # Create nodes
+        viewer_process_node = nuke.ViewerProcess.node()
+        cms_node = nuke.createNode("CMSTestPattern")
+        dag_node = nuke.createNode(viewer_process_node.Class())
+        generate_lut_node = nuke.createNode("GenerateLUT")
+
+        # Copy viewer process values
+        excludedKnobs = ["name", "xpos", "ypos"]
+        for item in viewer_process_node.knobs().keys():
+            if item not in excludedKnobs and item in dag_node.knobs():
+                x1 = viewer_process_node[item]
+                x2 = dag_node[item]
+                x2.fromScript(x1.toScript(False))
+
+        # Setup generate lut node
+        collection = instance.data["collection"]
+        output_path = collection.format("{head}.cube")
+        generate_lut_node["file"].setValue(output_path.replace("\\", "/"))
+        generate_lut_node["file_type"].setValue(6)
+
+        # Extract LUT file
+        nuke.execute(generate_lut_node, 0, 0)
+
+        # Clean up nodes
+        nuke.delete(cms_node)
+        nuke.delete(dag_node)
+        nuke.delete(generate_lut_node)
+
+
 class ExtractMovie(pyblish.api.InstancePlugin):
     """Extracts movie from image sequence.
 
@@ -59,46 +102,50 @@ class ExtractMovie(pyblish.api.InstancePlugin):
 
         if not list(collection):
             msg = "Skipping \"{0}\" because no frames was found."
-            self.log.info(msg.format(instance.data["name"]))
+            self.log.warning(msg.format(instance.data["name"]))
             return
-
-        if len(list(collection)) == 1:
-            msg = "Skipping \"{0}\" because only a single frame was found."
-            self.log.info(msg.format(instance.data["name"]))
-            return
-
-        self.produce_movie(instance)
-
-    def produce_movie(self, instance):
 
         collection = instance.data["collection"]
 
         # Start number needs to always be the first file of the existing
         # frames, in order to ensure the full movie gets exported.
+        # Also finding any LUT file to use.
         root = os.path.dirname(collection.format())
         indexes = []
+        lut_file = None
         for f in os.listdir(root):
             file_path = os.path.join(root, f).replace("\\", "/")
             match = collection.match(file_path)
             if match:
                 indexes.append(int(match.groupdict()["index"]))
 
+            if f.endswith(".cube"):
+                lut_file = f
+
+        # Generate args.
         args = [
-            "ffmpeg", "-y", "-gamma", "2.2",
+            "ffmpeg", "-y", "-start_number", str(min(indexes)),
             "-framerate", str(instance.context.data["framerate"]),
-            "-start_number", str(min(indexes)),
-            "-i", collection.format("{head}{padding}{tail}"),
-            "-q:v", "0", "-pix_fmt", "yuv420p", "-vf",
-            "scale=trunc(iw/2)*2:trunc(ih/2)*2,colormatrix=bt601:bt709",
+            "-i", collection.format("{head}{padding}{tail}"), "-crf", "0",
             "-timecode", "00:00:00:01",
-            collection.format("{head}.mov")
         ]
+
+        # Limit amount of video filters to reduce artifacts and banding.
+        if lut_file:
+            args.extend(["-vf", "lut3d={0}".format(lut_file)])
+
+        args.append(collection.format("{head}.mov"))
 
         self.log.debug("Executing args: {0}".format(args))
 
         # Can't use subprocess.check_output, cause Houdini doesn't like that.
-        p = subprocess.Popen(args, stdout=subprocess.PIPE,
-                             stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+        p = subprocess.Popen(
+            args,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            stdin=subprocess.PIPE,
+            cwd=os.path.dirname(args[-1])
+        )
 
         output = p.communicate()[0]
 
