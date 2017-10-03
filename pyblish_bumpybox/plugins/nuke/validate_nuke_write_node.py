@@ -32,10 +32,6 @@ class RepairNukeWriteNodeAction(pyblish.api.Action):
             ext = os.path.splitext(value)[1]
             instance[0]["file_type"].setValue(ext[1:])
 
-            path = os.path.dirname(cls_instance.get_current_value(instance))
-            if not os.path.exists(path):
-                os.makedirs(path)
-
             if "metadata" in instance[0].knobs().keys():
                 instance[0]["metadata"].setValue("all metadata")
 
@@ -61,11 +57,6 @@ class ValidateNukeWriteNode(pyblish.api.InstancePlugin):
         assert current == expected, msg.format(
             instance[0].name(), current, expected
         )
-
-        # Validate output directory exists.
-        path = os.path.dirname(self.get_current_value(instance))
-        msg = "Output directory doesn't exist: \"{0}\"".format(path)
-        assert os.path.exists(path), msg
 
         # Validate metadata knob
         if "metadata" in instance[0].knobs().keys():

@@ -32,10 +32,6 @@ class RepairNukeWriteGeoNodeAction(pyblish.api.Action):
             ext = os.path.splitext(value)[1]
             instance[0]["file_type"].setValue(ext[1:])
 
-            path = os.path.dirname(cls_instance.get_current_value(instance))
-            if not os.path.exists(path):
-                os.makedirs(path)
-
 
 class ValidateNukeWriteGeoNode(pyblish.api.InstancePlugin):
     """ Validates file output. """
@@ -67,11 +63,6 @@ class ValidateNukeWriteGeoNode(pyblish.api.InstancePlugin):
             int(instance[0]["file_type"].getValue())
         )
         assert file_type == ext, msg.format(file_type, ext)
-
-        # Validate output directory exists.
-        path = os.path.dirname(self.get_current_value(instance))
-        msg = "Output directory doesn't exist: \"{0}\"".format(path)
-        assert os.path.exists(path), msg
 
     def get_current_value(self, instance):
 
