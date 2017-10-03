@@ -123,10 +123,16 @@ class ExtractMovie(pyblish.api.InstancePlugin):
                 lut_file = f
 
         # Generate args.
+        # Has to be yuv420p for compatibility with older players and smooth
+        # playback. This does come with a sacrifice of more visible banding
+        # issues.
         args = [
-            "ffmpeg", "-y", "-start_number", str(min(indexes)),
+            "ffmpeg", "-y",
+            "-start_number", str(min(indexes)),
             "-framerate", str(instance.context.data["framerate"]),
-            "-i", collection.format("{head}{padding}{tail}"), "-crf", "0",
+            "-i", collection.format("{head}{padding}{tail}"),
+            "-pix_fmt", "yuv420p",
+            "-crf", "0",
             "-timecode", "00:00:00:01",
         ]
 
