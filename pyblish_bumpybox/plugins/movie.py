@@ -126,13 +126,14 @@ class ExtractMovie(pyblish.api.InstancePlugin):
         # Has to be yuv420p for compatibility with older players and smooth
         # playback. This does come with a sacrifice of more visible banding
         # issues.
+        # -crf 18 is visually lossless.
         args = [
             "ffmpeg", "-y",
             "-start_number", str(min(indexes)),
             "-framerate", str(instance.context.data["framerate"]),
             "-i", collection.format("{head}{padding}{tail}"),
             "-pix_fmt", "yuv420p",
-            "-crf", "0",
+            "-crf", "18",
             "-timecode", "00:00:00:01",
         ]
 
