@@ -1,9 +1,11 @@
+import os
 import json
+import subprocess
 
 import pyblish.api
 
 
-class ExtractFtrackReview(pyblish.api.InstancePlugin):
+class ExtractFtrackImgReview(pyblish.api.InstancePlugin):
     """Extracts movie from image sequence for review.
 
     Offset to get extraction data from studio plugins.
@@ -48,6 +50,69 @@ class ExtractFtrackReview(pyblish.api.InstancePlugin):
               "component_overwrite": True,
               "component_location": server_location,
               "component_path": output_file
+            }
+        )
+        instance.data["ftrackComponentsList"] = components
+
+
+class ExtractFtrackMovReview(pyblish.api.InstancePlugin):
+    """Extracts review movie component.
+
+    Offset to get extraction data from studio plugins.
+    """
+
+    families = ["mov"]
+    order = pyblish.api.ExtractorOrder + 0.1
+    label = "Review"
+    optional = True
+
+    def process(self, instance):
+
+        path = os.path.splitext(instance.data["output_path"])[0]
+        path += "_review.mov"
+
+        cmd = (
+            "ffprobe -v error -count_frames -select_streams v:0 -show_entries "
+            "stream=nb_read_frames -of default=nokey=1:noprint_wrappers=1 "
+        )
+        frame_count = subprocess.check_output(cmd + path)
+
+        cmd = (
+            "ffprobe -v 0 -of compact=p=0:nk=1 -select_streams 0 -show_entries"
+            " stream=r_frame_rate "
+        )
+        # ffprobe returns a math string, hence the "eval"
+        frame_rate = eval(subprocess.check_output(cmd + path))
+
+        # Add Ftrack review component
+        components = instance.data.get("ftrackComponentsList", [])
+        server_location = instance.context.data["ftrackSession"].query(
+            "Location where name is \"ftrack.server\""
+        ).one()
+        components.append(
+            {
+              "assettype_data": {
+                "short": "mov",
+              },
+              "asset_data": instance.data.get("asset_data"),
+              "assetversion_data": {
+                "version": instance.data.get(
+                    "version", instance.context.data["version"]
+                ),
+              },
+              "component_data": {
+                "name": "ftrackreview-mp4",
+                "metadata": {
+                    "ftr_meta": json.dumps({
+                        "frameIn": 1,
+                        "frameOut": frame_count,
+                        "frameRate": frame_rate
+                    })
+                }
+              },
+              "component_overwrite": True,
+              "component_location": server_location,
+              "component_path": path
             }
         )
         instance.data["ftrackComponentsList"] = components
