@@ -54,7 +54,7 @@ class ExtractViewerLut(pyblish.api.InstancePlugin):
             "Protune": "Protune",
         }
 
-        filereader_mapping = {
+        extension_mapping = {
             "mov": "2.20\tgamma 2.20",
             "dpx": "Cineon",
             "exr": "RGB\tLinear"
@@ -63,8 +63,15 @@ class ExtractViewerLut(pyblish.api.InstancePlugin):
         value = node["colorspace"].getValue()
         colorspace_index = 0
         if value == 0:
+            extension = ""
+
+            if node.Class() == "Read":
+                extension = node.metadata()["input/filereader"]
+            if node.Class() == "Write":
+                extension = node["file_type"].value()
+
             colorspace_index = colorspace_values.index(
-                filereader_mapping[node.metadata()["input/filereader"]]
+                extension_mapping[extension]
             )
         else:
             colorspace_index = colorspace_values.index(
