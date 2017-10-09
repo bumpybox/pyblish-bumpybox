@@ -68,14 +68,8 @@ class ExtractImgMovie(pyblish.api.InstancePlugin):
         # frames, in order to ensure the full movie gets exported.
         # Also finding any LUT file to use.
         root = os.path.dirname(collection.format())
-        indexes = []
         lut_file = None
         for f in os.listdir(root):
-            file_path = os.path.join(root, f).replace("\\", "/")
-            match = collection.match(file_path)
-            if match:
-                indexes.append(int(match.groupdict()["index"]))
-
             if f.endswith(".cube"):
                 lut_file = f
 
@@ -86,12 +80,14 @@ class ExtractImgMovie(pyblish.api.InstancePlugin):
         # -crf 18 is visually lossless.
         args = [
             "ffmpeg", "-y",
-            "-start_number", str(min(indexes)),
+            "-start_number", str(min(collection.indexes)),
             "-framerate", str(instance.context.data["framerate"]),
             "-i", collection.format("{head}{padding}{tail}"),
             "-pix_fmt", "yuv420p",
             "-crf", "18",
             "-timecode", "00:00:00:01",
+            "-vframes",
+            str(max(collection.indexes) - min(collection.indexes) + 1)
         ]
 
         # Limit amount of video filters to reduce artifacts and banding.

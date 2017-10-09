@@ -48,7 +48,7 @@ class CollectNukeReads(pyblish.api.ContextPlugin):
             last_frame = int(node["last"].getValue())
 
             # Collecting file paths
-            if output_type == "img" and first_frame != last_frame:
+            if output_type == "img":
                 # This could be improved because it does not account for "#"
                 # being in a sequence.
                 if "#" in path:
