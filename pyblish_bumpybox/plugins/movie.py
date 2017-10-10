@@ -107,6 +107,7 @@ class ExtractImgMovie(pyblish.api.InstancePlugin):
             "ffmpeg", "-y",
             "-start_number", str(min(collection.indexes)),
             "-framerate", str(instance.context.data["framerate"]),
+            "-gamma", "1.1",
             "-i", collection.format("{head}{padding}{tail}"),
             "-pix_fmt", "yuv420p",
             "-crf", "18",
