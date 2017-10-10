@@ -32,9 +32,6 @@ class CollectNukeReads(pyblish.api.ContextPlugin):
             instance.add(node)
 
             path = nuke.filename(node)
-            instance.data["label"] = "{0} - {1}".format(
-                node.name(), os.path.basename(path)
-            )
 
             # Adding/Checking publish attribute
             if "publish" not in node.knobs():
@@ -44,10 +41,8 @@ class CollectNukeReads(pyblish.api.ContextPlugin):
 
             instance.data["publish"] = bool(node["publish"].getValue())
 
-            first_frame = int(node["first"].getValue())
-            last_frame = int(node["last"].getValue())
-
             # Collecting file paths
+            label = "{0} - {1}".format(node.name(), os.path.basename(path))
             if output_type == "img":
                 # This could be improved because it does not account for "#"
                 # being in a sequence.
@@ -57,10 +52,22 @@ class CollectNukeReads(pyblish.api.ContextPlugin):
                         "#" * padding, "%{0:0>2}d".format(padding)
                     )
 
-                path += " [{0}-{1}]".format(first_frame, last_frame)
-                instance.data["collection"] = clique.parse(path)
+                collection = clique.parse(path + " []")
+
+                for f in os.listdir(os.path.dirname(path)):
+                    file_path = os.path.join(os.path.dirname(path), f)
+                    file_path = file_path.replace("\\", "/")
+                    if collection.match(file_path):
+                        collection.add(file_path)
+
+                instance.data["collection"] = collection
+                label = "{0} - {1}".format(
+                    node.name(), os.path.basename(collection.format())
+                )
             else:
                 instance.data["output_path"] = path
+
+            instance.data["label"] = label
 
             def instanceToggled(instance, value):
                 instance[0]["publish"].setValue(value)

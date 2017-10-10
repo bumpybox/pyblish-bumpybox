@@ -2,6 +2,7 @@ import os
 import subprocess
 
 import pyblish.api
+import filelink
 
 
 class ValidateMovie(pyblish.api.InstancePlugin):
@@ -53,6 +54,17 @@ class ExtractImgMovie(pyblish.api.InstancePlugin):
     optional = True
     families = ["img"]
 
+    def find_previous_index(self, index, indexes):
+        """Finds the closest previous value in a list from a value."""
+
+        data = []
+        for i in indexes:
+            if i >= index:
+                continue
+            data.append(index - i)
+
+        return indexes[data.index(min(data))]
+
     def process(self, instance):
 
         collection = instance.data.get("collection", [])
@@ -63,6 +75,19 @@ class ExtractImgMovie(pyblish.api.InstancePlugin):
             return
 
         collection = instance.data["collection"]
+
+        # Temporary fill the missing frames.
+        missing = collection.holes()
+        if not collection.is_contiguous():
+            pattern = collection.format("{head}{padding}{tail}")
+            for index in missing.indexes:
+                dst = pattern % index
+                src_index = self.find_previous_index(
+                    index, list(collection.indexes)
+                )
+                src = pattern % src_index
+
+                filelink.create(src, dst)
 
         # Start number needs to always be the first file of the existing
         # frames, in order to ensure the full movie gets exported.
@@ -108,6 +133,10 @@ class ExtractImgMovie(pyblish.api.InstancePlugin):
         )
 
         output = p.communicate()[0]
+
+        # Remove temporary frame fillers
+        for f in missing:
+            os.remove(f)
 
         if p.returncode != 0:
             raise ValueError(output)
