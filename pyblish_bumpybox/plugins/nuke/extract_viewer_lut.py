@@ -87,6 +87,11 @@ class ExtractViewerLut(pyblish.api.InstancePlugin):
 
         # Create nodes
         viewer_process_node = nuke.ViewerProcess.node()
+
+        if not viewer_process_node:
+            self.log.warning("No viewer node found.")
+            return
+
         cms_node = nuke.createNode("CMSTestPattern")
         colorspace_node = nuke.createNode("Colorspace")
         dag_node = nuke.createNode(viewer_process_node.Class())
