@@ -57,7 +57,9 @@ class ExtractViewerLut(pyblish.api.InstancePlugin):
         extension_mapping = {
             "mov": "2.20\tgamma 2.20",
             "dpx": "Cineon",
-            "exr": "RGB\tLinear"
+            "exr": "RGB\tLinear",
+            "jpeg": "2.20\tgamma 2.20",
+            "jpg": "2.20\tgamma 2.20"
         }
 
         value = node["colorspace"].getValue()
