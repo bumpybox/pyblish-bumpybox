@@ -116,9 +116,13 @@ class ExtractImgMovie(pyblish.api.InstancePlugin):
             str(max(collection.indexes) - min(collection.indexes) + 1)
         ]
 
+        video_filter = "scale=trunc(iw/2)*2:trunc(ih/2)*2"
+
         # Limit amount of video filters to reduce artifacts and banding.
         if lut_file:
-            args.extend(["-vf", "lut3d={0}".format(lut_file)])
+            video_filter += ",lut3d={0}".format(lut_file)
+
+        args.extend(["-vf", video_filter])
 
         args.append(collection.format("{head}.mov"))
 
