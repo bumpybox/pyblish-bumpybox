@@ -2,7 +2,6 @@ import os
 
 import pyblish.api
 import pymel.core
-import clique
 
 
 class CollectMayaPlayblasts(pyblish.api.ContextPlugin):
@@ -52,21 +51,15 @@ class CollectMayaPlayblasts(pyblish.api.ContextPlugin):
                 attr = pymel.core.Attribute(transform.name() + ".publish")
                 pymel.core.setAttr(attr, channelBox=True)
 
-            # Generate collection
-            filename = os.path.splitext(
-                os.path.basename(context.data["currentFile"])
-            )[0]
+            # Set output path
+            filename = "{0}_{1}.mov".format(
+                os.path.splitext(
+                    os.path.basename(context.data["currentFile"])
+                )[0],
+                name
+            )
             path = os.path.join(
                 os.path.dirname(context.data["currentFile"]),
                 "workspace", filename
             )
-            head = "{0}_{1}.".format(path, name)
-            tail = ".mov"
-            collection = clique.Collection(head=head, padding=4, tail=tail)
-
-            frame_start = int(
-                pymel.core.playbackOptions(query=True, minTime=True)
-            )
-            collection.add(head + str(frame_start).zfill(4) + tail)
-
-            instance.data["collection"] = collection
+            instance.data["output_path"] = path

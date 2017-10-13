@@ -22,7 +22,7 @@ class ExtractMayaFormats(pyblish.api.InstancePlugin):
             return
 
         # Export to file.
-        path = list(instance.data["collection"])[0]
+        path = instance.data["output_path"]
 
         if not os.path.exists(os.path.dirname(path)):
             os.makedirs(os.path.dirname(path))

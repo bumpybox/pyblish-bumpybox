@@ -39,11 +39,11 @@ class ExtractMayaAlembic(pyblish.api.InstancePlugin):
             self.log.warning(msg)
         cmd += " -uvWrite -worldSpace -wholeFrameGeo -eulerFilter "
         cmd += "-writeVisibility {0} ".format(nodesString)
-        path = list(instance.data["collection"])[0].replace("\\", "/")
+        path = instance.data["output_path"].replace("\\", "/")
         cmd += "-file \"{0}\"".format(path)
 
         # Ensure output directory exists.
-        path = os.path.dirname(list(instance.data["collection"])[0])
+        path = os.path.dirname(instance.data["output_path"])
         if not os.path.exists(path):
             os.makedirs(path)
 

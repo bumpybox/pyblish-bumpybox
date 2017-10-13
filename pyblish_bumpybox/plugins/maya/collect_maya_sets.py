@@ -62,6 +62,12 @@ class CollectMayaSets(pyblish.api.ContextPlugin):
                 # Remove illegal disk characters
                 name = object_set.name().replace(":", "_")
 
+                # Because mayaAscii and mayaBinary share the same family, we'll
+                # need to make the names different to avoid overwriting based
+                # on the name alone.
+                if fmt != "alembic":
+                    name += "_" + fmt
+
                 instance = context.create_instance(name=name)
                 instance.add(object_set)
 
@@ -87,21 +93,16 @@ class CollectMayaSets(pyblish.api.ContextPlugin):
                     attr = pm.Attribute(object_set.name() + "." + fmt)
                     pm.setAttr(attr, channelBox=True)
 
-                # Generate collection
-                filename = os.path.splitext(
-                    os.path.basename(context.data["currentFile"])
-                )[0]
+                # Set output path
+                filename = "{0}_{1}.{2}".format(
+                    os.path.splitext(
+                        os.path.basename(context.data["currentFile"])
+                    )[0],
+                    name,
+                    extensions[fmt]
+                )
                 path = os.path.join(
                     os.path.dirname(context.data["currentFile"]),
                     "workspace", filename
                 )
-                head = "{0}_{1}.".format(path, name)
-                tail = "." + extensions[fmt]
-                collection = clique.Collection(head=head, padding=4, tail=tail)
-
-                frame_start = int(
-                    pm.playbackOptions(query=True, minTime=True)
-                )
-                collection.add(head + str(frame_start).zfill(4) + tail)
-
-                instance.data["collection"] = collection
+                instance.data["output_path"] = path
