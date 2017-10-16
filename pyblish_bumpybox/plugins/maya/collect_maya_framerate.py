@@ -9,6 +9,7 @@ class CollectMayaFramerate(pyblish.api.ContextPlugin):
     order = pyblish.api.CollectorOrder - 0.5
     label = "Framerate"
     hosts = ["maya"]
+    targets = ["default", "process"]
 
     def process(self, context):
 

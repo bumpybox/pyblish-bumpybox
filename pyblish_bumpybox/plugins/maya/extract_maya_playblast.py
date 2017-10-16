@@ -2,6 +2,7 @@ import tempfile
 import os
 import subprocess
 import shutil
+import webbrowser
 
 import pymel.core
 
@@ -9,14 +10,38 @@ import pyblish.api
 from capture import capture
 
 
+class ViewPlayblastAction(pyblish.api.Action):
+
+    label = "View Playblast"
+    icon = "eye"
+    on = "succeeded"
+
+    def process(self, context, plugin):
+
+        # Get the errored instances
+        succeeded = []
+        for result in context.data["results"]:
+            if (result["error"] is None and result["instance"] is not None
+               and result["instance"] not in succeeded):
+                succeeded.append(result["instance"])
+
+        # Apply pyblish.logic to get the instances for the plug-in
+        instances = pyblish.api.instances_by_plugin(succeeded, plugin)
+
+        for instance in instances:
+            webbrowser.open(instance.data["output_path"])
+
+
 class ExtractMayaPlayblast(pyblish.api.InstancePlugin):
-    """ Extracts playblast. """
+    """Extracts playblast."""
 
     order = pyblish.api.ExtractorOrder
     families = ["playblast"]
     optional = True
     label = "Playblast"
     hosts = ["maya"]
+    targets = ["process.local"]
+    actions = [ViewPlayblastAction]
 
     def process(self, instance):
 

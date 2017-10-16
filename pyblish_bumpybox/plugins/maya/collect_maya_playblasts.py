@@ -13,6 +13,7 @@ class CollectMayaPlayblasts(pyblish.api.ContextPlugin):
     order = pyblish.api.CollectorOrder
     label = "Playblasts"
     hosts = ["maya"]
+    targets = ["default", "process"]
 
     def process(self, context):
 
