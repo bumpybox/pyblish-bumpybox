@@ -14,6 +14,7 @@ class ExtractMayaFormats(pyblish.api.InstancePlugin):
     optional = True
     label = "Maya Formats"
     hosts = ["maya"]
+    targets = ["process.local"]
 
     def process(self, instance):
 

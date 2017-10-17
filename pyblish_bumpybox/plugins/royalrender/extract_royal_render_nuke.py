@@ -9,11 +9,10 @@ import pyblish.api
 class ExtractRoyalRenderNuke(pyblish.api.InstancePlugin):
     """ Appending RoyalRender data to instances. """
 
-    families = ["royalrender"]
     order = pyblish.api.ExtractorOrder
     label = "Royal Render Nuke"
     hosts = ["nuke"]
-    targets = ["process"]
+    targets = ["process.royalrender"]
 
     def process(self, instance):
 

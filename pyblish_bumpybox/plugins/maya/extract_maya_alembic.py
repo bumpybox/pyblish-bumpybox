@@ -8,10 +8,12 @@ class ExtractMayaAlembic(pyblish.api.InstancePlugin):
     """ Extracts alembic files. """
 
     order = pyblish.api.ExtractorOrder
-    families = ["alembic"]
+    families = ["alembic", "local"]
     optional = True
+    match = pyblish.api.Subset
     label = "Alembic"
     hosts = ["maya"]
+    targets = ["process.local"]
 
     def process(self, instance):
 

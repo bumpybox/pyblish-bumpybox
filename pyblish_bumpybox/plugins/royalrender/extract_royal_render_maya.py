@@ -10,10 +10,11 @@ import pyblish.api
 class ExtractRoyalRenderMaya(pyblish.api.InstancePlugin):
     """ Appending RoyalRender data to instances. """
 
-    families = ["royalrender"]
+    families = ["img"]
     order = pyblish.api.ExtractorOrder
     label = "Royal Render"
     hosts = ["maya"]
+    targets = ["process.royalrender"]
 
     def process(self, instance):
 

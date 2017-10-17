@@ -2,7 +2,6 @@ import os
 
 import pyblish.api
 import pymel.core as pm
-import clique
 
 
 class CollectMayaSets(pyblish.api.ContextPlugin):
@@ -11,6 +10,7 @@ class CollectMayaSets(pyblish.api.ContextPlugin):
     order = pyblish.api.CollectorOrder
     label = "Sets"
     hosts = ["maya"]
+    targets = ["default", "process"]
 
     def validate_set(self, object_set):
 
@@ -22,13 +22,7 @@ class CollectMayaSets(pyblish.api.ContextPlugin):
 
     def process(self, context):
 
-        # Collect sets named starting with "remote".
-        remote_members = []
-        for object_set in pm.ls(type="objectSet"):
-
-            if object_set.name().lower().startswith("remote"):
-                remote_members.extend(object_set.members())
-
+        instances = []
         for object_set in pm.ls(type="objectSet"):
 
             if object_set.nodeType() != "objectSet":
@@ -51,11 +45,6 @@ class CollectMayaSets(pyblish.api.ContextPlugin):
                 "mayaAscii": "scene", "mayaBinary": "scene", "alembic": "cache"
             }
 
-            # Checking instance type.
-            instance_type = "local"
-            if object_set in remote_members:
-                instance_type = "remote"
-
             # Add an instance per format supported.
             for fmt in ["mayaBinary", "mayaAscii", "alembic"]:
 
@@ -68,14 +57,14 @@ class CollectMayaSets(pyblish.api.ContextPlugin):
                 if fmt != "alembic":
                     name += "_" + fmt
 
-                instance = context.create_instance(name=name)
+                instance = pyblish.api.Instance(name)
                 instance.add(object_set)
 
-                families = [fmt, family_mappings[fmt], instance_type]
+                families = [fmt, family_mappings[fmt]]
                 instance.data["families"] = families
                 instance.data["family"] = family_mappings[fmt]
 
-                label = "{0} - {1} - {2}".format(name, fmt, instance_type)
+                label = "{0} - {1}".format(name, fmt)
                 instance.data["label"] = label
 
                 # Adding/Checking publish attribute
@@ -106,3 +95,34 @@ class CollectMayaSets(pyblish.api.ContextPlugin):
                     "workspace", filename
                 )
                 instance.data["output_path"] = path
+
+                instances.append(instance)
+
+        context.data["instances"] = (
+            context.data.get("instances", []) + instances
+        )
+
+
+class CollectMayaSetsLocal(pyblish.api.ContextPlugin):
+    """Collect all local processing write instances."""
+
+    order = CollectMayaSets.order + 0.01
+    label = "Sets Local"
+    hosts = ["maya"]
+    targets = ["process.local"]
+
+    def process(self, context):
+
+        for item in context.data["instances"]:
+            # Skip any instances that is not valid.
+            valid_families = ["alembic", "mayaAscii", "mayaBinary"]
+            if len(set(valid_families) & set(item.data["families"])) != 1:
+                continue
+
+            instance = context.create_instance(item.data["name"])
+            for key, value in item.data.iteritems():
+                instance.data[key] = value
+
+            instance.data["families"] += ["local"]
+            for node in item:
+                instance.add(node)

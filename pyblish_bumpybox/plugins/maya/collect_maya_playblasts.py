@@ -13,7 +13,7 @@ class CollectMayaPlayblasts(pyblish.api.ContextPlugin):
     order = pyblish.api.CollectorOrder
     label = "Playblasts"
     hosts = ["maya"]
-    targets = ["default", "process"]
+    targets = ["default", "process.local"]
 
     def process(self, context):
 
@@ -34,7 +34,7 @@ class CollectMayaPlayblasts(pyblish.api.ContextPlugin):
             instance.add(camera)
             instance.data["families"] = ["local", "mov", "playblast"]
             instance.data["family"] = "mov"
-            label = "{0} - {1} - {2}".format(name, "playblast", "local")
+            label = "{0} - {1}".format(name, "playblast")
             instance.data["label"] = label
 
             # Adding/Checking publish attribute

@@ -46,3 +46,28 @@ class CollectNukeWritesRoyalRender(pyblish.api.ContextPlugin):
                 instance[0]["process_royalrender"].setValue(value)
 
             instance.data["instanceToggled"] = instanceToggled
+
+
+class CollectMayaSetsRoyalRender(pyblish.api.ContextPlugin):
+    """Collect all local processing write instances."""
+
+    order = pyblish.api.CollectorOrder + 0.1
+    label = "Sets Royal Render"
+    hosts = ["maya"]
+    targets = ["process.royalrender"]
+
+    def process(self, context):
+
+        for item in context.data["instances"]:
+            # Skip any instances that is not valid.
+            valid_families = ["alembic", "mayaAscii", "mayaBinary"]
+            if len(set(valid_families) & set(item.data["families"])) != 1:
+                continue
+
+            instance = context.create_instance(item.data["name"])
+            for key, value in item.data.iteritems():
+                instance.data[key] = value
+
+            instance.data["families"] += ["royalrender"]
+            for node in item:
+                instance.add(node)
