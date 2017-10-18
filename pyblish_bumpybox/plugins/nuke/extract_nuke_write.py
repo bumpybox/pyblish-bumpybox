@@ -44,14 +44,70 @@ class ExtractNukeWrite(Extract):
                 self.log.warning("\"{0}\" didn't render.".format(filename))
 
 
-class ExtractNukeWriteGeo(Extract):
+class ExtractNukeCache(Extract):
 
-    label = "WriteGeo"
-    families = ["writegeo", "local"]
+    label = "Cache"
+    families = ["cache", "local"]
 
     def process(self, instance):
 
         self.execute(instance)
+
+        # Validate output
+        msg = "\"{0}\" didn't render.".format(instance.data["output_path"])
+        assert os.path.exists(instance.data["output_path"]), msg
+
+
+class ExtractNukeCamera(Extract):
+
+    label = "Camera"
+    families = ["cam", "local"]
+
+    def process(self, instance):
+
+        node = instance[0]
+        node["writeGeometries"].setValue(False)
+        node["writePointClouds"].setValue(False)
+        node["writeAxes"].setValue(False)
+
+        file_path = node["file"].getValue()
+        node["file"].setValue(instance.data["output_path"])
+
+        self.execute(instance)
+
+        node["writeGeometries"].setValue(True)
+        node["writePointClouds"].setValue(True)
+        node["writeAxes"].setValue(True)
+
+        node["file"].setValue(file_path)
+
+        # Validate output
+        msg = "\"{0}\" didn't render.".format(instance.data["output_path"])
+        assert os.path.exists(instance.data["output_path"]), msg
+
+
+class ExtractNukeGeometry(Extract):
+
+    label = "Geometry"
+    families = ["geo", "local"]
+
+    def process(self, instance):
+
+        node = instance[0]
+        node["writeCameras"].setValue(False)
+        node["writePointClouds"].setValue(False)
+        node["writeAxes"].setValue(False)
+
+        file_path = node["file"].getValue()
+        node["file"].setValue(instance.data["output_path"])
+
+        self.execute(instance)
+
+        node["writeCameras"].setValue(True)
+        node["writePointClouds"].setValue(True)
+        node["writeAxes"].setValue(True)
+
+        node["file"].setValue(file_path)
 
         # Validate output
         msg = "\"{0}\" didn't render.".format(instance.data["output_path"])

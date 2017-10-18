@@ -1,3 +1,5 @@
+import os
+
 import nuke
 import pyblish.api
 
@@ -18,37 +20,63 @@ class CollectNukeWriteGeo(pyblish.api.ContextPlugin):
             if node.Class() != "WriteGeo":
                 continue
 
-            # Determine output type
-            output_type = "cache"
-
-            # Create instance
+            # Create cache instance
             instance = pyblish.api.Instance(node.name())
-            instance.data["family"] = output_type
+            instance.data["family"] = "cache"
+            instance.data["families"] = ["writegeo"]
             instance.add(node)
             instance.data["label"] = "{0} - writegeo".format(node.name())
             instance.data["publish"] = False
             instance.data["output_path"] = nuke.filename(node)
-
             instances.append(instance)
 
-        context.data["writegeo_instances"] = instances
+            # Create camera instance
+            instance = pyblish.api.Instance(node.name())
+            instance.data["family"] = "cam"
+            instance.data["families"] = ["writegeo"]
+            instance.add(node)
+            instance.data["label"] = "{0} - writegeo".format(node.name())
+            instance.data["publish"] = False
+            path, ext = os.path.splitext(nuke.filename(node))
+            instance.data["output_path"] = "{0}_camera{1}".format(path, ext)
+            instances.append(instance)
+
+            # Create geometry instance
+            instance = pyblish.api.Instance(node.name())
+            instance.data["family"] = "geo"
+            instance.data["families"] = ["writegeo"]
+            instance.add(node)
+            instance.data["label"] = "{0} - writegeo".format(node.name())
+            instance.data["publish"] = False
+            path, ext = os.path.splitext(nuke.filename(node))
+            instance.data["output_path"] = "{0}_geometry{1}".format(path, ext)
+            instances.append(instance)
 
         context.data["instances"] = (
             context.data.get("instances", []) + instances
         )
 
 
-class CollectNukeWriteGeoLocal(pyblish.api.ContextPlugin):
+class CollectNukeCacheLocal(pyblish.api.ContextPlugin):
     """Collect all local processing writegeo instances."""
 
     order = CollectNukeWriteGeo.order + 0.01
-    label = "Write Geo Local"
+    label = "Cache Local"
     hosts = ["nuke"]
     targets = ["process.local"]
 
     def process(self, context):
 
-        for item in context.data["writegeo_instances"]:
+        formats = ["cache", "cam", "geo"]
+        for item in context.data["instances"]:
+            families = [item.data["family"]] + item.data["families"]
+            # Skip any instances that is not valid.
+            valid_families = set(formats)
+            if len(valid_families & set(families)) != 1:
+                continue
+
+            fmt = list(valid_families & set(families))[0]
+
             instance = context.create_instance(item.data["name"])
             for key, value in item.data.iteritems():
                 instance.data[key] = value
@@ -59,14 +87,14 @@ class CollectNukeWriteGeoLocal(pyblish.api.ContextPlugin):
                 instance.add(node)
 
             # Adding/Checking publish attribute
-            if "process_local" not in node.knobs():
+            if "{0}_local".format(fmt) not in node.knobs():
                 knob = nuke.Boolean_Knob(
-                    "process_local", "Process Local"
+                    "{0}_local".format(fmt), "{0} Local".format(fmt.title())
                 )
                 knob.setValue(False)
                 node.addKnob(knob)
 
-            value = bool(node["process_local"].getValue())
+            value = bool(node["{0}_local".format(fmt)].getValue())
 
             # Compare against selection
             selection = instance.context.data.get("selection", [])
@@ -78,7 +106,17 @@ class CollectNukeWriteGeoLocal(pyblish.api.ContextPlugin):
 
             instance.data["publish"] = value
 
-            def instanceToggled(instance, value):
-                instance[0]["process_local"].setValue(value)
+            if fmt == "cache":
+                def instanceToggled(instance, value):
+                    instance[0]["cache_local"].setValue(value)
+                instance.data["instanceToggled"] = instanceToggled
 
-            instance.data["instanceToggled"] = instanceToggled
+            if fmt == "cam":
+                def instanceToggled(instance, value):
+                    instance[0]["cam_local"].setValue(value)
+                instance.data["instanceToggled"] = instanceToggled
+
+            if fmt == "geo":
+                def instanceToggled(instance, value):
+                    instance[0]["geo_local"].setValue(value)
+                instance.data["instanceToggled"] = instanceToggled
