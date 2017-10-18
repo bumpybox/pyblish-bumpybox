@@ -3,6 +3,8 @@ import os
 import pymel
 import pyblish.api
 
+import alembic_export
+
 
 class ExtractMayaAlembic(pyblish.api.InstancePlugin):
     """ Extracts alembic files. """
@@ -18,31 +20,21 @@ class ExtractMayaAlembic(pyblish.api.InstancePlugin):
     def process(self, instance):
 
         # Validate whether we can strip namespaces.
-        nodesString = ""
-        stripNamespaces = True
+        stripNamespaces = 0
         root_names = []
         for member in instance[0]:
-            nodesString += "-root %s " % member.name()
             if member.name().split(":")[-1] not in root_names:
                 root_names.append(member.name().split(":")[-1])
             else:
-                stripNamespaces = False
+                self.log.warning(
+                    "Can't strip namespaces, because of conflicting root "
+                    "names. Nodes will be renamed."
+                )
+                stripNamespaces = -1
 
-        # Generate export command.
+        # Get frame range
         frame_start = int(pymel.core.playbackOptions(q=True, min=True))
         frame_end = int(pymel.core.playbackOptions(q=True, max=True))
-
-        cmd = "-frameRange %s %s" % (frame_start, frame_end)
-        if stripNamespaces:
-            cmd += " -stripNamespaces"
-        else:
-            msg = "Can't strip namespaces, because of conflicting root names."
-            msg += " Nodes will be renamed."
-            self.log.warning(msg)
-        cmd += " -uvWrite -worldSpace -wholeFrameGeo -eulerFilter "
-        cmd += "-writeVisibility {0} ".format(nodesString)
-        path = instance.data["output_path"].replace("\\", "/")
-        cmd += "-file \"{0}\"".format(path)
 
         # Ensure output directory exists.
         path = os.path.dirname(instance.data["output_path"])
@@ -52,7 +44,17 @@ class ExtractMayaAlembic(pyblish.api.InstancePlugin):
         # Turn off viewport updating while exporting.
         pymel.core.general.refresh(suspend=True)
         try:
-            pymel.core.AbcExport(j=cmd)
+            alembic_export.export(
+                instance.data["output_path"],
+                frameRange=[[frame_start, frame_end]],
+                root=root_names,
+                stripNamespaces=stripNamespaces,
+                uvWrite=True,
+                worldSpace=True,
+                wholeFrameGeo=True,
+                eulerFilter=True,
+                writeVisibility=True
+            )
         except Exception as e:
             raise e
         pymel.core.general.refresh(suspend=False)
