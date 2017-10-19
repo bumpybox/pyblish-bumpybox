@@ -32,7 +32,7 @@ class CollectNukeWriteGeo(pyblish.api.ContextPlugin):
 
             # Create camera instance
             instance = pyblish.api.Instance(node.name())
-            instance.data["family"] = "cam"
+            instance.data["family"] = "camera"
             instance.data["families"] = ["writegeo"]
             instance.add(node)
             instance.data["label"] = "{0} - writegeo".format(node.name())
@@ -43,7 +43,7 @@ class CollectNukeWriteGeo(pyblish.api.ContextPlugin):
 
             # Create geometry instance
             instance = pyblish.api.Instance(node.name())
-            instance.data["family"] = "geo"
+            instance.data["family"] = "geometry"
             instance.data["families"] = ["writegeo"]
             instance.add(node)
             instance.data["label"] = "{0} - writegeo".format(node.name())
@@ -67,7 +67,7 @@ class CollectNukeCacheLocal(pyblish.api.ContextPlugin):
 
     def process(self, context):
 
-        formats = ["cache", "cam", "geo"]
+        formats = ["cache", "camera", "geometry"]
         for item in context.data["instances"]:
             families = [item.data["family"]] + item.data["families"]
             # Skip any instances that is not valid.
@@ -111,12 +111,12 @@ class CollectNukeCacheLocal(pyblish.api.ContextPlugin):
                     instance[0]["cache_local"].setValue(value)
                 instance.data["instanceToggled"] = instanceToggled
 
-            if fmt == "cam":
+            if fmt == "camera":
                 def instanceToggled(instance, value):
-                    instance[0]["cam_local"].setValue(value)
+                    instance[0]["camera_local"].setValue(value)
                 instance.data["instanceToggled"] = instanceToggled
 
-            if fmt == "geo":
+            if fmt == "geometry":
                 def instanceToggled(instance, value):
-                    instance[0]["geo_local"].setValue(value)
+                    instance[0]["geometry_local"].setValue(value)
                 instance.data["instanceToggled"] = instanceToggled

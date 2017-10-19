@@ -61,7 +61,7 @@ class ExtractNukeCache(Extract):
 class ExtractNukeCamera(Extract):
 
     label = "Camera"
-    families = ["cam", "local"]
+    families = ["camera", "local"]
 
     def process(self, instance):
 
@@ -89,7 +89,7 @@ class ExtractNukeCamera(Extract):
 class ExtractNukeGeometry(Extract):
 
     label = "Geometry"
-    families = ["geo", "local"]
+    families = ["geometry", "local"]
 
     def process(self, instance):
 

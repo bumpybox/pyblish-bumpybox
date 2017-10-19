@@ -71,8 +71,8 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
                 label="{0} - {1}".format(
                     instance.data["name"], os.path.basename(filename)
                 ),
-                family="output",
-                families=family_type,
+                family=family_type[0],
+                families=["output"],
                 publish=False,
                 output_path=filename,
                 version=context.data["version"]
@@ -111,7 +111,7 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
     def process(self, context):
 
         # Gather all valid collections
-        valid_families = ["img", "cache", "scene", "mov"]
+        valid_families = ["img", "cache", "scene", "mov", "camera", "geometry"]
         invalid_families = ["read"]
         collections = []
         instances = context + context.data.get("instances", [])

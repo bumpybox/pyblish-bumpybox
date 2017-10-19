@@ -160,3 +160,31 @@ class ExtractFtrackCache(pyblish.api.InstancePlugin):
         data = instance.data.get("assettype_data", {})
         data.update({"short": "cache"})
         instance.data["assettype_data"] = data
+
+
+class ExtractFtrackCamera(pyblish.api.InstancePlugin):
+    """Sets the data for Ftrack camera component."""
+
+    order = pyblish.api.ExtractorOrder
+    label = "Ftrack Camera"
+    families = ["camera"]
+
+    def process(self, instance):
+
+        data = instance.data.get("assettype_data", {})
+        data.update({"short": "camera"})
+        instance.data["assettype_data"] = data
+
+
+class ExtractFtrackGeometry(pyblish.api.InstancePlugin):
+    """Sets the data for Ftrack camera component."""
+
+    order = pyblish.api.ExtractorOrder
+    label = "Ftrack Geometry"
+    families = ["geometry"]
+
+    def process(self, instance):
+
+        data = instance.data.get("assettype_data", {})
+        data.update({"short": "geometry"})
+        instance.data["assettype_data"] = data
