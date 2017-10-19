@@ -40,7 +40,7 @@ class ExtractMayaFormats(pyblish.api.InstancePlugin):
                     connections.extend(self.disconnect(node, "animCurveTL"))
 
             # Export selection
-            pymel.core.select(instance[0].members(), noExpand=True)
+            pymel.core.select(instance.data["nodes"], noExpand=True)
             export_type = set(self.families) & set(instance.data["families"])
             pymel.core.system.exportSelected(
                 path,

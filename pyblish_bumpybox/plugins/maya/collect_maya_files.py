@@ -45,3 +45,7 @@ class CollectMayaFiles(pyblish.api.Collector):
                 )
                 attr = pymel.core.Attribute(node.name() + ".publish")
                 pymel.core.setAttr(attr, channelBox=True)
+
+            def instance_toggled(instance, value):
+                instance[0].publish.set(value)
+            instance.data["instanceToggled"] = instance_toggled

@@ -144,3 +144,7 @@ class CollectMayaRenderlayers(pyblish.api.ContextPlugin):
             instance.data["startFrame"] = start_frame
             instance.data["stepFrame"] = step_frame
             instance.data["collection"] = collection
+
+            def instance_toggled(instance, value):
+                instance[0].renderable.set(value)
+            instance.data["instanceToggled"] = instance_toggled

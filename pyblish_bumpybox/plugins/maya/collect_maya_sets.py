@@ -39,26 +39,50 @@ class CollectMayaSets(pyblish.api.ContextPlugin):
                 continue
 
             extensions = {
-                "mayaAscii": "ma", "mayaBinary": "mb", "alembic": "abc"
+                "mayaAscii": "ma", "mayaBinary": "mb", "alembic": "abc",
+                "camera": "abc", "geometry": "abc"
             }
             family_mappings = {
-                "mayaAscii": "scene", "mayaBinary": "scene", "alembic": "cache"
+                "mayaAscii": "scene", "mayaBinary": "scene",
+                "alembic": "cache", "geometry": "geometry", "camera": "camera"
             }
 
+            geometry = []
+            cameras = []
+            for member in object_set.members():
+                node_type = member.getShape().nodeType()
+                if node_type == "camera":
+                    cameras.append(member)
+                if node_type == "mesh":
+                    geometry.append(member)
+
             # Add an instance per format supported.
-            for fmt in ["mayaBinary", "mayaAscii", "alembic"]:
+            formats = [
+                "mayaBinary", "mayaAscii", "alembic", "camera", "geometry"
+            ]
+            for fmt in formats:
+
+                # Skip camera instances when there are no cameras in the set
+                if fmt == "camera" and not cameras:
+                    continue
+
+                # Skip geometry instances when there are no geometry in the set
+                if fmt == "geometry" and not geometry:
+                    continue
 
                 # Remove illegal disk characters
                 name = object_set.name().replace(":", "_")
 
-                # Because mayaAscii and mayaBinary share the same family, we'll
-                # need to make the names different to avoid overwriting based
-                # on the name alone.
-                if fmt != "alembic":
-                    name += "_" + fmt
+                name += "_" + fmt
 
                 instance = pyblish.api.Instance(name)
                 instance.add(object_set)
+
+                instance.data["nodes"] = object_set.members()
+                if fmt == "camera":
+                    instance.data["nodes"] = cameras
+                if fmt == "geometry":
+                    instance.data["nodes"] = geometry
 
                 families = [fmt, family_mappings[fmt]]
                 instance.data["families"] = families
@@ -96,6 +120,21 @@ class CollectMayaSets(pyblish.api.ContextPlugin):
                 )
                 instance.data["output_path"] = path
 
+                def instance_toggled(instance, value):
+                    node = instance[0]
+
+                    families = instance.data.get("families", [])
+
+                    attrs = []
+                    for attr in node.listAttr(userDefined=True):
+                        attrs.append(attr.name(includeNode=False))
+
+                    attr_list = list(set(attrs) & set(families))
+
+                    if attr_list:
+                        node.attr(attr_list[0]).set(value)
+                instance.data["instanceToggled"] = instance_toggled
+
                 instances.append(instance)
 
         context.data["instances"] = (
@@ -115,7 +154,9 @@ class CollectMayaSetsLocal(pyblish.api.ContextPlugin):
 
         for item in context.data["instances"]:
             # Skip any instances that is not valid.
-            valid_families = ["alembic", "mayaAscii", "mayaBinary"]
+            valid_families = [
+                "alembic", "mayaAscii", "mayaBinary", "camera", "geometry"
+            ]
             if len(set(valid_families) & set(item.data["families"])) != 1:
                 continue
 

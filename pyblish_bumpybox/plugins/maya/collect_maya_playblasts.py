@@ -18,6 +18,7 @@ class CollectMayaPlayblasts(pyblish.api.ContextPlugin):
     def process(self, context):
 
         default_cameras = ["persp", "top", "front", "side"]
+        instances = []
         for camera in pymel.core.ls(type="camera"):
 
             transform = camera.getTransform()
@@ -30,9 +31,9 @@ class CollectMayaPlayblasts(pyblish.api.ContextPlugin):
             name = transform.name().replace(":", "_")
 
             # Movie instance
-            instance = context.create_instance(name=name)
+            instance = pyblish.api.Instance(name)
             instance.add(camera)
-            instance.data["families"] = ["local", "mov", "playblast"]
+            instance.data["families"] = ["mov", "playblast"]
             instance.data["family"] = "mov"
             label = "{0} - {1}".format(name, "playblast")
             instance.data["label"] = label
@@ -64,3 +65,38 @@ class CollectMayaPlayblasts(pyblish.api.ContextPlugin):
                 "workspace", filename
             )
             instance.data["output_path"] = path
+
+            def instance_toggled(instance, value):
+                instance[0].getTransform().publish.set(value)
+            instance.data["instanceToggled"] = instance_toggled
+
+            instances.append(instance)
+
+        context.data["instances"] = (
+            context.data.get("instances", []) + instances
+        )
+
+
+class CollectMayaPlayblastsLocal(pyblish.api.ContextPlugin):
+    """Collect all local processing write instances."""
+
+    order = CollectMayaPlayblasts.order + 0.01
+    label = "Playblasts Local"
+    hosts = ["maya"]
+    targets = ["process.local"]
+
+    def process(self, context):
+
+        for item in context.data["instances"]:
+            # Skip any instances that is not valid.
+            valid_families = ["playblasts"]
+            if len(set(valid_families) & set(item.data["families"])) != 1:
+                continue
+
+            instance = context.create_instance(item.data["name"])
+            for key, value in item.data.iteritems():
+                instance.data[key] = value
+
+            instance.data["families"] += ["local"]
+            for node in item:
+                instance.add(node)

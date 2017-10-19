@@ -6,25 +6,24 @@ import pyblish.api
 import alembic_export
 
 
-class ExtractMayaAlembic(pyblish.api.InstancePlugin):
-    """ Extracts alembic files. """
+class ExtractAlembic(pyblish.api.InstancePlugin):
+    """Superclass for exporting alembic files."""
 
     order = pyblish.api.ExtractorOrder
-    families = ["alembic", "local"]
     optional = True
-    match = pyblish.api.Subset
-    label = "Alembic"
     hosts = ["maya"]
     targets = ["process.local"]
+    families = ["cache", "camera", "geometry"]
+    label = "Alembic"
 
     def process(self, instance):
 
         # Validate whether we can strip namespaces.
         stripNamespaces = 0
         root_names = []
-        for member in instance[0]:
-            if member.name().split(":")[-1] not in root_names:
-                root_names.append(member.name().split(":")[-1])
+        for node in instance.data["nodes"]:
+            if node.name().split(":")[-1] not in root_names:
+                root_names.append(node.name().split(":")[-1])
             else:
                 self.log.warning(
                     "Can't strip namespaces, because of conflicting root "
