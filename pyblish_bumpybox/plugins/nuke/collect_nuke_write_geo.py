@@ -69,7 +69,7 @@ class CollectNukeCacheLocal(pyblish.api.ContextPlugin):
 
         formats = ["cache", "camera", "geometry"]
         for item in context.data["instances"]:
-            families = [item.data["family"]] + item.data["families"]
+            families = [item.data["family"]] + item.data.get("families", [])
             # Skip any instances that is not valid.
             valid_families = set(formats)
             if len(valid_families & set(families)) != 1:
