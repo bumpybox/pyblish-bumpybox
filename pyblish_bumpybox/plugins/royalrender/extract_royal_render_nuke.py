@@ -12,6 +12,7 @@ class ExtractRoyalRenderNuke(pyblish.api.InstancePlugin):
     order = pyblish.api.ExtractorOrder
     label = "Royal Render Nuke"
     hosts = ["nuke"]
+    families = ["royalrender"]
     targets = ["process.royalrender"]
 
     def process(self, instance):
