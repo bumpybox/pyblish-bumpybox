@@ -89,7 +89,7 @@ class CollectMayaPlayblastsLocal(pyblish.api.ContextPlugin):
 
         for item in context.data["instances"]:
             # Skip any instances that is not valid.
-            valid_families = ["playblasts"]
+            valid_families = ["playblast"]
             if len(set(valid_families) & set(item.data["families"])) != 1:
                 continue
 

@@ -10,23 +10,21 @@ import pyblish.api
 from capture import capture
 
 
-class ViewPlayblastAction(pyblish.api.Action):
+class ViewPlayblastsAction(pyblish.api.Action):
 
-    label = "View Playblast"
+    label = "View Playblasts"
     icon = "eye"
-    on = "succeeded"
+    on = "all"
 
     def process(self, context, plugin):
 
         # Get the errored instances
-        succeeded = []
+        all_instances = []
         for result in context.data["results"]:
-            if (result["error"] is None and result["instance"] is not None
-               and result["instance"] not in succeeded):
-                succeeded.append(result["instance"])
+            all_instances.append(result["instance"])
 
         # Apply pyblish.logic to get the instances for the plug-in
-        instances = pyblish.api.instances_by_plugin(succeeded, plugin)
+        instances = pyblish.api.instances_by_plugin(context, plugin)
 
         for instance in instances:
             webbrowser.open(instance.data["output_path"])
@@ -41,7 +39,7 @@ class ExtractMayaPlayblast(pyblish.api.InstancePlugin):
     label = "Playblast"
     hosts = ["maya"]
     targets = ["process.local"]
-    actions = [ViewPlayblastAction]
+    actions = [ViewPlayblastsAction]
 
     def process(self, instance):
 
