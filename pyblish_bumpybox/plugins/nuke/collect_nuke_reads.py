@@ -24,6 +24,9 @@ class CollectNukeReads(pyblish.api.ContextPlugin):
             movie_formats = ["ari", "avi", "gif", "mov", "r3d"]
             if node.metadata()["input/filereader"] in movie_formats:
                 output_type = "mov"
+            scene_formats = ["psd"]
+            if node.metadata()["input/filereader"] in scene_formats:
+                output_type = "scene"
 
             # Create instance
             instance = context.create_instance(node.name())
@@ -52,7 +55,15 @@ class CollectNukeReads(pyblish.api.ContextPlugin):
                         "#" * padding, "%{0:0>2}d".format(padding)
                     )
 
-                collection = clique.parse(path + " []")
+                try:
+                    collection = clique.parse(path + " []")
+                except ValueError as e:
+                    context.remove(instance)
+                    self.log.warning(
+                        "Collection error on \"{0}\": "
+                        "{1}".format(node.name(), e)
+                    )
+                    continue
 
                 for f in os.listdir(os.path.dirname(path)):
                     file_path = os.path.join(os.path.dirname(path), f)
