@@ -13,7 +13,7 @@ class ExtractNukeBackdrop(pyblish.api.InstancePlugin):
     def process(self, instance):
         import os
         import nuke
-
+        self.log.info(instance)
         if not instance.data["publish"]:
             return
 
@@ -23,6 +23,9 @@ class ExtractNukeBackdrop(pyblish.api.InstancePlugin):
         # Create workspace if necessary
         if not os.path.exists(directory):
             os.makedirs(directory)
+
+        # Store selection
+        selected_nodes = nuke.selectedNodes()
 
         # Export gizmo
         # Deselect all nodes
@@ -35,6 +38,14 @@ class ExtractNukeBackdrop(pyblish.api.InstancePlugin):
 
         nuke.nodeCopy(file_path)
 
+        # Restore selection
+        for node in nuke.selectedNodes():
+            node["selected"].setValue(False)
+
+        for node in selected_nodes:
+            node["selected"].setValue(True)
+
+        # Export backdrop
         data = ""
         with open(file_path, "r") as f:
             data = f.read()
