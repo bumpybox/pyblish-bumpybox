@@ -35,7 +35,7 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
         """Return all collections of previous collection versions."""
 
         collections = []
-        for count in range(1, int(version) + 1):
+        for count in range(1, int(version)):
             version_string = "v" + str(count).zfill(len(version))
             head = collection.head.replace(
                 "v" + version, version_string
@@ -57,7 +57,7 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
 
     def single_file_instances(self, instance, version, family_type, context):
 
-        for count in range(1, int(version) + 1):
+        for count in range(1, int(version)):
             version_string = "v" + str(count).zfill(len(version))
             filename = instance.data["output_path"].replace(
                 "v" + version, version_string
@@ -71,8 +71,8 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
                 label="{0} - {1}".format(
                     instance.data["name"], os.path.basename(filename)
                 ),
-                family=family_type[0],
-                families=["output"],
+                family="output",
+                families=[family_type[0]],
                 publish=False,
                 output_path=filename,
                 version=context.data["version"]
@@ -156,10 +156,6 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
                         )
                     )
 
-                # Ensure original collection is gathered
-                if collection not in collections:
-                    collections.append(collection)
-
             # Single file outputs
             output_path = instance.data.get("output_path", "")
 
@@ -177,6 +173,7 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
         files = self.scan_collections_files(collections)
 
         # Generate instances from collections
+        populated_collections = []
         for collection in collections:
 
             collection = self.populate_collection(
@@ -185,6 +182,12 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
 
             if not list(collection):
                 continue
+
+            # Ensure collections are unique
+            if collection in populated_collections:
+                continue
+            else:
+                populated_collections.append(collection)
 
             instance = context.create_instance(name=collection.name)
 

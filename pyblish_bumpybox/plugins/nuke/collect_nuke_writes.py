@@ -1,3 +1,5 @@
+import os
+
 import nuke
 import pyblish.api
 import clique
@@ -64,7 +66,7 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
         )
 
 
-class CollectNukeWritesLocal(pyblish.api.ContextPlugin):
+class CollectNukeWritesProcess(pyblish.api.ContextPlugin):
     """Collect all local processing write instances."""
 
     order = CollectNukeWrites.order + 0.01
@@ -106,5 +108,53 @@ class CollectNukeWritesLocal(pyblish.api.ContextPlugin):
 
             def instanceToggled(instance, value):
                 instance[0]["process_local"].setValue(value)
+
+            instance.data["instanceToggled"] = instanceToggled
+
+
+class CollectNukeWritesPublish(pyblish.api.ContextPlugin):
+    """Collect all write instances for publishing."""
+
+    order = CollectNukeWrites.order + 0.01
+    label = "Writes"
+    hosts = ["nuke"]
+    targets = ["default"]
+
+    def process(self, context):
+
+        for item in context.data["write_instances"]:
+            instance = context.create_instance(item.data["name"])
+            for key, value in item.data.iteritems():
+                instance.data[key] = value
+
+            instance.data["label"] += (
+                " - " + os.path.basename(instance.data["collection"].format())
+            )
+
+            for node in item:
+                instance.add(node)
+
+            # Adding/Checking publish attribute
+            if "publish" not in node.knobs():
+                knob = nuke.Boolean_Knob(
+                    "publish", "Publish"
+                )
+                knob.setValue(False)
+                node.addKnob(knob)
+
+            value = bool(node["publish"].getValue())
+
+            # Compare against selection
+            selection = instance.context.data.get("selection", [])
+            if selection:
+                if list(set(instance) & set(selection)):
+                    value = True
+                else:
+                    value = False
+
+            instance.data["publish"] = value
+
+            def instanceToggled(instance, value):
+                instance[0]["publish"].setValue(value)
 
             instance.data["instanceToggled"] = instanceToggled

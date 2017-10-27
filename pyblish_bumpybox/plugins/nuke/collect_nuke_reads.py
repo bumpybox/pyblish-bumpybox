@@ -42,7 +42,16 @@ class CollectNukeReads(pyblish.api.ContextPlugin):
                 knob.setValue(False)
                 node.addKnob(knob)
 
-            instance.data["publish"] = bool(node["publish"].getValue())
+            # Compare against selection
+            selection = instance.context.data.get("selection", [])
+            publish = bool(node["publish"].getValue())
+            if selection:
+                if list(set(instance) & set(selection)):
+                    publish = True
+                else:
+                    publish = False
+
+            instance.data["publish"] = publish
 
             # Collecting file paths
             label = "{0} - {1}".format(node.name(), os.path.basename(path))

@@ -7,7 +7,7 @@ class ValidateProcessing(pyblish.api.ContextPlugin):
     order = pyblish.api.ValidatorOrder
     optional = True
     label = "Nodes to Process"
-    targets = ["process"]
+    targets = ["default", "process"]
 
     def process(self, context):
 
