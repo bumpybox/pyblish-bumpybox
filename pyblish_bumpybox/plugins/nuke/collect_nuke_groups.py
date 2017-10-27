@@ -41,7 +41,16 @@ class CollectNukeGroups(pyblish.api.ContextPlugin):
                     knob.setValue(False)
                     node.addKnob(knob)
 
-                instance.data["publish"] = bool(node[fmt].getValue())
+                # Compare against selection
+                selection = instance.context.data.get("selection", [])
+                publish_state = bool(node[fmt].getValue())
+                if selection:
+                    if list(set(instance) & set(selection)):
+                        publish_state = True
+                    else:
+                        publish_state = False
+
+                instance.data["publish"] = publish_state
 
                 # Generate output path
                 directory = os.path.join(
