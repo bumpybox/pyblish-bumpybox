@@ -31,7 +31,7 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
             instance.data["family"] = output_type
             instance.add(node)
 
-            instance.data["label"] = "{0} - write".format(node.name())
+            instance.data["label"] = node.name()
 
             instance.data["publish"] = False
 
@@ -81,7 +81,7 @@ class CollectNukeWritesProcess(pyblish.api.ContextPlugin):
             for key, value in item.data.iteritems():
                 instance.data[key] = value
 
-            instance.data["label"] += " - local"
+            instance.data["label"] += " - write - local"
             instance.data["families"] = ["write", "local"]
             for node in item:
                 instance.add(node)
@@ -123,6 +123,18 @@ class CollectNukeWritesPublish(pyblish.api.ContextPlugin):
     def process(self, context):
 
         for item in context.data["write_instances"]:
+
+            missing_files = []
+            for f in item.data["collection"]:
+                if not os.path.exists(f):
+                    missing_files.append(f)
+
+            for f in missing_files:
+                item.data["collection"].remove(f)
+
+            if not list(item.data["collection"]):
+                continue
+
             instance = context.create_instance(item.data["name"])
             for key, value in item.data.iteritems():
                 instance.data[key] = value
