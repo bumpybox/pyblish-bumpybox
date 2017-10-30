@@ -5,24 +5,17 @@ import pyblish.api
 import filelink
 
 
-class ValidateMovie(pyblish.api.InstancePlugin):
+class ValidateTranscode(pyblish.api.InstancePlugin):
     """Validate environment is ready for extracting a movie."""
 
     order = pyblish.api.ValidatorOrder
-    label = "Movie"
+    label = "Transcode"
     optional = True
     families = ["img"]
 
     def process(self, instance):
 
-        self.get_executable_path("ffmpeg")
-
-    def get_executable_path(self, executable):
-        """Returns the full path to an executable.
-
-        Args:
-            executable (str): The name of executable without extension.
-        """
+        executable = "ffmpeg"
 
         def is_exe(fpath):
             return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
@@ -43,14 +36,14 @@ class ValidateMovie(pyblish.api.InstancePlugin):
         raise IOError("\"{0}\" executable not found.".format(executable))
 
 
-class ExtractImgMovie(pyblish.api.InstancePlugin):
+class ExtractTranscodeImages(pyblish.api.InstancePlugin):
     """Extracts review movie from image sequence.
 
     Offset to get images to transcode from.
     """
 
     order = pyblish.api.ExtractorOrder + 0.1
-    label = "Img > Review Movie"
+    label = "Transcode - Images"
     optional = True
     families = ["img"]
 
@@ -149,11 +142,11 @@ class ExtractImgMovie(pyblish.api.InstancePlugin):
         self.log.debug(output)
 
 
-class ExtractMovMovie(pyblish.api.InstancePlugin):
+class ExtractTranscodeMovie(pyblish.api.InstancePlugin):
     """Extracts review movie from movies."""
 
     order = pyblish.api.ExtractorOrder + 0.1
-    label = "Movie > Review Movie"
+    label = "Transcode - Movie"
     optional = True
     families = ["mov"]
 
