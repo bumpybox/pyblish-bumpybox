@@ -139,6 +139,7 @@ class CollectNukeWritesPublish(pyblish.api.ContextPlugin):
             for key, value in item.data.iteritems():
                 instance.data[key] = value
 
+            instance.data["families"] = ["output"]
             instance.data["label"] += (
                 " - " + os.path.basename(instance.data["collection"].format())
             )
