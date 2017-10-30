@@ -353,9 +353,9 @@ class CollectFtrackNukeStudioEntities(pyblish.api.ContextPlugin):
                 sequence = parent.data["item"].parent().parent()
                 shot.data["fps"] = sequence.framerate().toFloat()
 
-                fmt = sequence.format()
-                shot.data["width"] = fmt.width()
-                shot.data["height"] = fmt.height()
+                media_source = parent.data["item"].source().mediaSource()
+                shot.data["width"] = media_source.width()
+                shot.data["height"] = media_source.height()
 
                 instances.append(shot)
 
