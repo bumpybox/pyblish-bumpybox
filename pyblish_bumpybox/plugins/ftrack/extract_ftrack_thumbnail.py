@@ -12,7 +12,7 @@ class ExtractFtrackThumbnailImg(pyblish.api.InstancePlugin):
 
     families = ["img"]
     order = pyblish.api.ExtractorOrder + 0.1
-    label = "Thumbnail - img"
+    label = "Thumbnail - Images"
     optional = True
 
     def process(self, instance):
@@ -76,7 +76,7 @@ class ExtractFtrackThumbnailMov(pyblish.api.InstancePlugin):
 
     families = ["mov"]
     order = pyblish.api.ExtractorOrder + 0.1
-    label = "Thumbnail - mov"
+    label = "Thumbnail - Movie"
     optional = True
 
     def process(self, instance):
