@@ -12,7 +12,7 @@ class ExtractFtrackImgReview(pyblish.api.InstancePlugin):
     """
 
     families = ["img"]
-    order = pyblish.api.ExtractorOrder + 0.1
+    order = pyblish.api.ExtractorOrder + 0.2
     label = "Review"
     optional = True
 
@@ -20,6 +20,9 @@ class ExtractFtrackImgReview(pyblish.api.InstancePlugin):
 
         collection = instance.data.get("collection", [])
         output_file = collection.format("{head}.mov")
+
+        if not os.path.exists(output_file):
+            raise IOError("\"{0}\" not found.".format(output_file))
 
         # Add Ftrack review component
         components = instance.data.get("ftrackComponentsList", [])
@@ -62,7 +65,7 @@ class ExtractFtrackMovReview(pyblish.api.InstancePlugin):
     """
 
     families = ["mov"]
-    order = pyblish.api.ExtractorOrder + 0.1
+    order = pyblish.api.ExtractorOrder + 0.2
     label = "Review"
     optional = True
 
@@ -70,6 +73,9 @@ class ExtractFtrackMovReview(pyblish.api.InstancePlugin):
 
         path = os.path.splitext(instance.data["output_path"])[0]
         path += "_review.mov"
+
+        if not os.path.exists(path):
+            raise IOError("\"{0}\" not found.".format(path))
 
         cmd = (
             "ffprobe -v error -count_frames -select_streams v:0 -show_entries "
