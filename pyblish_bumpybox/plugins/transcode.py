@@ -67,7 +67,7 @@ class ExtractTranscodeImages(pyblish.api.InstancePlugin):
             self.log.warning(msg.format(instance.data["name"]))
             return
 
-        collection = instance.data["collection"]
+        collection = instance.data.get("colorspace_collection", "collection")
 
         # Temporary fill the missing frames.
         missing = collection.holes()
@@ -82,15 +82,6 @@ class ExtractTranscodeImages(pyblish.api.InstancePlugin):
 
                 filelink.create(src, dst)
 
-        # Start number needs to always be the first file of the existing
-        # frames, in order to ensure the full movie gets exported.
-        # Also finding any LUT file to use.
-        root = os.path.dirname(collection.format())
-        lut_file = None
-        for f in os.listdir(root):
-            if f.endswith(".cube"):
-                lut_file = f
-
         # Generate args.
         # Has to be yuv420p for compatibility with older players and smooth
         # playback. This does come with a sacrifice of more visible banding
@@ -100,22 +91,15 @@ class ExtractTranscodeImages(pyblish.api.InstancePlugin):
             "ffmpeg", "-y",
             "-start_number", str(min(collection.indexes)),
             "-framerate", str(instance.context.data["framerate"]),
-            "-gamma", "1.1",
             "-i", collection.format("{head}{padding}{tail}"),
             "-pix_fmt", "yuv420p",
             "-crf", "18",
             "-timecode", "00:00:00:01",
             "-vframes",
-            str(max(collection.indexes) - min(collection.indexes) + 1)
+            str(max(collection.indexes) - min(collection.indexes) + 1),
+            "-vf",
+            "scale=trunc(iw/2)*2:trunc(ih/2)*2",
         ]
-
-        video_filter = "scale=trunc(iw/2)*2:trunc(ih/2)*2"
-
-        # Limit amount of video filters to reduce artifacts and banding.
-        if lut_file:
-            video_filter += ",lut3d={0}".format(lut_file)
-
-        args.extend(["-vf", video_filter])
 
         args.append(collection.format("{head}.mov"))
 
