@@ -25,6 +25,17 @@ class RepairNukeCropAction(pyblish.api.Action):
             if crop.Class() != "Crop":
                 crop = nuke.nodes.Crop(inputs=[instance[0].input(0)])
 
+                xpos = instance[0].xpos()
+                ypos = instance[0].ypos() - 26
+
+                dependent_ypos = instance[0].dependencies()[0].ypos()
+                if (instance[0].ypos() - dependent_ypos) <= 51:
+                    xpos += 110
+
+                crop.setXYpos(xpos, ypos)
+
+                instance[0].setInput(0, crop)
+
             crop["box"].setValue(
                 (
                     0.0,
@@ -33,17 +44,6 @@ class RepairNukeCropAction(pyblish.api.Action):
                     instance[0].input(0).height()
                 )
             )
-
-            xpos = instance[0].xpos()
-            ypos = instance[0].ypos() - 26
-
-            dependent_ypos = instance[0].dependencies()[0].ypos()
-            if (instance[0].ypos() - dependent_ypos) <= 51:
-                xpos += 110
-
-            crop.setXYpos(xpos, ypos)
-
-            instance[0].setInput(0, crop)
 
 
 class ValidateNukeCrop(pyblish.api.InstancePlugin):
