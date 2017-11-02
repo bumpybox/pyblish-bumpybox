@@ -21,10 +21,18 @@ class RepairNukeCropAction(pyblish.api.Action):
         instances = pyblish.api.instances_by_plugin(failed, plugin)
 
         for instance in instances:
+            crop = instance[0].dependencies()[0]
+            if crop.Class() != "Crop":
+                crop = nuke.nodes.Crop(inputs=[instance[0].input(0)])
 
-            crop = nuke.nodes.Crop(inputs=[instance[0].input(0)])
-            crop["box"].setValue(instance[0].input(0).width(), 2)
-            crop["box"].setValue(instance[0].input(0).height(), 3)
+            crop["box"].setValue(
+                (
+                    0.0,
+                    0.0,
+                    instance[0].input(0).width(),
+                    instance[0].input(0).height()
+                )
+            )
 
             xpos = instance[0].xpos()
             ypos = instance[0].ypos() - 26
@@ -52,3 +60,13 @@ class ValidateNukeCrop(pyblish.api.InstancePlugin):
 
         msg = "Couldn't find a crop node before %s" % instance
         assert instance[0].dependencies()[0].Class() == "Crop", msg
+
+        crop_node = instance[0].dependencies()[0]
+        input_node = crop_node.dependencies()[0]
+        expected = (0.0, 0.0, input_node.width(), input_node.height())
+        current = crop_node["box"].value()
+        msg = (
+            "Crop node dimensions; \"{0}\", does not match input "
+            "\"{1}\"".format(current, expected)
+        )
+        assert current == expected, msg
