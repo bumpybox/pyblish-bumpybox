@@ -21,7 +21,7 @@ class ValidateProcessing(pyblish.api.ContextPlugin):
             if "source" in families:
                 continue
 
-            instance_labels += "\n\n" + instance.data["label"]
+            instance_labels += "\n\n" + instance.data.get("label", "name")
 
             if instance.data("publish", True):
                 instances_to_process.append(instance)
