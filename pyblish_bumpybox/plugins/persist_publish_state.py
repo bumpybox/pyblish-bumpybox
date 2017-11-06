@@ -1,13 +1,13 @@
 from pyblish import api
 
 
-class ExtractPublishState(api.ContextPlugin):
+class PersistPublishState(api.ContextPlugin):
     """Extracts the publish state of all instances
 
     Instances needs to have a "instanceToggled" method stored as data member.
     """
 
-    order = api.ExtractorOrder
+    order = api.ValidatorOrder
     targets = ["default", "process"]
     label = "Publish State"
 
