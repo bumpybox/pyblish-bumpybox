@@ -27,6 +27,8 @@ class ViewPlayblastsAction(pyblish.api.Action):
         instances = pyblish.api.instances_by_plugin(context, plugin)
 
         for instance in instances:
+            if not instance.data.get("publish", True):
+                continue
             webbrowser.open(instance.data["output_path"])
 
 
