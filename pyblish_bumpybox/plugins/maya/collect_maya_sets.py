@@ -50,7 +50,10 @@ class CollectMayaSets(pyblish.api.ContextPlugin):
             geometry = []
             cameras = []
             for member in object_set.members():
-                node_type = member.getShape().nodeType()
+                try:
+                    node_type = member.getShape().nodeType()
+                except:
+                    continue
                 if node_type == "camera":
                     cameras.append(member)
                 if node_type == "mesh":
@@ -84,7 +87,7 @@ class CollectMayaSets(pyblish.api.ContextPlugin):
                 if fmt == "geometry":
                     instance.data["nodes"] = geometry
 
-                families = [fmt, family_mappings[fmt]]
+                families = [fmt, family_mappings[fmt], "set"]
                 instance.data["families"] = families
                 instance.data["family"] = family_mappings[fmt]
 
