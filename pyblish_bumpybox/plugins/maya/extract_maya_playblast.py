@@ -65,16 +65,26 @@ class ExtractMayaPlayblast(pyblish.api.InstancePlugin):
         )
 
         movie_path = os.path.join(temp_dir, "temp.mov")
+        start_frame = int(pymel.core.playbackOptions(q=True, min=True))
+
+        # Copy font file to movie path
+        shutil.copy(
+            os.path.join(os.path.dirname(__file__), "arial.ttf"),
+            os.path.join(os.path.dirname(movie_path), "arial.ttf")
+        )
+
         args = [
             "ffmpeg", "-y",
-            "-start_number", str(
-                int(pymel.core.playbackOptions(q=True, min=True))
-            ),
+            "-start_number", str(start_frame),
             "-framerate", str(instance.context.data["framerate"]),
             "-i", os.path.join(temp_dir, "temp.%04d.jpg"),
             "-pix_fmt", "yuv420p",
             "-crf", "18",
             "-timecode", "00:00:00:01",
+            "-vf", "drawtext=fontfile=arial.ttf: text='Frame\\: %{n}':"
+            " x=(w-tw) - lh: y=h-(2*lh): fontcolor=white: box=1:"
+            " boxcolor=black@0.5: start_number=" + str(start_frame) + ": "
+            "fontsize=32: boxborderw=5",
             movie_path
         ]
 
