@@ -77,7 +77,7 @@ class CollectMayaPlayblasts(pyblish.api.ContextPlugin):
         )
 
 
-class CollectMayaPlayblastsLocal(pyblish.api.ContextPlugin):
+class CollectMayaPlayblastsProcess(pyblish.api.ContextPlugin):
     """Collect all local processing write instances."""
 
     order = CollectMayaPlayblasts.order + 0.01
@@ -89,8 +89,7 @@ class CollectMayaPlayblastsLocal(pyblish.api.ContextPlugin):
 
         for item in context.data["instances"]:
             # Skip any instances that is not valid.
-            valid_families = ["playblast"]
-            if len(set(valid_families) & set(item.data["families"])) != 1:
+            if "playblast" not in item.data.get("families", []):
                 continue
 
             instance = context.create_instance(item.data["name"])
@@ -98,5 +97,36 @@ class CollectMayaPlayblastsLocal(pyblish.api.ContextPlugin):
                 instance.data[key] = value
 
             instance.data["families"] += ["local"]
+            for node in item:
+                instance.add(node)
+
+
+class CollectMayaPlayblastsPublish(pyblish.api.ContextPlugin):
+    """Collect all local processing write instances."""
+
+    order = CollectMayaPlayblasts.order + 0.01
+    label = "Playblasts Local"
+    hosts = ["maya"]
+    targets = ["default"]
+
+    def process(self, context):
+
+        for item in context.data["instances"]:
+            # Skip any instances that is not valid.
+            if "playblast" not in item.data.get("families", []):
+                continue
+
+            if not os.path.exists(item.data["output_path"]):
+                continue
+
+            instance = context.create_instance(item.data["name"])
+            for key, value in item.data.iteritems():
+                instance.data[key] = value
+
+            instance.data["label"] = "{0} - {1}".format(
+                instance.data["name"],
+                os.path.basename(instance.data["output_path"])
+            )
+
             for node in item:
                 instance.add(node)
