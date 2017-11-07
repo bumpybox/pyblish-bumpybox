@@ -36,8 +36,12 @@ class CollectNukeStudioTrackItems(pyblish.api.ContextPlugin):
         else:
             for item in context.data.get("selection", []):
                 # Skip audio track items
-                media_type = "core.Hiero.Python.TrackItem.MediaType.kAudio"
-                if str(item.mediaType()) == media_type:
+                # Try/Except is to handle items types, like EffectTrackItem
+                try:
+                    media_type = "core.Hiero.Python.TrackItem.MediaType.kVideo"
+                    if str(item.mediaType()) != media_type:
+                        continue
+                except:
                     continue
 
                 data[item.name()] = {
