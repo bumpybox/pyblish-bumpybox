@@ -43,6 +43,7 @@ class ExtractBakedColorspace(pyblish.api.InstancePlugin):
         # Read from Write node
         if node.Class() == "Write":
             node["reading"].setValue(True)
+            node["checkHashOnRead"].setValue(False)
 
         write_node = nuke.createNode("Write")
         path = nuke.filename(node)
