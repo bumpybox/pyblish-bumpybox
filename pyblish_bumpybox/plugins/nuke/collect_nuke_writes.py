@@ -124,6 +124,10 @@ class CollectNukeWritesPublish(pyblish.api.ContextPlugin):
 
         for item in context.data["write_instances"]:
 
+            # If the collection was not generated.
+            if not item.data["collection"]:
+                continue
+
             missing_files = []
             for f in item.data["collection"]:
                 if not os.path.exists(f):
