@@ -1,9 +1,10 @@
 import os
+import tempfile
+import shutil
 
 import nuke
 
 import pyblish.api
-import clique
 
 
 class ExtractBakedColorspace(pyblish.api.InstancePlugin):
@@ -21,13 +22,41 @@ class ExtractBakedColorspace(pyblish.api.InstancePlugin):
         # Deselect all nodes to prevent external connections
         [i["selected"].setValue(False) for i in nuke.allNodes()]
 
-        # Create nodes
-        viewer_process_node = nuke.ViewerProcess.node()
+        temporary_nodes = []
 
+        # Create nodes
+        first_frame = min(instance.data["collection"].indexes)
+        last_frame = max(instance.data["collection"].indexes)
+
+        temp_dir = tempfile.mkdtemp()
+        for f in instance.data["collection"]:
+            shutil.copy(f, os.path.join(temp_dir, os.path.basename(f)))
+
+        node = previous_node = nuke.createNode("Read")
+        node["file"].setValue(
+            os.path.join(
+                temp_dir,
+                os.path.basename(
+                    instance.data["collection"].format(
+                        "{head}{padding}{tail}"
+                    )
+                )
+            ).replace("\\", "/")
+        )
+
+        node["first"].setValue(first_frame)
+        node["origfirst"].setValue(first_frame)
+        node["last"].setValue(last_frame)
+        node["origlast"].setValue(last_frame)
+        temporary_nodes.append(node)
+
+        viewer_process_node = nuke.ViewerProcess.node()
         dag_node = None
         if viewer_process_node:
             dag_node = nuke.createNode(viewer_process_node.Class())
-
+            dag_node.setInput(0, previous_node)
+            previous_node = dag_node
+            temporary_nodes.append(dag_node)
             # Copy viewer process values
             excludedKnobs = ["name", "xpos", "ypos"]
             for item in viewer_process_node.knobs().keys():
@@ -38,52 +67,26 @@ class ExtractBakedColorspace(pyblish.api.InstancePlugin):
         else:
             self.log.warning("No viewer node found.")
 
-        node = instance[0]
-
-        # Read from Write node
-        if node.Class() == "Write":
-            node["reading"].setValue(True)
-            node["checkHashOnRead"].setValue(False)
-
         write_node = nuke.createNode("Write")
-        path = nuke.filename(node)
-        ext = os.path.splitext(path)[1]
-        path = path.replace(ext, "_baked_colorspace.jpeg")
-        write_node["file"].setValue(path)
-        write_node["file_type"].setValue("jpeg")
-        write_node["_jpeg_quality"].setValue(1)
+        path = instance.data["collection"].format(
+            "{head}_baked_colorspace.mov"
+        )
+        instance.data["baked_colorspace_movie"] = path
+        write_node["file"].setValue(path.replace("\\", "/"))
+        write_node["file_type"].setValue("mov")
         write_node["raw"].setValue(1)
-
-        if dag_node:
-            dag_node.setInput(0, node)
-            write_node.setInput(0, dag_node)
-        else:
-            write_node.setInput(0, node)
-
-        first_frame = min(instance.data["collection"].indexes)
-        last_frame = max(instance.data["collection"].indexes)
+        write_node.setInput(0, previous_node)
+        temporary_nodes.append(write_node)
 
         # Render frames
         nuke.execute(write_node.name(), int(first_frame), int(last_frame))
 
-        nuke.delete(write_node)
+        # Clean up
+        for node in temporary_nodes:
+            nuke.delete(node)
 
-        # Disable read from Write node
-        if node.Class() == "Write":
-            node["reading"].setValue(False)
-            node["postage_stamp"].setValue(False)
+        shutil.rmtree(temp_dir)
 
         # Restore selection
         [i["selected"].setValue(False) for i in nuke.allNodes()]
         [i["selected"].setValue(True) for i in selection]
-
-        if dag_node:
-            nuke.delete(dag_node)
-
-        collection = clique.Collection(
-            head=instance.data["collection"].head,
-            padding=instance.data["collection"].padding,
-            tail="_baked_colorspace.jpeg"
-        )
-        collection.indexes.update(instance.data["collection"].indexes)
-        instance.data["colorspace_collection"] = collection

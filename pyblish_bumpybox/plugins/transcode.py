@@ -67,8 +67,6 @@ class ExtractTranscodeImages(pyblish.api.InstancePlugin):
             self.log.warning(msg.format(instance.data["name"]))
             return
 
-        collection = instance.data.get("colorspace_collection", "collection")
-
         # Temporary fill the missing frames.
         missing = collection.holes()
         if not collection.is_contiguous():
@@ -100,6 +98,15 @@ class ExtractTranscodeImages(pyblish.api.InstancePlugin):
             "-vf",
             "scale=trunc(iw/2)*2:trunc(ih/2)*2",
         ]
+
+        if instance.data.get("baked_colorspace_movie"):
+            args = [
+                "ffmpeg", "-y",
+                "-i", instance.data["baked_colorspace_movie"],
+                "-pix_fmt", "yuv420p",
+                "-crf", "18",
+                "-timecode", "00:00:00:01",
+            ]
 
         args.append(collection.format("{head}.mov"))
 
