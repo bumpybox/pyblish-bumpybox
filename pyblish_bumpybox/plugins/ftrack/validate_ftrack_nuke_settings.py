@@ -16,11 +16,10 @@ class RepairFtrackNukeSettings(pyblish.api.Action):
         parent = task.getParent()
 
         nuke.root()["fps"].setValue(parent.get("fps"))
-        nuke.root()["first_frame"].setValue(parent.getFrameStart())
 
         handles = parent.get("handles")
-        last_frame = parent.getFrameEnd() + (handles * 2)
-        nuke.root()["last_frame"].setValue(last_frame)
+        nuke.root()["first_frame"].setValue(parent.getFrameStart() - handles)
+        nuke.root()["last_frame"].setValue(parent.getFrameEnd() + handles)
 
 
 class ValidateFtrackNukeSettings(pyblish.api.Validator):
@@ -60,7 +59,7 @@ class ValidateFtrackNukeSettings(pyblish.api.Validator):
         # validating first frame
         local_first_frame = nuke.root()["first_frame"].value()
 
-        online_first_frame = parent.getFrameStart()
+        online_first_frame = parent.getFrameStart() - handles
 
         msg = "First frame is incorrect."
         msg += "\n\nLocal last frame: %s" % local_first_frame
@@ -70,7 +69,7 @@ class ValidateFtrackNukeSettings(pyblish.api.Validator):
         # validating last frame
         local_last_frame = nuke.root()["last_frame"].value()
 
-        online_last_frame = parent.getFrameEnd() + (handles * 2)
+        online_last_frame = parent.getFrameEnd() + handles
 
         msg = "Last frame is incorrect."
         msg += "\n\nLocal last frame: %s" % local_last_frame
