@@ -22,7 +22,7 @@ class ValidateNukeProxyMode(pyblish.api.ContextPlugin):
     label = "Proxy Mode"
     actions = [RepairNukeProxyModeAction]
     hosts = ["nuke"]
-    targets = ["process"]
+    targets = ["default", "process"]
 
     def process(self, context):
 
