@@ -19,6 +19,9 @@ class CollectNukeReads(pyblish.api.ContextPlugin):
             if node.Class() != "Read":
                 continue
 
+            if not node.metadata():
+                continue
+
             # Determine output type
             output_type = "img"
             movie_formats = ["ari", "avi", "gif", "mov", "r3d"]
