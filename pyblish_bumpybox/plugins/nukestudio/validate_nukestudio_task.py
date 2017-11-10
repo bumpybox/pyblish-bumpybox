@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class ValidateNukeStudioTask(pyblish.api.InstancePlugin):
+class ValidateNukeStudioOutputRange(pyblish.api.InstancePlugin):
     """Validate the output range of the task.
 
     This compares the output range and clip associated with the task, so see
@@ -12,7 +12,7 @@ class ValidateNukeStudioTask(pyblish.api.InstancePlugin):
 
     order = pyblish.api.ValidatorOrder
     families = ["trackItem.task"]
-    label = "Task"
+    label = "Output Range"
     hosts = ["nukestudio"]
     optional = True
 
@@ -34,3 +34,24 @@ class ValidateNukeStudioTask(pyblish.api.InstancePlugin):
             'the "Handles" section of the export dialog.'
         )
         assert difference, failure_message
+
+
+class ValidateNukeStudioImageSequence(pyblish.api.InstancePlugin):
+    """Validate image sequence output path is setup correctly."""
+
+    order = pyblish.api.ValidatorOrder
+    families = ["trackItem.task", "img"]
+    match = pyblish.api.Subset
+    label = "Image Sequence"
+    hosts = ["nukestudio"]
+    optional = True
+
+    def process(self, instance):
+
+        resolved_path = instance.data["task"].resolvedExportPath()
+
+        msg = (
+            "Image sequence output is missing a padding. Please add \"####\" "
+            "or \"%04d\" to the output templates."
+        )
+        assert "#" in resolved_path or "%" in resolved_path, msg
