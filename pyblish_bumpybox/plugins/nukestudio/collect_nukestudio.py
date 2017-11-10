@@ -106,11 +106,11 @@ class CollectNukeStudioTasks(pyblish.api.ContextPlugin):
                 resolved_path = task.resolvedExportPath()
 
                 # Formatting the basename to not include frame padding or
-                # "."
-                name = os.path.basename(resolved_path)
-                name = name.replace("#", "").replace(".", "_")
-                name = re.sub(r"%.*d", "_", name)
-                name = re.sub(r"_{2,}", "_", name)
+                # extension.
+                name = os.path.splitext(os.path.basename(resolved_path))[0]
+                name = name.replace(".", "")
+                name = name.replace("#", "")
+                name = re.sub(r"%.*d", "", name)
                 instance = context.create_instance(name=name, parent=parent)
 
                 instance.data["task"] = task
