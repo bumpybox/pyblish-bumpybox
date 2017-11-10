@@ -140,7 +140,6 @@ class CollectNukeStudioTasks(pyblish.api.ContextPlugin):
                             resolved_path, pattern="{head}{padding}{tail}"
                         )
 
-                    if collection:
-                        instance.data["collection"] = collection
+                    instance.data["collection"] = collection
                 else:
                     instance.data["output_path"] = resolved_path
