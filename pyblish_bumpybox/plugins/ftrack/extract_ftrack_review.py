@@ -46,7 +46,7 @@ class ExtractFtrackImgReview(pyblish.api.InstancePlugin):
                     "ftr_meta": json.dumps({
                         "frameIn": list(collection.indexes)[0],
                         "frameOut": list(collection.indexes)[-1],
-                        "frameRate": instance.context.data["framerate"]
+                        "frameRate": str(instance.context.data["framerate"])
                     })
                 }
               },
@@ -112,7 +112,7 @@ class ExtractFtrackMovReview(pyblish.api.InstancePlugin):
                     "ftr_meta": json.dumps({
                         "frameIn": 1,
                         "frameOut": frame_count,
-                        "frameRate": frame_rate
+                        "frameRate": str(frame_rate)
                     })
                 }
               },
