@@ -80,15 +80,16 @@ class ExtractFtrackMovReview(pyblish.api.InstancePlugin):
         cmd = (
             "ffprobe -v error -count_frames -select_streams v:0 -show_entries "
             "stream=nb_read_frames -of default=nokey=1:noprint_wrappers=1 "
+            "\"{0}\""
         )
-        frame_count = subprocess.check_output(cmd + path)
+        frame_count = subprocess.check_output(cmd.format(path))
 
         cmd = (
             "ffprobe -v 0 -of compact=p=0:nk=1 -select_streams 0 -show_entries"
-            " stream=r_frame_rate "
+            " stream=r_frame_rate \"{0}\""
         )
         # ffprobe returns a math string, hence the "eval"
-        frame_rate = eval(subprocess.check_output(cmd + path))
+        frame_rate = eval(subprocess.check_output(cmd.format(path)))
 
         # Add Ftrack review component
         components = instance.data.get("ftrackComponentsList", [])
