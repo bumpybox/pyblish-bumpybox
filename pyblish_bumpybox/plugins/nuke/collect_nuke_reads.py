@@ -83,6 +83,16 @@ class CollectNukeReads(pyblish.api.ContextPlugin):
                     if collection.match(file_path):
                         collection.add(file_path)
 
+                # Limit to frame range
+                first = node["first"].value()
+                last = node["last"].value()
+
+                indexes = list(collection.indexes)
+                collection.indexes.clear()
+                collection.indexes.update(
+                    set(indexes) & set([x for x in range(first, last + 1)])
+                )
+
                 instance.data["collection"] = collection
                 label = "{0} - {1}".format(
                     node.name(), os.path.basename(collection.format())
