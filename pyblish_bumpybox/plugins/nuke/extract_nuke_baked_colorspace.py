@@ -7,13 +7,14 @@ import nuke
 import pyblish.api
 
 
-class ExtractBakedColorspace(pyblish.api.InstancePlugin):
-    """Extracts jpegs with baked in luts"""
+class ExtractNukeBakedColorspace(pyblish.api.InstancePlugin):
+    """Extracts movie with baked in luts"""
 
     order = pyblish.api.ExtractorOrder
     label = "Baked Colorspace"
     optional = True
     families = ["img"]
+    hosts = ["nuke"]
 
     def process(self, instance):
         # Store selection
