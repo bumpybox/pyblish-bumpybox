@@ -1,6 +1,19 @@
 import pyblish.api
 
 
+class CollectNukeStudioFramerate(pyblish.api.ContextPlugin):
+    """Collect framerate from selected sequence."""
+
+    order = pyblish.api.CollectorOrder
+    label = "Framerate"
+    hosts = ["nukestudio"]
+
+    def process(self, context):
+        for item in context.data.get("selection", []):
+            context.data["framerate"] = item.sequence().framerate().toFloat()
+            return
+
+
 class CollectNukeStudioTrackItems(pyblish.api.ContextPlugin):
     """Collect all tasks from submission."""
 

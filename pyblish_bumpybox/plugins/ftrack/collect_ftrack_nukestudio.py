@@ -385,6 +385,3 @@ class CollectFtrackNukeStudioEntities(pyblish.api.ContextPlugin):
                             "trackItem", "ftrackEntity", "task"
                         ]
                         task.data["parent"] = shot
-
-                        # Ensure framerate is collected
-                        context.data["framerate"] = sequence.framerate()
