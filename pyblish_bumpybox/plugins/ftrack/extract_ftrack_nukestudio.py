@@ -16,14 +16,10 @@ class ExtractFtrackThumbnail(pyblish.api.InstancePlugin):
         import time
         import hiero
 
-        item = instance.data["item"]
-
         nukeWriter = hiero.core.nuke.ScriptWriter()
 
-        # Getting top most track with media.
+        item = instance.data["item"]
         seq = item.parent().parent()
-        item = seq.trackItemAt(item.timelineIn())
-
         root_node = hiero.core.nuke.RootNode(1, 1, fps=seq.framerate())
         nukeWriter.addNode(root_node)
 
@@ -34,7 +30,7 @@ class ExtractFtrackThumbnail(pyblish.api.InstancePlugin):
             firstFrame=1,
             includeRetimes=True,
             retimeMethod="Frame",
-            startHandle=handles,
+            startHandle=-handles,
             endHandle=handles
         )
 
