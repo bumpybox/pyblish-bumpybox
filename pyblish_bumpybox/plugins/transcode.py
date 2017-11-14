@@ -142,13 +142,6 @@ class ExtractTranscodeMovie(pyblish.api.InstancePlugin):
     families = ["mov"]
 
     def process(self, instance):
-
-        root = os.path.dirname(instance.data["output_path"])
-        lut_file = None
-        for f in os.listdir(root):
-            if f.endswith(".cube"):
-                lut_file = f
-
         # Generate args.
         # Has to be yuv420p for compatibility with older players and smooth
         # playback. This does come with a sacrifice of more visible banding
@@ -161,9 +154,14 @@ class ExtractTranscodeMovie(pyblish.api.InstancePlugin):
             "-timecode", "00:00:00:01",
         ]
 
-        # Limit amount of video filters to reduce artifacts and banding.
-        if lut_file:
-            args.extend(["-vf", "lut3d={0}".format(lut_file)])
+        if instance.data.get("baked_colorspace_movie"):
+            args = [
+                "ffmpeg", "-y",
+                "-i", instance.data["baked_colorspace_movie"],
+                "-pix_fmt", "yuv420p",
+                "-crf", "18",
+                "-timecode", "00:00:00:01",
+            ]
 
         split = os.path.splitext(instance.data["output_path"])
         args.append(split[0] + "_review.mov")

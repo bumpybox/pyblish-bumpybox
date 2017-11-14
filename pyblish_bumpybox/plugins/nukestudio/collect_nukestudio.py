@@ -98,6 +98,14 @@ class CollectNukeStudioTasks(pyblish.api.ContextPlugin):
             for task in parent.data["tasks"]:
                 asset_type = None
 
+                hiero_cls = he.FnSymLinkExporter.SymLinkExporter
+                if isinstance(task, hiero_cls):
+                    asset_type = "img"
+                    movie_formats = [".mov", ".R3D"]
+                    ext = os.path.splitext(task.resolvedExportPath())[1]
+                    if ext in movie_formats:
+                        asset_type = "mov"
+
                 hiero_cls = he.FnTranscodeExporter.TranscodeExporter
                 if isinstance(task, hiero_cls):
                     asset_type = "img"
@@ -132,8 +140,13 @@ class CollectNukeStudioTasks(pyblish.api.ContextPlugin):
                 instance.data["family"] = "trackItem.task"
                 instance.data["families"] = [asset_type, "local", "task"]
 
-                label = "{0} - {1} - local".format(name, asset_type)
+                label = "{0} ({1}) - {2} - local".format(
+                    name, parent, asset_type
+                )
                 instance.data["label"] = label
+
+                output_range = task.outputRange(ignoreHandles=True)[1]
+                instance.data["handles"] = task.outputRange()[1] - output_range
 
                 # Add collection or output
                 if asset_type == "img":
