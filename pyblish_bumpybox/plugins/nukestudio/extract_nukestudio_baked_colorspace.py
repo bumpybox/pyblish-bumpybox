@@ -17,7 +17,7 @@ class ExtractNukeStudioBakedColorspace(pyblish.api.InstancePlugin):
 
         nukeWriter = hiero.core.nuke.ScriptWriter()
 
-        item = hiero.selection[0]
+        item = instance.data["item"]
 
         handles = instance.data["handles"]
 
@@ -31,10 +31,10 @@ class ExtractNukeStudioBakedColorspace(pyblish.api.InstancePlugin):
 
         item.addToNukeScript(
             script=nukeWriter,
-            firstFrame=item.timelineIn() - handles,
             includeRetimes=True,
             retimeMethod="Frame",
-            endHandle=handles*2
+            startHandle=handles,
+            endHandle=handles
         )
 
         node = hiero.core.nuke.Node("ViewerProcess_1DLUT")
