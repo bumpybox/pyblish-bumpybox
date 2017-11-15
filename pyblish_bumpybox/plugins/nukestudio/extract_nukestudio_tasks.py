@@ -12,6 +12,7 @@ class ExtractNukeStudioTasks(pyblish.api.InstancePlugin):
     def filelink(self, src, dst):
         import filecmp
         import os
+        import shutil
 
         import filelink
 
@@ -23,7 +24,18 @@ class ExtractNukeStudioTasks(pyblish.api.InstancePlugin):
         if os.path.exists(dst):
             os.remove(dst)
 
-        filelink.create(src, dst, filelink.HARDLINK)
+        try:
+            filelink.create(src, dst, filelink.HARDLINK)
+            self.log.debug("Linking: \"{0}\" to \"{1}\"".format(src, dst))
+        except WindowsError as e:
+            if e.winerror == 17:
+                self.log.warning(
+                    "File linking failed due to: \"{0}\". "
+                    "Resorting to copying instead.".format(e)
+                )
+                shutil.copy(src, dst)
+            else:
+                raise e
 
     def process(self, instance):
         import time
