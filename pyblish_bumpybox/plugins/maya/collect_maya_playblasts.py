@@ -128,5 +128,7 @@ class CollectMayaPlayblastsPublish(pyblish.api.ContextPlugin):
                 os.path.basename(instance.data["output_path"])
             )
 
+            instance.data["families"] += ["output"]
+
             for node in item:
                 instance.add(node)
