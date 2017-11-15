@@ -81,7 +81,9 @@ class ExtractFtrackThumbnailMov(pyblish.api.InstancePlugin):
 
     def process(self, instance):
 
-        input_file = instance.data.get("baked_colorspace_movie", "output_path")
+        input_file = instance.data.get(
+            "baked_colorspace_movie", instance.data["output_path"]
+        )
         ext = os.path.splitext(input_file)[1]
         output_file = input_file.replace(ext, "_thumbnail.jpeg")
         args = [
