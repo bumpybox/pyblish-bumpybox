@@ -145,8 +145,7 @@ class CollectNukeStudioTasks(pyblish.api.ContextPlugin):
                 )
                 instance.data["label"] = label
 
-                output_range = task.outputRange(ignoreHandles=True)[1]
-                instance.data["handles"] = task.outputRange()[1] - output_range
+                instance.data["handles"] = parent.data["handles"]
 
                 # Add collection or output
                 if asset_type == "img":
