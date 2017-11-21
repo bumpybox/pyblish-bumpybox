@@ -13,7 +13,7 @@ class ExtractNukeBackdrop(pyblish.api.InstancePlugin):
     def process(self, instance):
         import os
         import nuke
-        self.log.info(instance)
+
         if not instance.data["publish"]:
             return
 
