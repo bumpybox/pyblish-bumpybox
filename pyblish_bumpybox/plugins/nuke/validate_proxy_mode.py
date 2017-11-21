@@ -21,7 +21,7 @@ class ValidateNukeProxyMode(pyblish.api.ContextPlugin):
     optional = True
     label = "Proxy Mode"
     actions = [RepairNukeProxyModeAction]
-    hosts = ["nuke"]
+    hosts = ["nuke", "nukeassist"]
     targets = ["default", "process"]
 
     def process(self, context):

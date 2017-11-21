@@ -10,7 +10,7 @@ class CollectNukeReads(pyblish.api.ContextPlugin):
 
     order = pyblish.api.CollectorOrder
     label = "Reads"
-    hosts = ["nuke"]
+    hosts = ["nuke", "nukeassist"]
 
     def process(self, context):
 
@@ -103,6 +103,13 @@ class CollectNukeReads(pyblish.api.ContextPlugin):
             instance.data["label"] = label
 
             def instanceToggled(instance, value):
-                instance[0]["publish"].setValue(value)
+                # Removing and adding the knob to support NukeAssist, where
+                # you can't modify the knob value directly.
+                instance[0].removeKnob(instance[0]["publish"])
+                knob = nuke.Boolean_Knob(
+                    "publish", "Publish"
+                )
+                knob.setValue(value)
+                instance[0].addKnob(knob)
 
             instance.data["instanceToggled"] = instanceToggled

@@ -6,7 +6,7 @@ class CollectNukeWritesRoyalRender(pyblish.api.ContextPlugin):
 
     order = pyblish.api.CollectorOrder + 0.1
     label = "Writes Royal Render"
-    hosts = ["nuke"]
+    hosts = ["nuke", "nukeassist"]
     targets = ["process.royalrender"]
 
     def process(self, context):
@@ -43,7 +43,14 @@ class CollectNukeWritesRoyalRender(pyblish.api.ContextPlugin):
             instance.data["publish"] = value
 
             def instanceToggled(instance, value):
-                instance[0]["process_royalrender"].setValue(value)
+                # Removing and adding the knob to support NukeAssist, where
+                # you can't modify the knob value directly.
+                instance[0].removeKnob(instance[0]["process_royalrender"])
+                knob = nuke.Boolean_Knob(
+                    "process_royalrender", "Process RoyalRender"
+                )
+                knob.setValue(value)
+                instance[0].addKnob(knob)
 
             instance.data["instanceToggled"] = instanceToggled
 

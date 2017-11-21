@@ -9,7 +9,7 @@ class CollectNukeBackdrops(pyblish.api.ContextPlugin):
 
     order = pyblish.api.CollectorOrder + 0.1
     label = "Backdrops"
-    hosts = ["nuke"]
+    hosts = ["nuke", "nukeassist"]
 
     def process(self, context):
         import os
@@ -62,6 +62,13 @@ class CollectNukeBackdrops(pyblish.api.ContextPlugin):
 
             def instanceToggled(instance, value):
                 if instance[0].Class() == "BackdropNode":
-                    instance[0]["publish"].setValue(value)
+                    # Removing and adding the knob to support NukeAssist, where
+                    # you can't modify the knob value directly.
+                    instance[0].removeKnob(instance[0]["publish"])
+                    knob = nuke.Boolean_Knob(
+                        "publish", "Publish"
+                    )
+                    knob.setValue(value)
+                    instance[0].addKnob(knob)
 
             instance.data["instanceToggled"] = instanceToggled

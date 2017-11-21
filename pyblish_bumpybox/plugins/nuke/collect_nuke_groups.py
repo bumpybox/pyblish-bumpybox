@@ -13,7 +13,7 @@ class CollectNukeGroups(pyblish.api.ContextPlugin):
 
     order = pyblish.api.CollectorOrder + 0.1
     label = "Groups"
-    hosts = ["nuke"]
+    hosts = ["nuke", "nukeassist"]
 
     def process(self, context):
 

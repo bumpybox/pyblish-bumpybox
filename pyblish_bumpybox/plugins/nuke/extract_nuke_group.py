@@ -12,7 +12,7 @@ class ExtractNukeGroup(pyblish.api.InstancePlugin):
     optional = True
     families = ["gizmo", "lut"]
     label = "Group"
-    hosts = ["nuke"]
+    hosts = ["nuke", "nukeassist"]
 
     def process(self, instance):
 

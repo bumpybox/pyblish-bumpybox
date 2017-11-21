@@ -13,7 +13,7 @@ class ValidateNukeGroupNode(pyblish.api.InstancePlugin):
     optional = True
     families = ["gizmo", "lut"]
     label = "Group Node"
-    hosts = ["nuke"]
+    hosts = ["nuke", "nukeassist"]
 
     def process(self, instance):
 

@@ -8,7 +8,7 @@ class CollectNukeFramerate(pyblish.api.ContextPlugin):
 
     order = pyblish.api.CollectorOrder
     label = "Framerate"
-    hosts = ["nuke"]
+    hosts = ["nuke", "nukeassist"]
     targets = ["default", "process"]
 
     def process(self, context):
