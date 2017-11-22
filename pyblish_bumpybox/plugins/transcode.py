@@ -11,7 +11,7 @@ class ValidateTranscode(pyblish.api.InstancePlugin):
     order = pyblish.api.ValidatorOrder
     label = "Transcode"
     optional = True
-    families = ["img"]
+    families = ["review"]
 
     def process(self, instance):
 
@@ -36,16 +36,16 @@ class ValidateTranscode(pyblish.api.InstancePlugin):
         raise IOError("\"{0}\" executable not found.".format(executable))
 
 
-class ExtractTranscodeImages(pyblish.api.InstancePlugin):
+class ExtractTranscode(pyblish.api.InstancePlugin):
     """Extracts review movie from image sequence.
 
     Offset to get images to transcode from.
     """
 
     order = pyblish.api.ExtractorOrder + 0.1
-    label = "Transcode - Images"
+    label = "Transcode"
     optional = True
-    families = ["img"]
+    families = ["review"]
 
     def find_previous_index(self, index, indexes):
         """Finds the closest previous value in a list from a value."""
@@ -59,6 +59,14 @@ class ExtractTranscodeImages(pyblish.api.InstancePlugin):
         return indexes[data.index(min(data))]
 
     def process(self, instance):
+
+        if "collection" in instance.data.keys():
+            self.process_image(instance)
+
+        if "output_path" in instance.data.keys():
+            self.process_movie(instance)
+
+    def process_image(self, instance):
 
         collection = instance.data.get("collection", [])
 
@@ -132,16 +140,7 @@ class ExtractTranscodeImages(pyblish.api.InstancePlugin):
 
         self.log.debug(output)
 
-
-class ExtractTranscodeMovie(pyblish.api.InstancePlugin):
-    """Extracts review movie from movies."""
-
-    order = pyblish.api.ExtractorOrder + 0.1
-    label = "Transcode - Movie"
-    optional = True
-    families = ["mov"]
-
-    def process(self, instance):
+    def process_movie(self, instance):
         # Generate args.
         # Has to be yuv420p for compatibility with older players and smooth
         # playback. This does come with a sacrifice of more visible banding

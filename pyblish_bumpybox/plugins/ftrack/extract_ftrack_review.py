@@ -5,18 +5,26 @@ import subprocess
 import pyblish.api
 
 
-class ExtractFtrackImgReview(pyblish.api.InstancePlugin):
-    """Extracts movie from image sequence for review.
+class ExtractFtrackReview(pyblish.api.InstancePlugin):
+    """Extracts component for review.
 
     Offset to get extraction data from studio plugins.
     """
 
-    families = ["img"]
+    families = ["review"]
     order = pyblish.api.ExtractorOrder + 0.2
     label = "Review"
     optional = True
 
     def process(self, instance):
+
+        if "collection" in instance.data.keys():
+            self.process_image(instance)
+
+        if "output_path" in instance.data.keys():
+            self.process_movie(instance)
+
+    def process_image(self, instance):
 
         collection = instance.data.get("collection", [])
         output_file = collection.format("{head}.mov")
@@ -57,19 +65,7 @@ class ExtractFtrackImgReview(pyblish.api.InstancePlugin):
         )
         instance.data["ftrackComponentsList"] = components
 
-
-class ExtractFtrackMovReview(pyblish.api.InstancePlugin):
-    """Extracts review movie component.
-
-    Offset to get extraction data from studio plugins.
-    """
-
-    families = ["mov"]
-    order = pyblish.api.ExtractorOrder + 0.2
-    label = "Review"
-    optional = True
-
-    def process(self, instance):
+    def process_movie(self, instance):
 
         path = os.path.splitext(instance.data["output_path"])[0]
         path += "_review.mov"

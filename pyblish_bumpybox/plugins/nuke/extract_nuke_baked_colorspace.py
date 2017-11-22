@@ -13,7 +13,7 @@ class ExtractNukeBakedColorspace(pyblish.api.InstancePlugin):
     order = pyblish.api.ExtractorOrder
     label = "Baked Colorspace"
     optional = True
-    families = ["img"]
+    families = ["review"]
     hosts = ["nuke"]
 
     def process(self, instance):
