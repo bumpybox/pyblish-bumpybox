@@ -37,6 +37,9 @@ class ExtractFtrackReview(pyblish.api.InstancePlugin):
         server_location = instance.context.data["ftrackSession"].query(
             "Location where name is \"ftrack.server\""
         ).one()
+        frame_duration = (
+            list(collection.indexes)[-1] - list(collection.indexes)[0]
+        )
         components.append(
             {
               "assettype_data": {
@@ -52,8 +55,8 @@ class ExtractFtrackReview(pyblish.api.InstancePlugin):
                 "name": "ftrackreview-mp4",
                 "metadata": {
                     "ftr_meta": json.dumps({
-                        "frameIn": list(collection.indexes)[0],
-                        "frameOut": list(collection.indexes)[-1],
+                        "frameIn": 0,
+                        "frameOut": frame_duration,
                         "frameRate": str(instance.context.data["framerate"])
                     })
                 }
