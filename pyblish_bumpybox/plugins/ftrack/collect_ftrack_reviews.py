@@ -79,3 +79,7 @@ class CollectFtrackReviews(pyblish.api.ContextPlugin):
                 instance.data["collection"] = item.data["collection"]
             if "mov" in families:
                 instance.data["output_path"] = item.data["output_path"]
+
+            # Previous versions should always be disabled.
+            if item.data["family"] == "output":
+                instance.data["publish"] = False
