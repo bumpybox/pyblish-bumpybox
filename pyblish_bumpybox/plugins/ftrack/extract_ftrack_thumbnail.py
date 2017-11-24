@@ -21,11 +21,9 @@ class ExtractFtrackThumbnailImg(pyblish.api.InstancePlugin):
 
         output_file = collection.format("{head}_thumbnail.jpeg")
         input_file = list(collection)[0]
-        args = [
-            "ffmpeg", "-y",
-            "-gamma", "2.2", "-i", input_file,
-            "-vf", "scale=300:-1", output_file
-        ]
+        # Using djv because ffmpeg can't handle images with bounding boxes
+        # outside of the image format.
+        args = ["djv_convert", input_file, output_file, "-scale", "0.16"]
 
         self.log.debug("Executing args: {0}".format(args))
 
