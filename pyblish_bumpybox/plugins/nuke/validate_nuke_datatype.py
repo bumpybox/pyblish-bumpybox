@@ -13,9 +13,23 @@ class ValidateNukeDatatype(pyblish.api.InstancePlugin):
     targets = ["default", "process"]
 
     def process(self, instance):
+        upstream_nodes = []
+
+        def upstream(node):
+            dependencies = nuke.dependencies(
+                [node], nuke.INPUTS | nuke.HIDDEN_INPUTS | nuke.EXPRESSIONS
+            )
+            upstream_nodes.extend(dependencies)
+            for dependency in dependencies:
+                upstream(dependency)
+
+        upstream(instance[0])
 
         float_bit_nodes = []
-        for node in self.upstream(instance[0]):
+        for node in upstream_nodes:
+            if node.Class() != "Read":
+                continue
+
             bitsperchannel = node.metadata()["input/bitsperchannel"]
             if node.Class() == "Read" and bitsperchannel.startswith("32"):
                 float_bit_nodes.append(node)
@@ -26,22 +40,3 @@ class ValidateNukeDatatype(pyblish.api.InstancePlugin):
                 " output to 32-bit to preserve data.".format(float_bit_nodes)
             )
             assert instance[0]["datatype"].value().startswith("32"), msg
-
-    def upstream(self, startNode=None, nodes=None):
-        if nodes is None:
-            nodes = set([])
-        node = startNode
-        if not node:
-            return
-        else:
-            upNodes = nuke.dependencies(node)
-            for n in upNodes:
-                nodes.add(n)
-                if n.Class() == "Group":
-                    group = nuke.toNode(n.name())
-                    with group:
-                        outputs = nuke.allNodes('Output')
-                        for o in outputs:
-                            self.upstream(o, nodes=nodes)
-                self.upstream(n, nodes=nodes)
-        return list(nodes)
