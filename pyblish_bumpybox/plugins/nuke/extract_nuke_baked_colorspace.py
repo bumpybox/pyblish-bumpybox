@@ -70,7 +70,7 @@ class ExtractNukeBakedColorspace(pyblish.api.InstancePlugin):
 
         write_node = nuke.createNode("Write")
         path = instance.data["collection"].format(
-            "{head}_baked_colorspace.mov"
+            "{head}_baked.mov"
         )
         instance.data["baked_colorspace_movie"] = path
         write_node["file"].setValue(path.replace("\\", "/"))
