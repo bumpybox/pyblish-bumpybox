@@ -70,12 +70,21 @@ class CollectNukeReads(pyblish.api.ContextPlugin):
                 try:
                     collection = clique.parse(path + " []")
                 except ValueError as e:
-                    context.remove(instance)
-                    self.log.warning(
-                        "Collection error on \"{0}\": "
-                        "{1}".format(node.name(), e)
+                    collections, remainder = clique.assemble(
+                        [path],
+                        minimum_items=1,
+                        patterns=[clique.PATTERNS['frames']]
                     )
-                    continue
+
+                    if collections:
+                        collection = collections[0]
+                    else:
+                        context.remove(instance)
+                        self.log.warning(
+                            "Collection error on \"{0}\": "
+                            "{1}".format(node.name(), e)
+                        )
+                        continue
 
                 for f in os.listdir(os.path.dirname(path)):
                     file_path = os.path.join(os.path.dirname(path), f)
