@@ -1,5 +1,3 @@
-import nuke
-
 import pyblish.api
 
 
@@ -13,30 +11,28 @@ class ValidateNukeDatatype(pyblish.api.InstancePlugin):
     targets = ["default", "process"]
 
     def process(self, instance):
-        upstream_nodes = []
 
-        def upstream(node):
-            dependencies = nuke.dependencies(
-                [node], nuke.INPUTS | nuke.HIDDEN_INPUTS | nuke.EXPRESSIONS
-            )
-            upstream_nodes.extend(dependencies)
-            for dependency in dependencies:
-                upstream(dependency)
+        # Only validate these channels
+        channels = [
+            "N_Object",
+            "N_World",
+            "P_Object",
+            "P_World",
+            "Pref",
+            "UV",
+            "velocity",
+            "cryptomatte"
+        ]
 
-        upstream(instance[0])
+        valid_channels = []
+        for node_channel in instance[0].channels():
+            for channel in channels:
+                if node_channel.startswith(channel):
+                    valid_channels.append(node_channel)
 
-        float_bit_nodes = []
-        for node in upstream_nodes:
-            if node.Class() != "Read":
-                continue
-
-            bitsperchannel = node.metadata()["input/bitsperchannel"]
-            if node.Class() == "Read" and bitsperchannel.startswith("32"):
-                float_bit_nodes.append(node)
-
-        if float_bit_nodes:
+        if valid_channels:
             msg = (
-                "There are 32-bit inputs upstream: {0}. Consider changing the"
-                " output to 32-bit to preserve data.".format(float_bit_nodes)
+                "There are 32-bit channels: {0}.\n\nConsider changing the"
+                " output to 32-bit to preserve data.".format(valid_channels)
             )
             assert instance[0]["datatype"].value().startswith("32"), msg
