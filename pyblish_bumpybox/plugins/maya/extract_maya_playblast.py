@@ -75,13 +75,16 @@ class ExtractMayaPlayblast(pyblish.api.InstancePlugin):
             os.path.join(os.path.dirname(movie_path), "arial.ttf")
         )
 
+        # Using mpeg4 instead of h264 because Adobe Premiere can't read h264
+        # correctly.
         args = [
             "ffmpeg", "-y",
             "-start_number", str(start_frame),
             "-framerate", str(instance.context.data["framerate"]),
             "-i", os.path.join(temp_dir, "temp.%04d.jpg"),
             "-pix_fmt", "yuv420p",
-            "-crf", "18",
+            "-q:v", "1",
+            "-c:v", "mpeg4",
             "-timecode", "00:00:00:01",
             "-vf", "drawtext=fontfile=arial.ttf: text='Frame\\: %{n}':"
             " x=(w-tw) - lh: y=h-(2*lh): fontcolor=white: box=1:"
