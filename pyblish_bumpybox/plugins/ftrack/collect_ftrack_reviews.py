@@ -6,6 +6,7 @@ class CollectFtrackReviews(pyblish.api.ContextPlugin):
 
     # Offset to get created instances.
     order = pyblish.api.CollectorOrder + 0.3
+    hosts = ["maya", "nuke", "nukeassist"]
 
     def process(self, context):
 
