@@ -17,6 +17,10 @@ class ExtractNukeBakedColorspace(pyblish.api.InstancePlugin):
     hosts = ["nuke"]
 
     def process(self, instance):
+
+        if "collection" not in instance.data.keys():
+            return
+
         # Store selection
         selection = [i for i in nuke.allNodes() if i["selected"].getValue()]
 
