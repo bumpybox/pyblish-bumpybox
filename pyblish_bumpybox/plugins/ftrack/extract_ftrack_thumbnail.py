@@ -10,12 +10,20 @@ class ExtractFtrackThumbnailImg(pyblish.api.InstancePlugin):
     Offset to get extraction data from studio plugins.
     """
 
-    families = ["img"]
+    families = ["review"]
     order = pyblish.api.ExtractorOrder + 0.1
-    label = "Thumbnail - Images"
+    label = "Thumbnail"
     optional = True
 
     def process(self, instance):
+
+        if "collection" in instance.data.keys():
+            self.process_image(instance)
+
+        if "output_path" in instance.data.keys():
+            self.process_movie(instance)
+
+    def process_image(self, instance):
 
         collection = instance.data.get("collection", [])
 
@@ -65,19 +73,7 @@ class ExtractFtrackThumbnailImg(pyblish.api.InstancePlugin):
         )
         instance.data["ftrackComponentsList"] = components
 
-
-class ExtractFtrackThumbnailMov(pyblish.api.InstancePlugin):
-    """Extracts thumbnail from image sequence.
-
-    Offset to get extraction data from studio plugins.
-    """
-
-    families = ["mov"]
-    order = pyblish.api.ExtractorOrder + 0.1
-    label = "Thumbnail - Movie"
-    optional = True
-
-    def process(self, instance):
+    def process_movie(self, instance):
 
         input_file = instance.data.get(
             "baked_colorspace_movie", instance.data["output_path"]
