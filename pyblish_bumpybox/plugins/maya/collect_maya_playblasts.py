@@ -2,6 +2,8 @@ import os
 
 import pyblish.api
 import pymel.core
+from maya import cmds
+from maya import mel
 
 
 class CollectMayaPlayblasts(pyblish.api.ContextPlugin):
@@ -71,6 +73,12 @@ class CollectMayaPlayblasts(pyblish.api.ContextPlugin):
             instance.data["instanceToggled"] = instance_toggled
 
             instances.append(instance)
+
+            # Collect audio
+            playback_slider = mel.eval('$tmpVar=$gPlayBackSlider')
+            audio_string = cmds.timeControl(playback_slider, q=True, s=True)
+            if audio_string:
+                instance.data["audio"] = pymel.core.PyNode(audio_string)
 
         context.data["instances"] = (
             context.data.get("instances", []) + instances

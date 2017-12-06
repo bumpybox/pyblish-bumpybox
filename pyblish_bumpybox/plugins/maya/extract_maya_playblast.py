@@ -67,7 +67,6 @@ class ExtractMayaPlayblast(pyblish.api.InstancePlugin):
         )
 
         movie_path = os.path.join(temp_dir, "temp.mov")
-        start_frame = int(pymel.core.playbackOptions(q=True, min=True))
 
         # Copy font file to movie path
         shutil.copy(
@@ -77,21 +76,33 @@ class ExtractMayaPlayblast(pyblish.api.InstancePlugin):
 
         # Using mpeg4 instead of h264 because Adobe Premiere can't read h264
         # correctly.
+        start_frame = int(pymel.core.playbackOptions(q=True, min=True))
         args = [
             "ffmpeg", "-y",
             "-start_number", str(start_frame),
             "-framerate", str(instance.context.data["framerate"]),
             "-i", os.path.join(temp_dir, "temp.%04d.jpg"),
+        ]
+
+        if "audio" in instance.data:
+            args.extend([
+                "-i", instance.data["audio"].filename.get()
+            ])
+
+        end_frame = float(pymel.core.playbackOptions(q=True, max=True))
+        duration = end_frame / instance.context.data["framerate"]
+        args.extend([
             "-pix_fmt", "yuv420p",
             "-q:v", "1",
             "-c:v", "mpeg4",
             "-timecode", "00:00:00:01",
+            "-t", str(duration),
             "-vf", "drawtext=fontfile=arial.ttf: text='Frame\\: %{n}':"
             " x=(w-tw) - lh: y=h-(2*lh): fontcolor=white: box=1:"
             " boxcolor=black@0.5: start_number=" + str(start_frame) + ": "
             "fontsize=32: boxborderw=5",
             movie_path
-        ]
+        ])
 
         self.log.debug("Executing args: {0}".format(args))
 
