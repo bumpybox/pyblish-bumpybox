@@ -1,5 +1,7 @@
 import platform
 import os
+import time
+import shutil
 
 import nuke
 
@@ -17,6 +19,24 @@ class ExtractRoyalRenderNuke(pyblish.api.InstancePlugin):
 
     def process(self, instance):
 
+        # Get scene path
+        scene_path = os.path.join(
+            os.path.dirname(instance.context.data["currentFile"]),
+            "workspace",
+            "render",
+            time.strftime("%Y%m%d%H%M%S") + ".nk"
+        )
+
+        if not os.path.exists(os.path.dirname(scene_path)):
+            os.makedirs(os.path.dirname(scene_path))
+
+        if instance.context.data.get("royalrenderSceneName", ""):
+            scene_path = instance.context.data["royalrenderSceneName"]
+        else:
+            shutil.copy(instance.context.data["currentFile"], scene_path)
+            instance.context.data["royalrenderSceneName"] = scene_path
+
+        # Get OS
         scene_os = ""
         if platform.system() == "Windows":
             scene_os = "win"
@@ -39,7 +59,7 @@ class ExtractRoyalRenderNuke(pyblish.api.InstancePlugin):
             "SeqStep": 1,
             "SeqFileOffset": 0,
             "Version": nuke.NUKE_VERSION_STRING,
-            "SceneName": instance.context.data["currentFile"],
+            "SceneName": scene_path,
             "ImageDir": os.path.dirname(instance.data["collection"].format()),
             "ImageFilename": os.path.basename(
                 instance.data["collection"].head
