@@ -76,27 +76,40 @@ class ExtractMayaPlayblast(pyblish.api.InstancePlugin):
 
         # Using mpeg4 instead of h264 because Adobe Premiere can't read h264
         # correctly.
-        start_frame = int(pymel.core.playbackOptions(q=True, min=True))
+        start_frame = pymel.core.playbackOptions(q=True, min=True)
         args = [
             "ffmpeg", "-y",
-            "-start_number", str(start_frame),
+            "-start_number", str(int(start_frame)),
             "-framerate", str(instance.context.data["framerate"]),
             "-i", os.path.join(temp_dir, "temp.%04d.jpg"),
         ]
 
-        if "audio" in instance.data:
-            args.extend([
-                "-i", instance.data["audio"].filename.get()
-            ])
+        for node in instance.data["audio"]:
+            offset_frames = start_frame - node.offset.get()
+            offset_seconds = offset_frames / instance.context.data["framerate"]
 
-        end_frame = float(pymel.core.playbackOptions(q=True, max=True))
-        duration = end_frame / instance.context.data["framerate"]
+            if offset_seconds > 0:
+                args.append("-ss")
+            else:
+                args.append("-itsoffset")
+
+            args.append(str(abs(offset_seconds)))
+
+            args.extend(["-i", node.filename.get()])
+
+        # Need to merge audio if there are more than 1 input.
+        if len(instance.data["audio"]) > 1:
+            args.extend(["-filter_complex", "amerge", "-ac", "2"])
+
+        end_frame = pymel.core.playbackOptions(q=True, max=True)
+        duration_frames = end_frame - start_frame + 1.0
+        duration_seconds = duration_frames / instance.context.data["framerate"]
         args.extend([
             "-pix_fmt", "yuv420p",
             "-q:v", "1",
             "-c:v", "mpeg4",
             "-timecode", "00:00:00:01",
-            "-t", str(duration),
+            "-t", str(duration_seconds),
             "-vf", "drawtext=fontfile=arial.ttf: text='Frame\\: %{n}':"
             " x=(w-tw) - lh: y=h-(2*lh): fontcolor=white: box=1:"
             " boxcolor=black@0.5: start_number=" + str(start_frame) + ": "

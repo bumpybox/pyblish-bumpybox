@@ -76,9 +76,32 @@ class CollectMayaPlayblasts(pyblish.api.ContextPlugin):
 
             # Collect audio
             playback_slider = mel.eval('$tmpVar=$gPlayBackSlider')
-            audio_string = cmds.timeControl(playback_slider, q=True, s=True)
-            if audio_string:
-                instance.data["audio"] = pymel.core.PyNode(audio_string)
+            audio_name = cmds.timeControl(playback_slider, q=True, s=True)
+            display_sounds = cmds.timeControl(
+                playback_slider, q=True, displaySound=True
+            )
+
+            audio = []
+
+            if audio_name:
+                audio.append(pymel.core.PyNode(audio_name))
+
+            if not audio_name and display_sounds:
+                start_frame = int(pymel.core.playbackOptions(q=True, min=True))
+                end_frame = float(pymel.core.playbackOptions(q=True, max=True))
+                frame_range = range(int(start_frame), int(end_frame))
+
+                for node in pymel.core.ls(type="audio"):
+                    # Check if frame range and audio range intersections,
+                    # for whether to include this audio node or not.
+                    start_audio = node.offset.get()
+                    end_audio = node.offset.get() + node.duration.get()
+                    audio_range = range(int(start_audio), int(end_audio))
+
+                    if bool(set(frame_range).intersection(audio_range)):
+                        audio.append(node)
+
+            instance.data["audio"] = audio
 
         context.data["instances"] = (
             context.data.get("instances", []) + instances
