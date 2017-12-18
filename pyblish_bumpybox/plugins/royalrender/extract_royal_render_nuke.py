@@ -59,7 +59,7 @@ class ExtractRoyalRenderNuke(pyblish.api.InstancePlugin):
             "SeqStep": 1,
             "SeqFileOffset": 0,
             "Version": nuke.NUKE_VERSION_STRING,
-            "SceneName": scene_path,
+            "SceneName": os.path.dirname(instance.context.data["currentFile"]),
             "ImageDir": os.path.dirname(instance.data["collection"].format()),
             "ImageFilename": os.path.basename(
                 instance.data["collection"].head
