@@ -31,7 +31,10 @@ class ExtractRoyalRenderNuke(pyblish.api.ContextPlugin):
                 os.path.dirname(instance.context.data["currentFile"]),
                 "workspace",
                 "render",
-                time.strftime("%Y%m%d%H%M%S") + ".nk"
+                "{0}_{1}".format(
+                    time.strftime("%Y%m%d%H%M%S"),
+                    os.path.basename(instance.context.data["currentFile"])
+                )
             )
             if instance.context.data.get("royalrenderSceneName", ""):
                 scene_path = instance.context.data["royalrenderSceneName"]
