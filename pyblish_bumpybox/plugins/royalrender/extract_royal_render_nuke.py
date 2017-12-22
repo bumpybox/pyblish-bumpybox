@@ -26,6 +26,9 @@ class ExtractRoyalRenderNuke(pyblish.api.ContextPlugin):
             if "royalrender" not in families:
                 continue
 
+            if not instance.data["publish"]:
+                continue
+
             # Get scene path
             scene_path = os.path.join(
                 os.path.dirname(instance.context.data["currentFile"]),
