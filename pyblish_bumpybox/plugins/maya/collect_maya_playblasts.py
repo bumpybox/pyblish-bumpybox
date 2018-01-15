@@ -69,7 +69,9 @@ class CollectMayaPlayblasts(pyblish.api.ContextPlugin):
             instance.data["output_path"] = path
 
             def instance_toggled(instance, value):
+                instance[0].getTransform().publish.unlock()
                 instance[0].getTransform().publish.set(value)
+                instance[0].getTransform().publish.lock()
             instance.data["instanceToggled"] = instance_toggled
 
             instances.append(instance)
