@@ -52,7 +52,12 @@ class ExtractNukeBakedColorspace(pyblish.api.InstancePlugin):
         node["origfirst"].setValue(first_frame)
         node["last"].setValue(last_frame)
         node["origlast"].setValue(last_frame)
-        node["colorspace"].setValue(instance[0]["colorspace"].value())
+
+        index = instance[0]["colorspace"].values().index(
+            instance[0]["colorspace"].value()
+        )
+        node["colorspace"].setValue(node["colorspace"].enumName(index))
+
         temporary_nodes.append(node)
 
         viewer_process_node = nuke.ViewerProcess.node()
