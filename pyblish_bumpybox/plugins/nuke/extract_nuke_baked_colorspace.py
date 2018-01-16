@@ -48,11 +48,11 @@ class ExtractNukeBakedColorspace(pyblish.api.InstancePlugin):
                 )
             ).replace("\\", "/")
         )
-
         node["first"].setValue(first_frame)
         node["origfirst"].setValue(first_frame)
         node["last"].setValue(last_frame)
         node["origlast"].setValue(last_frame)
+        node["colorspace"].setValue(instance[0]["colorspace"].value())
         temporary_nodes.append(node)
 
         viewer_process_node = nuke.ViewerProcess.node()
