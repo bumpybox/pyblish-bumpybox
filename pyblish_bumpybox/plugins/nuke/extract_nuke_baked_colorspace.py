@@ -53,10 +53,8 @@ class ExtractNukeBakedColorspace(pyblish.api.InstancePlugin):
         node["last"].setValue(last_frame)
         node["origlast"].setValue(last_frame)
 
-        index = instance[0]["colorspace"].values().index(
-            instance[0]["colorspace"].value()
-        )
-        node["colorspace"].setValue(node["colorspace"].enumName(index))
+        index = instance[0]["colorspace"].getValue()
+        node["colorspace"].setValue(node["colorspace"].enumName(int(index)))
 
         temporary_nodes.append(node)
 
