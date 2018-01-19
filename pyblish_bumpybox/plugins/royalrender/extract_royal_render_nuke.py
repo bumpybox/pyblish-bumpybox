@@ -20,6 +20,7 @@ class ExtractRoyalRenderNuke(pyblish.api.ContextPlugin):
     def process(self, context):
 
         write_nodes = []
+        temporary_nodes = []
         for instance in context:
 
             families = [instance.data] + instance.data["families"]
@@ -92,9 +93,89 @@ class ExtractRoyalRenderNuke(pyblish.api.ContextPlugin):
             # Adding job
             jobs = instance.data.get("royalrenderJobs", [])
             jobs.append(data)
-            instance.data["royalrenderJobs"] = jobs
-
             write_nodes.append(instance[0])
+
+            # Generate review job
+            node = previous_node = nuke.createNode("Read")
+            node["file"].setValue(
+                instance.data["collection"].format(
+                    "{head}{padding}{tail}"
+                )
+            )
+            node["first"].setValue(int(first_frame))
+            node["origfirst"].setValue(int(first_frame))
+            node["last"].setValue(int(last_frame))
+            node["origlast"].setValue(int(last_frame))
+
+            index = instance[0]["colorspace"].getValue()
+            node["colorspace"].setValue(
+                node["colorspace"].enumName(int(index))
+            )
+            temporary_nodes.append(node)
+
+            viewer_process_node = nuke.ViewerProcess.node()
+            dag_node = None
+            if viewer_process_node:
+                dag_node = nuke.createNode(viewer_process_node.Class())
+                dag_node.setInput(0, previous_node)
+                previous_node = dag_node
+                temporary_nodes.append(dag_node)
+                # Copy viewer process values
+                excludedKnobs = ["name", "xpos", "ypos"]
+                for item in viewer_process_node.knobs().keys():
+                    if item not in excludedKnobs and item in dag_node.knobs():
+                        x1 = viewer_process_node[item]
+                        x2 = dag_node[item]
+                        x2.fromScript(x1.toScript(False))
+            else:
+                self.log.warning("No viewer node found.")
+
+            write_node = nuke.createNode("Write")
+            write_node["name"].setValue(
+                instance[0]["name"].value() + "_review"
+            )
+            path = instance.data["collection"].format(
+                "{head}_review.%04d.jpeg"
+            )
+            write_node["file"].setValue(path.replace("\\", "/"))
+            write_node["file_type"].setValue("jpeg")
+            write_node["raw"].setValue(1)
+            write_node["_jpeg_quality"].setValue(1)
+            write_node.setInput(0, previous_node)
+            temporary_nodes.append(write_node)
+
+            data = {
+                "Software": "Nuke",
+                "Renderer": "",
+                "SeqStart": first_frame,
+                "SeqEnd": last_frame,
+                "SeqStep": 1,
+                "SeqFileOffset": 0,
+                "Version": nuke.NUKE_VERSION_STRING,
+                "SceneName": scene_path,
+                "ImageDir": os.path.dirname(path),
+                "ImageFilename": os.path.basename(
+                    instance.data["collection"].format(
+                        "{head}_review"
+                    )
+                ),
+                "ImageExtension": os.path.splitext(path)[1],
+                "ImagePreNumberLetter": ".",
+                "ImageSingleOutputFile": False,
+                "SceneOS": scene_os,
+                "Layer": write_node.name(),
+                "PreID": 1,
+                "IsActive": True,
+                "WaitForPreID": 0
+            }
+
+            submit_params = data.get("SubmitterParameter", [])
+            submit_params.append("OverwriteExistingFiles=1~1")
+            submit_params.append("AllowLocalSceneCopy=0~0")
+            data["SubmitterParameter"] = submit_params
+
+            jobs.append(data)
+            instance.data["royalrenderJobs"] = jobs
 
         # Convert write paths to absolute
         paths = []
@@ -114,3 +195,9 @@ class ExtractRoyalRenderNuke(pyblish.api.ContextPlugin):
         # Revert write paths back
         for node in write_nodes:
             node["file"].setValue(paths[write_nodes.index(node)])
+
+        # Clean up
+        for node in temporary_nodes:
+            nuke.delete(node)
+
+        nuke.scriptSave()
