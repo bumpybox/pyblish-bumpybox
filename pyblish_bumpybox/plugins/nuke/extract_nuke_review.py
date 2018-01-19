@@ -4,22 +4,17 @@ import shutil
 
 import nuke
 
-import pyblish.api
+from pyblish_bumpybox.plugins.nuke.extract_nuke_write import ExtractNukeWrite
 
 
-class ExtractNukeBakedColorspace(pyblish.api.InstancePlugin):
-    """Extracts movie with baked in luts"""
+class ExtractNukeReview(ExtractNukeWrite):
+    """Extracts image sequence with baked in luts"""
 
-    order = pyblish.api.ExtractorOrder
-    label = "Baked Colorspace"
+    label = "Review"
     optional = True
-    families = ["review"]
-    hosts = ["nuke"]
+    order = ExtractNukeWrite.order + 0.01
 
     def process(self, instance):
-
-        if "collection" not in instance.data.keys():
-            return
 
         # Store selection
         selection = [i for i in nuke.allNodes() if i["selected"].getValue()]
@@ -77,12 +72,12 @@ class ExtractNukeBakedColorspace(pyblish.api.InstancePlugin):
 
         write_node = nuke.createNode("Write")
         path = instance.data["collection"].format(
-            "{head}_baked.mov"
+            "{head}_review.%04d.jpeg"
         )
-        instance.data["baked_colorspace_movie"] = path
         write_node["file"].setValue(path.replace("\\", "/"))
-        write_node["file_type"].setValue("mov")
+        write_node["file_type"].setValue("jpeg")
         write_node["raw"].setValue(1)
+        write_node["_jpeg_quality"].setValue(1)
         write_node.setInput(0, previous_node)
         temporary_nodes.append(write_node)
 

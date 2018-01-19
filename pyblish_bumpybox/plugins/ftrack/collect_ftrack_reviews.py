@@ -1,11 +1,14 @@
 import pyblish.api
+import clique
+
+from pyblish_bumpybox.plugins import collect_existing_files
 
 
 class CollectFtrackReviews(pyblish.api.ContextPlugin):
     """Generate Ftrack reviews from "img" and "mov" instances."""
 
     # Offset to get created instances.
-    order = pyblish.api.CollectorOrder + 0.3
+    order = collect_existing_files.CollectExistingFiles.order + 0.01
     hosts = ["maya", "nuke", "nukeassist"]
 
     def process(self, context):
@@ -77,7 +80,14 @@ class CollectFtrackReviews(pyblish.api.ContextPlugin):
 
             families = item.data["families"] + [item.data["family"]]
             if "img" in families:
-                instance.data["collection"] = item.data["collection"]
+                instance.data["collection"] = clique.Collection(
+                    head=item.data["collection"].head + "_review.",
+                    padding=item.data["collection"].padding,
+                    tail=".jpeg"
+                )
+                instance.data["collection"].indexes.update(
+                    item.data["collection"].indexes
+                )
             if "mov" in families:
                 instance.data["output_path"] = item.data["output_path"]
 

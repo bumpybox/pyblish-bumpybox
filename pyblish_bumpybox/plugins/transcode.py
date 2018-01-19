@@ -6,12 +6,9 @@ import filelink
 
 
 class ExtractTranscode(pyblish.api.InstancePlugin):
-    """Extracts review movie from image sequence.
+    """Extracts review movie from image sequence."""
 
-    Offset to get images to transcode from.
-    """
-
-    order = pyblish.api.ExtractorOrder + 0.1
+    order = pyblish.api.ExtractorOrder
     label = "Transcode"
     optional = True
     families = ["review"]
