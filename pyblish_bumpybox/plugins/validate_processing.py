@@ -6,8 +6,9 @@ class ValidateProcessing(pyblish.api.ContextPlugin):
 
     order = pyblish.api.ValidatorOrder
     optional = True
-    label = "Nodes to Process"
+    label = "Data to Process"
     targets = ["default", "process"]
+    hosts = ["nuke", "nukeassist", "maya"]
 
     def process(self, context):
 
