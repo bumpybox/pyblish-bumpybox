@@ -4,11 +4,11 @@ import pyblish.api
 
 
 class CollectScene(pyblish.api.ContextPlugin):
-    """ Collecting the scene from the context """
+    """Collecting the scene from the context."""
 
     # offset to get latest currentFile from context
     order = pyblish.api.CollectorOrder + 0.1
-    label = "Scene"
+    label = "Source"
     targets = ["default", "process"]
 
     def process(self, context):
@@ -25,5 +25,5 @@ class CollectScene(pyblish.api.ContextPlugin):
         instance.data["families"] = ["scene"]
         instance.data["family"] = "source"
         instance.data["path"] = current_file
-        label = "{0} - scene".format(os.path.basename(current_file))
+        label = "{0} - source".format(os.path.basename(current_file))
         instance.data["label"] = label
