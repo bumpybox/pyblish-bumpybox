@@ -140,7 +140,7 @@ class CollectNukeStudioTasks(pyblish.api.ContextPlugin):
                 instance.data["family"] = "trackItem.task"
                 instance.data["families"] = [asset_type, "local", "task"]
 
-                label = "{0} ({1}) - {2} - local".format(
+                label = "{1}/{0} - {2} - local".format(
                     name, parent, asset_type
                 )
                 instance.data["label"] = label
