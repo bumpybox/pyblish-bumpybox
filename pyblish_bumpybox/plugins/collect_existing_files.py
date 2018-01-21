@@ -57,7 +57,7 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
 
     def single_file_instances(self, instance, version, family_type, context):
 
-        for count in range(1, int(version)):
+        for count in range(1, int(version) + 1):
             version_string = "v" + str(count).zfill(len(version))
             filename = instance.data["output_path"].replace(
                 "v" + version, version_string
