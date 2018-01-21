@@ -18,7 +18,7 @@ class OtherFtrackLinkSource(api.ContextPlugin):
                 continue
 
             # Get AssetVersion from published component
-            for data in instance.data["ftrackComponentsList"]:
+            for data in instance.data.get("ftrackComponentsList", []):
                 if "component" not in data.keys():
                     continue
                 source_version = data["component"]["version"]
