@@ -11,7 +11,7 @@ class ExtractFtrackReview(pyblish.api.InstancePlugin):
     Offset to get extraction data from studio plugins.
     """
 
-    families = ["review"]
+    families = ["review", "trackItem.ftrackEntity.shot"]
     order = pyblish.api.ExtractorOrder + 0.2
     label = "Review"
     optional = True
@@ -95,30 +95,35 @@ class ExtractFtrackReview(pyblish.api.InstancePlugin):
         server_location = instance.context.data["ftrackSession"].query(
             "Location where name is \"ftrack.server\""
         ).one()
-        components.append(
-            {
-              "assettype_data": {
-                "short": "mov",
-              },
-              "asset_data": instance.data.get("asset_data"),
-              "assetversion_data": {
-                "version": instance.data.get(
-                    "version", instance.context.data["version"]
-                ),
-              },
-              "component_data": {
-                "name": "ftrackreview-mp4",
-                "metadata": {
-                    "ftr_meta": json.dumps({
-                        "frameIn": 1,
-                        "frameOut": frame_count,
-                        "frameRate": str(frame_rate)
-                    })
-                }
-              },
-              "component_overwrite": True,
-              "component_location": server_location,
-              "component_path": path
+
+        data = {
+          "assettype_data": {
+            "short": "mov",
+          },
+          "asset_data": instance.data.get("asset_data"),
+          "assetversion_data": {
+            "version": instance.data.get(
+                "version", instance.context.data["version"]
+            ),
+          },
+          "component_data": {
+            "name": "ftrackreview-mp4",
+            "metadata": {
+                "ftr_meta": json.dumps({
+                    "frameIn": 1,
+                    "frameOut": frame_count,
+                    "frameRate": str(frame_rate)
+                })
             }
-        )
+          },
+          "component_overwrite": True,
+          "component_location": server_location,
+          "component_path": path
+        }
+
+        # From NukeStudio the reviews needs to be parented to the shots.
+        if "trackItem.ftrackEntity.shot" in instance.data["families"]:
+            data["asset_data"]["parent"] = instance.data["entity"]
+
+        components.append(data)
         instance.data["ftrackComponentsList"] = components
