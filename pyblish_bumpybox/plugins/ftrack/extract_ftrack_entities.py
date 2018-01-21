@@ -42,7 +42,7 @@ def ensure_entity(instance, entity_type):
 
     parent_entity = instance.data["parent"].data.get("entity", None)
     if parent_entity is None:
-        parent_entity = instance.context.data["ftrackProject"]
+        parent_entity = instance.context.data["ftrackTask"]["parent"]
 
     # Query existence of entity
     entity = session.query(
