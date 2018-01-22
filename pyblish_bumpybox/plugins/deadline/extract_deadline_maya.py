@@ -1,9 +1,3 @@
-import math
-import os
-
-import pymel.core
-from pymel import versions
-
 import pyblish.api
 
 
@@ -16,6 +10,11 @@ class ExtractDeadlineMaya(pyblish.api.InstancePlugin):
     hosts = ["maya"]
 
     def process(self, instance):
+        import math
+        import os
+
+        import pymel.core
+        from pymel import versions
 
         collection = instance.data["collection"]
 

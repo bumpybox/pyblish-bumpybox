@@ -1,6 +1,3 @@
-import os
-import shutil
-
 import pyblish.api
 
 
@@ -11,6 +8,8 @@ class RepairMayaFilePathAction(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import os
+        import shutil
 
         # Get the errored instances
         failed = []
@@ -49,6 +48,7 @@ class ValidateMayaFilePath(pyblish.api.InstancePlugin):
     actions = [RepairMayaFilePathAction]
 
     def process(self, instance):
+        import os
 
         node = instance[0]
         src = os.path.abspath(node.fileTextureName.get())
@@ -59,6 +59,7 @@ class ValidateMayaFilePath(pyblish.api.InstancePlugin):
         assert src == dst, msg.format(src, dst)
 
     def get_expected_path(self, instance):
+        import os
 
         return os.path.abspath(
             os.path.join(

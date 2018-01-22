@@ -1,5 +1,3 @@
-import pymel.core as pm
-
 import pyblish.api
 
 
@@ -16,6 +14,7 @@ class ValidateMayaModelingTransforms(pyblish.api.InstancePlugin):
     optional = True
 
     def process(self, instance):
+        import pymel.core as pm
 
         attributes = {
             "tx": 0,

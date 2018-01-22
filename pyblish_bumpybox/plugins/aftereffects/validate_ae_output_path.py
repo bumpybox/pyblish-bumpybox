@@ -1,7 +1,4 @@
-import os
-
 import pyblish.api
-import pyblish_aftereffects
 
 
 class RepairAEOutputPathAction(pyblish.api.Action):
@@ -10,6 +7,7 @@ class RepairAEOutputPathAction(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import pyblish_aftereffects
 
         # Get the errored instances
         failed = []
@@ -34,7 +32,7 @@ class RepairAEOutputPathAction(pyblish.api.Action):
 
             pyblish_aftereffects.send(cmd.format(instance.data["index"],
                                                  data.format(path)))
-            
+
 
 class ValidateAEOutputPath(pyblish.api.InstancePlugin):
 
@@ -54,6 +52,7 @@ class ValidateAEOutputPath(pyblish.api.InstancePlugin):
         assert current_path == expected_path, msg
 
     def get_expected_path(self, instance):
+        import os
 
         current_path = instance.data["output"]
 

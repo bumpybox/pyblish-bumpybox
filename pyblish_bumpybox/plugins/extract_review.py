@@ -1,7 +1,3 @@
-import os
-import hashlib
-import subprocess
-
 import pyblish.api
 
 
@@ -14,6 +10,8 @@ class ExtractReview(pyblish.api.InstancePlugin):
     families = ["review"]
 
     def md5(self, fname):
+        import hashlib
+
         hash_md5 = hashlib.md5()
         with open(fname, "rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):
@@ -21,6 +19,7 @@ class ExtractReview(pyblish.api.InstancePlugin):
         return hash_md5.hexdigest()
 
     def process(self, instance):
+        import os
 
         hash_value = self.md5(instance.data["output_path"])
         md5_file = instance.data["output_path"].replace(
@@ -64,6 +63,8 @@ class ExtractReviewTranscode(pyblish.api.InstancePlugin):
             self.process_movie(instance)
 
     def process_image(self, instance):
+        import os
+        import subprocess
 
         collection = instance.data["review_collection"]
 
@@ -110,6 +111,9 @@ class ExtractReviewTranscode(pyblish.api.InstancePlugin):
         self.log.debug(output)
 
     def process_movie(self, instance):
+        import os
+        import subprocess
+
         # Generate args.
         # Has to be yuv420p for compatibility with older players and smooth
         # playback. This does come with a sacrifice of more visible banding

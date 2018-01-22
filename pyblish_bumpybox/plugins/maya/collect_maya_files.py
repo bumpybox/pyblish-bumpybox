@@ -1,7 +1,4 @@
-import os
-
 import pyblish.api
-import pymel
 
 
 class CollectMayaFiles(pyblish.api.Collector):
@@ -10,6 +7,9 @@ class CollectMayaFiles(pyblish.api.Collector):
     label = "Files"
 
     def process(self, context):
+        import os
+
+        import pymel
 
         for node in pymel.core.ls(type="file"):
             # Ignore referenced nodes.

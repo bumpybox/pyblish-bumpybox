@@ -1,9 +1,4 @@
-import os
-import json
-import re
-
 import pyblish.api
-import clique
 
 
 class CollectJSON(pyblish.api.ContextPlugin):
@@ -17,6 +12,7 @@ class CollectJSON(pyblish.api.ContextPlugin):
         """ Extract version information from filenames.  Code from Foundry"s
         nukescripts.version_get()
         """
+        import re
 
         regex = "[/_.]"+prefix+"\d+"
         matches = re.findall(regex, string, re.IGNORECASE)
@@ -26,6 +22,10 @@ class CollectJSON(pyblish.api.ContextPlugin):
         return matches[-1:][0][1], re.search("\d+", matches[-1:][0]).group()
 
     def process(self, context):
+        import os
+        import json
+
+        import clique
 
         current_file = context.data("currentFile")
 

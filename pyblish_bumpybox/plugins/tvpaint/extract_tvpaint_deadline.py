@@ -1,7 +1,4 @@
-import os
-
 import pyblish.api
-import ftrack
 
 
 class ExtractTVPaintDeadline(pyblish.api.Extractor):
@@ -11,6 +8,9 @@ class ExtractTVPaintDeadline(pyblish.api.Extractor):
     order = pyblish.api.Extractor.order - 0.1
 
     def process(self, instance, context):
+        import os
+
+        import ftrack
 
         job_data = {}
         job_data['Name'] = instance.data["name"]

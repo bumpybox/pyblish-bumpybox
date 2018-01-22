@@ -1,4 +1,3 @@
-import pymel
 import pyblish.api
 
 
@@ -9,6 +8,7 @@ class RepairMayaVraySettingsAction(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import pymel
 
         settings = pymel.core.PyNode("vraySettings")
 
@@ -33,6 +33,7 @@ class ValidateMayaVraySettings(pyblish.api.InstancePlugin):
     hosts = ["maya"]
 
     def process(self, instance):
+        import pymel
 
         settings = pymel.core.PyNode("vraySettings")
 

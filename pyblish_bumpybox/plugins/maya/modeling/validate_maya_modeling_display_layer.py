@@ -1,5 +1,4 @@
 import pyblish.api
-import pymel
 
 
 class RepairMayaModelingDisplayLayerAction(pyblish.api.Action):
@@ -9,6 +8,7 @@ class RepairMayaModelingDisplayLayerAction(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import pymel
 
         for layer in pymel.core.ls(type='displayLayer'):
             try:
@@ -27,6 +27,7 @@ class ValidateMayaModelingDisplayLayer(pyblish.api.ContextPlugin):
 
     def process(self, context):
         """Process all the nodes in the instance """
+        import pymel
 
         layers = []
         for layer in pymel.core.ls(type='displayLayer'):

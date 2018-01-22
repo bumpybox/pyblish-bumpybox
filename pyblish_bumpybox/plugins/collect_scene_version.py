@@ -1,7 +1,3 @@
-import os
-import re
-import traceback
-
 import pyblish.api
 
 
@@ -14,6 +10,8 @@ class CollectSceneVersion(pyblish.api.ContextPlugin):
     label = "Scene Version"
 
     def process(self, context):
+        import os
+        import traceback
 
         filename = os.path.basename(context.data("currentFile"))
 
@@ -30,6 +28,7 @@ class CollectSceneVersion(pyblish.api.ContextPlugin):
         """ Extract version information from filenames.  Code from Foundry"s
         nukescripts.version_get()
         """
+        import re
 
         if string is None:
             raise ValueError("Empty version string - no match")

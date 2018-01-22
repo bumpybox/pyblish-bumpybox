@@ -1,9 +1,4 @@
-import os
-
-import pymel
 import pyblish.api
-
-import alembic_export
 
 
 class ExtractAlembic(pyblish.api.InstancePlugin):
@@ -17,6 +12,11 @@ class ExtractAlembic(pyblish.api.InstancePlugin):
     label = "Alembic"
 
     def process(self, instance):
+        import os
+
+        import alembic_export
+
+        import pymel
 
         # Validate whether we can strip namespaces.
         stripNamespaces = 0

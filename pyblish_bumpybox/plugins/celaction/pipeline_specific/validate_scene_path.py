@@ -1,10 +1,4 @@
-import os
-import shutil
-
 import pyblish.api
-import pyblish_standalone
-from pyblish_bumpybox.plugins import utils
-import pipeline_schema
 
 
 class RepairScenePath(pyblish.api.Action):
@@ -13,6 +7,12 @@ class RepairScenePath(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import os
+        import shutil
+
+        import pyblish_standalone
+        from pyblish_bumpybox.plugins import utils
+        import pipeline_schema
 
         # get version data
         version = 1
@@ -54,6 +54,7 @@ class ValidateScenePath(pyblish.api.InstancePlugin):
     actions = [RepairScenePath]
 
     def get_path(self, instance):
+        import os
 
         path = []
         filename = []
@@ -105,6 +106,8 @@ class ValidateScenePath(pyblish.api.InstancePlugin):
         return path
 
     def process(self, instance):
+        import pipeline_schema
+        import pyblish_standalone
 
         # getting current work file
         work_path = pyblish_standalone.kwargs['path'][0].replace('\\', '/')

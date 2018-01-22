@@ -1,10 +1,4 @@
-import sys
-import os
-
-import pymel
-
 from pyblish import api
-import alembic_export
 
 
 class ExtractRoyalRenderMovie(api.InstancePlugin):
@@ -17,6 +11,12 @@ class ExtractRoyalRenderMovie(api.InstancePlugin):
     hosts = ["maya"]
 
     def process(self, instance):
+        import sys
+        import os
+
+        import alembic_export
+
+        import pymel
 
         mayapy_executable = os.path.join(
             os.path.dirname(sys.executable),

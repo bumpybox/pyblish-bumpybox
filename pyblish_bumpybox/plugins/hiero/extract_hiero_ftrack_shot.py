@@ -1,7 +1,4 @@
-import traceback
-
 import pyblish.api
-import ftrack
 
 
 class ExtractHieroFtrackShot(pyblish.api.InstancePlugin):
@@ -23,6 +20,10 @@ class ExtractHieroFtrackShot(pyblish.api.InstancePlugin):
         return "%s:%s:%s" % (h, m, str(s).zfill(2))
 
     def create_shot(self, parent, shot_name):
+        import traceback
+
+        import ftrack
+
         shot = None
 
         try:
@@ -46,6 +47,8 @@ class ExtractHieroFtrackShot(pyblish.api.InstancePlugin):
         return shot
 
     def get_shot(self, path):
+        import ftrack
+
         path_str = "/".join(path)
 
         try:
@@ -61,6 +64,10 @@ class ExtractHieroFtrackShot(pyblish.api.InstancePlugin):
         return False
 
     def path_to_shot(self, parents, item):
+        import traceback
+
+        import ftrack
+
         path = []
         for p in parents:
             path.append(p.getName())
@@ -101,6 +108,7 @@ class ExtractHieroFtrackShot(pyblish.api.InstancePlugin):
         return copy_path, parent
 
     def get_or_create_shot(self, instance):
+        import ftrack
 
         ftrack_data = instance.context.data("ftrackData")
         task = ftrack.Task(ftrack_data["Task"]["id"])
@@ -122,6 +130,7 @@ class ExtractHieroFtrackShot(pyblish.api.InstancePlugin):
         return shot
 
     def process(self, instance):
+        import ftrack
 
         item = instance[0]
 

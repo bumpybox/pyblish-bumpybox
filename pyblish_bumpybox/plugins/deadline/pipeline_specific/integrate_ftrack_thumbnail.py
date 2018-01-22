@@ -1,9 +1,4 @@
-import os
-import subprocess
-
 import pyblish.api
-from Deadline import Scripting
-import ftrack
 
 
 class IntegrateFtrackThumbnail(pyblish.api.InstancePlugin):
@@ -13,6 +8,11 @@ class IntegrateFtrackThumbnail(pyblish.api.InstancePlugin):
     order = pyblish.api.IntegratorOrder
 
     def process(self, instance):
+        import os
+        import subprocess
+
+        from Deadline import Scripting
+        import ftrack
 
         # Get FFmpeg executable from Deadline plugin config
         config = Scripting.RepositoryUtils.GetPluginConfig("FFmpeg")

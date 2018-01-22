@@ -1,7 +1,3 @@
-import os
-
-import nuke
-
 import pyblish.api
 
 
@@ -12,6 +8,7 @@ class RepairNukeWriteNodeAction(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import os
 
         # Get the errored instances
         failed = []
@@ -48,6 +45,7 @@ class ValidateNukeWriteNode(pyblish.api.InstancePlugin):
     targets = ["default", "process"]
 
     def process(self, instance):
+        import os
 
         current = instance[0]["file"].getValue()
         expected = self.get_expected_value(instance)
@@ -72,6 +70,7 @@ class ValidateNukeWriteNode(pyblish.api.InstancePlugin):
         assert file_type == ext, msg.format(file_type, ext)
 
     def get_current_value(self, instance):
+        import nuke
 
         current = ""
         if nuke.filename(instance[0]):
@@ -80,6 +79,7 @@ class ValidateNukeWriteNode(pyblish.api.InstancePlugin):
         return current
 
     def get_expected_value(self, instance):
+        import os
 
         expected = (
             "[python {nuke.script_directory()}]/workspace/[python "

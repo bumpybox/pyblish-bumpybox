@@ -1,6 +1,3 @@
-import math
-
-import nuke
 import pyblish.api
 
 
@@ -16,6 +13,9 @@ class ExtractDeadlineNuke(pyblish.api.InstancePlugin):
     hosts = ["nuke"]
 
     def process(self, instance):
+        import math
+
+        import nuke
 
         node = instance[0]
         collection = instance.data["collection"]

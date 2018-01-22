@@ -1,9 +1,4 @@
-import os
-
-import pymel
-import maya.cmds as cmds
 import pyblish.api
-import pyblish_maya
 
 
 class ExtractMayaFormats(pyblish.api.InstancePlugin):
@@ -17,6 +12,11 @@ class ExtractMayaFormats(pyblish.api.InstancePlugin):
     targets = ["process.local"]
 
     def process(self, instance):
+        import os
+
+        import pyblish_maya
+
+        import pymel
 
         # Skip any remote instances
         if "remote" in instance.data["families"]:
@@ -57,6 +57,7 @@ class ExtractMayaFormats(pyblish.api.InstancePlugin):
                 connection["source"] >> connection["destination"]
 
     def disconnect(self, node, connectionType):
+        import maya.cmds as cmds
 
         connections = []
         for connection in node.connections(type=connectionType, plugs=True):

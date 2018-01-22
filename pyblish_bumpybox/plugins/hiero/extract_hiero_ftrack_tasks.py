@@ -1,5 +1,4 @@
 import pyblish.api
-import ftrack
 
 
 class ExtractHieroFtrackTasks(pyblish.api.Extractor):
@@ -16,6 +15,8 @@ class ExtractHieroFtrackTasks(pyblish.api.Extractor):
     hosts = ["hiero"]
 
     def getTaskTypeByName(self, name):
+        import ftrack
+
         for t in ftrack.getTaskTypes():
             if t.getName().lower() == name.lower():
                 return t

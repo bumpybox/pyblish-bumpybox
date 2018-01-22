@@ -1,7 +1,5 @@
 import pyblish.api
 
-import pymel.core
-
 
 class RepairMayaModelingShapeName(pyblish.api.Action):
     label = "Repair"
@@ -9,6 +7,7 @@ class RepairMayaModelingShapeName(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import pymel.core
 
         invalid_shapes = []
         for shp in pymel.core.ls(type="mesh"):
@@ -28,6 +27,7 @@ class ValidateMayaModelingShapeName(pyblish.api.ContextPlugin):
     optional = True
 
     def process(self, context):
+        import pymel.core
 
         validate = False
         valid_families = set(["mayaAscii", "mayaBinary", "alembic"])

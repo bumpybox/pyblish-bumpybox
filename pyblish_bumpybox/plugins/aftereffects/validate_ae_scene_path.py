@@ -1,8 +1,4 @@
-import os
-
-import pyblish_aftereffects
 import pyblish.api
-import pipeline_schema
 
 
 class RepairAEScenePathAction(pyblish.api.Action):
@@ -11,6 +7,10 @@ class RepairAEScenePathAction(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import os
+
+        import pipeline_schema
+        import pyblish_aftereffects
 
         # expected path
         data = pipeline_schema.get_data()
@@ -38,6 +38,7 @@ class ValidateAEScenePath(pyblish.api.InstancePlugin):
     actions = [RepairAEScenePathAction]
 
     def process(self, instance):
+        import pipeline_schema
 
         # getting current work file
         work_path = instance.data["workPath"].lower()

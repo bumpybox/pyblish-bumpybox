@@ -1,5 +1,3 @@
-import pymel.core
-
 import pyblish.api
 
 
@@ -10,6 +8,7 @@ class RepairDeadlineParametersAction(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import pymel.core
 
         # Get the errored instances
         failed = []

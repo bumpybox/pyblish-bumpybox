@@ -1,4 +1,3 @@
-import pymel.core as pm
 import pyblish.api
 
 
@@ -9,7 +8,7 @@ class RepairMayaArnoldSettings(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
-
+        import pymel.core as pm
         node = pm.PyNode("defaultArnoldDriver")
         node.mergeAOVs.set(True)
 
@@ -25,6 +24,6 @@ class ValidateMayaArnoldSettings(pyblish.api.InstancePlugin):
     hosts = ["maya"]
 
     def process(self, instance):
-
+        import pymel.core as pm
         node = pm.PyNode("defaultArnoldDriver")
         assert node.mergeAOVs.get(), "AOVs needs to be merged."

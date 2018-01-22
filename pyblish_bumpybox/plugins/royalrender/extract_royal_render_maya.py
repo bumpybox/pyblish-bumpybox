@@ -1,9 +1,3 @@
-import platform
-import os
-
-import pymel.core as pm
-import pymel.versions
-
 import pyblish.api
 
 
@@ -17,6 +11,11 @@ class ExtractRoyalRenderMaya(pyblish.api.InstancePlugin):
     targets = ["process.royalrender"]
 
     def process(self, instance):
+        import platform
+        import os
+
+        import pymel.core as pm
+        import pymel.versions
 
         version = pymel.versions.current()
         version = str(version/100) + "." + str(version % 100).zfill(2)

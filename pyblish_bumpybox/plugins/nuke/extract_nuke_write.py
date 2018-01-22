@@ -1,6 +1,3 @@
-import os
-
-import nuke
 import pyblish.api
 
 
@@ -14,6 +11,8 @@ class Extract(pyblish.api.InstancePlugin):
     targets = ["process.local"]
 
     def execute(self, instance):
+        import nuke
+
         # Get frame range
         node = instance[0]
         first_frame = nuke.root()["first_frame"].value()
@@ -34,6 +33,7 @@ class ExtractNukeWrite(Extract):
     label = "Write"
 
     def process(self, instance):
+        import os
 
         self.execute(instance)
 
@@ -50,6 +50,7 @@ class ExtractNukeCache(Extract):
     families = ["cache", "local"]
 
     def process(self, instance):
+        import os
 
         self.execute(instance)
 
@@ -64,6 +65,7 @@ class ExtractNukeCamera(Extract):
     families = ["camera", "local"]
 
     def process(self, instance):
+        import os
 
         node = instance[0]
         node["writeGeometries"].setValue(False)
@@ -92,6 +94,7 @@ class ExtractNukeGeometry(Extract):
     families = ["geometry", "local"]
 
     def process(self, instance):
+        import os
 
         node = instance[0]
         node["writeCameras"].setValue(False)

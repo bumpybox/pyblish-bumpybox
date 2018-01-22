@@ -1,8 +1,4 @@
-import os
-
-import nuke
 import pyblish.api
-import clique
 
 
 class CollectNukeReads(pyblish.api.ContextPlugin):
@@ -13,6 +9,11 @@ class CollectNukeReads(pyblish.api.ContextPlugin):
     hosts = ["nuke", "nukeassist"]
 
     def process(self, context):
+        import os
+
+        import clique
+
+        import nuke
 
         # creating instances per write node
         for node in nuke.allNodes():

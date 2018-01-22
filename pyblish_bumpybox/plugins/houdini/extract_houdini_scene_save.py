@@ -1,4 +1,3 @@
-import hou
 import pyblish.api
 
 
@@ -11,5 +10,5 @@ class ExtractHoudiniSceneSave(pyblish.api.InstancePlugin):
     hosts = ["houdini"]
 
     def process(self, instance):
-
+        import hou
         hou.hipFile.save()

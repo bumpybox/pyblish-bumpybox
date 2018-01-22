@@ -1,8 +1,4 @@
-import os
-import re
-
 import pyblish.api
-import clique
 
 
 class CollectExistingFiles(pyblish.api.ContextPlugin):
@@ -19,6 +15,7 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
         """ Extract version information from filenames.  Code from Foundry"s
         nukescripts.get_version()
         """
+        import re
 
         if string is None:
             raise ValueError("Empty version string - no match")
@@ -33,6 +30,7 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
 
     def get_version_collections(self, collection, version):
         """Return all collections of previous collection versions."""
+        import clique
 
         collections = []
         for count in range(1, int(version)):
@@ -56,6 +54,7 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
         return collections
 
     def single_file_instances(self, instance, version, family_type, context):
+        import os
 
         for count in range(1, int(version)):
             version_string = "v" + str(count).zfill(len(version))
@@ -86,6 +85,7 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
 
     def scan_collections_files(self, collections):
         """Return all files in the directories of the collections."""
+        import os
 
         scanned_dirs = []
         files = []
@@ -112,6 +112,9 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
         return collection
 
     def process(self, context):
+        import os
+
+        import clique
 
         # Gather all valid collections
         valid_families = ["img", "cache", "scene", "mov", "camera", "geometry"]

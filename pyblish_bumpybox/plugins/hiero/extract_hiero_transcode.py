@@ -1,9 +1,4 @@
-import os
-import time
-
 import pyblish.api
-import hiero
-import clique
 
 
 class ExtractHieroTranscode(pyblish.api.InstancePlugin):
@@ -16,6 +11,7 @@ class ExtractHieroTranscode(pyblish.api.InstancePlugin):
     hosts = ["hiero"]
 
     def process(self, instance):
+        import os
 
         collections = []
         transcode_tags = instance.data.get("transcodeTags", [])
@@ -46,6 +42,11 @@ class ExtractHieroTranscode(pyblish.api.InstancePlugin):
         instance.data["transcodes"] = collections
 
     def transcode(self, instance, write_path, tag_type):
+        import os
+        import time
+
+        import hiero
+        import clique
 
         item = instance[0]
 

@@ -1,5 +1,4 @@
 import pyblish.api
-import ftrack
 
 
 class CollectCelactionRender(pyblish.api.ContextPlugin):
@@ -8,6 +7,7 @@ class CollectCelactionRender(pyblish.api.ContextPlugin):
     order = pyblish.api.CollectorOrder + 0.1
 
     def process(self, context):
+        import ftrack
 
         # common data
         fps = 25

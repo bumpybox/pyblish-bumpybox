@@ -1,11 +1,4 @@
-import os
-import _winreg
-import subprocess
-
 import pyblish.api
-import pyblish_standalone
-import pipeline_schema
-import ftrack
 
 
 class ExtractCelactionRenderImages(pyblish.api.InstancePlugin):
@@ -17,6 +10,13 @@ class ExtractCelactionRenderImages(pyblish.api.InstancePlugin):
     optional = True
 
     def process(self, instance):
+        import os
+        import _winreg
+        import subprocess
+
+        import pyblish_standalone
+        import pipeline_schema
+        import ftrack
 
         progpath = instance.context.data['kwargs']['data']['progpath'][:-1]
         exe = os.path.join(progpath, 'CelAction2D.exe')
@@ -110,6 +110,11 @@ class ExtractCelactionRenderMovie(pyblish.api.InstancePlugin):
         return '%s:%s:%s:%s' % (h, m, str(s).zfill(2), str(f).zfill(2))
 
     def process(self, instance):
+        import os
+        import subprocess
+
+        import pipeline_schema
+        import ftrack
 
         exe = 'ffmpeg.exe'
 

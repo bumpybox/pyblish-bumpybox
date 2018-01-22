@@ -1,4 +1,3 @@
-import hou
 import pyblish.api
 
 
@@ -11,6 +10,7 @@ class ValidateHoudiniMantraCamera(pyblish.api.InstancePlugin):
     hosts = ["houdini"]
 
     def process(self, instance):
+        import hou
 
         node = instance[0]
         camera = node.parm("camera").eval()

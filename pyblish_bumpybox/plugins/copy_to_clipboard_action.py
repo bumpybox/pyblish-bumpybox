@@ -1,5 +1,4 @@
 import pyblish.api
-import pyperclip
 
 
 class CopyToClipboardAction(pyblish.api.Action):
@@ -8,6 +7,7 @@ class CopyToClipboardAction(pyblish.api.Action):
     on = "all"
 
     def process(self, context, plugin):
+        import pyperclip
 
         header = "{:<10}{:<40} -> {}".format("Success", "Plug-in", "Instance")
         result = "{success:<10}{plugin.__name__:<40} -> {instance}"

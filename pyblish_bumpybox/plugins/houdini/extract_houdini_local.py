@@ -1,5 +1,3 @@
-import os
-
 import pyblish.api
 
 
@@ -13,6 +11,7 @@ class ExtractHoudiniLocal(pyblish.api.InstancePlugin):
     hosts = ["houdini"]
 
     def process(self, instance):
+        import os
 
         node = instance[0]
 

@@ -1,5 +1,4 @@
 import pyblish.api
-import ftrack
 
 
 class ExtractDeadlineFtrackPath(pyblish.api.InstancePlugin):
@@ -10,6 +9,7 @@ class ExtractDeadlineFtrackPath(pyblish.api.InstancePlugin):
     label = "Ftrack Path"
 
     def process(self, instance):
+        import ftrack
 
         if not instance.context.has_data("ftrackData"):
             return

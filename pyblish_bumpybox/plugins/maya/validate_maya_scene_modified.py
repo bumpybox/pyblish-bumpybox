@@ -1,6 +1,3 @@
-import pymel.core
-import maya.cmds as cmds
-
 import pyblish.api
 
 
@@ -13,6 +10,8 @@ class ValidateMayaSceneModified(pyblish.api.ContextPlugin):
     optional = True
 
     def process(self, context):
+        import pymel.core
+        import maya.cmds as cmds
 
         # Using "pymel.core.dgmodified()" seems to crash in 2017,
         # when using the time Editor.

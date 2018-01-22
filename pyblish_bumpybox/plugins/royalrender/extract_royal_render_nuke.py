@@ -1,11 +1,3 @@
-import platform
-import os
-import time
-import shutil
-import subprocess
-
-import nuke
-
 import pyblish.api
 
 
@@ -19,6 +11,13 @@ class ExtractRoyalRenderNuke(pyblish.api.ContextPlugin):
     targets = ["process.royalrender"]
 
     def process(self, context):
+        import platform
+        import os
+        import time
+        import shutil
+        import subprocess
+
+        import nuke
 
         write_nodes = []
         temporary_nodes = []

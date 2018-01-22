@@ -1,9 +1,4 @@
-import os
-
 import pyblish.api
-import pymel.core
-from maya import cmds
-from maya import mel
 
 
 class CollectMayaPlayblasts(pyblish.api.ContextPlugin):
@@ -18,6 +13,11 @@ class CollectMayaPlayblasts(pyblish.api.ContextPlugin):
     targets = ["default", "process.local"]
 
     def process(self, context):
+        import os
+
+        import pymel.core
+        from maya import cmds
+        from maya import mel
 
         default_cameras = ["persp", "top", "front", "side"]
         instances = []

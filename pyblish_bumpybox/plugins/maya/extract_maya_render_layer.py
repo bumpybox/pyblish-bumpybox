@@ -1,12 +1,4 @@
-import os
-import sys
-import subprocess
-
-import pymel.core as pm
-import maya.cmds as cmds
-
 import pyblish.api
-import clique
 
 
 class ExtractMayaRenderLayer(pyblish.api.InstancePlugin):
@@ -20,6 +12,14 @@ class ExtractMayaRenderLayer(pyblish.api.InstancePlugin):
     match = pyblish.api.Subset
 
     def process(self, instance):
+        import os
+        import sys
+        import subprocess
+
+        import clique
+
+        import pymel.core as pm
+        import maya.cmds as cmds
 
         # Use RenderSequence if in 2017+
         if cmds.about(version=True) >= 2017:

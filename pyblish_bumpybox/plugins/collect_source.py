@@ -1,5 +1,3 @@
-import os
-
 import pyblish.api
 
 
@@ -12,6 +10,7 @@ class CollectScene(pyblish.api.ContextPlugin):
     targets = ["default", "process"]
 
     def process(self, context):
+        import os
 
         current_file = context.data("currentFile")
 

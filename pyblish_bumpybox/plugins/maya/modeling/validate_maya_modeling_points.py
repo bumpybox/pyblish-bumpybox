@@ -1,5 +1,4 @@
 import pyblish.api
-import pymel.core as pm
 
 
 class RepairMayaModelingPointsAction(pyblish.api.Action):
@@ -8,6 +7,7 @@ class RepairMayaModelingPointsAction(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import pymel.core as pm
 
         # Get the errored instances
         failed = []

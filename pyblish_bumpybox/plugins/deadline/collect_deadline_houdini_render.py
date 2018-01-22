@@ -1,9 +1,4 @@
-import os
-
-import hou
-
 import pyblish.api
-import clique
 
 
 class CollectDeadlineHoudiniRender(pyblish.api.ContextPlugin):
@@ -17,6 +12,12 @@ class CollectDeadlineHoudiniRender(pyblish.api.ContextPlugin):
     label = "Houdini Render"
 
     def process(self, context):
+        import os
+
+        import hou
+
+        import clique
+
 
         for instance in context:
 

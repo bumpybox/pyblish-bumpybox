@@ -1,5 +1,4 @@
 import pyblish.api as api
-import pymel.core as pm
 
 
 class RepairMayaModelingIntermediateShapes(api.Action):
@@ -8,6 +7,7 @@ class RepairMayaModelingIntermediateShapes(api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import pymel.core as pm
 
         # Get the errored instances
         failed = []
@@ -35,6 +35,7 @@ class ValidateMayaModelingIntermediateShapes(api.InstancePlugin):
     optional = True
 
     def process(self, instance):
+        import pymel.core as pm
 
         intermediate_objects = []
         for node in instance[0].members():

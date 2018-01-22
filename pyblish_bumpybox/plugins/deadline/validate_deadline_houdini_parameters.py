@@ -1,5 +1,3 @@
-import hou
-
 import pyblish.api
 
 
@@ -10,6 +8,7 @@ class RepairDeadlineParametersAction(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import hou
 
         # Get the errored instances
         failed = []

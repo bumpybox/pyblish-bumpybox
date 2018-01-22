@@ -1,5 +1,3 @@
-import os
-
 import pyblish.api
 
 
@@ -11,6 +9,7 @@ class ValidateSceneVersion(pyblish.api.ContextPlugin):
     optional = True
 
     def process(self, context):
+        import os
 
         name, ext = os.path.splitext(context.data("currentFile"))
         failure_message = (

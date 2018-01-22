@@ -1,9 +1,4 @@
-import os
-import re
-import shutil
-
 import pyblish.api
-import pipeline_schema
 
 
 class IntegrateLocal(pyblish.api.InstancePlugin):
@@ -13,6 +8,11 @@ class IntegrateLocal(pyblish.api.InstancePlugin):
     order = pyblish.api.IntegratorOrder
 
     def process(self, instance):
+        import os
+        import re
+        import shutil
+
+        import pipeline_schema
 
         if "outputPaths" not in instance.data:
             return

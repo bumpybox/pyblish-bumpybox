@@ -1,5 +1,3 @@
-import nuke
-
 import pyblish.api
 
 
@@ -12,5 +10,6 @@ class CollectNukeFramerate(pyblish.api.ContextPlugin):
     targets = ["default", "process"]
 
     def process(self, context):
+        import nuke
 
         context.data["framerate"] = nuke.root()["fps"].getValue()

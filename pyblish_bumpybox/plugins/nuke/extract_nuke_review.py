@@ -1,10 +1,3 @@
-import os
-import tempfile
-import shutil
-
-import nuke
-
-import clique
 from pyblish import api
 
 
@@ -22,6 +15,13 @@ class ExtractNukeReview(api.InstancePlugin):
     families = ["img"]
 
     def process(self, instance):
+        import os
+        import tempfile
+        import shutil
+
+        import clique
+
+        import nuke
 
         # Store selection
         selection = [i for i in nuke.allNodes() if i["selected"].getValue()]

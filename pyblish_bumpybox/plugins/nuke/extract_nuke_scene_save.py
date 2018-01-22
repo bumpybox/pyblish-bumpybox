@@ -1,4 +1,3 @@
-import nuke
 import pyblish.api
 
 
@@ -11,5 +10,5 @@ class ExtractNukeSceneSave(pyblish.api.InstancePlugin):
     targets = ["default", "process"]
 
     def process(self, instance):
-
+        import nuke
         nuke.scriptSave()

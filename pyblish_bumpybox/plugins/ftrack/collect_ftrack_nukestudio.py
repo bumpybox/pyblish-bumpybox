@@ -1,15 +1,14 @@
 from PySide import QtCore, QtGui
 
-import hiero
-
 import pyblish.api
-import ftrack_api
 
 
 class Window(QtGui.QDialog):
     """Dialog for selecting project data."""
 
     def __init__(self, parent=None, data=None):
+        import ftrack_api
+
         super(Window, self).__init__(parent)
         self.setWindowTitle("Ftrack Project Data")
         self.setFocusPolicy(QtCore.Qt.StrongFocus)
@@ -229,6 +228,7 @@ class CollectFtrackNukeStudioProjectData(pyblish.api.ContextPlugin):
         context.data["ftrackProjectData"] = data
 
     def get_sequence_data(self, context):
+        import hiero
 
         data = {
             "name": "",

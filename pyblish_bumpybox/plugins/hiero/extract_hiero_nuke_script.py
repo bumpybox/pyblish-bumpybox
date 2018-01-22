@@ -1,8 +1,4 @@
-import os
-
 import pyblish.api
-import hiero
-import clique
 
 
 class ExtractHieroNukeScript(pyblish.api.InstancePlugin):
@@ -15,6 +11,10 @@ class ExtractHieroNukeScript(pyblish.api.InstancePlugin):
     hosts = ["hiero"]
 
     def process(self, instance):
+        import os
+
+        import hiero
+        import clique
 
         item = instance[0]
         file_path = item.source().mediaSource().fileinfos()[0].filename()

@@ -1,6 +1,3 @@
-import os
-import hashlib
-
 import pyblish.api
 
 
@@ -13,6 +10,8 @@ class ValidateReview(pyblish.api.InstancePlugin):
     families = ["review"]
 
     def md5(self, fname):
+        import hashlib
+
         hash_md5 = hashlib.md5()
         with open(fname, "rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):
@@ -20,6 +19,7 @@ class ValidateReview(pyblish.api.InstancePlugin):
         return hash_md5.hexdigest()
 
     def process(self, instance):
+        import os
 
         msg = "Review movie file is missing: {0}".format(
             instance.data["output_path"]

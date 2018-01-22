@@ -1,7 +1,4 @@
-import json
-
 import pyblish.api
-import clique
 
 
 class BumpyboxDeadlineOnJobSubmittedCollectMovie(pyblish.api.ContextPlugin):
@@ -10,6 +7,9 @@ class BumpyboxDeadlineOnJobSubmittedCollectMovie(pyblish.api.ContextPlugin):
     order = pyblish.api.CollectorOrder
 
     def process(self, context):
+        import json
+
+        import clique
 
         job = context.data("deadlineJob")
         data = job.GetJobExtraInfoKeyValueWithDefault(

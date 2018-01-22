@@ -1,10 +1,4 @@
-import os
-import json
-import datetime
-import time
-
 import pyblish.api
-import clique
 
 
 class ExtractJSON(pyblish.api.ContextPlugin):
@@ -16,6 +10,12 @@ class ExtractJSON(pyblish.api.ContextPlugin):
     targets = ["default", "process"]
 
     def process(self, context):
+        import os
+        import json
+        import datetime
+        import time
+
+        import clique
 
         workspace = os.path.join(
             os.path.dirname(context.data["currentFile"]),

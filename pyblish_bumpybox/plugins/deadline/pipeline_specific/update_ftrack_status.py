@@ -1,8 +1,4 @@
-import os
-import json
-
 import pyblish.api
-import ftrack
 
 
 class UpdateFtrackStatus(pyblish.api.ContextPlugin):
@@ -11,6 +7,10 @@ class UpdateFtrackStatus(pyblish.api.ContextPlugin):
     order = pyblish.api.IntegratorOrder + 0.4
 
     def process(self, context):
+        import os
+        import json
+
+        import ftrack
 
         job = context.data("deadlineJob")
         value = job.GetJobExtraInfoKeyValueWithDefault("PyblishInstanceData",

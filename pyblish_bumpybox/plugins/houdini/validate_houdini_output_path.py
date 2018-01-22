@@ -1,5 +1,3 @@
-import os
-
 import pyblish.api
 
 
@@ -67,6 +65,7 @@ class ValidateHoudiniOutputPath(pyblish.api.InstancePlugin):
                 )
 
     def get_expected_path(self, instance, parameter_name):
+        import os
 
         output = instance[0].parm(parameter_name).eval()
 

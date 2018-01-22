@@ -1,7 +1,4 @@
-import os
-
 import pyblish.api
-import pymel.core as pm
 
 
 class CollectMayaSets(pyblish.api.ContextPlugin):
@@ -21,6 +18,9 @@ class CollectMayaSets(pyblish.api.ContextPlugin):
         return False
 
     def process(self, context):
+        import os
+
+        import pymel.core as pm
 
         instances = []
         for object_set in pm.ls(type="objectSet"):

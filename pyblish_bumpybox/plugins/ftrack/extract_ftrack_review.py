@@ -1,6 +1,3 @@
-import json
-import subprocess
-
 import pyblish.api
 
 
@@ -16,6 +13,8 @@ class ExtractFtrackReview(pyblish.api.InstancePlugin):
     optional = True
 
     def process(self, instance):
+        import json
+        import subprocess
 
         path = instance.data["output_path"]
 

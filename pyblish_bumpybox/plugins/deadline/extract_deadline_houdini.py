@@ -1,6 +1,3 @@
-import math
-
-import hou
 import pyblish.api
 
 
@@ -13,6 +10,9 @@ class ExtractDeadlineHoudini(pyblish.api.InstancePlugin):
     hosts = ["houdini"]
 
     def process(self, instance):
+        import math
+
+        import hou
 
         node = instance[0]
         collection = instance.data["collection"]

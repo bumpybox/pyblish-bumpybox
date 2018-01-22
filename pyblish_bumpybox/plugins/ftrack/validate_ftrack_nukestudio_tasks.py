@@ -1,5 +1,3 @@
-import collections
-
 import pyblish.api
 
 
@@ -11,6 +9,7 @@ class ValidateFtrackNukeStudioTasks(pyblish.api.ContextPlugin):
     hosts = ["nukestudio"]
 
     def process(self, context):
+        import collections
 
         labels = []
         for instance in context:

@@ -1,8 +1,4 @@
-import os
-
-import nuke
 import pyblish.api
-import clique
 
 
 class CollectNukeWrites(pyblish.api.ContextPlugin):
@@ -14,6 +10,9 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
     targets = ["default", "process"]
 
     def process(self, context):
+        import clique
+
+        import nuke
 
         instances = []
         # creating instances per write node
@@ -75,6 +74,7 @@ class CollectNukeWritesProcess(pyblish.api.ContextPlugin):
     targets = ["process.local"]
 
     def process(self, context):
+        import nuke
 
         for item in context.data["write_instances"]:
             instance = context.create_instance(item.data["name"])
@@ -121,6 +121,9 @@ class CollectNukeWritesPublish(pyblish.api.ContextPlugin):
     targets = ["default"]
 
     def process(self, context):
+        import os
+
+        import nuke
 
         for item in context.data["write_instances"]:
 

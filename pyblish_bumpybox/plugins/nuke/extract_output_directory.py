@@ -1,5 +1,3 @@
-import os
-
 import pyblish.api
 
 
@@ -12,6 +10,7 @@ class ExtractOutputDirectory(pyblish.api.InstancePlugin):
     targets = ["process"]
 
     def process(self, instance):
+        import os
 
         path = None
 

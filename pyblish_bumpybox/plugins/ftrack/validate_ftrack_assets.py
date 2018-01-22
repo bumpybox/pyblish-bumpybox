@@ -1,5 +1,3 @@
-import pymel.core as pc
-
 import pyblish.api
 
 
@@ -10,6 +8,7 @@ class RepairFtrackAssetsAction(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import pymel.core as pc
 
         for node in pc.ls(type="ftrackAssetNode"):
             if not node.assetLink.connections():
@@ -26,6 +25,7 @@ class ValidateFtrackAssets(pyblish.api.Validator):
     hosts = ["maya"]
 
     def process(self, context):
+        import pymel.core as pc
 
         for node in pc.ls(type="ftrackAssetNode"):
             msg = "Ftrack Asset link on \"{0}\" is broken.".format(node.name())

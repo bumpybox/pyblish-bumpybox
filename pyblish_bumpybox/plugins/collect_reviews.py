@@ -1,5 +1,3 @@
-import os
-
 import pyblish.api
 
 
@@ -15,6 +13,7 @@ class CollectReviews(pyblish.api.ContextPlugin):
     hosts = ["maya", "nuke", "nukeassist"]
 
     def process(self, context):
+        import os
 
         items = []
         for item in context:

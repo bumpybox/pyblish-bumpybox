@@ -1,7 +1,4 @@
-import os
-
 import pyblish.api
-import pyblish_aftereffects
 
 
 class CollectAERenderItems(pyblish.api.ContextPlugin):
@@ -10,6 +7,8 @@ class CollectAERenderItems(pyblish.api.ContextPlugin):
     order = pyblish.api.CollectorOrder
 
     def process(self, context):
+        import os
+        import pyblish_aftereffects
 
         cmd = "return app.project.renderQueue.numItems"
         itemCount = int(pyblish_aftereffects.send(cmd))

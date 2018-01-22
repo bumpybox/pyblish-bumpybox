@@ -1,5 +1,3 @@
-import nuke
-
 import pyblish.api
 
 
@@ -10,6 +8,7 @@ class RepairDeadlineNukeParametersAction(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import nuke
 
         # Get the errored instances
         failed = []

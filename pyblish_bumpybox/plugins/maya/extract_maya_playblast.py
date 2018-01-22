@@ -1,13 +1,4 @@
-import tempfile
-import os
-import subprocess
-import shutil
-import webbrowser
-
-import pymel.core
-
 import pyblish.api
-from capture import capture
 
 
 class ViewPlayblastsAction(pyblish.api.Action):
@@ -17,6 +8,8 @@ class ViewPlayblastsAction(pyblish.api.Action):
     on = "all"
 
     def process(self, context, plugin):
+        import os
+        import webbrowser
 
         # Get the errored instances
         all_instances = []
@@ -46,6 +39,14 @@ class ExtractMayaPlayblast(pyblish.api.InstancePlugin):
     actions = [ViewPlayblastsAction]
 
     def process(self, instance):
+        import tempfile
+        import subprocess
+        import shutil
+        import os
+
+        from capture import capture
+
+        import pymel.core
 
         temp_dir = tempfile.mkdtemp()
         capture(

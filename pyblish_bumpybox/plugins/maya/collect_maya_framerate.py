@@ -1,5 +1,3 @@
-import pymel.core
-
 import pyblish.api
 
 
@@ -12,7 +10,7 @@ class CollectMayaFramerate(pyblish.api.ContextPlugin):
     targets = ["default", "process"]
 
     def process(self, context):
-
+        import pymel.core
         options = {"pal": 25, "game": 15, "film": 24, "ntsc": 30, "show": 48,
                    "palf": 50, "ntscf": 60}
 

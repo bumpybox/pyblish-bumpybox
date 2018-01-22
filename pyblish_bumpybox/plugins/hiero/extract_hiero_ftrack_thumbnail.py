@@ -1,8 +1,4 @@
-import os
-import time
-
 import pyblish.api
-import hiero
 
 
 class ExtractHieroFtrackThumbnail(pyblish.api.InstancePlugin):
@@ -20,6 +16,10 @@ class ExtractHieroFtrackThumbnail(pyblish.api.InstancePlugin):
     hosts = ["hiero"]
 
     def process(self, instance):
+        import os
+        import time
+
+        import hiero
 
         item = instance[0]
         shot = instance.data["ftrackShot"]

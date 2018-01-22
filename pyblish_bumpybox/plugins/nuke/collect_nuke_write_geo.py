@@ -1,6 +1,3 @@
-import os
-
-import nuke
 import pyblish.api
 
 
@@ -13,6 +10,9 @@ class CollectNukeWriteGeo(pyblish.api.ContextPlugin):
     targets = ["default", "process.local"]
 
     def process(self, context):
+        import os
+
+        import nuke
 
         instances = []
         # creating instances per write node

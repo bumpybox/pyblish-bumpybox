@@ -1,8 +1,4 @@
-import os
-import json
-
 import pyblish.api
-import clique
 
 
 class BumpyboxDeadlineOnJobFinishedCollectOutput(pyblish.api.ContextPlugin):
@@ -11,6 +7,10 @@ class BumpyboxDeadlineOnJobFinishedCollectOutput(pyblish.api.ContextPlugin):
     order = pyblish.api.CollectorOrder
 
     def process(self, context):
+        import os
+        import json
+
+        import clique
 
         job = context.data["deadlineJob"]
 

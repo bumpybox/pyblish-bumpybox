@@ -1,5 +1,3 @@
-import os
-
 import pyblish.api
 
 
@@ -14,6 +12,7 @@ class ValidateFFmpeg(pyblish.api.ContextPlugin):
     optional = True
 
     def get_executable(self, executable):
+        import os
 
         def is_exe(fpath):
             return os.path.isfile(fpath) and os.access(fpath, os.X_OK)

@@ -1,9 +1,4 @@
-import os
-
-import hou
-
 import pyblish.api
-import clique
 
 
 class CollectHoudini(pyblish.api.ContextPlugin):
@@ -14,6 +9,11 @@ class CollectHoudini(pyblish.api.ContextPlugin):
     hosts = ["houdini"]
 
     def process(self, context):
+        import os
+
+        import clique
+
+        import hou
 
         # Find nodes by class.
         nodes = []

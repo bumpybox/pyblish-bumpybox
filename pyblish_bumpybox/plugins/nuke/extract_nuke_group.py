@@ -1,7 +1,3 @@
-import os
-
-import nuke
-
 import pyblish.api
 
 
@@ -15,6 +11,9 @@ class ExtractNukeGroup(pyblish.api.InstancePlugin):
     hosts = ["nuke", "nukeassist"]
 
     def process(self, instance):
+        import os
+
+        import nuke
 
         if not instance.data["publish"]:
             return

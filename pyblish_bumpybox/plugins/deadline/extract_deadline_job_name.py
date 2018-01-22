@@ -1,5 +1,3 @@
-import os
-
 import pyblish.api
 
 
@@ -11,6 +9,7 @@ class ExtractDeadlineJobName(pyblish.api.InstancePlugin):
     label = "Deadline Job Name"
 
     def process(self, instance):
+        import os
 
         data = instance.data.get(
             "deadlineData", {"job": {}, "plugin": {}}

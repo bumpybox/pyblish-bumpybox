@@ -1,9 +1,4 @@
-import os
-import subprocess
-import re
-
 import pyblish.api
-import pyblish_aftereffects
 
 
 class ExtractAELocal(pyblish.api.InstancePlugin):
@@ -14,6 +9,11 @@ class ExtractAELocal(pyblish.api.InstancePlugin):
     label = "Render Local"
 
     def process(self, instance):
+        import os
+        import subprocess
+        import re
+
+        import pyblish_aftereffects
 
         # ensureing project on disk is updated
         pyblish_aftereffects.send("app.project.save()")

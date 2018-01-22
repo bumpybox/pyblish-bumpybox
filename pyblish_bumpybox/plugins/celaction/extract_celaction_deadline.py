@@ -1,8 +1,4 @@
-import os
-
 import pyblish.api
-import pyblish_standalone
-import pipeline_schema
 
 
 class ExtractCelactionDeadline(pyblish.api.InstancePlugin):
@@ -12,6 +8,10 @@ class ExtractCelactionDeadline(pyblish.api.InstancePlugin):
     order = pyblish.api.ExtractorOrder
 
     def process(self, instance):
+        import os
+
+        import pyblish_standalone
+        import pipeline_schema
 
         job_data = {}
         plugin_data = {}

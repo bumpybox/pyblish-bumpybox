@@ -1,6 +1,4 @@
-import nuke
 import pyblish.api
-import ftrack
 
 
 class RepairFtrackNukeSettings(pyblish.api.Action):
@@ -10,6 +8,8 @@ class RepairFtrackNukeSettings(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import nuke
+        import ftrack
 
         ftrack_data = context.data("ftrackData")
         task = ftrack.Task(ftrack_data["Task"]["id"])
@@ -32,6 +32,8 @@ class ValidateFtrackNukeSettings(pyblish.api.Validator):
     hosts = ["nuke"]
 
     def process(self, context):
+        import nuke
+        import ftrack
 
         ftrack_data = context.data("ftrackData")
 

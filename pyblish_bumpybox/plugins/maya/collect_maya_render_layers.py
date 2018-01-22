@@ -1,9 +1,4 @@
-import os
-
-import pymel.core as pm
-
 import pyblish.api
-import clique
 
 
 class CollectMayaRenderlayers(pyblish.api.ContextPlugin):
@@ -14,6 +9,11 @@ class CollectMayaRenderlayers(pyblish.api.ContextPlugin):
     label = "Render Layers"
 
     def process(self, context):
+        import os
+
+        import clique
+
+        import pymel.core as pm
 
         # Collect sets named starting with "remote".
         remote_members = []

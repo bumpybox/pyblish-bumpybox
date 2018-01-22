@@ -1,7 +1,5 @@
 import pyblish.api
 
-import hiero
-
 
 class CollectHieroItems(pyblish.api.ContextPlugin):
     """ Collect Hiero instances.
@@ -15,6 +13,8 @@ class CollectHieroItems(pyblish.api.ContextPlugin):
     hosts = ["hiero"]
 
     def process(self, context):
+        import hiero
+
         project = context.data("activeProject")
 
         selection = None

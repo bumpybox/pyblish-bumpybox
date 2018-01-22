@@ -1,6 +1,3 @@
-import os
-
-import pymel
 import pyblish.api
 
 
@@ -11,6 +8,9 @@ class RepairRenderLayerSettings(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
+        import os
+
+        import pymel
 
         render_globals = pymel.core.PyNode("defaultRenderGlobals")
 
@@ -63,6 +63,9 @@ class ValidateMayaRenderLayerSettings(pyblish.api.InstancePlugin):
     hosts = ["maya"]
 
     def process(self, instance):
+        import os
+
+        import pymel
 
         render_globals = pymel.core.PyNode("defaultRenderGlobals")
 

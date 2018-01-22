@@ -1,4 +1,3 @@
-import pymel.core
 import pyblish.api
 
 
@@ -10,7 +9,7 @@ class ValidateMayaRenderCamera(pyblish.api.Validator):
     label = "Render Camera"
 
     def process(self, instance):
-
+        import pymel.core
         # Validate non native camera active
         render_cameras = instance.data["cameras"]
 

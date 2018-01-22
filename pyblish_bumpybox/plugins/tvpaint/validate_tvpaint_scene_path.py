@@ -1,8 +1,4 @@
-import os
-import subprocess
-
 import pyblish.api
-import ftrack
 
 
 @pyblish.api.log
@@ -13,6 +9,9 @@ class ValidateTVPaintScenePath(pyblish.api.Validator):
     label = 'Scene Path'
 
     def get_path(self, instance):
+        import os
+
+        import ftrack
 
         path = []
         filename = []
@@ -80,6 +79,9 @@ class ValidateTVPaintScenePath(pyblish.api.Validator):
     def repair(self, instance):
         """
         """
+        import os
+        import subprocess
+
         # saving scene
         file_path = self.get_path(instance)
         file_dir = os.path.dirname(file_path)

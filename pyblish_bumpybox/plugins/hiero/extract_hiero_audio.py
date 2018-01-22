@@ -1,5 +1,3 @@
-import os
-
 import pyblish.api
 
 
@@ -13,6 +11,7 @@ class ExtractHeiroAudio(pyblish.api.InstancePlugin):
     optional = True
 
     def process(self, instance):
+        import os
 
         item = instance[0]
         output_file = os.path.join(

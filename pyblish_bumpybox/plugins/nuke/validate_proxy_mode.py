@@ -1,5 +1,3 @@
-import nuke
-
 import pyblish.api
 
 
@@ -10,7 +8,7 @@ class RepairNukeProxyModeAction(pyblish.api.Action):
     on = "failed"
 
     def process(self, context, plugin):
-
+        import nuke
         nuke.root()["proxy"].setValue(0)
 
 
@@ -25,7 +23,7 @@ class ValidateNukeProxyMode(pyblish.api.ContextPlugin):
     targets = ["default", "process"]
 
     def process(self, context):
-
+        import nuke
         msg = (
             "Proxy mode is not supported. Please disable Proxy Mode in the "
             "Project settings."

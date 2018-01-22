@@ -1,5 +1,3 @@
-import os
-
 import pyblish.api
 
 
@@ -16,6 +14,7 @@ class ValidateNukeGroupNode(pyblish.api.InstancePlugin):
     hosts = ["nuke", "nukeassist"]
 
     def process(self, instance):
+        import os
 
         for node in instance[0].nodes():
 

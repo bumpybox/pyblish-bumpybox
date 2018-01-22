@@ -1,5 +1,4 @@
 import pyblish.api
-import pipeline_schema
 
 
 class ExtractCelactionDeadlineMovie(pyblish.api.InstancePlugin):
@@ -20,6 +19,7 @@ class ExtractCelactionDeadlineMovie(pyblish.api.InstancePlugin):
         return "%s:%s:%s:%s" % (h, m, str(s).zfill(2), str(f).zfill(2))
 
     def process(self, instance):
+        import pipeline_schema
 
         # skipping instance if data is missing
         if "deadlineData" not in instance.data:

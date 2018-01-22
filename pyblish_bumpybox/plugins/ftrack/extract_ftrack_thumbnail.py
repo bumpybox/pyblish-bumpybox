@@ -1,6 +1,3 @@
-import os
-import subprocess
-
 import pyblish.api
 
 
@@ -16,6 +13,8 @@ class ExtractFtrackThumbnailImg(pyblish.api.InstancePlugin):
     optional = True
 
     def process(self, instance):
+        import os
+        import subprocess
 
         input_file = instance.data["output_path"]
         ext = os.path.splitext(input_file)[1]

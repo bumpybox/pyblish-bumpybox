@@ -1,5 +1,3 @@
-import nuke
-
 import pyblish.api
 
 
@@ -12,4 +10,5 @@ class CollectNukeSelection(pyblish.api.ContextPlugin):
     targets = ["default", "process"]
 
     def process(self, context):
+        import nuke
         context.data["selection"] = nuke.selectedNodes()

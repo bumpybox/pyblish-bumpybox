@@ -1,6 +1,3 @@
-import os
-import shutil
-
 import pyblish.api
 
 
@@ -12,6 +9,8 @@ class ExtractTVPaintHobsoftScene(pyblish.api.Extractor):
     label = 'Hobsoft Sync'
 
     def process(self, instance, context):
+        import os
+        import shutil
 
         current_file = instance.data('workPath')
         ftrack_data = context.data('ftrackData')

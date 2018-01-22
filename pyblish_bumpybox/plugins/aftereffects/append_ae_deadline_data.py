@@ -1,8 +1,4 @@
-import os
-from distutils.version import StrictVersion
-
 import pyblish.api
-import pyblish_aftereffects
 
 
 class AppendAEDeadlineData(pyblish.api.InstancePlugin):
@@ -13,6 +9,10 @@ class AppendAEDeadlineData(pyblish.api.InstancePlugin):
     order = pyblish.api.ExtractorOrder
 
     def process(self, instance):
+        import os
+        from distutils.version import StrictVersion
+        
+        import pyblish_aftereffects
 
         job_data = {}
         plugin_data = {}

@@ -1,5 +1,4 @@
 import pyblish.api
-import ftrack
 
 
 class AppendAEFtrackAudio(pyblish.api.ContextPlugin):
@@ -8,6 +7,7 @@ class AppendAEFtrackAudio(pyblish.api.ContextPlugin):
     order = pyblish.api.ExtractorOrder
 
     def process(self, context):
+        import ftrack
 
         # get audio file
         task = ftrack.Task(context.data["ftrackData"]["Task"]["id"])

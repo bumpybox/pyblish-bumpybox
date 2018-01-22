@@ -1,7 +1,4 @@
-import traceback
-
 import pyblish.api
-import pyblish_aftereffects
 
 
 class CollectAEScene(pyblish.api.ContextPlugin):
@@ -9,6 +6,10 @@ class CollectAEScene(pyblish.api.ContextPlugin):
     order = pyblish.api.CollectorOrder
 
     def process(self, context):
+        import traceback
+
+        import pyblish_aftereffects
+
         try:
             path = pyblish_aftereffects.send("return app.project.file.fsName")
             context.data["currentFile"] = path.replace("\\", "/")
