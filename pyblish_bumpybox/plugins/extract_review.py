@@ -1,17 +1,48 @@
 import os
+import hashlib
 import subprocess
 
 import pyblish.api
-import filelink
 
 
-class ExtractTranscode(pyblish.api.InstancePlugin):
-    """Extracts review movie from image sequence."""
+class ExtractReview(pyblish.api.InstancePlugin):
+    """Extract review hash value."""
 
     order = pyblish.api.ExtractorOrder
-    label = "Transcode"
+    label = "Review Hash"
     optional = True
     families = ["review"]
+
+    def md5(self, fname):
+        hash_md5 = hashlib.md5()
+        with open(fname, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5.update(chunk)
+        return hash_md5.hexdigest()
+
+    def process(self, instance):
+
+        hash_value = self.md5(instance.data["output_path"])
+        md5_file = instance.data["output_path"].replace(
+            os.path.splitext(instance.data["output_path"])[1],
+            ".md5"
+        )
+        with open(md5_file, "w") as the_file:
+            the_file.write(hash_value)
+
+
+class ExtractReviewTranscode(pyblish.api.InstancePlugin):
+    """Extracts review movie from image sequence.
+
+    Offset:
+        pyblish_bumpybox.plugins.nuke.extract_nuke_review.ExtractNukeReview
+    """
+
+    order = pyblish.api.ExtractorOrder + 0.02
+    label = "Review Transcode"
+    optional = True
+    families = ["img", "mov"]
+    targets = ["process.local"]
 
     def find_previous_index(self, index, indexes):
         """Finds the closest previous value in a list from a value."""
@@ -34,25 +65,7 @@ class ExtractTranscode(pyblish.api.InstancePlugin):
 
     def process_image(self, instance):
 
-        collection = instance.data.get("collection", [])
-
-        if not list(collection):
-            msg = "Skipping \"{0}\" because no frames was found."
-            self.log.warning(msg.format(instance.data["name"]))
-            return
-
-        # Temporary fill the missing frames.
-        missing = collection.holes()
-        if not collection.is_contiguous():
-            pattern = collection.format("{head}{padding}{tail}")
-            for index in missing.indexes:
-                dst = pattern % index
-                src_index = self.find_previous_index(
-                    index, list(collection.indexes)
-                )
-                src = pattern % src_index
-
-                filelink.create(src, dst)
+        collection = instance.data["review_collection"]
 
         # Generate args.
         # Has to be yuv420p for compatibility with older players and smooth
@@ -73,16 +86,10 @@ class ExtractTranscode(pyblish.api.InstancePlugin):
             "scale=trunc(iw/2)*2:trunc(ih/2)*2",
         ]
 
-        if instance.data.get("baked_colorspace_movie"):
-            args = [
-                "ffmpeg", "-y",
-                "-i", instance.data["baked_colorspace_movie"],
-                "-pix_fmt", "yuv420p",
-                "-crf", "18",
-                "-timecode", "00:00:00:01",
-            ]
-
-        args.append(collection.format("{head}.mov"))
+        if collection.format("{head}").endswith("."):
+            args.append(collection.format("{head}mov"))
+        else:
+            args.append(collection.format("{head}.mov"))
 
         self.log.debug("Executing args: {0}".format(args))
 
@@ -96,10 +103,6 @@ class ExtractTranscode(pyblish.api.InstancePlugin):
         )
 
         output = p.communicate()[0]
-
-        # Remove temporary frame fillers
-        for f in missing:
-            os.remove(f)
 
         if p.returncode != 0:
             raise ValueError(output)

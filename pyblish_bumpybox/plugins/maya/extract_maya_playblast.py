@@ -136,6 +136,8 @@ class ExtractMayaPlayblast(pyblish.api.InstancePlugin):
         self.log.debug(output)
 
         # Copy movie to final destination
+        if not os.path.exists(os.path.dirname(instance.data["output_path"])):
+            os.makedirs(os.path.dirname(instance.data["output_path"]))
         shutil.copy(movie_path, instance.data["output_path"])
 
         # Clean up temporary files

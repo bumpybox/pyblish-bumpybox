@@ -57,7 +57,7 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
 
     def single_file_instances(self, instance, version, family_type, context):
 
-        for count in range(1, int(version) + 1):
+        for count in range(1, int(version)):
             version_string = "v" + str(count).zfill(len(version))
             filename = instance.data["output_path"].replace(
                 "v" + version, version_string
@@ -80,6 +80,9 @@ class CollectExistingFiles(pyblish.api.ContextPlugin):
 
             for node in instance:
                 new_instance.add(node)
+
+            self.log.info(instance)
+            self.log.info(instance.data)
 
     def scan_collections_files(self, collections):
         """Return all files in the directories of the collections."""

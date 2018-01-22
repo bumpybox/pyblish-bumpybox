@@ -16,7 +16,8 @@ class PersistPublishState(api.ContextPlugin):
         for instance in context:
             if "instanceToggled" not in instance.data.keys():
                 continue
-
+            self.log.info(instance)
+            self.log.info(instance.data)
             instance.data["instanceToggled"](
                 instance, instance.data["publish"]
             )

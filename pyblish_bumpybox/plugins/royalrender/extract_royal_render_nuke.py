@@ -2,6 +2,7 @@ import platform
 import os
 import time
 import shutil
+import subprocess
 
 import nuke
 
@@ -95,7 +96,7 @@ class ExtractRoyalRenderNuke(pyblish.api.ContextPlugin):
             jobs.append(data)
             write_nodes.append(instance[0])
 
-            # Generate review job
+            # Generate baked colorspace job
             node = previous_node = nuke.createNode("Read")
             node["file"].setValue(
                 instance.data["collection"].format(
@@ -134,10 +135,15 @@ class ExtractRoyalRenderNuke(pyblish.api.ContextPlugin):
             write_node["name"].setValue(
                 instance[0]["name"].value() + "_review"
             )
-            path = instance.data["collection"].format(
+            review_files = instance.data["collection"].format(
                 "{head}_review.%04d.jpeg"
             )
-            write_node["file"].setValue(path.replace("\\", "/"))
+            if instance.data["collection"].format("{head}").endswith("."):
+                review_files = instance.data["collection"].format(
+                    "{head}"
+                )[:-1]
+                review_files += "_review.%04d.jpeg"
+            write_node["file"].setValue(review_files.replace("\\", "/"))
             write_node["file_type"].setValue("jpeg")
             write_node["raw"].setValue(1)
             write_node["_jpeg_quality"].setValue(1)
@@ -153,13 +159,11 @@ class ExtractRoyalRenderNuke(pyblish.api.ContextPlugin):
                 "SeqFileOffset": 0,
                 "Version": nuke.NUKE_VERSION_STRING,
                 "SceneName": scene_path,
-                "ImageDir": os.path.dirname(path),
-                "ImageFilename": os.path.basename(
-                    instance.data["collection"].format(
-                        "{head}_review"
-                    )
+                "ImageDir": os.path.dirname(review_files),
+                "ImageFilename": os.path.basename(review_files).replace(
+                    ".%04d.jpeg", ""
                 ),
-                "ImageExtension": os.path.splitext(path)[1],
+                "ImageExtension": ".jpeg",
                 "ImagePreNumberLetter": ".",
                 "ImageSingleOutputFile": False,
                 "SceneOS": scene_os,
@@ -175,6 +179,55 @@ class ExtractRoyalRenderNuke(pyblish.api.ContextPlugin):
             data["SubmitterParameter"] = submit_params
 
             jobs.append(data)
+
+            # Generate batch script
+            output_file = review_files.replace("%04d.jpeg", "mov")
+            args = [
+                "ffmpeg", "-y",
+                "-start_number", str(first_frame),
+                "-framerate", str(instance.context.data["framerate"]),
+                "-i", review_files.replace("%", "%%"),
+                "-pix_fmt", "yuv420p",
+                "-crf", "18",
+                "-timecode", "00:00:00:01",
+                "-vframes", str(last_frame - first_frame + 1),
+                "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2",
+                output_file
+            ]
+
+            batch_file = review_files.replace("%04d.jpeg", "bat")
+            with open(batch_file, "w") as the_file:
+                the_file.write(subprocess.list2cmdline(args))
+
+            # Generate movie job
+            data = {
+                "Software": "Execute",
+                "SeqStart": 1,
+                "SeqEnd": 1,
+                "SeqStep": 1,
+                "SeqFileOffset": 0,
+                "Version": 1.0,
+                "SceneName": batch_file,
+                "ImageDir": os.path.dirname(output_file),
+                "ImageFilename": os.path.basename(output_file),
+                "ImageExtension": "",
+                "ImagePreNumberLetter": ".",
+                "ImageSingleOutputFile": "true",
+                "SceneOS": "win",
+                "Layer": "",
+                "PreID": 2,
+                "IsActive": True,
+                "WaitForPreID": 1
+            }
+
+            submit_params = data.get("SubmitterParameter", [])
+            submit_params.append("OverwriteExistingFiles=1~1")
+            submit_params.append("AllowLocalSceneCopy=0~0")
+            data["SubmitterParameter"] = submit_params
+
+            jobs.append(data)
+
+            # Adding jobs
             instance.data["royalrenderJobs"] = jobs
 
         # Convert write paths to absolute

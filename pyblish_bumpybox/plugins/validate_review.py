@@ -1,4 +1,6 @@
 import os
+import hashlib
+
 import pyblish.api
 
 
@@ -10,20 +12,37 @@ class ValidateReview(pyblish.api.InstancePlugin):
     optional = True
     families = ["review"]
 
+    def md5(self, fname):
+        hash_md5 = hashlib.md5()
+        with open(fname, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5.update(chunk)
+        return hash_md5.hexdigest()
+
     def process(self, instance):
 
-        # Validate collection
-        missing_files = []
-        for f in instance.data.get("collection", []):
-            if not os.path.exists(f):
-                missing_files.append(f)
+        msg = "Review movie file is missing: {0}".format(
+            instance.data["output_path"]
+        )
+        assert os.path.exists(instance.data["output_path"]), msg
 
-        msg = "Review files missing: {0}".format(missing_files)
-        assert not missing_files, msg
+        # Compare hash values of current to previous review file, which should
+        # be different.
+        md5_file = instance.data["output_path"].replace(
+            os.path.splitext(instance.data["output_path"])[1],
+            ".md5"
+        )
 
-        # Validate output
-        if "output_path" in instance.data.keys():
-            msg = "Review file missing: {0}".format(
-                instance.data["output_path"]
-            )
-            assert os.path.exists(instance.data["output_path"]), msg
+        if not os.path.exists(md5_file):
+            return
+
+        previous_hash_value = ""
+        with open(md5_file, "r") as the_file:
+            previous_hash_value = the_file.read()
+
+        current_hash_value = self.md5(instance.data["output_path"])
+
+        msg = "{0} is the same as previous published review.".format(
+            instance.data["output_path"]
+        )
+        assert current_hash_value != previous_hash_value, msg

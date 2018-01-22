@@ -36,19 +36,3 @@ class ValidateFFmpeg(pyblish.api.ContextPlugin):
     def process(self, instance):
 
         self.get_executable("ffmpeg")
-
-
-class ValidateDJV(ValidateFFmpeg):
-    """Validate djv_convert is available.
-
-    djv_convert is being used in various plugins for image and video
-    processing.
-    """
-
-    order = pyblish.api.ValidatorOrder
-    label = "DJV"
-    optional = True
-
-    def process(self, instance):
-
-        self.get_executable("djv_convert")

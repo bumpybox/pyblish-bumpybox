@@ -1,14 +1,17 @@
+import os
+
 import pyblish.api
-import clique
-
-from pyblish_bumpybox.plugins import collect_existing_files
 
 
-class CollectFtrackReviews(pyblish.api.ContextPlugin):
-    """Generate Ftrack reviews from "img" and "mov" instances."""
+class CollectReviews(pyblish.api.ContextPlugin):
+    """Generate reviews from "img" and "mov" instances.
+
+    Offset:
+        pyblish_bumpybox.plugins.collect_existing_files
+    """
 
     # Offset to get created instances.
-    order = collect_existing_files.CollectExistingFiles.order + 0.01
+    order = pyblish.api.CollectorOrder + 0.3
     hosts = ["maya", "nuke", "nukeassist"]
 
     def process(self, context):
@@ -72,24 +75,34 @@ class CollectFtrackReviews(pyblish.api.ContextPlugin):
                         )
                         pymel.core.setAttr(attr, channelBox=True)
 
+                    instance[0].getTransform().review.unlock()
                     instance[0].getTransform().review.set(value)
+                    instance[0].getTransform().review.lock()
                 except AttributeError:
                     pass
 
             instance.data["instanceToggled"] = instanceToggled
 
             families = item.data["families"] + [item.data["family"]]
+            output_path = ""
             if "img" in families:
-                instance.data["collection"] = clique.Collection(
-                    head=item.data["collection"].head + "_review.",
-                    padding=item.data["collection"].padding,
-                    tail=".jpeg"
+                output_path = item.data["collection"].format(
+                    "{head}_review.mov"
                 )
-                instance.data["collection"].indexes.update(
-                    item.data["collection"].indexes
-                )
+                if item.data["collection"].format("{head}").endswith("."):
+                    output_path = item.data["collection"].format(
+                        "{head}"
+                    )[:-1]
+                    output_path += "_review.mov"
+                instance.data["review_family"] = "img"
             if "mov" in families:
-                instance.data["output_path"] = item.data["output_path"]
+                output_path = item.data["output_path"].replace(
+                    os.path.splitext(item.data["output_path"])[1],
+                    "_review.mov"
+                )
+                instance.data["review_family"] = "mov"
+
+            instance.data["output_path"] = output_path
 
             # Previous versions should always be disabled.
             if item.data["family"] == "output":

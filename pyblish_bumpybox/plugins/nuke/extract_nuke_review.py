@@ -4,15 +4,22 @@ import shutil
 
 import nuke
 
-from pyblish_bumpybox.plugins.nuke.extract_nuke_write import ExtractNukeWrite
+import clique
+from pyblish import api
 
 
-class ExtractNukeReview(ExtractNukeWrite):
-    """Extracts image sequence with baked in luts"""
+class ExtractNukeReview(api.InstancePlugin):
+    """Extracts image sequence with baked in luts
 
-    label = "Review"
+    Offset from:
+        pyblish_bumpybox.plugins.nuke.extract_nuke_write.ExtractNukeWrite
+    """
+
+    label = "Nuke Review"
     optional = True
-    order = ExtractNukeWrite.order + 0.01
+    order = api.ExtractorOrder + 0.01
+    targets = ["process.local"]
+    families = ["img"]
 
     def process(self, instance):
 
@@ -71,15 +78,29 @@ class ExtractNukeReview(ExtractNukeWrite):
             self.log.warning("No viewer node found.")
 
         write_node = nuke.createNode("Write")
-        path = instance.data["collection"].format(
-            "{head}_review.%04d.jpeg"
+        head = instance.data["collection"].format(
+            "{head}_review."
         )
-        write_node["file"].setValue(path.replace("\\", "/"))
+        if instance.data["collection"].format("{head}").endswith("."):
+            head = instance.data["collection"].format("{head}")[:-1]
+            head += "_review."
+        review_collection = clique.Collection(
+            head=head,
+            padding=4,
+            tail=".jpeg"
+        )
+        review_collection.indexes.update(instance.data["collection"].indexes)
+        write_node["file"].setValue(
+            review_collection.format(
+                "{head}{padding}{tail}"
+            ).replace("\\", "/")
+        )
         write_node["file_type"].setValue("jpeg")
         write_node["raw"].setValue(1)
         write_node["_jpeg_quality"].setValue(1)
         write_node.setInput(0, previous_node)
         temporary_nodes.append(write_node)
+        instance.data["review_collection"] = review_collection
 
         # Render frames
         nuke.execute(write_node.name(), int(first_frame), int(last_frame))
