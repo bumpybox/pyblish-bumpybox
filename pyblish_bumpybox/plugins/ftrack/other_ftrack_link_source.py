@@ -38,12 +38,18 @@ class OtherFtrackLinkSource(api.ContextPlugin):
                 if "component" not in data.keys():
                     continue
 
-                context.data["ftrackSession"].create(
-                    "AssetVersionLink",
-                    {
-                        "from": source_version,
-                        "to": data["component"]["version"]
-                    }
-                )
+                existing_link = None
+                for link in data["component"]["version"]["incoming_links"]:
+                    if link["from_id"] == source_version["id"]:
+                        existing_link = link
+
+                if existing_link is None:
+                    context.data["ftrackSession"].create(
+                        "AssetVersionLink",
+                        {
+                            "from": source_version,
+                            "to": data["component"]["version"]
+                        }
+                    )
 
         context.data["ftrackSession"].commit()
