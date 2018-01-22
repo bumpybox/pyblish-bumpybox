@@ -143,6 +143,7 @@ class CollectMayaPlayblastsPublish(pyblish.api.ContextPlugin):
     targets = ["default"]
 
     def process(self, context):
+        import os
 
         for item in context.data["instances"]:
             # Skip any instances that is not valid.
