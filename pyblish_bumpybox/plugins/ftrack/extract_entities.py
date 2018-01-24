@@ -181,13 +181,28 @@ class ExtractLinkAssetbuilds(pyblish.api.InstancePlugin):
 
     def process(self, instance):
         session = instance.context.data["ftrackSession"]
-        session.create(
-            "TypedContextLink",
-            {
-                "from": session.get("AssetBuild", instance.data["id"]),
-                "to": instance.data["shot"].data["entity"]
-            }
-        )
+
+        assetbuild = session.get("AssetBuild", instance.data["id"])
+        shot = instance.data["shot"].data["entity"]
+
+        existing_link = None
+        for link in shot["incoming_links"]:
+            if link["from_id"] == assetbuild["id"]:
+                existing_link = link
+
+        if existing_link is None:
+            self.log.debug(
+                "Creating link from {0} to {1}".format(
+                    assetbuild["name"], shot["name"]
+                )
+            )
+            session.create(
+                "TypedContextLink",
+                {
+                    "from": session.get("AssetBuild", instance.data["id"]),
+                    "to": shot
+                }
+            )
 
 
 class ExtractCommit(pyblish.api.ContextPlugin):
