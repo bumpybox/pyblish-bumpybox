@@ -13,7 +13,8 @@ class OtherLinkSource(api.ContextPlugin):
         source_version = None
         for instance in context:
             # Filter to source instance
-            families = [instance.data["family"]] + instance.data["families"]
+            families = [instance.data["family"]]
+            families += instance.data.get("families", [])
             if "source" not in families:
                 continue
 
