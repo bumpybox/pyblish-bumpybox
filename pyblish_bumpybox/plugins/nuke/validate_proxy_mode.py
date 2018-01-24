@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class RepairNukeProxyModeAction(pyblish.api.Action):
+class RepairProxyModeAction(pyblish.api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -12,13 +12,13 @@ class RepairNukeProxyModeAction(pyblish.api.Action):
         nuke.root()["proxy"].setValue(0)
 
 
-class ValidateNukeProxyMode(pyblish.api.ContextPlugin):
+class ValidateProxyMode(pyblish.api.ContextPlugin):
     """Validates against having proxy mode on."""
 
     order = pyblish.api.ValidatorOrder
     optional = True
     label = "Proxy Mode"
-    actions = [RepairNukeProxyModeAction]
+    actions = [RepairProxyModeAction]
     hosts = ["nuke", "nukeassist"]
     targets = ["default", "process"]
 

@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class BumpyboxDeadlineOnJobSubmittedCollectRender(pyblish.api.ContextPlugin):
+class CollectRender(pyblish.api.ContextPlugin):
     """ Integrates render """
 
     order = pyblish.api.CollectorOrder

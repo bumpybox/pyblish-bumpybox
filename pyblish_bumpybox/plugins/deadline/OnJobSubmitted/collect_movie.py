@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class BumpyboxDeadlineOnJobSubmittedCollectMovie(pyblish.api.ContextPlugin):
+class CollectMovie(pyblish.api.ContextPlugin):
     """ Generate movie instance and job. """
 
     order = pyblish.api.CollectorOrder

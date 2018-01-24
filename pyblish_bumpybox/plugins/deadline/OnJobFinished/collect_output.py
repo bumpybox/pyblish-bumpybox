@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class BumpyboxDeadlineOnJobFinishedCollectOutput(pyblish.api.ContextPlugin):
+class CollectOutput(pyblish.api.ContextPlugin):
     """ Collects output """
 
     order = pyblish.api.CollectorOrder
