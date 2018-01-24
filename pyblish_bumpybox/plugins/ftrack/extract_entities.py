@@ -171,6 +171,25 @@ class ExtractTasks(pyblish.api.InstancePlugin):
         instance.data["entity"] = task
 
 
+class ExtractLinkAssetbuilds(pyblish.api.InstancePlugin):
+    """Link Assetbuilds to shot."""
+
+    order = ExtractShot.order + 0.01
+    families = ["trackItem.ftrackEntity.assetbuild"]
+    label = "Ftrack Link Assetbuilds"
+    optional = True
+
+    def process(self, instance):
+        session = instance.context.data["ftrackSession"]
+        session.create(
+            "TypedContextLink",
+            {
+                "from": session.get("AssetBuild", instance.data["id"]),
+                "to": instance.data["shot"].data["entity"]
+            }
+        )
+
+
 class ExtractCommit(pyblish.api.ContextPlugin):
     """Commits the Ftrack session for entities."""
 

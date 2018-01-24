@@ -98,6 +98,7 @@ ftrack_extract_nukestudio_ExtractThumbnail = api.ExtractorOrder
 ftrack_extract_entities_ExtractEpisode = api.ExtractorOrder + 0.01
 ftrack_extract_entities_ExtractSequence = api.ExtractorOrder + 0.02
 ftrack_extract_entities_ExtractShot = api.ExtractorOrder + 0.03
+ftrack_extract_entities_ExtractLinkAssetbuilds = api.ExtractorOrder + 0.03
 ftrack_extract_entities_ExtractTasks = api.ExtractorOrder + 0.04
 ftrack_extract_entities_ExtractCommit = api.ExtractorOrder + 0.05
 ftrack_extract_entities_ExtractNukeStudio = api.ExtractorOrder + 0.05
