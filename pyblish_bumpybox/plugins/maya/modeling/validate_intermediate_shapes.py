@@ -1,7 +1,7 @@
 import pyblish.api as api
 
 
-class RepairModelingIntermediateShapes(api.Action):
+class RepairIntermediateShapes(api.Action):
     label = "Repair"
     icon = "wrench"
     on = "failed"
@@ -25,13 +25,13 @@ class RepairModelingIntermediateShapes(api.Action):
                 pm.delete(io)
 
 
-class ValidateModelingIntermediateShapes(api.InstancePlugin):
+class ValidateIntermediateShapes(api.InstancePlugin):
     """ Ensures there are no intermediate shapes in the scene. """
 
     families = ["mayaAscii", "mayaBinary", "alembic"]
     label = "Intermediate Shapes"
     order = api.ValidatorOrder
-    actions = [RepairModelingIntermediateShapes]
+    actions = [RepairIntermediateShapes]
     optional = True
 
     def process(self, instance):

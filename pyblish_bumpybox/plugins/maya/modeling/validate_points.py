@@ -1,13 +1,13 @@
 import pyblish.api
 
 
-class RepairModelingSmoothDisplay(pyblish.api.Action):
-
+class RepairPointsAction(pyblish.api.Action):
     label = "Repair"
     icon = "wrench"
     on = "failed"
 
     def process(self, context, plugin):
+        import pymel.core as pm
 
         # Get the errored instances
         failed = []
@@ -21,25 +21,26 @@ class RepairModelingSmoothDisplay(pyblish.api.Action):
 
         for instance in instances:
             for node in instance[0].members():
-                node.displaySmoothMesh.set(False)
+                pm.delete(pm.cluster(node))
 
 
-class ValidateModelingSmoothDisplay(pyblish.api.InstancePlugin):
-    """ Ensures all meshes are not smoothed """
+class ValidatePoints(pyblish.api.InstancePlugin):
+    """ Ensures all points in mesh are zero"ed out """
 
-    order = pyblish.api.ValidatorOrder
     families = ["mayaAscii", "mayaBinary", "alembic"]
+    label = "Points"
+    order = pyblish.api.ValidatorOrder
+    actions = [RepairPointsAction]
     optional = True
-    label = "Smooth Display"
-    actions = [RepairModelingSmoothDisplay]
 
     def process(self, instance):
 
-        check = True
         for node in instance[0].members():
-            if node.displaySmoothMesh.get():
-                msg = "%s has smooth display enabled" % node.name()
-                self.log.error(msg)
-                check = False
+            for p in node.getShape().pnts:
+                position = 0
+                position += p.pntx.get()
+                position += p.pnty.get()
+                position += p.pntz.get()
 
-        assert check, "Smooth display enabled meshes in the scene."
+                msg = "Points aren't zero'ed out on: %s" % p
+                assert position < 0.00001, msg

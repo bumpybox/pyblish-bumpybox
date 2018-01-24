@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class ValidateModelingTransforms(pyblish.api.InstancePlugin):
+class ValidateTransforms(pyblish.api.InstancePlugin):
     """ Freeze/Reset transforms.
 
     Ensure all meshes have their pivot at world zero,

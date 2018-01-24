@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class RepairModelingShapeName(pyblish.api.Action):
+class RepairShapeName(pyblish.api.Action):
     label = "Repair"
     icon = "wrench"
     on = "failed"
@@ -18,12 +18,12 @@ class RepairModelingShapeName(pyblish.api.Action):
             pymel.core.rename(shp, shp.getParent().name() + "Shape")
 
 
-class ValidateModelingShapeName(pyblish.api.ContextPlugin):
+class ValidateShapeName(pyblish.api.ContextPlugin):
     """ No two shapes can have the same name. """
 
     order = pyblish.api.ValidatorOrder
     label = "Shape Name"
-    actions = [RepairModelingShapeName]
+    actions = [RepairShapeName]
     optional = True
 
     def process(self, context):

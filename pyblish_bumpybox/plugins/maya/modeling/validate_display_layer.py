@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class RepairModelingDisplayLayerAction(pyblish.api.Action):
+class RepairDisplayLayerAction(pyblish.api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -17,13 +17,13 @@ class RepairModelingDisplayLayerAction(pyblish.api.Action):
                 pass
 
 
-class ValidateModelingDisplayLayer(pyblish.api.ContextPlugin):
+class ValidateDisplayLayer(pyblish.api.ContextPlugin):
     """ Ensure no displays layers are present in the scene """
 
     order = pyblish.api.ValidatorOrder
     optional = True
     label = 'Display Layers'
-    actions = [RepairModelingDisplayLayerAction]
+    actions = [RepairDisplayLayerAction]
 
     def process(self, context):
         """Process all the nodes in the instance """

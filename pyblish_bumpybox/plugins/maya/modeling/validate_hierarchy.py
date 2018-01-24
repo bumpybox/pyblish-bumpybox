@@ -1,7 +1,7 @@
 import pyblish.api
 
 
-class ValidateModelingHierarchy(pyblish.api.Validator):
+class ValidateHierarchy(pyblish.api.Validator):
     """ Ensures a flat hierarchy """
 
     families = ["mayaAscii", "mayaBinary", "alembic"]
