@@ -44,7 +44,7 @@ class ExtractPlayblast(pyblish.api.InstancePlugin):
         import shutil
         import os
 
-        from capture import capture
+        from pyblish_bumpybox.capture import capture
 
         import pymel.core
 
