@@ -35,9 +35,16 @@ class OtherLinkSource(api.ContextPlugin):
                 continue
 
             # Get AssetVersion from published component
+            covered_versions = []
             for data in instance.data.get("ftrackComponentsList", []):
                 if "component" not in data.keys():
                     continue
+
+                # Prevent duplicate links being created with multiple
+                # components on the same version.
+                if data["component"]["version"]["id"] in covered_versions:
+                    continue
+                covered_versions.append(data["component"]["version"]["id"])
 
                 existing_link = None
                 for link in data["component"]["version"]["incoming_links"]:
