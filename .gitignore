@@ -4,3 +4,4 @@ sync.ffs_db
 pyblish_bumpybox.egg-info/
 build
 docs/_build
+.cache
