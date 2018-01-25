@@ -1,7 +1,0 @@
-language: python
-python:
-  - "2.7"
-install:
-  - pip install pytest
-  - pip install pyblish-base
-script: pytest
