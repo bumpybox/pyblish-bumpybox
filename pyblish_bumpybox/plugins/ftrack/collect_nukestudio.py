@@ -206,25 +206,38 @@ class CollectNukeStudioEntities(pyblish.api.ContextPlugin):
 
                 instances.append(shot)
 
-                # Create Ftrack task instances.
-                for tag in parent.data["item"].tags():
-                    if ("tag.ftrack") not in tag.metadata().keys():
-                        continue
+            # Create Ftrack task instances.
+            for tag in parent.data["item"].tags():
+                if ("tag.ftrack") not in tag.metadata().keys():
+                    continue
 
-                    metadata = tag.metadata().dict()
+                metadata = tag.metadata().dict()
 
-                    if "tag.type" in metadata.keys():
-                        # Expect "task_name" instead of "name", because "name"
-                        # can't be edited by the user.
-                        name = metadata.get(
-                            "tag.task_name", metadata["tag.type"].lower()
-                        )
-                        task = context.create_instance(name=name)
-                        label = shot.data["label"] + "/" + name
-                        task.data["label"] = label
-                        task.data["type"] = metadata["tag.type"]
-                        task.data["family"] = "trackItem.ftrackEntity.task"
-                        task.data["families"] = [
-                            "trackItem", "ftrackEntity", "task"
-                        ]
-                        task.data["parent"] = shot
+                if "tag.type" in metadata.keys():
+                    # Expect "task_name" instead of "name", because "name"
+                    # can't be edited by the user.
+                    name = metadata.get(
+                        "tag.task_name", metadata["tag.type"].lower()
+                    )
+                    task = context.create_instance(name=name)
+                    label = shot.data["label"] + "/" + name
+                    task.data["label"] = label
+                    task.data["type"] = metadata["tag.type"]
+                    task.data["family"] = "trackItem.ftrackEntity.task"
+                    task.data["families"] = [
+                        "trackItem", "ftrackEntity", "task"
+                    ]
+                    task.data["parent"] = shot
+
+                if metadata["tag.ftrack"] == "assetbuild":
+                    assetbuild = context.create_instance(name=tag.name())
+                    label = shot.data["label"] + "/" + tag.name()
+                    assetbuild.data["label"] = label
+                    assetbuild.data["family"] = (
+                        "trackItem.ftrackEntity.assetbuild"
+                    )
+                    assetbuild.data["families"] = [
+                        "trackItem", "ftrackEntity", "assetbuild"
+                    ]
+                    assetbuild.data["shot"] = shot
+                    assetbuild.data["id"] = metadata["tag.id"]
