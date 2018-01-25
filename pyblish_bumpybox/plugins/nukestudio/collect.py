@@ -22,6 +22,8 @@ class CollectTrackItems(pyblish.api.ContextPlugin):
     hosts = ["nukestudio"]
 
     def process(self, context):
+        import os
+
         submission = context.data.get("submission", None)
         data = {}
 
@@ -74,6 +76,20 @@ class CollectTrackItems(pyblish.api.ContextPlugin):
                 startFrame=value["startFrame"] + handles,
                 endFrame=value["endFrame"] - handles,
                 handles=handles
+            )
+            context.create_instance(
+                name=key,
+                item=value["item"],
+                family="review",
+                handles=handles,
+                output_path=os.path.abspath(
+                    os.path.join(
+                        context.data["activeProject"].path(),
+                        "..",
+                        "workspace",
+                        key + ".mov"
+                    )
+                )
             )
 
 

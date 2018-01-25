@@ -15,6 +15,9 @@ plugins_persist_publish_state_PersistPublishState = api.ValidatorOrder
 # ----Extraction
 plugins_extract_review_ExtractReview = api.ExtractorOrder
 plugins_extract_review_ExtractReviewTranscode = api.ExtractorOrder + 0.02
+plugins_extract_review_ExtractReviewTranscodeNukeStudio = (
+    api.ExtractorOrder + 0.02
+)
 plugins_extract_json_ExtractJSON = api.ExtractorOrder + 1
 
 # AfterEffects

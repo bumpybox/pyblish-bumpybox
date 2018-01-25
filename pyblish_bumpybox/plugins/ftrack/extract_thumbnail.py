@@ -7,7 +7,7 @@ class ExtractThumbnailImg(pyblish.api.InstancePlugin):
     Offset to get extraction data from studio plugins.
     """
 
-    families = ["review", "trackItem.ftrackEntity.shot"]
+    families = ["review"]
     order = pyblish.api.ExtractorOrder + 0.1
     label = "Thumbnail"
     optional = True

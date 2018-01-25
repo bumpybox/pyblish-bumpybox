@@ -8,6 +8,7 @@ class ExtractReview(pyblish.api.InstancePlugin):
     label = "Review Hash"
     optional = True
     families = ["review"]
+    hosts = ["nuke", "maya"]
 
     def md5(self, fname):
         import hashlib
@@ -31,10 +32,10 @@ class ExtractReview(pyblish.api.InstancePlugin):
 
 
 class ExtractReviewTranscode(pyblish.api.InstancePlugin):
-    """Extracts review movie from image sequence.
+    """Extracts review movie from image sequence or movie.
 
     Offset:
-        pyblish_bumpybox.plugins.nuke.extract_nuke_review.ExtractNukeReview
+        pyblish_bumpybox.plugins.nuke.extract_review.ExtractReview
     """
 
     order = pyblish.api.ExtractorOrder + 0.02
@@ -126,17 +127,9 @@ class ExtractReviewTranscode(pyblish.api.InstancePlugin):
             "-timecode", "00:00:00:01",
         ]
 
-        if instance.data.get("baked_colorspace_movie"):
-            args = [
-                "ffmpeg", "-y",
-                "-i", instance.data["baked_colorspace_movie"],
-                "-pix_fmt", "yuv420p",
-                "-crf", "18",
-                "-timecode", "00:00:00:01",
-            ]
-
         split = os.path.splitext(instance.data["output_path"])
-        args.append(split[0] + "_review.mov")
+        output_path = split[0] + "_review.mov"
+        args.append(output_path)
 
         self.log.debug("Executing args: {0}".format(args))
 
@@ -155,3 +148,22 @@ class ExtractReviewTranscode(pyblish.api.InstancePlugin):
             raise ValueError(output)
 
         self.log.debug(output)
+
+        instance.data["output_path"] = output_path
+
+
+class ExtractReviewTranscodeNukeStudio(ExtractReviewTranscode):
+    """Extracts review movie from image sequence or movie.
+
+    NukeStudio needs a processing workflow to merge with ExtractReviewTranscode
+
+    Offset:
+        pyblish_bumpybox.plugins.nukestudio.extract_review.ExtractReview
+    """
+
+    order = pyblish.api.ExtractorOrder + 0.02
+    label = "Review Transcode"
+    optional = True
+    families = ["review"]
+    targets = ["default"]
+    hosts = ["nukestudio"]

@@ -130,12 +130,42 @@ class ExtractShot(pyblish.api.InstancePlugin):
             entity.create_thumbnail(instance.data["thumbnail"])
 
 
+class ExtractAssetDataNukeStudio(pyblish.api.ContextPlugin):
+    """Changes the parent of the review component."""
+
+    order = ExtractShot.order + 0.01
+    label = "Ftrack Link Review"
+    optional = True
+    hosts = ["nukestudio"]
+
+    def process(self, context):
+
+        data = {}
+        for instance in context:
+            families = [instance.data["family"]]
+            families += instance.data.get("families", [])
+
+            instance_data = data.get(instance.data["name"], {})
+            if "review" in families:
+                instance_data["review"] = instance
+            if "trackItem.ftrackEntity.shot" in families:
+                instance_data["shot"] = instance
+
+            data[instance.data["name"]] = instance_data
+
+        for name, instance_data in data.iteritems():
+            if not instance_data:
+                continue
+            asset_data = instance_data["review"].data.get("asset_data", {})
+            asset_data["parent"] = instance_data["shot"].data["entity"]
+            instance_data["review"].data["asset_data"] = asset_data
+
+
 class ExtractTasks(pyblish.api.InstancePlugin):
     """Creates ftrack shots by the name of the instance."""
 
     order = ExtractShot.order + 0.01
-    families = ["ftrackEntity", "task"]
-    match = pyblish.api.Subset
+    families = ["trackItem.ftrackEntity.task"]
     label = "Ftrack Tasks"
     optional = True
 

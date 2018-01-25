@@ -8,6 +8,8 @@ class ValidateReview(pyblish.api.InstancePlugin):
     label = "Review"
     optional = True
     families = ["review"]
+    # NukeStudio needs a processing workflow to enable this plugin.
+    hosts = ["nuke", "maya"]
 
     def md5(self, fname):
         import hashlib

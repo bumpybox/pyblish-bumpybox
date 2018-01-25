@@ -5,10 +5,10 @@ class ExtractReview(pyblish.api.InstancePlugin):
     """Extracts movie for review"""
 
     order = pyblish.api.ExtractorOrder
-    label = "Review"
+    label = "NukeStudio Review"
     optional = True
     hosts = ["nukestudio"]
-    families = ["trackItem.ftrackEntity.shot"]
+    families = ["review"]
 
     def process(self, instance):
         import os
@@ -43,7 +43,7 @@ class ExtractReview(pyblish.api.InstancePlugin):
             )
         )
         movie_path = os.path.join(
-            output_path, "{0}_review.mov".format(instance.data["name"])
+            output_path, "{0}.mov".format(instance.data["name"])
         )
         write_node = hiero.core.nuke.WriteNode(movie_path.replace("\\", "/"))
         write_node.setKnob("file_type", "mov")
@@ -64,3 +64,4 @@ class ExtractReview(pyblish.api.InstancePlugin):
         assert os.path.exists(movie_path), "Creating review failed."
 
         instance.data["output_path"] = movie_path
+        instance.data["review_family"] = "mov"
