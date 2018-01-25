@@ -252,7 +252,11 @@ tvpaint_extract_hobsoft_scene_ExtractHobsoftScene = api.ExtractorOrder
 
 
 def get_order(module, name):
+    path = get_variable_name(module, name)
+    return globals()[path]
 
+
+def get_variable_name(module, name):
     plugins_directory = os.path.abspath(
         os.path.join(__file__, "..", "plugins")
     )
@@ -262,4 +266,4 @@ def get_order(module, name):
     path = path.replace(".py", "_")
     path = path.replace(os.sep, "_")
 
-    return globals()[path]
+    return path
