@@ -1,24 +1,27 @@
+import os
+import inspect
+
 from pyblish import api
 
 
 # ----Collection
-plugins_copy_to_clipboard_action_Report = api.CollectorOrder - 1
-plugins_collect_source_CollectScene = api.CollectorOrder + 0.1
-plugins_collect_scene_version_CollectSceneVersion = api.CollectorOrder + 0.1
-plugins_collect_existing_files_CollectExistingFiles = api.CollectorOrder + 0.25
-plugins_collect_reviews_CollectReviews = api.CollectorOrder + 0.3
-plugins_collect_sorting_CollectSorting = api.CollectorOrder + 0.49
+copy_to_clipboard_action_Report = api.CollectorOrder - 1
+collect_source_CollectScene = api.CollectorOrder + 0.1
+collect_scene_version_CollectSceneVersion = api.CollectorOrder + 0.1
+collect_existing_files_CollectExistingFiles = api.CollectorOrder + 0.25
+collect_reviews_CollectReviews = api.CollectorOrder + 0.3
+collect_sorting_CollectSorting = api.CollectorOrder + 0.49
 
 # ----Validation
-plugins_persist_publish_state_PersistPublishState = api.ValidatorOrder
+persist_publish_state_PersistPublishState = api.ValidatorOrder
 
 # ----Extraction
-plugins_extract_review_ExtractReview = api.ExtractorOrder
-plugins_extract_review_ExtractReviewTranscode = api.ExtractorOrder + 0.02
-plugins_extract_review_ExtractReviewTranscodeNukeStudio = (
+extract_review_ExtractReview = api.ExtractorOrder
+extract_review_ExtractReviewTranscode = api.ExtractorOrder + 0.02
+extract_review_ExtractReviewTranscodeNukeStudio = (
     api.ExtractorOrder + 0.02
 )
-plugins_extract_json_ExtractJSON = api.ExtractorOrder + 1
+extract_json_ExtractJSON = api.ExtractorOrder + 1
 
 # AfterEffects
 aftereffects_collect_render_items_CollectRenderItems = api.CollectorOrder
@@ -252,6 +255,18 @@ tvpaint_extract_hobsoft_scene_ExtractHobsoftScene = api.ExtractorOrder
 
 
 def get_order(module, name):
-    print module
-    print name
-    return api.ExtractorOrder
+    path = get_variable_name(module, name)
+    return globals()[path]
+
+
+def get_variable_name(module, name):
+    plugins_directory = os.path.abspath(
+        os.path.join(__file__, "..", "plugins")
+    )
+
+    module = os.path.relpath(module, plugins_directory)
+    path = "{0}{1}".format(module, name)
+    path = path.replace(".py", "_")
+    path = path.replace(os.sep, "_")
+
+    return path
