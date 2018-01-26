@@ -7,6 +7,7 @@ class ValidateNukeStudioViewerLut(pyblish.api.ContextPlugin):
     order = pyblish.api.ValidatorOrder
     label = "Viewer LUT"
     hosts = ["nukestudio"]
+    optional = True
 
     def process(self, context):
         import nuke
