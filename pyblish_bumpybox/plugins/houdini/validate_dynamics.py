@@ -1,11 +1,11 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ValidateDynamics(plugin.InstancePlugin):
+class ValidateDynamics(api.ContextPlugin):
     """ Validates that the DOP path is set. """
 
     families = ["dynamics"]
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     label = "Dynamics"
     hosts = ["houdini"]
 

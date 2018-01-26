@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class CollectWriteGeo(plugin.ContextPlugin):
+class CollectWriteGeo(api.ContextPlugin):
     """Collect all write nodes."""
 
-    order = plugin.CollectorOrder
+    order = api.CollectorOrder
     label = "Write Geo"
     hosts = ["nuke"]
     targets = ["default", "process.local"]
@@ -57,7 +57,7 @@ class CollectWriteGeo(plugin.ContextPlugin):
         )
 
 
-class CollectCacheProcess(plugin.ContextPlugin):
+class CollectCacheProcess(api.ContextPlugin):
     """Collect all local processing writegeo instances."""
 
     order = CollectWriteGeo.order + 0.01
@@ -123,7 +123,7 @@ class CollectCacheProcess(plugin.ContextPlugin):
                 instance.data["instanceToggled"] = instanceToggled
 
 
-class CollectCachePublish(plugin.ContextPlugin):
+class CollectCachePublish(api.ContextPlugin):
     """Collect all local processing writegeo instances."""
 
     order = CollectWriteGeo.order + 0.01

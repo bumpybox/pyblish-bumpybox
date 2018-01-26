@@ -1,13 +1,13 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class IntegrateCollection(plugin.InstancePlugin):
+class IntegrateCollection(api.ContextPlugin):
     """ Convert clique collection to string.
 
     Negative offset to come before Deadine submission.
     """
 
-    order = plugin.IntegratorOrder - 0.1
+    order = api.IntegratorOrder - 0.1
     label = "Collection"
     families = ["deadline"]
 

@@ -1,11 +1,11 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractMovie(plugin.InstancePlugin):
+class ExtractMovie(api.ContextPlugin):
     """Appending RoyalRender movie job data."""
 
     families = ["alembic"]
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "Royal Render Alembic"
     targets = ["process.royalrender"]
     hosts = ["maya"]

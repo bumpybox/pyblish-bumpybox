@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class CollectReads(plugin.ContextPlugin):
+class CollectReads(api.ContextPlugin):
     """Collect all read nodes."""
 
-    order = plugin.CollectorOrder
+    order = api.CollectorOrder
     label = "Reads"
     hosts = ["nuke", "nukeassist"]
 

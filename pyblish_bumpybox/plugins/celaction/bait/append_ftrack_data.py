@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class AppendFtrackAudio(plugin.ContextPlugin):
+class AppendFtrackAudio(api.ContextPlugin):
 
     label = "Ftrack Audio"
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
 
     def process(self, context):
         import ftrack
@@ -20,12 +20,12 @@ class AppendFtrackAudio(plugin.ContextPlugin):
             self.log.warning("Couldn't find any audio file on Ftrack.")
 
 
-class AppendFtrackData(plugin.InstancePlugin):
+class AppendFtrackData(api.ContextPlugin):
     """ Appending ftrack component and asset type data """
 
     families = ["img.*", "mov.*"]
     # offset to piggy back from default collectors
-    order = plugin.CollectorOrder + 0.1
+    order = api.CollectorOrder + 0.1
 
     def process(self, instance):
 

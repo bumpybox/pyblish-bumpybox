@@ -1,11 +1,11 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class AppendFtrackAssetName(plugin.InstancePlugin):
+class AppendFtrackAssetName(api.ContextPlugin):
     """ Appending "ftrackAssetName" """
 
     label = "Ftrack Asset Name"
-    order = plugin.CollectorOrder + 0.1
+    order = api.CollectorOrder + 0.1
 
     def process(self, instance):
 

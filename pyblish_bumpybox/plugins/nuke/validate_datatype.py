@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ValidateDatatype(plugin.InstancePlugin):
+class ValidateDatatype(api.ContextPlugin):
     """Validate output datatype matches with input."""
 
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     families = ["write"]
     label = "Datatype"
     optional = True

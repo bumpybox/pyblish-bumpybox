@@ -1,7 +1,7 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractComponents(plugin.InstancePlugin):
+class ExtractComponents(api.ContextPlugin):
     """Appending output files from local extraction as components.
 
     This plugin generates component data from either the instance data or
@@ -9,7 +9,7 @@ class ExtractComponents(plugin.InstancePlugin):
     trigger the component data generation.
     """
 
-    order = plugin.ExtractorOrder + 0.4
+    order = api.ExtractorOrder + 0.4
     label = "Components"
     families = ["local", "output"]
 
@@ -74,10 +74,10 @@ class ExtractComponents(plugin.InstancePlugin):
         instance.data["ftrackComponentsList"] = components
 
 
-class ExtractGizmo(plugin.InstancePlugin):
+class ExtractGizmo(api.ContextPlugin):
     """Sets the data for Ftrack gizmo component."""
 
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "Ftrack Gizmo"
     families = ["gizmo"]
 
@@ -88,10 +88,10 @@ class ExtractGizmo(plugin.InstancePlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractLUT(plugin.InstancePlugin):
+class ExtractLUT(api.ContextPlugin):
     """Sets the data for Ftrack lut component."""
 
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "Ftrack LUT"
     families = ["lut"]
 
@@ -106,10 +106,10 @@ class ExtractLUT(plugin.InstancePlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractMovie(plugin.InstancePlugin):
+class ExtractMovie(api.ContextPlugin):
     """Sets the data for Ftrack mov component."""
 
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "Ftrack Movie"
     families = ["mov"]
 
@@ -120,10 +120,10 @@ class ExtractMovie(plugin.InstancePlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractScene(plugin.InstancePlugin):
+class ExtractScene(api.ContextPlugin):
     """Sets the data for Ftrack scene component."""
 
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "Ftrack Scene"
     families = ["scene"]
 
@@ -134,10 +134,10 @@ class ExtractScene(plugin.InstancePlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractImg(plugin.InstancePlugin):
+class ExtractImg(api.ContextPlugin):
     """Sets the data for Ftrack img component."""
 
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "Ftrack Img"
     families = ["img"]
 
@@ -148,10 +148,10 @@ class ExtractImg(plugin.InstancePlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractCache(plugin.InstancePlugin):
+class ExtractCache(api.ContextPlugin):
     """Sets the data for Ftrack cache component."""
 
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "Ftrack Cache"
     families = ["cache"]
 
@@ -162,10 +162,10 @@ class ExtractCache(plugin.InstancePlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractCamera(plugin.InstancePlugin):
+class ExtractCamera(api.ContextPlugin):
     """Sets the data for Ftrack camera component."""
 
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "Ftrack Camera"
     families = ["camera"]
 
@@ -176,10 +176,10 @@ class ExtractCamera(plugin.InstancePlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractGeometry(plugin.InstancePlugin):
+class ExtractGeometry(api.ContextPlugin):
     """Sets the data for Ftrack camera component."""
 
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "Ftrack Geometry"
     families = ["geometry"]
 

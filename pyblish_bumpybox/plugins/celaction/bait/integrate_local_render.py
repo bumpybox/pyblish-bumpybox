@@ -1,11 +1,11 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class IntegrateLocal(plugin.InstancePlugin):
+class IntegrateLocal(api.ContextPlugin):
 
     label = "Local"
     families = ["img.local.*", "mov.local.*"]
-    order = plugin.IntegratorOrder
+    order = api.IntegratorOrder
 
     def process(self, instance):
         import os

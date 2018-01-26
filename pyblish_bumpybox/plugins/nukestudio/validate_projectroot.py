@@ -1,7 +1,7 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class RepairProjectRoot(plugin.Action):
+class RepairProjectRoot(api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -28,10 +28,10 @@ class RepairProjectRoot(plugin.Action):
                 task._projectRoot = workspace
 
 
-class ValidateProjectRoot(plugin.ContextPlugin):
+class ValidateProjectRoot(api.ContextPlugin):
     """Validate the project root to the workspace directory."""
 
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     label = "Project Root"
     hosts = ["nukestudio"]
     actions = [RepairProjectRoot]

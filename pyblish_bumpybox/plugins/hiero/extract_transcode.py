@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractTranscode(plugin.InstancePlugin):
+class ExtractTranscode(api.ContextPlugin):
     """ Transcode shots. """
 
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     families = ["transcode"]
     label = "Transcode"
     optional = True
@@ -165,7 +165,7 @@ class ExtractTranscode(plugin.InstancePlugin):
         return collection
 
 
-class BumpyboxExtractTranscodeJPEG(plugin.InstancePlugin):
+class BumpyboxExtractTranscodeJPEG(api.ContextPlugin):
     """ Enable/Disable JPEG transcoding. """
 
     order = ExtractTranscode.order - 0.1
@@ -180,7 +180,7 @@ class BumpyboxExtractTranscodeJPEG(plugin.InstancePlugin):
         instance.data["transcodeTags"] = data
 
 
-class BumpyboxExtractTranscodeH264(plugin.InstancePlugin):
+class BumpyboxExtractTranscodeH264(api.ContextPlugin):
     """ Enable/Disable h264 transcoding. """
 
     order = ExtractTranscode.order - 0.1

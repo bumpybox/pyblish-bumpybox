@@ -1,7 +1,7 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class RepairIntermediateShapes(plugin.Action):
+class RepairIntermediateShapes(api.Action):
     label = "Repair"
     icon = "wrench"
     on = "failed"
@@ -25,12 +25,12 @@ class RepairIntermediateShapes(plugin.Action):
                 pm.delete(io)
 
 
-class ValidateIntermediateShapes(plugin.InstancePlugin):
+class ValidateIntermediateShapes(api.ContextPlugin):
     """ Ensures there are no intermediate shapes in the scene. """
 
     families = ["mayaAscii", "mayaBinary", "alembic"]
     label = "Intermediate Shapes"
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     actions = [RepairIntermediateShapes]
     optional = True
 

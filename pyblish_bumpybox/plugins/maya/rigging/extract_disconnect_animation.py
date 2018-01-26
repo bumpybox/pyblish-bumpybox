@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractDisconnectAnimation(plugin.InstancePlugin):
+class ExtractDisconnectAnimation(api.ContextPlugin):
     """ Option to extract the with/without animation. """
 
-    order = plugin.ExtractorOrder - 0.1
+    order = api.ExtractorOrder - 0.1
     families = ["mayaAscii", "mayaBinary"]
     optional = True
     label = "Disconnect Animation"

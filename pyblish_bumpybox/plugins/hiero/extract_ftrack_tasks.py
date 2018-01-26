@@ -1,7 +1,7 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractFtrackTasks(plugin.Extractor):
+class ExtractFtrackTasks(api.InstancePlugin):
     """ Extract Ftrack tasks.
 
     Offset to get shot from "extract_ftrack_shot"
@@ -10,7 +10,7 @@ class ExtractFtrackTasks(plugin.Extractor):
     families = ["task"]
     label = "Ftrack Tasks"
     optional = True
-    order = plugin.ExtractorOrder + 0.1
+    order = api.ExtractorOrder + 0.1
     optional = True
     hosts = ["hiero"]
 

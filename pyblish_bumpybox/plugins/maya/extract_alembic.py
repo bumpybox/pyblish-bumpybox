@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractAlembic(plugin.InstancePlugin):
+class ExtractAlembic(api.ContextPlugin):
     """Superclass for exporting alembic files."""
 
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     optional = True
     hosts = ["maya"]
     targets = ["process.local"]

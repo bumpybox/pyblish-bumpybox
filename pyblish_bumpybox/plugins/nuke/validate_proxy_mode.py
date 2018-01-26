@@ -1,7 +1,7 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class RepairProxyModeAction(plugin.Action):
+class RepairProxyModeAction(api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -12,10 +12,10 @@ class RepairProxyModeAction(plugin.Action):
         nuke.root()["proxy"].setValue(0)
 
 
-class ValidateProxyMode(plugin.ContextPlugin):
+class ValidateProxyMode(api.ContextPlugin):
     """Validates against having proxy mode on."""
 
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     optional = True
     label = "Proxy Mode"
     actions = [RepairProxyModeAction]

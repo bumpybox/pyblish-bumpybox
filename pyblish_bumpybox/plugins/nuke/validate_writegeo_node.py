@@ -1,7 +1,7 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class RepairWriteGeoNodeAction(plugin.Action):
+class RepairWriteGeoNodeAction(api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -30,10 +30,10 @@ class RepairWriteGeoNodeAction(plugin.Action):
             instance[0]["file_type"].setValue(ext[1:])
 
 
-class ValidateWriteGeoNode(plugin.InstancePlugin):
+class ValidateWriteGeoNode(api.ContextPlugin):
     """ Validates file output. """
 
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     optional = True
     families = ["writegeo"]
     label = "WriteGeo Node"

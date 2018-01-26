@@ -1,9 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class CollectFiles(plugin.Collector):
+class CollectFiles(api.ContextPlugin):
     """ Collects file nodes from the scene. """
 
+    order = api.CollectorOrder
     label = "Files"
 
     def process(self, context):

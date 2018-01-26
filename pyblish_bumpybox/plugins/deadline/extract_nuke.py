@@ -1,14 +1,14 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractNuke(plugin.InstancePlugin):
+class ExtractNuke(api.ContextPlugin):
     """ Appending Deadline data to deadline instances.
 
     Important that Path Mapping is turned off in the Nuke plugin.
     """
 
     families = ["deadline"]
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "Deadline"
     hosts = ["nuke"]
 

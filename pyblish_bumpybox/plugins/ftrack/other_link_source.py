@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class OtherLinkSource(plugin.ContextPlugin):
+class OtherLinkSource(api.ContextPlugin):
     """Link the source version to all other versions."""
 
-    order = plugin.IntegratorOrder + 1
+    order = api.IntegratorOrder + 1
     label = "Ftrack Link Source"
 
     def process(self, context):

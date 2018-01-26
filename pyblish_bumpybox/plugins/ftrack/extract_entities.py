@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractProject(plugin.ContextPlugin):
+class ExtractProject(api.ContextPlugin):
     """Extract an Ftrack project from context.data["ftrackProjectData"]"""
 
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "Ftrack Project"
     hosts = ["nukestudio"]
 
@@ -65,12 +65,12 @@ def ensure_entity(instance, entity_type):
     return entity
 
 
-class ExtractEpisode(plugin.InstancePlugin):
+class ExtractEpisode(api.ContextPlugin):
     """Creates ftrack episodes by the name of the instance."""
 
-    order = plugin.ExtractorOrder + 0.01
+    order = api.ExtractorOrder + 0.01
     families = ["ftrackEntity", "episode"]
-    match = plugin.Subset
+    match = api.Subset
     label = "Ftrack Episode"
     optional = True
 
@@ -80,12 +80,12 @@ class ExtractEpisode(plugin.InstancePlugin):
         instance.data["item"] = instance.data["parent"].data["item"]
 
 
-class ExtractSequence(plugin.InstancePlugin):
+class ExtractSequence(api.ContextPlugin):
     """Creates ftrack sequences by the name of the instance."""
 
-    order = plugin.ExtractorOrder + 0.02
+    order = api.ExtractorOrder + 0.02
     families = ["ftrackEntity", "sequence"]
-    match = plugin.Subset
+    match = api.Subset
     label = "Ftrack Sequence"
     optional = True
 
@@ -95,12 +95,12 @@ class ExtractSequence(plugin.InstancePlugin):
         instance.data["item"] = instance.data["parent"].data["item"]
 
 
-class ExtractShot(plugin.InstancePlugin):
+class ExtractShot(api.ContextPlugin):
     """Creates ftrack shots by the name of the instance."""
 
-    order = plugin.ExtractorOrder + 0.03
+    order = api.ExtractorOrder + 0.03
     families = ["ftrackEntity", "shot"]
-    match = plugin.Subset
+    match = api.Subset
     label = "Ftrack Shot"
     optional = True
 
@@ -130,10 +130,10 @@ class ExtractShot(plugin.InstancePlugin):
             entity.create_thumbnail(instance.data["thumbnail"])
 
 
-class ExtractAssetDataNukeStudio(plugin.ContextPlugin):
+class ExtractAssetDataNukeStudio(api.ContextPlugin):
     """Changes the parent of the review component."""
 
-    order = plugin.ExtractorOrder + 0.04
+    order = api.ExtractorOrder + 0.04
     label = "Ftrack Link Review"
     optional = True
     hosts = ["nukestudio"]
@@ -161,10 +161,10 @@ class ExtractAssetDataNukeStudio(plugin.ContextPlugin):
             instance_data["review"].data["asset_data"] = asset_data
 
 
-class ExtractTasks(plugin.InstancePlugin):
+class ExtractTasks(api.ContextPlugin):
     """Creates ftrack shots by the name of the instance."""
 
-    order = plugin.ExtractorOrder + 0.04
+    order = api.ExtractorOrder + 0.04
     families = ["trackItem.ftrackEntity.task"]
     label = "Ftrack Tasks"
     optional = True
@@ -201,10 +201,10 @@ class ExtractTasks(plugin.InstancePlugin):
         instance.data["entity"] = task
 
 
-class ExtractLinkAssetbuilds(plugin.InstancePlugin):
+class ExtractLinkAssetbuilds(api.ContextPlugin):
     """Link Assetbuilds to shot."""
 
-    order = plugin.ExtractorOrder + 0.04
+    order = api.ExtractorOrder + 0.04
     families = ["trackItem.ftrackEntity.assetbuild"]
     label = "Ftrack Link Assetbuilds"
     optional = True
@@ -235,10 +235,10 @@ class ExtractLinkAssetbuilds(plugin.InstancePlugin):
             )
 
 
-class ExtractCommit(plugin.ContextPlugin):
+class ExtractCommit(api.ContextPlugin):
     """Commits the Ftrack session for entities."""
 
-    order = plugin.ExtractorOrder + 0.05
+    order = api.ExtractorOrder + 0.05
     label = "Ftrack Commit"
 
     def process(self, context):
@@ -246,10 +246,10 @@ class ExtractCommit(plugin.ContextPlugin):
         context.data["ftrackSession"].commit()
 
 
-class ExtractNukeStudio(plugin.InstancePlugin):
+class ExtractNukeStudio(api.ContextPlugin):
     """Sets the Ftrack data for NukeStudio components."""
 
-    order = plugin.ExtractorOrder + 0.05
+    order = api.ExtractorOrder + 0.05
     label = "Ftrack NukeStudio"
     families = ["trackItem.task"]
     hosts = ["nukestudio"]

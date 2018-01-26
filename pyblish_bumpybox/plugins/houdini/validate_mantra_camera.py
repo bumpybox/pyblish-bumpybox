@@ -1,11 +1,11 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ValidateMantraCamera(plugin.InstancePlugin):
+class ValidateMantraCamera(api.ContextPlugin):
     """ Validates that the camera for mantra nodes exists. """
 
     families = ["mantra"]
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     label = "Mantra Camera"
     hosts = ["houdini"]
 

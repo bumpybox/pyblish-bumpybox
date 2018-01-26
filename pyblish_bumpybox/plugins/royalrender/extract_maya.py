@@ -1,11 +1,11 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractMaya(plugin.InstancePlugin):
+class ExtractMaya(api.ContextPlugin):
     """ Appending RoyalRender data to instances. """
 
     families = ["img"]
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "Royal Render"
     hosts = ["maya"]
     targets = ["process.royalrender"]

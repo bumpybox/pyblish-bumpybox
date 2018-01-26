@@ -1,11 +1,11 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractRenderImages(plugin.InstancePlugin):
+class ExtractRenderImages(api.ContextPlugin):
 
     label = 'Render Images'
     families = ['render']
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     active = False
     optional = True
 
@@ -91,7 +91,7 @@ class ExtractRenderImages(plugin.InstancePlugin):
             self.log.warning(msg)
 
 
-class ExtractRenderMovie(plugin.InstancePlugin):
+class ExtractRenderMovie(api.ContextPlugin):
 
     label = 'Render Movie'
     families = ['render']

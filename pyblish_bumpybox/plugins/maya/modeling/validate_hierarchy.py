@@ -1,9 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ValidateHierarchy(plugin.Validator):
+class ValidateHierarchy(api.InstancePlugin):
     """ Ensures a flat hierarchy """
 
+    order = api.ValidatorOrder
     families = ["mayaAscii", "mayaBinary", "alembic"]
     label = "Hierarchy"
     optional = True

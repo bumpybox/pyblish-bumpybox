@@ -1,12 +1,12 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class AppendDeadlineData(plugin.InstancePlugin):
+class AppendDeadlineData(api.ContextPlugin):
     """ Appending Deadline data to farm related instances """
 
     families = ["img.farm.*"]
     label = "Deadline"
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
 
     def process(self, instance):
         import os

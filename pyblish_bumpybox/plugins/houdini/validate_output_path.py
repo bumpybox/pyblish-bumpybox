@@ -1,7 +1,7 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class RepairOutputPathAction(plugin.Action):
+class RepairOutputPathAction(api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -31,11 +31,11 @@ class RepairOutputPathAction(plugin.Action):
                     parm.set(expected)
 
 
-class ValidateOutputPath(plugin.InstancePlugin):
+class ValidateOutputPath(api.ContextPlugin):
     """ Validates parameter for output """
 
     families = ["alembic", "mantra", "geometry", "dynamics"]
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     label = "Output Path"
     actions = [RepairOutputPathAction]
     optional = True

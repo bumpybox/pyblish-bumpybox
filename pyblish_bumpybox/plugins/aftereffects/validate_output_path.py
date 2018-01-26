@@ -1,7 +1,7 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class RepairOutputPathAction(plugin.Action):
+class RepairOutputPathAction(api.Action):
     label = "Repair"
     icon = "wrench"
     on = "failed"
@@ -34,9 +34,9 @@ class RepairOutputPathAction(plugin.Action):
                                                  data.format(path)))
 
 
-class ValidateOutputPath(plugin.InstancePlugin):
+class ValidateOutputPath(api.ContextPlugin):
 
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     label = "Output Path"
     families = ["img.*"]
     actions = [RepairOutputPathAction]

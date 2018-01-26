@@ -1,11 +1,11 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ValidateGeometry(plugin.InstancePlugin):
+class ValidateGeometry(api.ContextPlugin):
     """ Validates that the SOP path is set. """
 
     families = ["geometry"]
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     label = "Geometry"
     hosts = ["houdini"]
 

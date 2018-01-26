@@ -1,13 +1,13 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class CollectBackdrops(plugin.ContextPlugin):
+class CollectBackdrops(api.ContextPlugin):
     """Collect all backdrop nodes.
 
     Offset to get context.data["currentFile"]
     """
 
-    order = plugin.CollectorOrder + 0.1
+    order = api.CollectorOrder + 0.1
     label = "Backdrops"
     hosts = ["nuke", "nukeassist"]
 

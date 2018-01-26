@@ -1,11 +1,11 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractDeadline(plugin.InstancePlugin):
+class ExtractDeadline(api.ContextPlugin):
 
     label = 'Deadline'
     families = ['render']
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
 
     def process(self, instance):
         import os

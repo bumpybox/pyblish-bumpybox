@@ -1,15 +1,15 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ValidateTrackItem(plugin.InstancePlugin):
+class ValidateTrackItem(api.ContextPlugin):
     """Validate the track item to the sequence.
 
     Exact matching to optimize processing.
     """
 
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     families = ["trackItem"]
-    match = plugin.Exact
+    match = api.Exact
     label = "Track Item"
     hosts = ["nukestudio"]
     optional = True

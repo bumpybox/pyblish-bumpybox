@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class CollectRender(plugin.ContextPlugin):
+class CollectRender(api.ContextPlugin):
     """ Integrates render """
 
-    order = plugin.CollectorOrder
+    order = api.CollectorOrder
 
     def process(self, context):
         import json

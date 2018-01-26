@@ -1,11 +1,11 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractJobName(plugin.InstancePlugin):
+class ExtractJobName(api.ContextPlugin):
     """ Appending Deadline job name to all instances. """
 
     families = ["deadline"]
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "Deadline Job Name"
 
     def process(self, instance):

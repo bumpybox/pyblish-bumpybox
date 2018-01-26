@@ -1,19 +1,20 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractHobsoftScene(plugin.Extractor):
+class ExtractHobsoftScene(api.InstancePlugin):
     """ Extract work file to Hobsoft drive
     """
 
+    order = api.ExtractorOrder
     families = ['scene']
     label = 'Hobsoft Sync'
 
-    def process(self, instance, context):
+    def process(self, instance):
         import os
         import shutil
 
         current_file = instance.data('workPath')
-        ftrack_data = context.data('ftrackData')
+        ftrack_data = instance.context.data('ftrackData')
 
         if ftrack_data['Project']['name'] != 'ethel_and_ernest':
             return
@@ -22,8 +23,9 @@ class ExtractHobsoftScene(plugin.Extractor):
         shot_name = 'c' + ftrack_data['Shot']['name'].split('c')[1]
         filename = ftrack_data['Shot']['name'] + '_ee.tvpp'
 
-        publish_file = os.path.join('B:\\', 'film', sequence_name, shot_name,
-                                                        'tvpaint', filename)
+        publish_file = os.path.join(
+            'B:\\', 'film', sequence_name, shot_name, 'tvpaint', filename
+        )
 
         # create publish directory
         if not os.path.exists(os.path.dirname(publish_file)):

@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class CollectFamily(plugin.ContextPlugin):
+class CollectFamily(api.ContextPlugin):
     """ Append Deadline data to "remote" instances. """
 
-    order = plugin.CollectorOrder + 0.4
+    order = api.CollectorOrder + 0.4
     label = "Family"
 
     def process(self, context):

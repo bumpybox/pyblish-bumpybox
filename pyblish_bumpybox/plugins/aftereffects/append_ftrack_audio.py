@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class AppendFtrackAudio(plugin.ContextPlugin):
+class AppendFtrackAudio(api.ContextPlugin):
 
     label = "Ftrack Audio"
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
 
     def process(self, context):
         import ftrack

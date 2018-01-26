@@ -1,11 +1,11 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class CollectVersion(plugin.ContextPlugin):
+class CollectVersion(api.ContextPlugin):
     """ Collects the version from the latest scene asset """
 
     # offset to get current version from CollectSceneVersion
-    order = plugin.CollectorOrder + 0.2
+    order = api.CollectorOrder + 0.2
     label = "Ftrack Version"
 
     def process(self, context):

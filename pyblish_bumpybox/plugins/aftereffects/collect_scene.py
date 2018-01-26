@@ -1,9 +1,9 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class CollectScene(plugin.ContextPlugin):
+class CollectScene(api.ContextPlugin):
 
-    order = plugin.CollectorOrder
+    order = api.CollectorOrder
 
     def process(self, context):
         import traceback

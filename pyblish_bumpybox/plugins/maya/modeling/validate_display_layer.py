@@ -1,7 +1,7 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class RepairDisplayLayerAction(plugin.Action):
+class RepairDisplayLayerAction(api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -17,10 +17,10 @@ class RepairDisplayLayerAction(plugin.Action):
                 pass
 
 
-class ValidateDisplayLayer(plugin.ContextPlugin):
+class ValidateDisplayLayer(api.ContextPlugin):
     """ Ensure no displays layers are present in the scene """
 
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     optional = True
     label = 'Display Layers'
     actions = [RepairDisplayLayerAction]

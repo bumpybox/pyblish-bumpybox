@@ -1,14 +1,14 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractReview(plugin.InstancePlugin):
+class ExtractReview(api.ContextPlugin):
     """Extracts component for review.
 
     Offset to get extraction data from studio plugins.
     """
 
     families = ["review"]
-    order = plugin.ExtractorOrder + 0.2
+    order = api.ExtractorOrder + 0.2
     label = "Ftrack Review"
     optional = True
 

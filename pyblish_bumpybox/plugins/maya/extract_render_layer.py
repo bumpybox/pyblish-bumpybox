@@ -1,15 +1,15 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractRenderLayer(plugin.InstancePlugin):
+class ExtractRenderLayer(api.ContextPlugin):
     """ Extracts the renderlayer to image output. """
 
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     families = ["renderlayer", "local"]
     optional = True
     label = "Render Layer"
     hosts = ["maya"]
-    match = plugin.Subset
+    match = api.Subset
 
     def process(self, instance):
         import os

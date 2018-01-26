@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-@plugin.log
-class ValidateScenePath(plugin.Validator):
+class ValidateScenePath(api.InstancePlugin):
     """ Validates the path of the hiero file """
 
+    order = api.ValidatorOrder
     families = ['scene']
     label = 'Scene Path'
 
@@ -18,7 +18,6 @@ class ValidateScenePath(plugin.Validator):
 
         # get ftrack data
         ftrack_data = instance.context.data('ftrackData')
-        project = ftrack.Project(id=ftrack_data['Project']['id'])
         path.append(ftrack_data['Project']['root'])
 
         try:
@@ -72,9 +71,9 @@ class ValidateScenePath(plugin.Validator):
         # validating scene work path
         file_path = self.get_path(instance)
         msg = 'Scene path is not correct:'
-        msg += '\n\nCurrent: %s' % instance.data('workPath').replace('\\','/')
+        msg += '\n\nCurrent: %s' % instance.data('workPath').replace('\\', '/')
         msg += '\n\nExpected: %s' % file_path
-        assert file_path == instance.data('workPath').replace('\\','/'), msg
+        assert file_path == instance.data('workPath').replace('\\', '/'), msg
 
     def repair(self, instance):
         """

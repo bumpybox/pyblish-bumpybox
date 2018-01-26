@@ -1,7 +1,7 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class RepairVraySettingsAction(plugin.Action):
+class RepairVraySettingsAction(api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -22,10 +22,10 @@ class RepairVraySettingsAction(plugin.Action):
         settings.fileNamePadding.set(4)
 
 
-class ValidateVraySettings(plugin.InstancePlugin):
+class ValidateVraySettings(api.ContextPlugin):
     """ Validates render layer settings. """
 
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     optional = True
     families = ["vray"]
     label = "Vray Settings"

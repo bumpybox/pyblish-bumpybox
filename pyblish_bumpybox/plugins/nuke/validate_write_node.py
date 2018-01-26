@@ -1,7 +1,7 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class RepairWriteNodeAction(plugin.Action):
+class RepairWriteNodeAction(api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -33,10 +33,10 @@ class RepairWriteNodeAction(plugin.Action):
                 instance[0]["metadata"].setValue("all metadata")
 
 
-class ValidateWriteNode(plugin.InstancePlugin):
+class ValidateWriteNode(api.ContextPlugin):
     """ Validates file output. """
 
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     optional = True
     families = ["write"]
     label = "Write Node"

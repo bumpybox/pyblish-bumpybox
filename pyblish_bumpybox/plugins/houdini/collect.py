@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class Collect(plugin.ContextPlugin):
+class Collect(api.ContextPlugin):
     """ Collects from all supported Houdini nodes. """
 
-    order = plugin.CollectorOrder
+    order = api.CollectorOrder
     label = "Collect"
     hosts = ["houdini"]
 

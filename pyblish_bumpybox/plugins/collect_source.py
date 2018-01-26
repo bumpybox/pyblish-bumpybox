@@ -1,11 +1,11 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class CollectScene(plugin.ContextPlugin):
+class CollectScene(api.ContextPlugin):
     """Collecting the scene from the context."""
 
     # offset to get latest currentFile from context
-    order = plugin.CollectorOrder + 0.1
+    order = api.CollectorOrder + 0.1
     label = "Source"
     targets = ["default", "process"]
 

@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractReview(plugin.InstancePlugin):
+class ExtractReview(api.ContextPlugin):
     """Extracts movie for review"""
 
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "NukeStudio Review"
     optional = True
     hosts = ["nukestudio"]

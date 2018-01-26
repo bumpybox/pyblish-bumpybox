@@ -1,14 +1,14 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractThumbnailImg(plugin.InstancePlugin):
+class ExtractThumbnailImg(api.ContextPlugin):
     """Extracts thumbnail from review.
 
     Offset to get extraction data from studio plugins.
     """
 
     families = ["review"]
-    order = plugin.ExtractorOrder + 0.1
+    order = api.ExtractorOrder + 0.1
     label = "Thumbnail"
     optional = True
 

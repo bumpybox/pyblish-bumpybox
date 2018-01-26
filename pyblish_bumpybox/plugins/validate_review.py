@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ValidateReview(plugin.InstancePlugin):
+class ValidateReview(api.ContextPlugin):
     """Validate all review files exists."""
 
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     label = "Review"
     optional = True
     families = ["review"]

@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class CollectSets(plugin.ContextPlugin):
+class CollectSets(api.ContextPlugin):
     """ Collects all sets in scene """
 
-    order = plugin.CollectorOrder
+    order = api.CollectorOrder
     label = "Sets"
     hosts = ["maya"]
     targets = ["default", "process"]
@@ -145,7 +145,7 @@ class CollectSets(plugin.ContextPlugin):
         )
 
 
-class CollectSetsLocal(plugin.ContextPlugin):
+class CollectSetsLocal(api.ContextPlugin):
     """Collect all local processing write instances."""
 
     order = CollectSets.order + 0.01

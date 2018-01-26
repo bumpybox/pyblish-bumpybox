@@ -1,13 +1,13 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractDeadline(plugin.Extractor):
+class ExtractDeadline(api.InstancePlugin):
 
     label = 'Deadline'
     families = ['render']
-    order = plugin.Extractor.order - 0.1
+    order = api.ExtractorOrder - 0.1
 
-    def process(self, instance, context):
+    def process(self, instance):
         import os
 
         import ftrack
@@ -18,8 +18,8 @@ class ExtractDeadline(plugin.Extractor):
         ftrack_data = instance.context.data('ftrackData')
 
         job_data['ChunkSize'] = 50
-        appVersion = context.data('kwargs')['data']['applicationVersion']
-        appVersion = appVersion.split('.')[0]
+        appVersion = instance.context.data('kwargs')['data']
+        appVersion = appVersion['applicationVersion'].split('.')[0]
         job_data['Group'] = 'tvpaint_%s' % appVersion
         job_data['Pool'] = 'medium'
         job_data['Plugin'] = 'TVPaint'
@@ -56,7 +56,9 @@ class ExtractDeadline(plugin.Extractor):
         # plugin data
         plugin_data = {}
 
-        plugin_data['SceneFile'] = context.data('kwargs')['data']['scene']
+        plugin_data['SceneFile'] = (
+            instance.context.data('kwargs')['data']['scene']
+        )
         plugin_data['Version'] = appVersion
         plugin_data['OutputFormat'] = 'PNG'
         plugin_data['OutputFile'] = output_path.replace('.####', '.0001')

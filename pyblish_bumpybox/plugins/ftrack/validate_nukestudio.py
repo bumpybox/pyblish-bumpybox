@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ValidateNukeStudioProjectData(plugin.ContextPlugin):
+class ValidateNukeStudioProjectData(api.ContextPlugin):
     """Validate the project data."""
 
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     label = "Ftrack Project Data"
     hosts = ["nukestudio"]
 

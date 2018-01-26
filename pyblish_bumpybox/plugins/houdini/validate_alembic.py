@@ -1,7 +1,7 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class RepairAlembic(plugin.Action):
+class RepairAlembic(api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -26,11 +26,11 @@ class RepairAlembic(plugin.Action):
             instance[0].setParms({"partition_mode": 4, "collapse": 1})
 
 
-class ValidateAlembic(plugin.InstancePlugin):
+class ValidateAlembic(api.ContextPlugin):
     """ Validates Alembic settings """
 
     families = ["alembic"]
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     label = "Alembic"
     actions = [RepairAlembic]
     optional = True

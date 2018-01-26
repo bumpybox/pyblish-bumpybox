@@ -1,14 +1,14 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class CollectItems(plugin.ContextPlugin):
+class CollectItems(api.ContextPlugin):
     """ Collect Hiero instances.
 
     Collects all trackitem tagged with the preset tags. If a tag has "family"
     in its meta data, this family will also be added to the instance.
     """
 
-    order = plugin.CollectorOrder
+    order = api.CollectorOrder
     label = "Collect"
     hosts = ["hiero"]
 

@@ -1,13 +1,13 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class CollectGroups(plugin.ContextPlugin):
+class CollectGroups(api.ContextPlugin):
     """Collect all group nodes.
 
     Offset to get context.data["currentFile"]
     """
 
-    order = plugin.CollectorOrder + 0.1
+    order = api.CollectorOrder + 0.1
     label = "Groups"
     hosts = ["nuke", "nukeassist"]
 

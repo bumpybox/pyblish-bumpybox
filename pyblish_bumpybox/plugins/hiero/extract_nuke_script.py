@@ -1,12 +1,12 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractNukeScript(plugin.InstancePlugin):
+class ExtractNukeScript(api.ContextPlugin):
     """ Extract Nuke script """
 
     families = ["nuke"]
     label = "Nuke Script"
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     optional = True
     hosts = ["hiero"]
 

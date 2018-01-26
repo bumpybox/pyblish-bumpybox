@@ -1,7 +1,7 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class RepairReadNodeAction(plugin.Action):
+class RepairReadNodeAction(api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -37,12 +37,12 @@ class RepairReadNodeAction(plugin.Action):
             instance[0]["origlast"].setValue(list(collection.indexes)[0])
 
 
-class ValidateReadNode(plugin.InstancePlugin):
+class ValidateReadNode(api.ContextPlugin):
     """Validate Read node is setup correctly."""
 
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     families = ["read", "img"]
-    match = plugin.Subset
+    match = api.Subset
     label = "Read Node"
     optional = True
     actions = [RepairReadNodeAction]

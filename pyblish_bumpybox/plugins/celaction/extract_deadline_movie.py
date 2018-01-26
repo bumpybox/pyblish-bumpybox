@@ -1,12 +1,12 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractDeadlineMovie(plugin.InstancePlugin):
+class ExtractDeadlineMovie(api.ContextPlugin):
 
     hosts = ["celaction"]
     label = "Movie"
     families = ["*"]
-    order = plugin.ExtractorOrder + 0.4
+    order = api.ExtractorOrder + 0.4
 
     def frames_to_timecode(self, frames, framerate):
 

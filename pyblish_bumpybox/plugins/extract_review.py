@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractReview(plugin.InstancePlugin):
+class ExtractReview(api.ContextPlugin):
     """Extract review hash value."""
 
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "Review Hash"
     optional = True
     families = ["review"]
@@ -31,14 +31,14 @@ class ExtractReview(plugin.InstancePlugin):
             the_file.write(hash_value)
 
 
-class ExtractReviewTranscode(plugin.InstancePlugin):
+class ExtractReviewTranscode(api.ContextPlugin):
     """Extracts review movie from image sequence or movie.
 
     Offset:
         pyblish_bumpybox.plugins.nuke.extract_review.ExtractReview
     """
 
-    order = plugin.ExtractorOrder + 0.02
+    order = api.ExtractorOrder + 0.02
     label = "Review Transcode"
     optional = True
     families = ["img", "mov"]
@@ -161,7 +161,7 @@ class ExtractReviewTranscodeNukeStudio(ExtractReviewTranscode):
         pyblish_bumpybox.plugins.nukestudio.extract_review.ExtractReview
     """
 
-    order = plugin.ExtractorOrder + 0.02
+    order = api.ExtractorOrder + 0.02
     label = "Review Transcode"
     optional = True
     families = ["review"]

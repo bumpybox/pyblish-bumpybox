@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractOutputDirectory(plugin.InstancePlugin):
+class ExtractOutputDirectory(api.ContextPlugin):
     """Extracts the output path for any collection or single output_path."""
 
-    order = plugin.ExtractorOrder - 0.1
+    order = api.ExtractorOrder - 0.1
     label = "Output Directory"
     optional = True
     targets = ["process"]

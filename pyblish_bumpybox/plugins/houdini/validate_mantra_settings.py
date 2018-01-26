@@ -1,7 +1,7 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class RepairMantraSettings(plugin.Action):
+class RepairMantraSettings(api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -31,11 +31,11 @@ class RepairMantraSettings(plugin.Action):
             instance[0].setParms({"soho_foreground": soho_foreground})
 
 
-class ValidateMantraSettings(plugin.InstancePlugin):
+class ValidateMantraSettings(api.ContextPlugin):
     """ Validates mantra settings """
 
     families = ["mantra"]
-    order = plugin.ValidatorOrder
+    order = api.ValidatorOrder
     label = "Mantra Settings"
     actions = [RepairMantraSettings]
     optional = True

@@ -1,7 +1,7 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractFtrackComponents(plugin.InstancePlugin):
+class ExtractFtrackComponents(api.ContextPlugin):
     """ Extracting data to ftrack components.
 
     Offset to get shot data from "extract_ftrack_shot"
@@ -10,7 +10,7 @@ class ExtractFtrackComponents(plugin.InstancePlugin):
     families = ["ftrack"]
     label = "Ftrack Components"
     hosts = ["hiero"]
-    order = plugin.ExtractorOrder + 0.1
+    order = api.ExtractorOrder + 0.1
     hosts = ["hiero"]
 
     def process(self, instance):

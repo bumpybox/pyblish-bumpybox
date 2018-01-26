@@ -1,10 +1,10 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class CollectMovie(plugin.ContextPlugin):
+class CollectMovie(api.ContextPlugin):
     """ Generate movie instance and job. """
 
-    order = plugin.CollectorOrder
+    order = api.CollectorOrder
 
     def process(self, context):
         import json

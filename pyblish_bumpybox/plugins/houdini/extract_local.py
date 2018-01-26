@@ -1,11 +1,11 @@
-from pyblish_bumpybox import plugin
+from pyblish import api
 
 
-class ExtractLocal(plugin.InstancePlugin):
+class ExtractLocal(api.ContextPlugin):
     """ Extracts nodes locally. """
 
     families = ["local"]
-    order = plugin.ExtractorOrder
+    order = api.ExtractorOrder
     label = "Local"
     optional = True
     hosts = ["houdini"]
