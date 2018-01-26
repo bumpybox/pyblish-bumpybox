@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectReviews(pyblish.api.ContextPlugin):
+class CollectReviews(plugin.ContextPlugin):
     """Generate reviews from "img" and "mov" instances.
 
     Offset:
@@ -9,7 +9,7 @@ class CollectReviews(pyblish.api.ContextPlugin):
     """
 
     # Offset to get created instances.
-    order = pyblish.api.CollectorOrder + 0.3
+    order = plugin.CollectorOrder + 0.3
     hosts = ["maya", "nuke", "nukeassist"]
 
     def process(self, context):

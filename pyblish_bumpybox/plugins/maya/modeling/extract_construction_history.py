@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractConstructionHistory(pyblish.api.InstancePlugin):
+class ExtractConstructionHistory(plugin.InstancePlugin):
     """ Option to extract the with/without construction history. """
 
-    order = pyblish.api.ExtractorOrder - 0.1
+    order = plugin.ExtractorOrder - 0.1
     families = ["mayaAscii", "mayaBinary"]
     optional = True
     label = "Remove Construction History"

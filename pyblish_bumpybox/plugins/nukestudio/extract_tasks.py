@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractTasks(pyblish.api.InstancePlugin):
+class ExtractTasks(plugin.InstancePlugin):
     """Extract tasks."""
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     label = "Tasks"
     hosts = ["nukestudio"]
     families = ["trackItem.task"]

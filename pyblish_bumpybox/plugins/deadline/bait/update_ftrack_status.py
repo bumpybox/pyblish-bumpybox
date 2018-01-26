@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class UpdateFtrackStatus(pyblish.api.ContextPlugin):
+class UpdateFtrackStatus(plugin.ContextPlugin):
     """ Updates ftrack status """
 
-    order = pyblish.api.IntegratorOrder + 0.4
+    order = plugin.IntegratorOrder + 0.4
 
     def process(self, context):
         import os

@@ -1,11 +1,11 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectFamily(pyblish.api.ContextPlugin):
+class CollectFamily(plugin.ContextPlugin):
     """ Adds the "ftrack" family to all instanes. """
 
     # Offset to get all instances
-    order = pyblish.api.CollectorOrder + 0.4
+    order = plugin.CollectorOrder + 0.4
     label = "Ftrack Family"
 
     def process(self, context):

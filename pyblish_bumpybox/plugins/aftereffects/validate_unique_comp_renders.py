@@ -1,15 +1,15 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ValidateUniqueCompRenders(pyblish.api.ContextPlugin):
+class ValidateUniqueCompRenders(plugin.ContextPlugin):
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     label = "Unique Comp Renders"
     families = ["img.local.*"]
 
     def process(self, context):
 
-        instances = pyblish.api.instances_by_plugin(context,
+        instances = plugin.instances_by_plugin(context,
                                                     ValidateAEUniqueCompRenders)
 
         names = []

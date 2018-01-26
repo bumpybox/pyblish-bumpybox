@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractSuspended(pyblish.api.InstancePlugin):
+class ExtractSuspended(plugin.InstancePlugin):
     """ Option to suspend Deadline job on submission """
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     label = "Suspend Deadline Job Initally"
     families = ["deadline"]
     active = False

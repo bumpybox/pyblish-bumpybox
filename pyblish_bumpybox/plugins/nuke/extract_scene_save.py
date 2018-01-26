@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractSceneSave(pyblish.api.InstancePlugin):
+class ExtractSceneSave(plugin.InstancePlugin):
     """ Saves the scene before extraction. """
 
-    order = pyblish.api.ExtractorOrder - 0.49
+    order = plugin.ExtractorOrder - 0.49
     families = ["source"]
     label = "Scene Save"
     targets = ["default", "process"]

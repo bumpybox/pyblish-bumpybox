@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectSelection(pyblish.api.ContextPlugin):
+class CollectSelection(plugin.ContextPlugin):
     """Collect selection."""
 
-    order = pyblish.api.CollectorOrder - 0.1
+    order = plugin.CollectorOrder - 0.1
     label = "Selection"
     hosts = ["nuke"]
     targets = ["default", "process"]

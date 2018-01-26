@@ -1,14 +1,14 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ValidateTransforms(pyblish.api.InstancePlugin):
+class ValidateTransforms(plugin.InstancePlugin):
     """ Freeze/Reset transforms.
 
     Ensure all meshes have their pivot at world zero,
     and their transforms are zero'ed out.
     """
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     families = ["mayaAscii", "mayaBinary", "alembic"]
     label = "Transforms"
     optional = True

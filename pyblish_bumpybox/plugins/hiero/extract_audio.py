@@ -1,13 +1,13 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractAudio(pyblish.api.InstancePlugin):
+class ExtractAudio(plugin.InstancePlugin):
     """ Extracting audio """
 
     families = ["audio"]
     label = "Audio"
     hosts = ["hiero"]
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     optional = True
 
     def process(self, instance):

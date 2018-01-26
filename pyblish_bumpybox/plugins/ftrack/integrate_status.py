@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class IntegrateStatus(pyblish.api.ContextPlugin):
+class IntegrateStatus(plugin.ContextPlugin):
     """ Sets the task to "In Progress". """
 
-    order = pyblish.api.IntegratorOrder
+    order = plugin.IntegratorOrder
     label = "Ftrack Status"
     optional = True
 

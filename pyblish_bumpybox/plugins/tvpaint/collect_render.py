@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectRender(pyblish.api.Collector):
+class CollectRender(plugin.Collector):
     """"""
 
-    order = pyblish.api.Collector.order + 0.1
+    order = plugin.Collector.order + 0.1
 
     def process(self, context):
 

@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectNukeParameters(pyblish.api.ContextPlugin):
+class CollectNukeParameters(plugin.ContextPlugin):
     """ Add optional parameters to remote instances.
 
     A ContextPlugin because if remote instance is unpublishable,
@@ -9,7 +9,7 @@ class CollectNukeParameters(pyblish.api.ContextPlugin):
     Offset from default order, to pick up on created instances.
     """
 
-    order = pyblish.api.CollectorOrder + 0.2
+    order = plugin.CollectorOrder + 0.2
     label = "Parameters"
     hosts = ["nuke"]
 

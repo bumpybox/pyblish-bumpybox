@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectWrites(pyblish.api.ContextPlugin):
+class CollectWrites(plugin.ContextPlugin):
     """Collect all write nodes."""
 
-    order = pyblish.api.CollectorOrder
+    order = plugin.CollectorOrder
     label = "Writes"
     hosts = ["nuke", "nukeassist"]
     targets = ["default", "process"]
@@ -26,7 +26,7 @@ class CollectWrites(pyblish.api.ContextPlugin):
                 output_type = "mov"
 
             # Create instance
-            instance = pyblish.api.Instance(node.name())
+            instance = plugin.Instance(node.name())
             instance.data["family"] = output_type
             instance.add(node)
 
@@ -65,7 +65,7 @@ class CollectWrites(pyblish.api.ContextPlugin):
         )
 
 
-class CollectWritesProcess(pyblish.api.ContextPlugin):
+class CollectWritesProcess(plugin.ContextPlugin):
     """Collect all local processing write instances."""
 
     order = CollectWrites.order + 0.01
@@ -112,7 +112,7 @@ class CollectWritesProcess(pyblish.api.ContextPlugin):
             instance.data["instanceToggled"] = instanceToggled
 
 
-class CollectWritesPublish(pyblish.api.ContextPlugin):
+class CollectWritesPublish(plugin.ContextPlugin):
     """Collect all write instances for publishing."""
 
     order = CollectWrites.order + 0.01

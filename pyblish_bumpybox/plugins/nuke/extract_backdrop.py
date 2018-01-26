@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractBackdrop(pyblish.api.InstancePlugin):
+class ExtractBackdrop(plugin.InstancePlugin):
     """ Extract gizmos from group nodes. """
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     optional = True
     families = ["backdrop"]
     label = "Backdrop"

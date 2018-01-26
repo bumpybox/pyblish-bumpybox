@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectScene(pyblish.api.ContextPlugin):
+class CollectScene(plugin.ContextPlugin):
     """ Converts the path flag value to the current file in the context. """
 
-    order = pyblish.api.CollectorOrder
+    order = plugin.CollectorOrder
 
     def process(self, context):
 

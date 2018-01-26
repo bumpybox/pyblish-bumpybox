@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectNukeWrites(pyblish.api.ContextPlugin):
+class CollectNukeWrites(plugin.ContextPlugin):
     """Collect all write nodes."""
 
-    order = pyblish.api.CollectorOrder + 0.1
+    order = plugin.CollectorOrder + 0.1
     label = "Writes Royal Render"
     hosts = ["nuke", "nukeassist"]
     targets = ["process.royalrender"]
@@ -55,10 +55,10 @@ class CollectNukeWrites(pyblish.api.ContextPlugin):
             instance.data["instanceToggled"] = instanceToggled
 
 
-class CollectMayaSets(pyblish.api.ContextPlugin):
+class CollectMayaSets(plugin.ContextPlugin):
     """Collect all local processing write instances."""
 
-    order = pyblish.api.CollectorOrder + 0.1
+    order = plugin.CollectorOrder + 0.1
     label = "Sets Royal Render"
     hosts = ["maya"]
     targets = ["process.royalrender"]

@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ValidateSceneModified(pyblish.api.ContextPlugin):
+class ValidateSceneModified(plugin.ContextPlugin):
     """ Validates whether the scene has been saved since modifying. """
 
-    order = pyblish.api.ExtractorOrder - 0.49
+    order = plugin.ExtractorOrder - 0.49
     hosts = ["maya"]
     label = "Scene Modified"
     optional = True

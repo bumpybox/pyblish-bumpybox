@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ValidateNukeStudioTasks(pyblish.api.ContextPlugin):
+class ValidateNukeStudioTasks(plugin.ContextPlugin):
     """Validate tasks."""
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     label = "Ftrack Tasks"
     hosts = ["nukestudio"]
 

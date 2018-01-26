@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractComponents(pyblish.api.InstancePlugin):
+class ExtractComponents(plugin.InstancePlugin):
     """Appending output files from local extraction as components.
 
     This plugin generates component data from either the instance data or
@@ -9,7 +9,7 @@ class ExtractComponents(pyblish.api.InstancePlugin):
     trigger the component data generation.
     """
 
-    order = pyblish.api.ExtractorOrder + 0.4
+    order = plugin.ExtractorOrder + 0.4
     label = "Components"
     families = ["local", "output"]
 
@@ -74,10 +74,10 @@ class ExtractComponents(pyblish.api.InstancePlugin):
         instance.data["ftrackComponentsList"] = components
 
 
-class ExtractGizmo(pyblish.api.InstancePlugin):
+class ExtractGizmo(plugin.InstancePlugin):
     """Sets the data for Ftrack gizmo component."""
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     label = "Ftrack Gizmo"
     families = ["gizmo"]
 
@@ -88,10 +88,10 @@ class ExtractGizmo(pyblish.api.InstancePlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractLUT(pyblish.api.InstancePlugin):
+class ExtractLUT(plugin.InstancePlugin):
     """Sets the data for Ftrack lut component."""
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     label = "Ftrack LUT"
     families = ["lut"]
 
@@ -106,10 +106,10 @@ class ExtractLUT(pyblish.api.InstancePlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractMovie(pyblish.api.InstancePlugin):
+class ExtractMovie(plugin.InstancePlugin):
     """Sets the data for Ftrack mov component."""
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     label = "Ftrack Movie"
     families = ["mov"]
 
@@ -120,10 +120,10 @@ class ExtractMovie(pyblish.api.InstancePlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractScene(pyblish.api.InstancePlugin):
+class ExtractScene(plugin.InstancePlugin):
     """Sets the data for Ftrack scene component."""
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     label = "Ftrack Scene"
     families = ["scene"]
 
@@ -134,10 +134,10 @@ class ExtractScene(pyblish.api.InstancePlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractImg(pyblish.api.InstancePlugin):
+class ExtractImg(plugin.InstancePlugin):
     """Sets the data for Ftrack img component."""
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     label = "Ftrack Img"
     families = ["img"]
 
@@ -148,10 +148,10 @@ class ExtractImg(pyblish.api.InstancePlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractCache(pyblish.api.InstancePlugin):
+class ExtractCache(plugin.InstancePlugin):
     """Sets the data for Ftrack cache component."""
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     label = "Ftrack Cache"
     families = ["cache"]
 
@@ -162,10 +162,10 @@ class ExtractCache(pyblish.api.InstancePlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractCamera(pyblish.api.InstancePlugin):
+class ExtractCamera(plugin.InstancePlugin):
     """Sets the data for Ftrack camera component."""
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     label = "Ftrack Camera"
     families = ["camera"]
 
@@ -176,10 +176,10 @@ class ExtractCamera(pyblish.api.InstancePlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractGeometry(pyblish.api.InstancePlugin):
+class ExtractGeometry(plugin.InstancePlugin):
     """Sets the data for Ftrack camera component."""
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     label = "Ftrack Geometry"
     families = ["geometry"]
 

@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectOutput(pyblish.api.ContextPlugin):
+class CollectOutput(plugin.ContextPlugin):
     """ Collects output """
 
-    order = pyblish.api.CollectorOrder
+    order = plugin.CollectorOrder
 
     def process(self, context):
         import os

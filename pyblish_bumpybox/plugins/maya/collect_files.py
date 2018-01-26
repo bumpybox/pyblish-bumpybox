@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectFiles(pyblish.api.Collector):
+class CollectFiles(plugin.Collector):
     """ Collects file nodes from the scene. """
 
     label = "Files"

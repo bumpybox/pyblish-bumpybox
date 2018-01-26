@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectRenderlayers(pyblish.api.ContextPlugin):
+class CollectRenderlayers(plugin.ContextPlugin):
     """ Gathers all renderlayers. """
 
-    order = pyblish.api.CollectorOrder
+    order = plugin.CollectorOrder
     hosts = ["maya"]
     label = "Render Layers"
 

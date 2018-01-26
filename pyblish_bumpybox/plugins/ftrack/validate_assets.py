@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class RepairAssetsAction(pyblish.api.Action):
+class RepairAssetsAction(plugin.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -15,7 +15,7 @@ class RepairAssetsAction(pyblish.api.Action):
                 pc.delete(node)
 
 
-class ValidateAssets(pyblish.api.Validator):
+class ValidateAssets(plugin.Validator):
     """ Validates clean up broken Ftrack assets. """
 
     families = ["scene"]

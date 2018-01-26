@@ -1,9 +1,9 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectSorting(pyblish.api.Collector):
+class CollectSorting(plugin.Collector):
     # offset to execute last of all collectors
-    order = pyblish.api.Collector.order + 0.49
+    order = plugin.Collector.order + 0.49
     label = "Sorting"
     targets = ["default", "process"]
 

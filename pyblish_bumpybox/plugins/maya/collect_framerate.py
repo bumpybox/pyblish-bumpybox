@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectFramerate(pyblish.api.ContextPlugin):
+class CollectFramerate(plugin.ContextPlugin):
     """Collect the frame rate."""
 
-    order = pyblish.api.CollectorOrder - 0.5
+    order = plugin.CollectorOrder - 0.5
     label = "Framerate"
     hosts = ["maya"]
     targets = ["default", "process"]

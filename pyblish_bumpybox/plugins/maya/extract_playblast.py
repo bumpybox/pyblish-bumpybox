@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ViewPlayblastsAction(pyblish.api.Action):
+class ViewPlayblastsAction(plugin.Action):
 
     label = "View Playblasts"
     icon = "eye"
@@ -17,7 +17,7 @@ class ViewPlayblastsAction(pyblish.api.Action):
             all_instances.append(result["instance"])
 
         # Apply pyblish.logic to get the instances for the plug-in
-        instances = pyblish.api.instances_by_plugin(context, plugin)
+        instances = plugin.instances_by_plugin(context, plugin)
 
         for instance in instances:
 
@@ -27,10 +27,10 @@ class ViewPlayblastsAction(pyblish.api.Action):
             webbrowser.open(instance.data["output_path"])
 
 
-class ExtractPlayblast(pyblish.api.InstancePlugin):
+class ExtractPlayblast(plugin.InstancePlugin):
     """Extracts playblast."""
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     families = ["playblast"]
     optional = True
     label = "Playblast"

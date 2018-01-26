@@ -1,14 +1,14 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectHoudiniRender(pyblish.api.ContextPlugin):
+class CollectHoudiniRender(plugin.ContextPlugin):
     """ Append render output path to instances.
 
     ContextPlugin to ensure processing, even if instance is disabled.
     Offset to get instances from Houdini collection.
     """
 
-    order = pyblish.api.CollectorOrder + 0.4
+    order = plugin.CollectorOrder + 0.4
     label = "Houdini Render"
     hosts = ["houdini"]
 

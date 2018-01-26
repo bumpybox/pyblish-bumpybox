@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class RepairSmoothDisplay(pyblish.api.Action):
+class RepairSmoothDisplay(plugin.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -17,17 +17,17 @@ class RepairSmoothDisplay(pyblish.api.Action):
                 failed.append(result["instance"])
 
         # Apply pyblish.logic to get the instances for the plug-in
-        instances = pyblish.api.instances_by_plugin(failed, plugin)
+        instances = plugin.instances_by_plugin(failed, plugin)
 
         for instance in instances:
             for node in instance[0].members():
                 node.displaySmoothMesh.set(False)
 
 
-class ValidateSmoothDisplay(pyblish.api.InstancePlugin):
+class ValidateSmoothDisplay(plugin.InstancePlugin):
     """ Ensures all meshes are not smoothed """
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     families = ["mayaAscii", "mayaBinary", "alembic"]
     optional = True
     label = "Smooth Display"

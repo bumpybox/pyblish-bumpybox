@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class RepairNukeParametersAction(pyblish.api.Action):
+class RepairNukeParametersAction(plugin.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -19,7 +19,7 @@ class RepairNukeParametersAction(pyblish.api.Action):
                 failed.append(result["instance"])
 
         # Apply pyblish.logic to get the instances for the plug-in.
-        instances = pyblish.api.instances_by_plugin(failed, plugin)
+        instances = plugin.instances_by_plugin(failed, plugin)
 
         plugin = plugin()
         for instance in instances:
@@ -48,10 +48,10 @@ class RepairNukeParametersAction(pyblish.api.Action):
             node.addKnob(knob)
 
 
-class ValidateNukeParameters(pyblish.api.InstancePlugin):
+class ValidateNukeParameters(plugin.InstancePlugin):
     """ Validates the existence of deadline parameters on node. """
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     label = "Parameters"
     families = ["deadline"]
     hosts = ["nuke"]

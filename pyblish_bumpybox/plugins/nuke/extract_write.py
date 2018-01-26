@@ -1,13 +1,13 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class Extract(pyblish.api.InstancePlugin):
+class Extract(plugin.InstancePlugin):
     """Super class for write and writegeo extractors."""
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     optional = True
     hosts = ["nuke"]
-    match = pyblish.api.Subset
+    match = plugin.Subset
     targets = ["process.local"]
 
     def execute(self, instance):

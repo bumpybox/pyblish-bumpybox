@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class RepairFilePathAction(pyblish.api.Action):
+class RepairFilePathAction(plugin.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -19,7 +19,7 @@ class RepairFilePathAction(pyblish.api.Action):
                 failed.append(result["instance"])
 
         # Apply pyblish.logic to get the instances for the plug-in
-        instances = pyblish.api.instances_by_plugin(failed, plugin)
+        instances = plugin.instances_by_plugin(failed, plugin)
 
         for instance in instances:
 
@@ -39,10 +39,10 @@ class RepairFilePathAction(pyblish.api.Action):
                 instance[0].fileTextureName.set(expected)
 
 
-class ValidateFilePath(pyblish.api.InstancePlugin):
+class ValidateFilePath(plugin.InstancePlugin):
     """ Validate file paths to be in the workspace directory. """
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     families = ["file"]
     label = "File Path"
     actions = [RepairFilePathAction]

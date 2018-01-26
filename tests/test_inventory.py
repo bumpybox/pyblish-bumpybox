@@ -1,4 +1,5 @@
 import lib
+import inspect
 
 from pyblish_bumpybox import inventory
 
@@ -7,7 +8,15 @@ def test_class_name_attribute_existence():
 
     failed_plugins = []
     for plugin in lib.get_all_plugins():
-        if "class_name" not in plugin.__dict__.keys():
+        members = inspect.getmembers(
+            plugin, lambda a: not(inspect.isroutine(a))
+        )
+        failed = True
+        for member in members:
+            if member[0] == "class_name":
+                failed = False
+
+        if failed:
             failed_plugins.append(plugin)
 
     print "Failed plugins:"

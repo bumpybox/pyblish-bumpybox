@@ -1,11 +1,11 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class IntegrateFtrackThumbnail(pyblish.api.InstancePlugin):
+class IntegrateFtrackThumbnail(plugin.InstancePlugin):
     """ Integrates output """
 
     families = ["img.*", "mov.*"]
-    order = pyblish.api.IntegratorOrder
+    order = plugin.IntegratorOrder
 
     def process(self, instance):
         import os

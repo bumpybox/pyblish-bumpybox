@@ -1,7 +1,7 @@
-from pyblish import api
+from pyblish_bumpybox import plugin
 
 
-class ExtractReview(api.InstancePlugin):
+class ExtractReview(plugin.InstancePlugin):
     """Extracts image sequence with baked in luts
 
     Offset from:
@@ -10,7 +10,7 @@ class ExtractReview(api.InstancePlugin):
 
     label = "Nuke Review"
     optional = True
-    order = api.ExtractorOrder + 0.01
+    order = plugin.ExtractorOrder + 0.01
     targets = ["process.local"]
     families = ["img"]
 

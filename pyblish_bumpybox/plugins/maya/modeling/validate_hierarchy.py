@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ValidateHierarchy(pyblish.api.Validator):
+class ValidateHierarchy(plugin.Validator):
     """ Ensures a flat hierarchy """
 
     families = ["mayaAscii", "mayaBinary", "alembic"]

@@ -1,13 +1,13 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ValidateGroupNode(pyblish.api.InstancePlugin):
+class ValidateGroupNode(plugin.InstancePlugin):
     """Validates group node.
 
     Ensures none of the groups content is locally stored.
     """
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     optional = True
     families = ["gizmo", "lut"]
     label = "Group Node"

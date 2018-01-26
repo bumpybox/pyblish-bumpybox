@@ -1,13 +1,13 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-pyblish.api.register_host('tvpaint')
+plugin.register_host('tvpaint')
 
 
-class CollectSceneArg(pyblish.api.Collector):
+class CollectSceneArg(plugin.Collector):
     """"""
 
-    order = pyblish.api.Collector.order - 0.05
+    order = plugin.Collector.order - 0.05
 
     def process(self, context):
 

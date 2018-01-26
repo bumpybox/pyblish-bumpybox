@@ -1,5 +1,4 @@
 import os
-import inspect
 
 from pyblish import api
 
@@ -14,6 +13,18 @@ collect_sorting_CollectSorting = api.CollectorOrder + 0.49
 
 # ----Validation
 persist_publish_state_PersistPublishState = api.ValidatorOrder
+validate_executables_ValidateFFmpeg = (
+    api.ValidatorOrder
+)
+validate_processing_ValidateProcessing = (
+    api.ValidatorOrder
+)
+validate_scene_version_ValidateSceneVersion = (
+    api.ValidatorOrder
+)
+validate_review_ValidateReview = (
+    api.ValidatorOrder
+)
 
 # ----Extraction
 extract_review_ExtractReview = api.ExtractorOrder
@@ -21,7 +32,7 @@ extract_review_ExtractReviewTranscode = api.ExtractorOrder + 0.02
 extract_review_ExtractReviewTranscodeNukeStudio = (
     api.ExtractorOrder + 0.02
 )
-extract_json_ExtractJSON = api.ExtractorOrder + 1
+extract_json_ExtractJSON = api.IntegratorOrder + 1
 
 # AfterEffects
 aftereffects_collect_render_items_CollectRenderItems = api.CollectorOrder
@@ -37,14 +48,32 @@ aftereffects_append_deadline_data_AppendDeadlineData = api.ExtractorOrder
 aftereffects_append_ftrack_audio_AppendFtrackAudio = api.ExtractorOrder
 aftereffects_extract_local_ExtractLocal = api.ExtractorOrder
 
+# CelAction
 celaction_collect_scene_CollectScene = api.CollectorOrder
 celaction_collect_render_CollectRender = api.CollectorOrder + 0.1
+celaction_bait_append_ftrack_data_AppendFtrackData = (
+    api.CollectorOrder + 0.1
+)
+celaction_bait_append_ftrack_asset_name_AppendFtrackAssetName = (
+    api.CollectorOrder + 0.1
+)
 
+celaction_bait_validate_scene_path_ValidateScenePath = (
+    api.ValidatorOrder
+)
+
+celaction_bait_append_ftrack_data_AppendFtrackAudio = (
+    api.ExtractorOrder
+)
 celaction_extract_deadline_ExtractDeadline = api.ExtractorOrder
 celaction_extract_render_images_ExtractRenderImages = api.ExtractorOrder
 celaction_extract_render_images_ExtractRenderMovie = api.ExtractorOrder + 0.1
 celaction_extract_deadline_movie_ExtractDeadlineMovie = (
     api.ExtractorOrder + 0.4
+)
+
+celaction_bait_integrate_local_render_IntegrateLocal = (
+    api.IntegratorOrder
 )
 
 # Deadline
@@ -77,6 +106,13 @@ deadline_extract_nuke_ExtractNuke = api.ExtractorOrder
 deadline_extract_suspended_ExtractSuspended = api.ExtractorOrder
 
 deadline_integrate_collection_IntegrateCollection = api.IntegratorOrder - 0.1
+deadline_bait_integrate_ftrack_thumbnail_IntegrateFtrackThumbnail = (
+    api.IntegratorOrder
+)
+deadline_bait_update_ftrack_status_UpdateFtrackStatus = (
+    api.IntegratorOrder + 0.4
+)
+
 
 # Ftrack
 ftrack_collect_nukestudio_CollectNukeStudioEntities = api.CollectorOrder + 0.1
@@ -104,14 +140,15 @@ ftrack_extract_nukestudio_ExtractThumbnail = api.ExtractorOrder
 ftrack_extract_entities_ExtractEpisode = api.ExtractorOrder + 0.01
 ftrack_extract_entities_ExtractSequence = api.ExtractorOrder + 0.02
 ftrack_extract_entities_ExtractShot = api.ExtractorOrder + 0.03
-ftrack_extract_entities_ExtractLinkAssetbuilds = api.ExtractorOrder + 0.03
+ftrack_extract_entities_ExtractLinkAssetbuilds = api.ExtractorOrder + 0.04
+ftrack_extract_entities_ExtractAssetDataNukeStudio = api.ExtractorOrder + 0.04
 ftrack_extract_entities_ExtractTasks = api.ExtractorOrder + 0.04
 ftrack_extract_entities_ExtractCommit = api.ExtractorOrder + 0.05
 ftrack_extract_entities_ExtractNukeStudio = api.ExtractorOrder + 0.05
 ftrack_extract_thumbnail_ExtractThumbnailImg = api.ExtractorOrder + 0.1
 ftrack_extract_review_ExtractReview = api.ExtractorOrder + 0.2
 ftrack_extract_components_ExtractComponents = api.ExtractorOrder + 0.4
-ftrack_other_link_source_OtherLinkSource = api.ExtractorOrder + 1
+ftrack_other_link_source_OtherLinkSource = api.IntegratorOrder + 1
 
 ftrack_integrate_status_IntegrateStatus = api.IntegratorOrder
 
@@ -157,6 +194,27 @@ maya_collect_playblasts_CollectPlayblastsProcess = api.CollectorOrder + 0.01
 maya_collect_playblasts_CollectPlayblastsPublish = api.CollectorOrder + 0.01
 maya_collect_sets_CollectSetsLocal = api.CollectorOrder + 0.01
 
+maya_modeling_validate_intermediate_shapes_ValidateIntermediateShapes = (
+    api.ValidatorOrder
+)
+maya_modeling_validate_points_ValidatePoints = (
+    api.ValidatorOrder
+)
+maya_modeling_validate_hierarchy_ValidateHierarchy = (
+    api.ValidatorOrder
+)
+maya_modeling_validate_shape_name_ValidateShapeName = (
+    api.ValidatorOrder
+)
+maya_modeling_validate_transforms_ValidateTransforms = (
+    api.ValidatorOrder
+)
+maya_modeling_validate_display_layer_ValidateDisplayLayer = (
+    api.ValidatorOrder
+)
+maya_modeling_validate_smooth_display_ValidateSmoothDisplay = (
+    api.ValidatorOrder
+)
 maya_validate_display_layer_ValidateDisplayLayer = api.ValidatorOrder
 maya_validate_hierarchy_ValidateHierarchy = api.ValidatorOrder
 maya_validate_intermediate_shapes_ValidateIntermediateShapes = (
@@ -174,7 +232,7 @@ maya_validate_render_layer_settings_ValidateRenderLayerSettings = (
 )
 maya_validate_vray_settings_ValidateVraySettings = api.ValidatorOrder
 
-maya_extract_construction_history_ExtractConstructionHistory = (
+maya_modeling_extract_construction_history_ExtractConstructionHistory = (
     api.ExtractorOrder - 0.1
 )
 maya_rigging_extract_disconnect_animation_ExtractDisconnectAnimation = (

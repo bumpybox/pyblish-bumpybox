@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ValidateNames(pyblish.api.InstancePlugin):
+class ValidateNames(plugin.InstancePlugin):
     """Validate sequence, video track and track item names.
 
     When creating output directories with the name of an item, ending with a
@@ -9,9 +9,9 @@ class ValidateNames(pyblish.api.InstancePlugin):
     Exact matching to optimize processing.
     """
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     families = ["trackItem"]
-    match = pyblish.api.Exact
+    match = plugin.Exact
     label = "Names"
     hosts = ["nukestudio"]
 

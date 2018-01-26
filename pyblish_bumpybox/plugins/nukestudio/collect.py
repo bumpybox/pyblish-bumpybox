@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectFramerate(pyblish.api.ContextPlugin):
+class CollectFramerate(plugin.ContextPlugin):
     """Collect framerate from selected sequence."""
 
-    order = pyblish.api.CollectorOrder
+    order = plugin.CollectorOrder
     label = "Framerate"
     hosts = ["nukestudio"]
 
@@ -14,10 +14,10 @@ class CollectFramerate(pyblish.api.ContextPlugin):
             return
 
 
-class CollectTrackItems(pyblish.api.ContextPlugin):
+class CollectTrackItems(plugin.ContextPlugin):
     """Collect all tasks from submission."""
 
-    order = pyblish.api.CollectorOrder
+    order = plugin.CollectorOrder
     label = "Track Items"
     hosts = ["nukestudio"]
 
@@ -93,7 +93,7 @@ class CollectTrackItems(pyblish.api.ContextPlugin):
             )
 
 
-class CollectTasks(pyblish.api.ContextPlugin):
+class CollectTasks(plugin.ContextPlugin):
     """Collect all tasks from submission."""
 
     order = CollectTrackItems.order + 0.01

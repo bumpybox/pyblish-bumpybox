@@ -1,15 +1,15 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractFtrackThumbnail(pyblish.api.InstancePlugin):
+class ExtractFtrackThumbnail(plugin.InstancePlugin):
     """ Creates thumbnails for ftrack shots and uploads them.
 
     Offset to get shot from "extract_ftrack_shot"
     """
 
-    order = pyblish.api.ExtractorOrder + 0.1
+    order = plugin.ExtractorOrder + 0.1
     families = ["ftrack", "trackItem"]
-    match = pyblish.api.Subset
+    match = plugin.Subset
     label = "Ftrack Thumbnail"
     optional = True
     active = False

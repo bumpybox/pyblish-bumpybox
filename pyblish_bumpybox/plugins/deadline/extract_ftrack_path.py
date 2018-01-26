@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractFtrackPath(pyblish.api.InstancePlugin):
+class ExtractFtrackPath(plugin.InstancePlugin):
     """ Extract Ftrack path for Deadline """
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     families = ["deadline"]
     label = "Ftrack Path"
 

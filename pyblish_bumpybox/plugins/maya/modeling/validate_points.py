@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class RepairPointsAction(pyblish.api.Action):
+class RepairPointsAction(plugin.Action):
     label = "Repair"
     icon = "wrench"
     on = "failed"
@@ -17,19 +17,19 @@ class RepairPointsAction(pyblish.api.Action):
                 failed.append(result["instance"])
 
         # Apply pyblish.logic to get the instances for the plug-in
-        instances = pyblish.api.instances_by_plugin(failed, plugin)
+        instances = plugin.instances_by_plugin(failed, plugin)
 
         for instance in instances:
             for node in instance[0].members():
                 pm.delete(pm.cluster(node))
 
 
-class ValidatePoints(pyblish.api.InstancePlugin):
+class ValidatePoints(plugin.InstancePlugin):
     """ Ensures all points in mesh are zero"ed out """
 
     families = ["mayaAscii", "mayaBinary", "alembic"]
     label = "Points"
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     actions = [RepairPointsAction]
     optional = True
 

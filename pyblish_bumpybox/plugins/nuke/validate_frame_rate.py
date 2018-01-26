@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ValidateFrameRate(pyblish.api.ContextPlugin):
+class ValidateFrameRate(plugin.ContextPlugin):
     """ Validate frame rate to ensure, its never zero. """
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     families = ["write"]
     label = "Frame Rate"
     optional = True

@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractLocal(pyblish.api.InstancePlugin):
+class ExtractLocal(plugin.InstancePlugin):
     """ Renders all publishable items locally. """
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     families = ["img.local.*"]
     label = "Render Local"
 

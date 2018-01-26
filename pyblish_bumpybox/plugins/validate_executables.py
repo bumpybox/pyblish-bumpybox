@@ -1,13 +1,13 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ValidateFFmpeg(pyblish.api.ContextPlugin):
+class ValidateFFmpeg(plugin.ContextPlugin):
     """Validate FFMPEG is available.
 
     FFMPEG is being used in various plugins for image and video processing.
     """
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     label = "FFMPEG"
     optional = True
 

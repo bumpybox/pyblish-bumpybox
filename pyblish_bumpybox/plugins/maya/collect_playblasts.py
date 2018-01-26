@@ -1,13 +1,13 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectPlayblasts(pyblish.api.ContextPlugin):
+class CollectPlayblasts(plugin.ContextPlugin):
     """ Collects all playblast instances.
 
     Collects all cameras in scene, and presents as playblast instances.
     """
 
-    order = pyblish.api.CollectorOrder
+    order = plugin.CollectorOrder
     label = "Playblasts"
     hosts = ["maya"]
     targets = ["default", "process.local"]
@@ -33,7 +33,7 @@ class CollectPlayblasts(pyblish.api.ContextPlugin):
             name = transform.name().replace(":", "_")
 
             # Movie instance
-            instance = pyblish.api.Instance(name)
+            instance = plugin.Instance(name)
             instance.add(camera)
             instance.data["families"] = ["mov", "playblast"]
             instance.data["family"] = "mov"
@@ -110,7 +110,7 @@ class CollectPlayblasts(pyblish.api.ContextPlugin):
         )
 
 
-class CollectPlayblastsProcess(pyblish.api.ContextPlugin):
+class CollectPlayblastsProcess(plugin.ContextPlugin):
     """Collect all local processing write instances."""
 
     order = CollectPlayblasts.order + 0.01
@@ -134,7 +134,7 @@ class CollectPlayblastsProcess(pyblish.api.ContextPlugin):
                 instance.add(node)
 
 
-class CollectPlayblastsPublish(pyblish.api.ContextPlugin):
+class CollectPlayblastsPublish(plugin.ContextPlugin):
     """Collect all local processing write instances."""
 
     order = CollectPlayblasts.order + 0.01

@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectNukeStudioProjectData(pyblish.api.ContextPlugin):
+class CollectNukeStudioProjectData(plugin.ContextPlugin):
     """Collect the Ftrack project data.
 
     Offset to get collected Ftrack data from pyblish-ftrack.
@@ -18,7 +18,7 @@ class CollectNukeStudioProjectData(pyblish.api.ContextPlugin):
     disk_id - The id of the disk applied to the project.
     """
 
-    order = pyblish.api.CollectorOrder + 0.1
+    order = plugin.CollectorOrder + 0.1
     label = "Ftrack Project Data"
     hosts = ["nukestudio"]
 
@@ -99,13 +99,13 @@ class CollectNukeStudioProjectData(pyblish.api.ContextPlugin):
         return results
 
 
-class CollectNukeStudioEntities(pyblish.api.ContextPlugin):
+class CollectNukeStudioEntities(plugin.ContextPlugin):
     """Collect the Ftrack project data.
 
     Offset to get collected "trackItem" instances.
     """
 
-    order = pyblish.api.CollectorOrder + 0.1
+    order = plugin.CollectorOrder + 0.1
     label = "Ftrack Entities"
     hosts = ["nukestudio"]
 

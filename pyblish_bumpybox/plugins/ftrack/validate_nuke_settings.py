@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class RepairNukeSettings(pyblish.api.Action):
+class RepairNukeSettings(plugin.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -22,7 +22,7 @@ class RepairNukeSettings(pyblish.api.Action):
         nuke.root()["last_frame"].setValue(parent.getFrameEnd() + handles)
 
 
-class ValidateNukeSettings(pyblish.api.Validator):
+class ValidateNukeSettings(plugin.Validator):
     """ Validates nuke settings. """
 
     families = ["scene"]

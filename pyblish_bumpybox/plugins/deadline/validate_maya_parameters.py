@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class RepairParametersAction(pyblish.api.Action):
+class RepairParametersAction(plugin.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -19,7 +19,7 @@ class RepairParametersAction(pyblish.api.Action):
                 failed.append(result["instance"])
 
         # Apply pyblish.logic to get the instances for the plug-in.
-        instances = pyblish.api.instances_by_plugin(failed, plugin)
+        instances = plugin.instances_by_plugin(failed, plugin)
 
         plugin = plugin()
         for instance in instances:
@@ -60,10 +60,10 @@ class RepairParametersAction(pyblish.api.Action):
                 pymel.core.setAttr(attr, channelBox=True)
 
 
-class ValidateMayaParameters(pyblish.api.InstancePlugin):
+class ValidateMayaParameters(plugin.InstancePlugin):
     """ Validates the existence of deadline parameters on node. """
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     label = "Parameters"
     families = ["deadline"]
     hosts = ["maya"]

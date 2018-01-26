@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectRender(pyblish.api.ContextPlugin):
+class CollectRender(plugin.ContextPlugin):
     """ Adds the celaction render instances """
 
-    order = pyblish.api.CollectorOrder + 0.1
+    order = plugin.CollectorOrder + 0.1
 
     def process(self, context):
         import ftrack

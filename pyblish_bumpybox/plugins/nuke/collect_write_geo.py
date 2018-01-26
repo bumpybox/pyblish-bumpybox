@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectWriteGeo(pyblish.api.ContextPlugin):
+class CollectWriteGeo(plugin.ContextPlugin):
     """Collect all write nodes."""
 
-    order = pyblish.api.CollectorOrder
+    order = plugin.CollectorOrder
     label = "Write Geo"
     hosts = ["nuke"]
     targets = ["default", "process.local"]
@@ -21,7 +21,7 @@ class CollectWriteGeo(pyblish.api.ContextPlugin):
                 continue
 
             # Create cache instance
-            instance = pyblish.api.Instance(node.name())
+            instance = plugin.Instance(node.name())
             instance.data["family"] = "cache"
             instance.data["families"] = ["writegeo"]
             instance.add(node)
@@ -31,7 +31,7 @@ class CollectWriteGeo(pyblish.api.ContextPlugin):
             instances.append(instance)
 
             # Create camera instance
-            instance = pyblish.api.Instance(node.name())
+            instance = plugin.Instance(node.name())
             instance.data["family"] = "camera"
             instance.data["families"] = ["writegeo"]
             instance.add(node)
@@ -42,7 +42,7 @@ class CollectWriteGeo(pyblish.api.ContextPlugin):
             instances.append(instance)
 
             # Create geometry instance
-            instance = pyblish.api.Instance(node.name())
+            instance = plugin.Instance(node.name())
             instance.data["family"] = "geometry"
             instance.data["families"] = ["writegeo"]
             instance.add(node)
@@ -57,7 +57,7 @@ class CollectWriteGeo(pyblish.api.ContextPlugin):
         )
 
 
-class CollectCacheProcess(pyblish.api.ContextPlugin):
+class CollectCacheProcess(plugin.ContextPlugin):
     """Collect all local processing writegeo instances."""
 
     order = CollectWriteGeo.order + 0.01
@@ -123,7 +123,7 @@ class CollectCacheProcess(pyblish.api.ContextPlugin):
                 instance.data["instanceToggled"] = instanceToggled
 
 
-class CollectCachePublish(pyblish.api.ContextPlugin):
+class CollectCachePublish(plugin.ContextPlugin):
     """Collect all local processing writegeo instances."""
 
     order = CollectWriteGeo.order + 0.01

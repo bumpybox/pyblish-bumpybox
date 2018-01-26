@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectMayaParameters(pyblish.api.ContextPlugin):
+class CollectMayaParameters(plugin.ContextPlugin):
     """ Add optional parameters to remote instances.
 
     A ContextPlugin because if remote instance is unpublishable,
@@ -9,7 +9,7 @@ class CollectMayaParameters(pyblish.api.ContextPlugin):
     Offset from default order, to pick up on created instances.
     """
 
-    order = pyblish.api.CollectorOrder + 0.1
+    order = plugin.CollectorOrder + 0.1
     label = "Maya Parameters"
     hosts = ["maya"]
 

@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ValidateOutputRange(pyblish.api.InstancePlugin):
+class ValidateOutputRange(plugin.InstancePlugin):
     """Validate the output range of the task.
 
     This compares the output range and clip associated with the task, so see
@@ -10,7 +10,7 @@ class ValidateOutputRange(pyblish.api.InstancePlugin):
     do.
     """
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     families = ["trackItem.task"]
     label = "Output Range"
     hosts = ["nukestudio"]
@@ -36,12 +36,12 @@ class ValidateOutputRange(pyblish.api.InstancePlugin):
         assert difference, failure_message
 
 
-class ValidateImageSequence(pyblish.api.InstancePlugin):
+class ValidateImageSequence(plugin.InstancePlugin):
     """Validate image sequence output path is setup correctly."""
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     families = ["trackItem.task", "img"]
-    match = pyblish.api.Subset
+    match = plugin.Subset
     label = "Image Sequence"
     hosts = ["nukestudio"]
     optional = True

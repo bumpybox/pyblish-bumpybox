@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractSceneSave(pyblish.api.InstancePlugin):
+class ExtractSceneSave(plugin.InstancePlugin):
     """ Saves the active scene file """
 
-    order = pyblish.api.ExtractorOrder - 0.1
+    order = plugin.ExtractorOrder - 0.1
     families = ["scene"]
     label = "Scene Save"
     hosts = ["houdini"]

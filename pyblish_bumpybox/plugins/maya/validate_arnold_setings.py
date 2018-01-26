@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class RepairArnoldSettings(pyblish.api.Action):
+class RepairArnoldSettings(plugin.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -13,10 +13,10 @@ class RepairArnoldSettings(pyblish.api.Action):
         node.mergeAOVs.set(True)
 
 
-class ValidateArnoldSettings(pyblish.api.InstancePlugin):
+class ValidateArnoldSettings(plugin.InstancePlugin):
     """ Validates render layer settings. """
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     optional = True
     families = ["arnold"]
     label = "Arnold Settings"

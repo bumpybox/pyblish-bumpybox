@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractProject(pyblish.api.ContextPlugin):
+class ExtractProject(plugin.ContextPlugin):
     """Extract an Ftrack project from context.data["ftrackProjectData"]"""
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     label = "Ftrack Project"
     hosts = ["nukestudio"]
 
@@ -65,12 +65,12 @@ def ensure_entity(instance, entity_type):
     return entity
 
 
-class ExtractEpisode(pyblish.api.InstancePlugin):
+class ExtractEpisode(plugin.InstancePlugin):
     """Creates ftrack episodes by the name of the instance."""
 
-    order = ExtractProject.order + 0.01
+    order = plugin.ExtractorOrder + 0.01
     families = ["ftrackEntity", "episode"]
-    match = pyblish.api.Subset
+    match = plugin.Subset
     label = "Ftrack Episode"
     optional = True
 
@@ -80,12 +80,12 @@ class ExtractEpisode(pyblish.api.InstancePlugin):
         instance.data["item"] = instance.data["parent"].data["item"]
 
 
-class ExtractSequence(pyblish.api.InstancePlugin):
+class ExtractSequence(plugin.InstancePlugin):
     """Creates ftrack sequences by the name of the instance."""
 
-    order = ExtractEpisode.order + 0.01
+    order = plugin.ExtractorOrder + 0.02
     families = ["ftrackEntity", "sequence"]
-    match = pyblish.api.Subset
+    match = plugin.Subset
     label = "Ftrack Sequence"
     optional = True
 
@@ -95,12 +95,12 @@ class ExtractSequence(pyblish.api.InstancePlugin):
         instance.data["item"] = instance.data["parent"].data["item"]
 
 
-class ExtractShot(pyblish.api.InstancePlugin):
+class ExtractShot(plugin.InstancePlugin):
     """Creates ftrack shots by the name of the instance."""
 
-    order = ExtractSequence.order + 0.01
+    order = plugin.ExtractorOrder + 0.03
     families = ["ftrackEntity", "shot"]
-    match = pyblish.api.Subset
+    match = plugin.Subset
     label = "Ftrack Shot"
     optional = True
 
@@ -130,10 +130,10 @@ class ExtractShot(pyblish.api.InstancePlugin):
             entity.create_thumbnail(instance.data["thumbnail"])
 
 
-class ExtractAssetDataNukeStudio(pyblish.api.ContextPlugin):
+class ExtractAssetDataNukeStudio(plugin.ContextPlugin):
     """Changes the parent of the review component."""
 
-    order = ExtractShot.order + 0.01
+    order = plugin.ExtractorOrder + 0.04
     label = "Ftrack Link Review"
     optional = True
     hosts = ["nukestudio"]
@@ -161,10 +161,10 @@ class ExtractAssetDataNukeStudio(pyblish.api.ContextPlugin):
             instance_data["review"].data["asset_data"] = asset_data
 
 
-class ExtractTasks(pyblish.api.InstancePlugin):
+class ExtractTasks(plugin.InstancePlugin):
     """Creates ftrack shots by the name of the instance."""
 
-    order = ExtractShot.order + 0.01
+    order = plugin.ExtractorOrder + 0.04
     families = ["trackItem.ftrackEntity.task"]
     label = "Ftrack Tasks"
     optional = True
@@ -201,10 +201,10 @@ class ExtractTasks(pyblish.api.InstancePlugin):
         instance.data["entity"] = task
 
 
-class ExtractLinkAssetbuilds(pyblish.api.InstancePlugin):
+class ExtractLinkAssetbuilds(plugin.InstancePlugin):
     """Link Assetbuilds to shot."""
 
-    order = ExtractShot.order + 0.01
+    order = plugin.ExtractorOrder + 0.04
     families = ["trackItem.ftrackEntity.assetbuild"]
     label = "Ftrack Link Assetbuilds"
     optional = True
@@ -235,10 +235,10 @@ class ExtractLinkAssetbuilds(pyblish.api.InstancePlugin):
             )
 
 
-class ExtractCommit(pyblish.api.ContextPlugin):
+class ExtractCommit(plugin.ContextPlugin):
     """Commits the Ftrack session for entities."""
 
-    order = ExtractTasks.order + 0.01
+    order = plugin.ExtractorOrder + 0.05
     label = "Ftrack Commit"
 
     def process(self, context):
@@ -246,10 +246,10 @@ class ExtractCommit(pyblish.api.ContextPlugin):
         context.data["ftrackSession"].commit()
 
 
-class ExtractNukeStudio(pyblish.api.InstancePlugin):
+class ExtractNukeStudio(plugin.InstancePlugin):
     """Sets the Ftrack data for NukeStudio components."""
 
-    order = ExtractTasks.order + 0.01
+    order = plugin.ExtractorOrder + 0.05
     label = "Ftrack NukeStudio"
     families = ["trackItem.task"]
     hosts = ["nukestudio"]

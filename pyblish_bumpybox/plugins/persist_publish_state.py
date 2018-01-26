@@ -1,13 +1,13 @@
-from pyblish import api
+from pyblish_bumpybox import plugin
 
 
-class PersistPublishState(api.ContextPlugin):
+class PersistPublishState(plugin.ContextPlugin):
     """Extracts the publish state of all instances
 
     Instances needs to have a "instanceToggled" method stored as data member.
     """
 
-    order = api.ValidatorOrder
+    order = plugin.ValidatorOrder
     targets = ["default", "process"]
     label = "Publish State"
 

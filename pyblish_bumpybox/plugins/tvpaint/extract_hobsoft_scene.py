@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractHobsoftScene(pyblish.api.Extractor):
+class ExtractHobsoftScene(plugin.Extractor):
     """ Extract work file to Hobsoft drive
     """
 

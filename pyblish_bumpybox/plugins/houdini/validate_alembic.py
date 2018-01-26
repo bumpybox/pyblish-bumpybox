@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class RepairAlembic(pyblish.api.Action):
+class RepairAlembic(plugin.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -18,7 +18,7 @@ class RepairAlembic(pyblish.api.Action):
                 failed.append(result["instance"])
 
         # Apply pyblish.logic to get the instances for the plug-in
-        instances = pyblish.api.instances_by_plugin(failed, plugin)
+        instances = plugin.instances_by_plugin(failed, plugin)
 
         for instance in instances:
 
@@ -26,11 +26,11 @@ class RepairAlembic(pyblish.api.Action):
             instance[0].setParms({"partition_mode": 4, "collapse": 1})
 
 
-class ValidateAlembic(pyblish.api.InstancePlugin):
+class ValidateAlembic(plugin.InstancePlugin):
     """ Validates Alembic settings """
 
     families = ["alembic"]
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     label = "Alembic"
     actions = [RepairAlembic]
     optional = True

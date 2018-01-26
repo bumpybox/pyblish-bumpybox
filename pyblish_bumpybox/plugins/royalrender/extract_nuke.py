@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractNuke(pyblish.api.ContextPlugin):
+class ExtractNuke(plugin.ContextPlugin):
     """ Appending RoyalRender data to instances. """
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     label = "Royal Render Nuke"
     hosts = ["nuke", "nukeassist"]
     families = ["royalrender"]

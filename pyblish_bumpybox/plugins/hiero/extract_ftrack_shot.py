@@ -1,12 +1,12 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractFtrackShot(pyblish.api.InstancePlugin):
+class ExtractFtrackShot(plugin.InstancePlugin):
     """ Creates ftrack shots by the name of the shot. """
 
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     families = ["ftrack", "trackItem"]
-    match = pyblish.api.Subset
+    match = plugin.Subset
     label = "Ftrack Shot"
     optional = True
     hosts = ["hiero"]

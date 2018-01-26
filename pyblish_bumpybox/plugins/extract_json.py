@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractJSON(pyblish.api.ContextPlugin):
+class ExtractJSON(plugin.ContextPlugin):
     """ Extract all instances to a serialized json file. """
 
-    order = pyblish.api.IntegratorOrder + 1
+    order = plugin.IntegratorOrder + 1
     label = "JSON"
     hosts = ["maya", "houdini", "nuke"]
     targets = ["default", "process"]

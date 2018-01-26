@@ -1,14 +1,14 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ValidateNames(pyblish.api.InstancePlugin):
+class ValidateNames(plugin.InstancePlugin):
     """ Validate sequence, video track and track item names.
 
     When creating output directories with the name of an item, ending with a
     whitespace will fail the extraction.
     """
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     families = ["trackItem"]
     label = "Names"
     hosts = ["hiero"]

@@ -1,11 +1,11 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ExtractMaya(pyblish.api.InstancePlugin):
+class ExtractMaya(plugin.InstancePlugin):
     """ Appending Deadline data to deadline instances. """
 
     families = ["deadline"]
-    order = pyblish.api.ExtractorOrder
+    order = plugin.ExtractorOrder
     label = "Deadline"
     hosts = ["maya"]
 

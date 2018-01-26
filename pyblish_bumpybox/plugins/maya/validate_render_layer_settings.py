@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class RepairRenderLayerSettings(pyblish.api.Action):
+class RepairRenderLayerSettings(plugin.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -52,10 +52,10 @@ class RepairRenderLayerSettings(pyblish.api.Action):
         pymel.core.mel.eval("setProject \"{0}\"".format(expected))
 
 
-class ValidateRenderLayerSettings(pyblish.api.InstancePlugin):
+class ValidateRenderLayerSettings(plugin.InstancePlugin):
     """ Validates render layer settings. """
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     optional = True
     families = ["renderlayer"]
     label = "Render Layer Settings"

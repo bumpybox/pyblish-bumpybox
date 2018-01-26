@@ -1,10 +1,10 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class ValidateProcessing(pyblish.api.ContextPlugin):
+class ValidateProcessing(plugin.ContextPlugin):
     """Validates whether there are any instances to process."""
 
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     optional = True
     label = "Data to Process"
     targets = ["default", "process"]

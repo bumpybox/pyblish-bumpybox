@@ -1,7 +1,7 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class RepairScenePath(pyblish.api.Action):
+class RepairScenePath(plugin.Action):
     label = "Repair"
     icon = "wrench"
     on = "failed"
@@ -46,9 +46,9 @@ class RepairScenePath(pyblish.api.Action):
         self.log.info("Saved to \"%s\"" % file_path)
 
 
-class ValidateScenePath(pyblish.api.InstancePlugin):
+class ValidateScenePath(plugin.InstancePlugin):
     """ Validates the path of the hiero file """
-    order = pyblish.api.ValidatorOrder
+    order = plugin.ValidatorOrder
     families = ['scene']
     label = 'Scene Path'
     actions = [RepairScenePath]

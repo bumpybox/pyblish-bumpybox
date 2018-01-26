@@ -1,8 +1,8 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-@pyblish.api.log
-class ValidateScenePath(pyblish.api.Validator):
+@plugin.log
+class ValidateScenePath(plugin.Validator):
     """ Validates the path of the hiero file """
 
     families = ['scene']

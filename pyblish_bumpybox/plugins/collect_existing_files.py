@@ -1,13 +1,13 @@
-import pyblish.api
+from pyblish_bumpybox import plugin
 
 
-class CollectExistingFiles(pyblish.api.ContextPlugin):
+class CollectExistingFiles(plugin.ContextPlugin):
     """Collect all existing files from the collection.
 
     Offset to iterate over all collected instances.
     """
 
-    order = pyblish.api.CollectorOrder + 0.25
+    order = plugin.CollectorOrder + 0.25
     label = "Existing Files"
     hosts = ["maya", "houdini", "nuke", "nukestudio"]
 
