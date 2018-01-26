@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateHierarchy(api.InstancePlugin):
     """ Ensures a flat hierarchy """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateHierarchy")
     families = ["mayaAscii", "mayaBinary", "alembic"]
     label = "Hierarchy"
     optional = True

@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractReview(api.ContextPlugin):
     """Extracts movie for review"""
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractReview")
     label = "NukeStudio Review"
     optional = True
     hosts = ["nukestudio"]

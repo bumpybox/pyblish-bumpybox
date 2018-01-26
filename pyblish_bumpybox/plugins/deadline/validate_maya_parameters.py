@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairParametersAction(api.Action):
@@ -63,7 +64,7 @@ class RepairParametersAction(api.Action):
 class ValidateMayaParameters(api.ContextPlugin):
     """ Validates the existence of deadline parameters on node. """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateMayaParameters")
     label = "Parameters"
     families = ["deadline"]
     hosts = ["maya"]

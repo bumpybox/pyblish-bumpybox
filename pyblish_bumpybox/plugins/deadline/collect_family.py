@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectFamily(api.ContextPlugin):
     """ Append Deadline data to "remote" instances. """
 
-    order = api.CollectorOrder + 0.4
+    order = inventory.get_order(__file__, "CollectFamily")
     label = "Family"
 
     def process(self, context):

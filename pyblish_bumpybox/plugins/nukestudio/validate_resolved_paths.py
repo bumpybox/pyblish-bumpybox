@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateResolvedPaths(api.ContextPlugin):
     """Validate there are no overlapping resolved paths."""
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateResolvedPaths")
     label = "Resolved Paths"
     hosts = ["nukestudio"]
 

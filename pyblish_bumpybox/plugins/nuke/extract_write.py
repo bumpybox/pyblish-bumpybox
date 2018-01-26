@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class Extract(api.ContextPlugin):
     """Super class for write and writegeo extractors."""
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "Extract")
     optional = True
     hosts = ["nuke"]
     match = api.Subset
@@ -29,6 +30,7 @@ class Extract(api.ContextPlugin):
 class ExtractWrite(Extract):
     """ Extract output from write nodes. """
 
+    order = inventory.get_order(__file__, "ExtractWrite")
     families = ["write", "local"]
     label = "Write"
 
@@ -46,6 +48,7 @@ class ExtractWrite(Extract):
 
 class ExtractCache(Extract):
 
+    order = inventory.get_order(__file__, "ExtractCache")
     label = "Cache"
     families = ["cache", "local"]
 
@@ -61,6 +64,7 @@ class ExtractCache(Extract):
 
 class ExtractCamera(Extract):
 
+    order = inventory.get_order(__file__, "ExtractCamera")
     label = "Camera"
     families = ["camera", "local"]
 
@@ -90,6 +94,7 @@ class ExtractCamera(Extract):
 
 class ExtractGeometry(Extract):
 
+    order = inventory.get_order(__file__, "ExtractGeometry")
     label = "Geometry"
     families = ["geometry", "local"]
 

@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectRenderItems(api.ContextPlugin):
     """ Collect render queue items. """
 
-    order = api.CollectorOrder
+    order = inventory.get_order(__file__, "CollectRenderItems")
 
     def process(self, context):
         import os

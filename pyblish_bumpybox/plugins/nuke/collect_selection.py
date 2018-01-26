@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectSelection(api.ContextPlugin):
     """Collect selection."""
 
-    order = api.CollectorOrder - 0.1
+    order = inventory.get_order(__file__, "CollectSelection")
     label = "Selection"
     hosts = ["nuke"]
     targets = ["default", "process"]

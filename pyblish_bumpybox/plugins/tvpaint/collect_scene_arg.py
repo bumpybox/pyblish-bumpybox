@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 api.register_host('tvpaint')
@@ -7,7 +8,7 @@ api.register_host('tvpaint')
 class CollectSceneArg(api.ContextPlugin):
     """"""
 
-    order = api.CollectorOrder - 0.05
+    order = inventory.get_order(__file__, "CollectSceneArg")
 
     def process(self, context):
 

@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectFiles(api.ContextPlugin):
     """ Collects file nodes from the scene. """
 
-    order = api.CollectorOrder
+    order = inventory.get_order(__file__, "CollectFiles")
     label = "Files"
 
     def process(self, context):

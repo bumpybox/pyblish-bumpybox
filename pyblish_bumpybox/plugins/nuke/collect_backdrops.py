@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectBackdrops(api.ContextPlugin):
@@ -7,7 +8,7 @@ class CollectBackdrops(api.ContextPlugin):
     Offset to get context.data["currentFile"]
     """
 
-    order = api.CollectorOrder + 0.1
+    order = inventory.get_order(__file__, "CollectBackdrops")
     label = "Backdrops"
     hosts = ["nuke", "nukeassist"]
 

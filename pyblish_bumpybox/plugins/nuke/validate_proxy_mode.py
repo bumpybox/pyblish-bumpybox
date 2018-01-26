@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairProxyModeAction(api.Action):
@@ -15,7 +16,7 @@ class RepairProxyModeAction(api.Action):
 class ValidateProxyMode(api.ContextPlugin):
     """Validates against having proxy mode on."""
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateProxyMode")
     optional = True
     label = "Proxy Mode"
     actions = [RepairProxyModeAction]

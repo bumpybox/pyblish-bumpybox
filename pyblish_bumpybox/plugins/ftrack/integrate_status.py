@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class IntegrateStatus(api.ContextPlugin):
     """ Sets the task to "In Progress". """
 
-    order = api.IntegratorOrder
+    order = inventory.get_order(__file__, "IntegrateStatus")
     label = "Ftrack Status"
     optional = True
 

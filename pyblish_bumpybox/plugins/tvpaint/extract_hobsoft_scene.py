@@ -1,11 +1,12 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractHobsoftScene(api.InstancePlugin):
     """ Extract work file to Hobsoft drive
     """
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractHobsoftScene")
     families = ['scene']
     label = 'Hobsoft Sync'
 

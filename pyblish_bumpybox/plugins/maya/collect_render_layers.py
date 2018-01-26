@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectRenderlayers(api.ContextPlugin):
     """ Gathers all renderlayers. """
 
-    order = api.CollectorOrder
+    order = inventory.get_order(__file__, "CollectRenderlayers")
     hosts = ["maya"]
     label = "Render Layers"
 

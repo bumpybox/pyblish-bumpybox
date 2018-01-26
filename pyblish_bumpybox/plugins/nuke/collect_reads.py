@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectReads(api.ContextPlugin):
     """Collect all read nodes."""
 
-    order = api.CollectorOrder
+    order = inventory.get_order(__file__, "CollectReads")
     label = "Reads"
     hosts = ["nuke", "nukeassist"]
 

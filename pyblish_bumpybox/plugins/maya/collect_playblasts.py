@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectPlayblasts(api.ContextPlugin):
@@ -7,7 +8,7 @@ class CollectPlayblasts(api.ContextPlugin):
     Collects all cameras in scene, and presents as playblast instances.
     """
 
-    order = api.CollectorOrder
+    order = inventory.get_order(__file__, "CollectPlayblasts")
     label = "Playblasts"
     hosts = ["maya"]
     targets = ["default", "process.local"]
@@ -33,7 +34,7 @@ class CollectPlayblasts(api.ContextPlugin):
             name = transform.name().replace(":", "_")
 
             # Movie instance
-            instance = plugin.Instance(name)
+            instance = api.Instance(name)
             instance.add(camera)
             instance.data["families"] = ["mov", "playblast"]
             instance.data["family"] = "mov"
@@ -113,7 +114,7 @@ class CollectPlayblasts(api.ContextPlugin):
 class CollectPlayblastsProcess(api.ContextPlugin):
     """Collect all local processing write instances."""
 
-    order = CollectPlayblasts.order + 0.01
+    order = inventory.get_order(__file__, "CollectPlayblastsProcess")
     label = "Playblasts Local"
     hosts = ["maya"]
     targets = ["process.local"]
@@ -137,7 +138,7 @@ class CollectPlayblastsProcess(api.ContextPlugin):
 class CollectPlayblastsPublish(api.ContextPlugin):
     """Collect all local processing write instances."""
 
-    order = CollectPlayblasts.order + 0.01
+    order = inventory.get_order(__file__, "CollectPlayblastsPublish")
     label = "Playblasts Local"
     hosts = ["maya"]
     targets = ["default"]

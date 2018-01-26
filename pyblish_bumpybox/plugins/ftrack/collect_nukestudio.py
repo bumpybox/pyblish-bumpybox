@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectNukeStudioProjectData(api.ContextPlugin):
@@ -18,7 +19,7 @@ class CollectNukeStudioProjectData(api.ContextPlugin):
     disk_id - The id of the disk applied to the project.
     """
 
-    order = api.CollectorOrder + 0.1
+    order = inventory.get_order(__file__, "CollectNukeStudioProjectData")
     label = "Ftrack Project Data"
     hosts = ["nukestudio"]
 
@@ -105,7 +106,7 @@ class CollectNukeStudioEntities(api.ContextPlugin):
     Offset to get collected "trackItem" instances.
     """
 
-    order = api.CollectorOrder + 0.1
+    order = inventory.get_order(__file__, "CollectNukeStudioEntities")
     label = "Ftrack Entities"
     hosts = ["nukestudio"]
 

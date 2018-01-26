@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairSmoothDisplay(api.Action):
@@ -27,7 +28,7 @@ class RepairSmoothDisplay(api.Action):
 class ValidateSmoothDisplay(api.ContextPlugin):
     """ Ensures all meshes are not smoothed """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateSmoothDisplay")
     families = ["mayaAscii", "mayaBinary", "alembic"]
     optional = True
     label = "Smooth Display"

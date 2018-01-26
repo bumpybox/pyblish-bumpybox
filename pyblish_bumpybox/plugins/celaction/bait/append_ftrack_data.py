@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class AppendFtrackAudio(api.ContextPlugin):
 
     label = "Ftrack Audio"
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "AppendFtrackAudio")
 
     def process(self, context):
         import ftrack
@@ -25,7 +26,7 @@ class AppendFtrackData(api.ContextPlugin):
 
     families = ["img.*", "mov.*"]
     # offset to piggy back from default collectors
-    order = api.CollectorOrder + 0.1
+    order = inventory.get_order(__file__, "AppendFtrackData")
 
     def process(self, instance):
 

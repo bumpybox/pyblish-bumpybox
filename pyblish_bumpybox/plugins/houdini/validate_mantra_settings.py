@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairMantraSettings(api.Action):
@@ -35,7 +36,7 @@ class ValidateMantraSettings(api.ContextPlugin):
     """ Validates mantra settings """
 
     families = ["mantra"]
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateMantraSettings")
     label = "Mantra Settings"
     actions = [RepairMantraSettings]
     optional = True

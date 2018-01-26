@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairWriteNodeAction(api.Action):
@@ -36,7 +37,7 @@ class RepairWriteNodeAction(api.Action):
 class ValidateWriteNode(api.ContextPlugin):
     """ Validates file output. """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateWriteNode")
     optional = True
     families = ["write"]
     label = "Write Node"

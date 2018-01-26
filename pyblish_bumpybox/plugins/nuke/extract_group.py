@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractGroup(api.ContextPlugin):
     """ Extract gizmos from group nodes. """
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractGroup")
     optional = True
     families = ["gizmo", "lut"]
     label = "Group"

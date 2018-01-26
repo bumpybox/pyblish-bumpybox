@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectNukeParameters(api.ContextPlugin):
@@ -9,7 +10,7 @@ class CollectNukeParameters(api.ContextPlugin):
     Offset from default order, to pick up on created instances.
     """
 
-    order = api.CollectorOrder + 0.2
+    order = inventory.get_order(__file__, "CollectNukeParameters")
     label = "Parameters"
     hosts = ["nuke"]
 

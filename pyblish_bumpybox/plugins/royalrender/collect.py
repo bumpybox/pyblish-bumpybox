@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectNukeWrites(api.ContextPlugin):
     """Collect all write nodes."""
 
-    order = api.CollectorOrder + 0.1
+    order = inventory.get_order(__file__, "CollectNukeWrites")
     label = "Writes Royal Render"
     hosts = ["nuke", "nukeassist"]
     targets = ["process.royalrender"]
@@ -58,7 +59,7 @@ class CollectNukeWrites(api.ContextPlugin):
 class CollectMayaSets(api.ContextPlugin):
     """Collect all local processing write instances."""
 
-    order = api.CollectorOrder + 0.1
+    order = inventory.get_order(__file__, "CollectMayaSets")
     label = "Sets Royal Render"
     hosts = ["maya"]
     targets = ["process.royalrender"]

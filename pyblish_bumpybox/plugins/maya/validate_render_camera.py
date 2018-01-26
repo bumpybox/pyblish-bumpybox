@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateRenderCamera(api.InstancePlugin):
     """ Validates render camera """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateRenderCamera")
     families = ["renderlayer"]
     optional = True
     label = "Render Camera"

@@ -1,9 +1,10 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectSorting(api.ContextPlugin):
     # offset to execute last of all collectors
-    order = api.CollectorOrder + 0.49
+    order = inventory.get_order(__file__, "CollectSorting")
     label = "Sorting"
     targets = ["default", "process"]
 

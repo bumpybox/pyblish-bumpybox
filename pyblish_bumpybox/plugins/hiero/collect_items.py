@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectItems(api.ContextPlugin):
@@ -8,7 +9,7 @@ class CollectItems(api.ContextPlugin):
     in its meta data, this family will also be added to the instance.
     """
 
-    order = api.CollectorOrder
+    order = inventory.get_order(__file__, "CollectItems")
     label = "Collect"
     hosts = ["hiero"]
 

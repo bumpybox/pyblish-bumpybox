@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectWrites(api.ContextPlugin):
     """Collect all write nodes."""
 
-    order = api.CollectorOrder
+    order = inventory.get_order(__file__, "CollectWrites")
     label = "Writes"
     hosts = ["nuke", "nukeassist"]
     targets = ["default", "process"]
@@ -68,7 +69,7 @@ class CollectWrites(api.ContextPlugin):
 class CollectWritesProcess(api.ContextPlugin):
     """Collect all local processing write instances."""
 
-    order = CollectWrites.order + 0.01
+    order = inventory.get_order(__file__, "CollectWritesProcess")
     label = "Writes Local"
     hosts = ["nuke"]
     targets = ["process.local"]
@@ -115,7 +116,7 @@ class CollectWritesProcess(api.ContextPlugin):
 class CollectWritesPublish(api.ContextPlugin):
     """Collect all write instances for publishing."""
 
-    order = CollectWrites.order + 0.01
+    order = inventory.get_order(__file__, "CollectWritesPublish")
     label = "Writes"
     hosts = ["nuke", "nukeassist"]
     targets = ["default"]

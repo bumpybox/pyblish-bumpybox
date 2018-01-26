@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairDisplayLayerAction(api.Action):
@@ -20,7 +21,7 @@ class RepairDisplayLayerAction(api.Action):
 class ValidateDisplayLayer(api.ContextPlugin):
     """ Ensure no displays layers are present in the scene """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateDisplayLayer")
     optional = True
     label = 'Display Layers'
     actions = [RepairDisplayLayerAction]

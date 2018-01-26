@@ -1,9 +1,10 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectScene(api.ContextPlugin):
 
-    order = api.CollectorOrder
+    order = inventory.get_order(__file__, "CollectScene")
 
     def process(self, context):
         import traceback

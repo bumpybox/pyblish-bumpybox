@@ -1,16 +1,18 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateUniqueCompRenders(api.ContextPlugin):
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateUniqueCompRenders")
     label = "Unique Comp Renders"
     families = ["img.local.*"]
 
     def process(self, context):
 
-        instances = plugin.instances_by_plugin(context,
-                                                    ValidateAEUniqueCompRenders)
+        instances = api.instances_by_plugin(
+            context, ValidateAEUniqueCompRenders
+        )
 
         names = []
         for instance in instances:

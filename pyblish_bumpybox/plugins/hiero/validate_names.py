@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateNames(api.ContextPlugin):
@@ -8,7 +9,7 @@ class ValidateNames(api.ContextPlugin):
     whitespace will fail the extraction.
     """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateNames")
     families = ["trackItem"]
     label = "Names"
     hosts = ["hiero"]

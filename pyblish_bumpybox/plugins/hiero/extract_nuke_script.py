@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractNukeScript(api.ContextPlugin):
@@ -6,7 +7,7 @@ class ExtractNukeScript(api.ContextPlugin):
 
     families = ["nuke"]
     label = "Nuke Script"
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractNukeScript")
     optional = True
     hosts = ["hiero"]
 

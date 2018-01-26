@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateProcessing(api.ContextPlugin):
     """Validates whether there are any instances to process."""
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateProcessing")
     optional = True
     label = "Data to Process"
     targets = ["default", "process"]

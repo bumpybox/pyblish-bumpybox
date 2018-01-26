@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairRenderLayerSettings(api.Action):
@@ -55,7 +56,7 @@ class RepairRenderLayerSettings(api.Action):
 class ValidateRenderLayerSettings(api.ContextPlugin):
     """ Validates render layer settings. """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateRenderLayerSettings")
     optional = True
     families = ["renderlayer"]
     label = "Render Layer Settings"

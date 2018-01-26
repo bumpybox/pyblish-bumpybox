@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairIntermediateShapes(api.Action):
@@ -30,7 +31,7 @@ class ValidateIntermediateShapes(api.ContextPlugin):
 
     families = ["mayaAscii", "mayaBinary", "alembic"]
     label = "Intermediate Shapes"
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateIntermediateShapes")
     actions = [RepairIntermediateShapes]
     optional = True
 

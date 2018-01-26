@@ -1,11 +1,12 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateMantraCamera(api.ContextPlugin):
     """ Validates that the camera for mantra nodes exists. """
 
     families = ["mantra"]
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateMantraCamera")
     label = "Mantra Camera"
     hosts = ["houdini"]
 

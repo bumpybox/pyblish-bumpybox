@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractReview(api.ContextPlugin):
@@ -10,7 +11,7 @@ class ExtractReview(api.ContextPlugin):
 
     label = "Nuke Review"
     optional = True
-    order = api.ExtractorOrder + 0.01
+    order = inventory.get_order(__file__, "ExtractReview")
     targets = ["process.local"]
     families = ["img"]
 
@@ -61,6 +62,7 @@ class ExtractReview(api.ContextPlugin):
         temporary_nodes.append(node)
 
         viewer_process_node = nuke.ViewerProcess.node()
+
         dag_node = None
         if viewer_process_node:
             dag_node = nuke.createNode(viewer_process_node.Class())

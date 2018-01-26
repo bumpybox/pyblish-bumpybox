@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateNukeStudioTasks(api.ContextPlugin):
     """Validate tasks."""
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateNukeStudioTasks")
     label = "Ftrack Tasks"
     hosts = ["nukestudio"]
 

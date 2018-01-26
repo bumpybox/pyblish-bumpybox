@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairVraySettingsAction(api.Action):
@@ -25,7 +26,7 @@ class RepairVraySettingsAction(api.Action):
 class ValidateVraySettings(api.ContextPlugin):
     """ Validates render layer settings. """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateVraySettings")
     optional = True
     families = ["vray"]
     label = "Vray Settings"

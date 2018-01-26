@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractFormats(api.ContextPlugin):
     """ Extracts Maya ascii and binary files. """
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractFormats")
     families = ["mayaAscii", "mayaBinary"]
     optional = True
     label = "Maya Formats"

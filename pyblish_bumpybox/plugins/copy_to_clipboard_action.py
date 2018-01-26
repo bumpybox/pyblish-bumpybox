@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CopyToClipboardAction(api.Action):
@@ -45,6 +46,7 @@ class CopyToClipboardAction(api.Action):
 class Report(api.ContextPlugin):
     """ Report plugin. """
 
+    order = inventory.get_order(__file__, "Report")
     label = "Report"
     actions = [CopyToClipboardAction]
 

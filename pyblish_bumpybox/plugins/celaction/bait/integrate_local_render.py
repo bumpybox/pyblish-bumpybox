@@ -1,11 +1,12 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class IntegrateLocal(api.ContextPlugin):
 
     label = "Local"
     families = ["img.local.*", "mov.local.*"]
-    order = api.IntegratorOrder
+    order = inventory.get_order(__file__, "IntegrateLocal")
 
     def process(self, instance):
         import os

@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractLocal(api.ContextPlugin):
     """ Renders all publishable items locally. """
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractLocal")
     families = ["img.local.*"]
     label = "Render Local"
 

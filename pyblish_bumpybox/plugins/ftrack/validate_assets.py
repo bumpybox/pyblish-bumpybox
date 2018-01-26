@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairAssetsAction(api.Action):
@@ -18,7 +19,7 @@ class RepairAssetsAction(api.Action):
 class ValidateAssets(api.ContextPlugin):
     """ Validates clean up broken Ftrack assets. """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateAssets")
     families = ["scene"]
     optional = True
     label = "Assets"

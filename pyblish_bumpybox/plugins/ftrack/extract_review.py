@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractReview(api.ContextPlugin):
@@ -8,7 +9,7 @@ class ExtractReview(api.ContextPlugin):
     """
 
     families = ["review"]
-    order = api.ExtractorOrder + 0.2
+    order = inventory.get_order(__file__, "ExtractReview")
     label = "Ftrack Review"
     optional = True
 

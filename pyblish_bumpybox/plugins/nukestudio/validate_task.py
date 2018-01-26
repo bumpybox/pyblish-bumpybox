@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateOutputRange(api.ContextPlugin):
@@ -10,7 +11,7 @@ class ValidateOutputRange(api.ContextPlugin):
     do.
     """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateOutputRange")
     families = ["trackItem.task"]
     label = "Output Range"
     hosts = ["nukestudio"]
@@ -39,7 +40,7 @@ class ValidateOutputRange(api.ContextPlugin):
 class ValidateImageSequence(api.ContextPlugin):
     """Validate image sequence output path is setup correctly."""
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateImageSequence")
     families = ["trackItem.task", "img"]
     match = api.Subset
     label = "Image Sequence"

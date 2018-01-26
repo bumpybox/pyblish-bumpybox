@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairFilePathAction(api.Action):
@@ -42,7 +43,7 @@ class RepairFilePathAction(api.Action):
 class ValidateFilePath(api.ContextPlugin):
     """ Validate file paths to be in the workspace directory. """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateFilePath")
     families = ["file"]
     label = "File Path"
     actions = [RepairFilePathAction]

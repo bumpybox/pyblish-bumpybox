@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractAudio(api.ContextPlugin):
@@ -7,7 +8,7 @@ class ExtractAudio(api.ContextPlugin):
     families = ["audio"]
     label = "Audio"
     hosts = ["hiero"]
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractAudio")
     optional = True
 
     def process(self, instance):

@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairReadNodeAction(api.Action):
@@ -40,7 +41,7 @@ class RepairReadNodeAction(api.Action):
 class ValidateReadNode(api.ContextPlugin):
     """Validate Read node is setup correctly."""
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateReadNode")
     families = ["read", "img"]
     match = api.Subset
     label = "Read Node"

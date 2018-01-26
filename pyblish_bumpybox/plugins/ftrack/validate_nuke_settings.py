@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairNukeSettings(api.Action):
@@ -25,7 +26,7 @@ class RepairNukeSettings(api.Action):
 class ValidateNukeSettings(api.ContextPlugin):
     """ Validates nuke settings. """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateNukeSettings")
     families = ["scene"]
     optional = True
     label = "Settings"

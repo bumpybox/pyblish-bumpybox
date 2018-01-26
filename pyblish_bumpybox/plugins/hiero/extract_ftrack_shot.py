@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractFtrackShot(api.ContextPlugin):
     """ Creates ftrack shots by the name of the shot. """
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractFtrackShot")
     families = ["ftrack", "trackItem"]
     match = api.Subset
     label = "Ftrack Shot"

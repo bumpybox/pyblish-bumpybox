@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectSets(api.ContextPlugin):
     """ Collects all sets in scene """
 
-    order = api.CollectorOrder
+    order = inventory.get_order(__file__, "CollectSets")
     label = "Sets"
     hosts = ["maya"]
     targets = ["default", "process"]
@@ -148,7 +149,7 @@ class CollectSets(api.ContextPlugin):
 class CollectSetsLocal(api.ContextPlugin):
     """Collect all local processing write instances."""
 
-    order = CollectSets.order + 0.01
+    order = inventory.get_order(__file__, "CollectSetsLocal")
     label = "Sets Local"
     hosts = ["maya"]
     targets = ["process.local"]

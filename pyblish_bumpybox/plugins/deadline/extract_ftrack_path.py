@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractFtrackPath(api.ContextPlugin):
     """ Extract Ftrack path for Deadline """
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractFtrackPath")
     families = ["deadline"]
     label = "Ftrack Path"
 

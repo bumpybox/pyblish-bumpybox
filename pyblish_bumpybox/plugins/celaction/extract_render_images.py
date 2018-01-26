@@ -1,11 +1,12 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractRenderImages(api.ContextPlugin):
 
     label = 'Render Images'
     families = ['render']
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractRenderImages")
     active = False
     optional = True
 
@@ -95,7 +96,7 @@ class ExtractRenderMovie(api.ContextPlugin):
 
     label = 'Render Movie'
     families = ['render']
-    order = ExtractRenderImages.order + 0.1
+    order = inventory.get_order(__file__, "ExtractRenderMovie")
     active = False
     optional = True
 

@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectExistingFiles(api.ContextPlugin):
@@ -7,7 +8,7 @@ class CollectExistingFiles(api.ContextPlugin):
     Offset to iterate over all collected instances.
     """
 
-    order = api.CollectorOrder + 0.25
+    order = inventory.get_order(__file__, "CollectExistingFiles")
     label = "Existing Files"
     hosts = ["maya", "houdini", "nuke", "nukestudio"]
 

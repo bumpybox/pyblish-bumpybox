@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairAlembic(api.Action):
@@ -30,7 +31,7 @@ class ValidateAlembic(api.ContextPlugin):
     """ Validates Alembic settings """
 
     families = ["alembic"]
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateAlembic")
     label = "Alembic"
     actions = [RepairAlembic]
     optional = True

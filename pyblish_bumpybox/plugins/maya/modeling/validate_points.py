@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairPointsAction(api.Action):
@@ -29,7 +30,7 @@ class ValidatePoints(api.ContextPlugin):
 
     families = ["mayaAscii", "mayaBinary", "alembic"]
     label = "Points"
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidatePoints")
     actions = [RepairPointsAction]
     optional = True
 

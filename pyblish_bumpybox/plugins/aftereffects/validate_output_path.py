@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairOutputPathAction(api.Action):
@@ -36,7 +37,7 @@ class RepairOutputPathAction(api.Action):
 
 class ValidateOutputPath(api.ContextPlugin):
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateOutputPath")
     label = "Output Path"
     families = ["img.*"]
     actions = [RepairOutputPathAction]

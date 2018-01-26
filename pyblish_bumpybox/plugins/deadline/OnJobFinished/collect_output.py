@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectOutput(api.ContextPlugin):
     """ Collects output """
 
-    order = api.CollectorOrder
+    order = inventory.get_order(__file__, "CollectOutput")
 
     def process(self, context):
         import os

@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractJSON(api.ContextPlugin):
     """ Extract all instances to a serialized json file. """
 
-    order = api.IntegratorOrder + 1
+    order = inventory.get_order(__file__, "ExtractJSON")
     label = "JSON"
     hosts = ["maya", "houdini", "nuke"]
     targets = ["default", "process"]

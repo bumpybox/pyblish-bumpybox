@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairNukeParametersAction(api.Action):
@@ -51,7 +52,7 @@ class RepairNukeParametersAction(api.Action):
 class ValidateNukeParameters(api.ContextPlugin):
     """ Validates the existence of deadline parameters on node. """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateNukeParameters")
     label = "Parameters"
     families = ["deadline"]
     hosts = ["nuke"]

@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairShapeName(api.Action):
@@ -21,7 +22,7 @@ class RepairShapeName(api.Action):
 class ValidateShapeName(api.ContextPlugin):
     """ No two shapes can have the same name. """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateShapeName")
     label = "Shape Name"
     actions = [RepairShapeName]
     optional = True

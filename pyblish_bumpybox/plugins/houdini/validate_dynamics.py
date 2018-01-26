@@ -1,11 +1,12 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateDynamics(api.ContextPlugin):
     """ Validates that the DOP path is set. """
 
     families = ["dynamics"]
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateDynamics")
     label = "Dynamics"
     hosts = ["houdini"]
 

@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectHoudiniParameters(api.ContextPlugin):
@@ -9,7 +10,7 @@ class CollectHoudiniParameters(api.ContextPlugin):
     Offset from default order, to pick up on created instances.
     """
 
-    order = api.CollectorOrder + 0.1
+    order = inventory.get_order(__file__, "CollectHoudiniParameters")
     label = "Houdini Parameters"
     hosts = ["houdini"]
 

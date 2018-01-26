@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectHoudiniRender(api.ContextPlugin):
@@ -8,7 +9,7 @@ class CollectHoudiniRender(api.ContextPlugin):
     Offset to get instances from Houdini collection.
     """
 
-    order = api.CollectorOrder + 0.4
+    order = inventory.get_order(__file__, "CollectHoudiniRender")
     label = "Houdini Render"
     hosts = ["houdini"]
 

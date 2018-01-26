@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class AppendDeadlineData(api.ContextPlugin):
@@ -6,7 +7,7 @@ class AppendDeadlineData(api.ContextPlugin):
 
     families = ["img.farm.*"]
     label = "Deadline"
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "AppendDeadlineData")
 
     def process(self, instance):
         import os

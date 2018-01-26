@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateReview(api.ContextPlugin):
     """Validate all review files exists."""
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateReview")
     label = "Review"
     optional = True
     families = ["review"]

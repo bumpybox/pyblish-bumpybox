@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectWriteGeo(api.ContextPlugin):
     """Collect all write nodes."""
 
-    order = api.CollectorOrder
+    order = inventory.get_order(__file__, "CollectWriteGeo")
     label = "Write Geo"
     hosts = ["nuke"]
     targets = ["default", "process.local"]
@@ -60,7 +61,7 @@ class CollectWriteGeo(api.ContextPlugin):
 class CollectCacheProcess(api.ContextPlugin):
     """Collect all local processing writegeo instances."""
 
-    order = CollectWriteGeo.order + 0.01
+    order = inventory.get_order(__file__, "CollectCacheProcess")
     label = "Cache Local"
     hosts = ["nuke"]
     targets = ["process.local"]
@@ -126,7 +127,7 @@ class CollectCacheProcess(api.ContextPlugin):
 class CollectCachePublish(api.ContextPlugin):
     """Collect all local processing writegeo instances."""
 
-    order = CollectWriteGeo.order + 0.01
+    order = inventory.get_order(__file__, "CollectCachePublish")
     label = "Cache Local"
     hosts = ["nuke"]
     targets = ["default"]

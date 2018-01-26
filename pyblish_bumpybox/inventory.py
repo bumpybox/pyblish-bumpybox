@@ -5,6 +5,7 @@ from pyblish import api
 
 # ----Collection
 copy_to_clipboard_action_Report = api.CollectorOrder - 1
+collect_json_CollectJSON = api.CollectorOrder + 0.1
 collect_source_CollectScene = api.CollectorOrder + 0.1
 collect_scene_version_CollectSceneVersion = api.CollectorOrder + 0.1
 collect_existing_files_CollectExistingFiles = api.CollectorOrder + 0.25

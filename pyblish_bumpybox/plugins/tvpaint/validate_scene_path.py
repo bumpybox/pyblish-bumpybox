@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateScenePath(api.InstancePlugin):
     """ Validates the path of the hiero file """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateScenePath")
     families = ['scene']
     label = 'Scene Path'
 

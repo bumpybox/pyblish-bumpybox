@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectRender(api.ContextPlugin):
     """"""
 
-    order = api.CollectorOrder + 0.1
+    order = inventory.get_order(__file__, "CollectRender")
 
     def process(self, context):
 

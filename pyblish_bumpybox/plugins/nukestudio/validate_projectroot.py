@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairProjectRoot(api.Action):
@@ -31,7 +32,7 @@ class RepairProjectRoot(api.Action):
 class ValidateProjectRoot(api.ContextPlugin):
     """Validate the project root to the workspace directory."""
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateProjectRoot")
     label = "Project Root"
     hosts = ["nukestudio"]
     actions = [RepairProjectRoot]

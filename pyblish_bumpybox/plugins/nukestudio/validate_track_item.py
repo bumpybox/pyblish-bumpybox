@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateTrackItem(api.ContextPlugin):
@@ -7,7 +8,7 @@ class ValidateTrackItem(api.ContextPlugin):
     Exact matching to optimize processing.
     """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateTrackItem")
     families = ["trackItem"]
     match = api.Exact
     label = "Track Item"
@@ -50,4 +51,6 @@ class ValidateTrackItemFtrack(ValidateTrackItem):
     Because we are matching the families exactly, we need this plugin to
     accommodate for the ftrack family addition.
     """
+
+    order = inventory.get_order(__file__, "ValidateTrackItemFtrack")
     families = ["trackItem", "ftrack"]

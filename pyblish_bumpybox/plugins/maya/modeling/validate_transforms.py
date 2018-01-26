@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateTransforms(api.ContextPlugin):
@@ -8,7 +9,7 @@ class ValidateTransforms(api.ContextPlugin):
     and their transforms are zero'ed out.
     """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateTransforms")
     families = ["mayaAscii", "mayaBinary", "alembic"]
     label = "Transforms"
     optional = True

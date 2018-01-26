@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairWriteGeoNodeAction(api.Action):
@@ -33,7 +34,7 @@ class RepairWriteGeoNodeAction(api.Action):
 class ValidateWriteGeoNode(api.ContextPlugin):
     """ Validates file output. """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateWriteGeoNode")
     optional = True
     families = ["writegeo"]
     label = "WriteGeo Node"

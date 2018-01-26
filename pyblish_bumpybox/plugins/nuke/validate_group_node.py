@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateGroupNode(api.ContextPlugin):
@@ -7,7 +8,7 @@ class ValidateGroupNode(api.ContextPlugin):
     Ensures none of the groups content is locally stored.
     """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateGroupNode")
     optional = True
     families = ["gizmo", "lut"]
     label = "Group Node"

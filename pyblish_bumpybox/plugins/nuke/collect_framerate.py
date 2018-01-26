@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectFramerate(api.ContextPlugin):
     """Collect framerate."""
 
-    order = api.CollectorOrder
+    order = inventory.get_order(__file__, "CollectFramerate")
     label = "Framerate"
     hosts = ["nuke", "nukeassist"]
     targets = ["default", "process"]

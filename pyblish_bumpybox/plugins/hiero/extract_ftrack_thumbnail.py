@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractFtrackThumbnail(api.ContextPlugin):
@@ -7,7 +8,7 @@ class ExtractFtrackThumbnail(api.ContextPlugin):
     Offset to get shot from "extract_ftrack_shot"
     """
 
-    order = api.ExtractorOrder + 0.1
+    order = inventory.get_order(__file__, "ExtractFtrackThumbnail")
     families = ["ftrack", "trackItem"]
     match = api.Subset
     label = "Ftrack Thumbnail"

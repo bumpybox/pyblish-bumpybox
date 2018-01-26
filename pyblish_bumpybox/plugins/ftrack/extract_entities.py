@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractProject(api.ContextPlugin):
     """Extract an Ftrack project from context.data["ftrackProjectData"]"""
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractProject")
     label = "Ftrack Project"
     hosts = ["nukestudio"]
 
@@ -68,7 +69,7 @@ def ensure_entity(instance, entity_type):
 class ExtractEpisode(api.ContextPlugin):
     """Creates ftrack episodes by the name of the instance."""
 
-    order = api.ExtractorOrder + 0.01
+    order = inventory.get_order(__file__, "ExtractEpisode")
     families = ["ftrackEntity", "episode"]
     match = api.Subset
     label = "Ftrack Episode"
@@ -83,7 +84,7 @@ class ExtractEpisode(api.ContextPlugin):
 class ExtractSequence(api.ContextPlugin):
     """Creates ftrack sequences by the name of the instance."""
 
-    order = api.ExtractorOrder + 0.02
+    order = inventory.get_order(__file__, "ExtractSequence")
     families = ["ftrackEntity", "sequence"]
     match = api.Subset
     label = "Ftrack Sequence"
@@ -98,7 +99,7 @@ class ExtractSequence(api.ContextPlugin):
 class ExtractShot(api.ContextPlugin):
     """Creates ftrack shots by the name of the instance."""
 
-    order = api.ExtractorOrder + 0.03
+    order = inventory.get_order(__file__, "ExtractShot")
     families = ["ftrackEntity", "shot"]
     match = api.Subset
     label = "Ftrack Shot"
@@ -133,7 +134,7 @@ class ExtractShot(api.ContextPlugin):
 class ExtractAssetDataNukeStudio(api.ContextPlugin):
     """Changes the parent of the review component."""
 
-    order = api.ExtractorOrder + 0.04
+    order = inventory.get_order(__file__, "ExtractAssetDataNukeStudio")
     label = "Ftrack Link Review"
     optional = True
     hosts = ["nukestudio"]
@@ -164,7 +165,7 @@ class ExtractAssetDataNukeStudio(api.ContextPlugin):
 class ExtractTasks(api.ContextPlugin):
     """Creates ftrack shots by the name of the instance."""
 
-    order = api.ExtractorOrder + 0.04
+    order = inventory.get_order(__file__, "ExtractTasks")
     families = ["trackItem.ftrackEntity.task"]
     label = "Ftrack Tasks"
     optional = True
@@ -204,7 +205,7 @@ class ExtractTasks(api.ContextPlugin):
 class ExtractLinkAssetbuilds(api.ContextPlugin):
     """Link Assetbuilds to shot."""
 
-    order = api.ExtractorOrder + 0.04
+    order = inventory.get_order(__file__, "ExtractLinkAssetbuilds")
     families = ["trackItem.ftrackEntity.assetbuild"]
     label = "Ftrack Link Assetbuilds"
     optional = True
@@ -238,7 +239,7 @@ class ExtractLinkAssetbuilds(api.ContextPlugin):
 class ExtractCommit(api.ContextPlugin):
     """Commits the Ftrack session for entities."""
 
-    order = api.ExtractorOrder + 0.05
+    order = inventory.get_order(__file__, "ExtractCommit")
     label = "Ftrack Commit"
 
     def process(self, context):
@@ -249,7 +250,7 @@ class ExtractCommit(api.ContextPlugin):
 class ExtractNukeStudio(api.ContextPlugin):
     """Sets the Ftrack data for NukeStudio components."""
 
-    order = api.ExtractorOrder + 0.05
+    order = inventory.get_order(__file__, "ExtractNukeStudio")
     label = "Ftrack NukeStudio"
     families = ["trackItem.task"]
     hosts = ["nukestudio"]

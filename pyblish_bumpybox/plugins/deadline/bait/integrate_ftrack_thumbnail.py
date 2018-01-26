@@ -1,11 +1,12 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class IntegrateFtrackThumbnail(api.ContextPlugin):
     """ Integrates output """
 
     families = ["img.*", "mov.*"]
-    order = api.IntegratorOrder
+    order = inventory.get_order(__file__, "IntegrateFtrackThumbnail")
 
     def process(self, instance):
         import os

@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectReviews(api.ContextPlugin):
@@ -9,7 +10,7 @@ class CollectReviews(api.ContextPlugin):
     """
 
     # Offset to get created instances.
-    order = api.CollectorOrder + 0.3
+    order = inventory.get_order(__file__, "CollectReviews")
     hosts = ["maya", "nuke", "nukeassist"]
 
     def process(self, context):

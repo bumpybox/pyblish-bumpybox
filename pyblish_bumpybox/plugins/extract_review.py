@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractReview(api.ContextPlugin):
     """Extract review hash value."""
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractReview")
     label = "Review Hash"
     optional = True
     families = ["review"]
@@ -38,7 +39,7 @@ class ExtractReviewTranscode(api.ContextPlugin):
         pyblish_bumpybox.plugins.nuke.extract_review.ExtractReview
     """
 
-    order = api.ExtractorOrder + 0.02
+    order = inventory.get_order(__file__, "ExtractReviewTranscode")
     label = "Review Transcode"
     optional = True
     families = ["img", "mov"]
@@ -161,7 +162,7 @@ class ExtractReviewTranscodeNukeStudio(ExtractReviewTranscode):
         pyblish_bumpybox.plugins.nukestudio.extract_review.ExtractReview
     """
 
-    order = api.ExtractorOrder + 0.02
+    order = inventory.get_order(__file__, "ExtractReviewTranscodeNukeStudio")
     label = "Review Transcode"
     optional = True
     families = ["review"]

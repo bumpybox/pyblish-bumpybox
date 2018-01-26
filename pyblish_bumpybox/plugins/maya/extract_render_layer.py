@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractRenderLayer(api.ContextPlugin):
     """ Extracts the renderlayer to image output. """
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractRenderLayer")
     families = ["renderlayer", "local"]
     optional = True
     label = "Render Layer"

@@ -1,11 +1,12 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractMaya(api.ContextPlugin):
     """ Appending RoyalRender data to instances. """
 
     families = ["img"]
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractMaya")
     label = "Royal Render"
     hosts = ["maya"]
     targets = ["process.royalrender"]

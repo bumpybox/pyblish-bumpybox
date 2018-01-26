@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateFFmpeg(api.ContextPlugin):
@@ -7,7 +8,7 @@ class ValidateFFmpeg(api.ContextPlugin):
     FFMPEG is being used in various plugins for image and video processing.
     """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateFFmpeg")
     label = "FFMPEG"
     optional = True
 

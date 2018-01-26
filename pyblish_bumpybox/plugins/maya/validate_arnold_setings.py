@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class RepairArnoldSettings(api.Action):
@@ -16,7 +17,7 @@ class RepairArnoldSettings(api.Action):
 class ValidateArnoldSettings(api.ContextPlugin):
     """ Validates render layer settings. """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateArnoldSettings")
     optional = True
     families = ["arnold"]
     label = "Arnold Settings"

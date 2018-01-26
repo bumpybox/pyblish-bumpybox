@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateSceneModified(api.ContextPlugin):
     """ Validates whether the scene has been saved since modifying. """
 
-    order = api.ExtractorOrder - 0.49
+    order = inventory.get_order(__file__, "ValidateSceneModified")
     hosts = ["maya"]
     label = "Scene Modified"
     optional = True

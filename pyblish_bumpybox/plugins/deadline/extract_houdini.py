@@ -1,11 +1,12 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractHoudini(api.ContextPlugin):
     """ Appending Deadline data to deadline instances. """
 
     families = ["deadline"]
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractHoudini")
     label = "Deadline"
     hosts = ["houdini"]
 

@@ -1,11 +1,12 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class AppendFtrackAssetName(api.ContextPlugin):
     """ Appending "ftrackAssetName" """
 
     label = "Ftrack Asset Name"
-    order = api.CollectorOrder + 0.1
+    order = inventory.get_order(__file__, "AppendFtrackAssetName")
 
     def process(self, instance):
 

@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class IntegrateCollection(api.ContextPlugin):
@@ -7,7 +8,7 @@ class IntegrateCollection(api.ContextPlugin):
     Negative offset to come before Deadine submission.
     """
 
-    order = api.IntegratorOrder - 0.1
+    order = inventory.get_order(__file__, "IntegrateCollection")
     label = "Collection"
     families = ["deadline"]
 

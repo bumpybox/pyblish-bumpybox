@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class CollectMayaParameters(api.ContextPlugin):
@@ -9,7 +10,7 @@ class CollectMayaParameters(api.ContextPlugin):
     Offset from default order, to pick up on created instances.
     """
 
-    order = api.CollectorOrder + 0.1
+    order = inventory.get_order(__file__, "CollectMayaParameters")
     label = "Maya Parameters"
     hosts = ["maya"]
 

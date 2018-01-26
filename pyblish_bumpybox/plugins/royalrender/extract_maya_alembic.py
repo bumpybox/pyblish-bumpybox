@@ -1,11 +1,12 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractMovie(api.ContextPlugin):
     """Appending RoyalRender movie job data."""
 
     families = ["alembic"]
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractMovie")
     label = "Royal Render Alembic"
     targets = ["process.royalrender"]
     hosts = ["maya"]

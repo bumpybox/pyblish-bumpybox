@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ExtractComponents(api.ContextPlugin):
@@ -9,7 +10,7 @@ class ExtractComponents(api.ContextPlugin):
     trigger the component data generation.
     """
 
-    order = api.ExtractorOrder + 0.4
+    order = inventory.get_order(__file__, "ExtractComponents")
     label = "Components"
     families = ["local", "output"]
 
@@ -77,7 +78,7 @@ class ExtractComponents(api.ContextPlugin):
 class ExtractGizmo(api.ContextPlugin):
     """Sets the data for Ftrack gizmo component."""
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractGizmo")
     label = "Ftrack Gizmo"
     families = ["gizmo"]
 
@@ -91,7 +92,7 @@ class ExtractGizmo(api.ContextPlugin):
 class ExtractLUT(api.ContextPlugin):
     """Sets the data for Ftrack lut component."""
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractLUT")
     label = "Ftrack LUT"
     families = ["lut"]
 
@@ -109,7 +110,7 @@ class ExtractLUT(api.ContextPlugin):
 class ExtractMovie(api.ContextPlugin):
     """Sets the data for Ftrack mov component."""
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractMovie")
     label = "Ftrack Movie"
     families = ["mov"]
 
@@ -123,7 +124,7 @@ class ExtractMovie(api.ContextPlugin):
 class ExtractScene(api.ContextPlugin):
     """Sets the data for Ftrack scene component."""
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractScene")
     label = "Ftrack Scene"
     families = ["scene"]
 
@@ -137,7 +138,7 @@ class ExtractScene(api.ContextPlugin):
 class ExtractImg(api.ContextPlugin):
     """Sets the data for Ftrack img component."""
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractImg")
     label = "Ftrack Img"
     families = ["img"]
 
@@ -151,7 +152,7 @@ class ExtractImg(api.ContextPlugin):
 class ExtractCache(api.ContextPlugin):
     """Sets the data for Ftrack cache component."""
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractCache")
     label = "Ftrack Cache"
     families = ["cache"]
 
@@ -165,7 +166,7 @@ class ExtractCache(api.ContextPlugin):
 class ExtractCamera(api.ContextPlugin):
     """Sets the data for Ftrack camera component."""
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractCamera")
     label = "Ftrack Camera"
     families = ["camera"]
 
@@ -179,7 +180,7 @@ class ExtractCamera(api.ContextPlugin):
 class ExtractGeometry(api.ContextPlugin):
     """Sets the data for Ftrack camera component."""
 
-    order = api.ExtractorOrder
+    order = inventory.get_order(__file__, "ExtractGeometry")
     label = "Ftrack Geometry"
     families = ["geometry"]
 

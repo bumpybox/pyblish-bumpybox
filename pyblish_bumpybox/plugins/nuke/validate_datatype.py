@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class ValidateDatatype(api.ContextPlugin):
     """Validate output datatype matches with input."""
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateDatatype")
     families = ["write"]
     label = "Datatype"
     optional = True

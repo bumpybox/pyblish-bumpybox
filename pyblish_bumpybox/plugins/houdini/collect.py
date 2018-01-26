@@ -1,10 +1,11 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class Collect(api.ContextPlugin):
     """ Collects from all supported Houdini nodes. """
 
-    order = api.CollectorOrder
+    order = inventory.get_order(__file__, "Collect")
     label = "Collect"
     hosts = ["houdini"]
 
