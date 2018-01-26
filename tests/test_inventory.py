@@ -1,32 +1,25 @@
 import lib
-import inspect
 
 from pyblish_bumpybox import inventory
 
 
-def test_class_name_attribute_existence():
+def test_plugins_use_inventory_order():
 
     failed_plugins = []
     for plugin in lib.get_all_plugins():
-        members = inspect.getmembers(
-            plugin, lambda a: not(inspect.isroutine(a))
+        code_line = "order = inventory.get_order(__file__, \"{0}\")".format(
+            plugin.__name__
         )
-        failed = True
-        for member in members:
-            if member[0] == "class_name":
-                failed = False
+        with open(plugin.__module__, "r") as the_file:
+            if code_line not in the_file.read():
+                failed_plugins.append(plugin)
 
-        if failed:
-            failed_plugins.append(plugin)
-
-    print "Failed plugins:"
-    for plugin in failed_plugins:
-        print plugin
+                print "\"{0}\" is missing:\n{1}".format(plugin, code_line)
 
     assert not failed_plugins
 
 
-def test_inventory_match():
+def test_inventory_order_match():
 
     errors = []
     for plugin in lib.get_all_plugins():
