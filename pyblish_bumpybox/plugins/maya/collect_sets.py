@@ -79,7 +79,7 @@ class CollectSets(api.ContextPlugin):
 
                 name += "_" + fmt
 
-                instance = plugin.Instance(name)
+                instance = api.Instance(name)
                 instance.add(object_set)
 
                 instance.data["nodes"] = object_set.members()
