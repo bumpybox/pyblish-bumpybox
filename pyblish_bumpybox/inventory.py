@@ -198,12 +198,17 @@ houdini_extract_local_ExtractLocal = api.ExtractorOrder
 # Maya
 maya_collect_framerate_CollectFramerate = api.CollectorOrder - 0.5
 maya_collect_files_CollectFiles = api.CollectorOrder
-maya_collect_playblasts_CollectPlayblasts = api.CollectorOrder
 maya_collect_render_layers_CollectRenderlayers = api.CollectorOrder
 maya_collect_sets_CollectSets = api.CollectorOrder
-maya_collect_playblasts_CollectPlayblastsProcess = api.CollectorOrder + 0.01
-maya_collect_playblasts_CollectPlayblastsPublish = api.CollectorOrder + 0.01
-maya_collect_sets_CollectSetsLocal = api.CollectorOrder + 0.01
+maya_collect_sets_CollectSetsProcess = maya_collect_sets_CollectSets + 0.01
+maya_collect_sets_CollectSetsPublish = maya_collect_sets_CollectSets + 0.01
+maya_collect_playblasts_CollectPlayblasts = api.CollectorOrder
+maya_collect_playblasts_CollectPlayblastsProcess = (
+    maya_collect_playblasts_CollectPlayblasts + 0.01
+)
+maya_collect_playblasts_CollectPlayblastsPublish = (
+    maya_collect_playblasts_CollectPlayblasts + 0.01
+)
 
 maya_modeling_validate_intermediate_shapes_ValidateIntermediateShapes = (
     api.ValidatorOrder

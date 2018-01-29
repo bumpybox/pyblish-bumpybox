@@ -146,11 +146,11 @@ class CollectSets(api.ContextPlugin):
         )
 
 
-class CollectSetsLocal(api.ContextPlugin):
+class CollectSetsProcess(api.ContextPlugin):
     """Collect all local processing write instances."""
 
-    order = inventory.get_order(__file__, "CollectSetsLocal")
-    label = "Sets Local"
+    order = inventory.get_order(__file__, "CollectSetsProcess")
+    label = "Sets Process"
     hosts = ["maya"]
     targets = ["process.local"]
 
@@ -169,5 +169,31 @@ class CollectSetsLocal(api.ContextPlugin):
                 instance.data[key] = value
 
             instance.data["families"] += ["local"]
+            for node in item:
+                instance.add(node)
+
+
+class CollectSetsPublish(api.ContextPlugin):
+    """Collect all publishable write instances."""
+
+    order = inventory.get_order(__file__, "CollectSetsPublish")
+    label = "Sets Publish"
+    hosts = ["maya"]
+
+    def process(self, context):
+
+        for item in context.data["instances"]:
+            # Skip any instances that is not valid.
+            valid_families = [
+                "alembic", "mayaAscii", "mayaBinary", "camera", "geometry"
+            ]
+            if len(set(valid_families) & set(item.data["families"])) != 1:
+                continue
+
+            instance = context.create_instance(item.data["name"])
+            for key, value in item.data.iteritems():
+                instance.data[key] = value
+
+            instance.data["families"] += ["output"]
             for node in item:
                 instance.add(node)
