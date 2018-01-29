@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractOutputDirectory(api.ContextPlugin):
+class ExtractOutputDirectory(api.InstancePlugin):
     """Extracts the output path for any collection or single output_path."""
 
     order = inventory.get_order(__file__, "ExtractOutputDirectory")

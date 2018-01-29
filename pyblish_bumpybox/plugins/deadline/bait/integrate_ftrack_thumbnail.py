@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class IntegrateFtrackThumbnail(api.ContextPlugin):
+class IntegrateFtrackThumbnail(api.InstancePlugin):
     """ Integrates output """
 
     families = ["img.*", "mov.*"]

@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractAudio(api.ContextPlugin):
+class ExtractAudio(api.InstancePlugin):
     """ Extracting audio """
 
     families = ["audio"]

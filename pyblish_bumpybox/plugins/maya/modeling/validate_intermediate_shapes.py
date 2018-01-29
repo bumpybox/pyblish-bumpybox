@@ -26,7 +26,7 @@ class RepairIntermediateShapes(api.Action):
                 pm.delete(io)
 
 
-class ValidateIntermediateShapes(api.ContextPlugin):
+class ValidateIntermediateShapes(api.InstancePlugin):
     """ Ensures there are no intermediate shapes in the scene. """
 
     families = ["mayaAscii", "mayaBinary", "alembic"]

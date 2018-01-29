@@ -66,7 +66,7 @@ def ensure_entity(instance, entity_type):
     return entity
 
 
-class ExtractEpisode(api.ContextPlugin):
+class ExtractEpisode(api.InstancePlugin):
     """Creates ftrack episodes by the name of the instance."""
 
     order = inventory.get_order(__file__, "ExtractEpisode")
@@ -81,7 +81,7 @@ class ExtractEpisode(api.ContextPlugin):
         instance.data["item"] = instance.data["parent"].data["item"]
 
 
-class ExtractSequence(api.ContextPlugin):
+class ExtractSequence(api.InstancePlugin):
     """Creates ftrack sequences by the name of the instance."""
 
     order = inventory.get_order(__file__, "ExtractSequence")
@@ -96,7 +96,7 @@ class ExtractSequence(api.ContextPlugin):
         instance.data["item"] = instance.data["parent"].data["item"]
 
 
-class ExtractShot(api.ContextPlugin):
+class ExtractShot(api.InstancePlugin):
     """Creates ftrack shots by the name of the instance."""
 
     order = inventory.get_order(__file__, "ExtractShot")
@@ -162,7 +162,7 @@ class ExtractAssetDataNukeStudio(api.ContextPlugin):
             instance_data["review"].data["asset_data"] = asset_data
 
 
-class ExtractTasks(api.ContextPlugin):
+class ExtractTasks(api.InstancePlugin):
     """Creates ftrack shots by the name of the instance."""
 
     order = inventory.get_order(__file__, "ExtractTasks")
@@ -202,7 +202,7 @@ class ExtractTasks(api.ContextPlugin):
         instance.data["entity"] = task
 
 
-class ExtractLinkAssetbuilds(api.ContextPlugin):
+class ExtractLinkAssetbuilds(api.InstancePlugin):
     """Link Assetbuilds to shot."""
 
     order = inventory.get_order(__file__, "ExtractLinkAssetbuilds")
@@ -247,7 +247,7 @@ class ExtractCommit(api.ContextPlugin):
         context.data["ftrackSession"].commit()
 
 
-class ExtractNukeStudio(api.ContextPlugin):
+class ExtractNukeStudio(api.InstancePlugin):
     """Sets the Ftrack data for NukeStudio components."""
 
     order = inventory.get_order(__file__, "ExtractNukeStudio")

@@ -28,7 +28,7 @@ class ViewPlayblastsAction(api.Action):
             webbrowser.open(instance.data["output_path"])
 
 
-class ExtractPlayblast(api.ContextPlugin):
+class ExtractPlayblast(api.InstancePlugin):
     """Extracts playblast."""
 
     order = inventory.get_order(__file__, "ExtractPlayblast")

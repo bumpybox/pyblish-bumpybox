@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractBackdrop(api.ContextPlugin):
+class ExtractBackdrop(api.InstancePlugin):
     """ Extract gizmos from group nodes. """
 
     order = inventory.get_order(__file__, "ExtractBackdrop")

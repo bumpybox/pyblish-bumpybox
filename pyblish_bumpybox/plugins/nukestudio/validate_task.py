@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ValidateOutputRange(api.ContextPlugin):
+class ValidateOutputRange(api.InstancePlugin):
     """Validate the output range of the task.
 
     This compares the output range and clip associated with the task, so see
@@ -37,7 +37,7 @@ class ValidateOutputRange(api.ContextPlugin):
         assert difference, failure_message
 
 
-class ValidateImageSequence(api.ContextPlugin):
+class ValidateImageSequence(api.InstancePlugin):
     """Validate image sequence output path is setup correctly."""
 
     order = inventory.get_order(__file__, "ValidateImageSequence")

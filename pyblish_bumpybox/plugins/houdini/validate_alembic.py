@@ -27,7 +27,7 @@ class RepairAlembic(api.Action):
             instance[0].setParms({"partition_mode": 4, "collapse": 1})
 
 
-class ValidateAlembic(api.ContextPlugin):
+class ValidateAlembic(api.InstancePlugin):
     """ Validates Alembic settings """
 
     families = ["alembic"]

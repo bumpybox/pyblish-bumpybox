@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractDeadline(api.ContextPlugin):
+class ExtractDeadline(api.InstancePlugin):
 
     label = 'Deadline'
     families = ['render']

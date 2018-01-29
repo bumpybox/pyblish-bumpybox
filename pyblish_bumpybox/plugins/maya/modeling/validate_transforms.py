@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ValidateTransforms(api.ContextPlugin):
+class ValidateTransforms(api.InstancePlugin):
     """ Freeze/Reset transforms.
 
     Ensure all meshes have their pivot at world zero,

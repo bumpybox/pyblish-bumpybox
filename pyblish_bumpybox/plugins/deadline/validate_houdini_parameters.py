@@ -57,7 +57,7 @@ class RepairParametersAction(api.Action):
             node.setParmTemplateGroup(parm_group)
 
 
-class ValidateHoudiniParameters(api.ContextPlugin):
+class ValidateHoudiniParameters(api.InstancePlugin):
     """ Validates the existence of deadline parameters on node. """
 
     order = inventory.get_order(__file__, "ValidateHoudiniParameters")

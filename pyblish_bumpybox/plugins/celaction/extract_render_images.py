@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractRenderImages(api.ContextPlugin):
+class ExtractRenderImages(api.InstancePlugin):
 
     label = 'Render Images'
     families = ['render']
@@ -92,7 +92,7 @@ class ExtractRenderImages(api.ContextPlugin):
             self.log.warning(msg)
 
 
-class ExtractRenderMovie(api.ContextPlugin):
+class ExtractRenderMovie(api.InstancePlugin):
 
     label = 'Render Movie'
     families = ['render']

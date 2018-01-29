@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractComponents(api.ContextPlugin):
+class ExtractComponents(api.InstancePlugin):
     """Appending output files from local extraction as components.
 
     This plugin generates component data from either the instance data or
@@ -75,7 +75,7 @@ class ExtractComponents(api.ContextPlugin):
         instance.data["ftrackComponentsList"] = components
 
 
-class ExtractGizmo(api.ContextPlugin):
+class ExtractGizmo(api.InstancePlugin):
     """Sets the data for Ftrack gizmo component."""
 
     order = inventory.get_order(__file__, "ExtractGizmo")
@@ -89,7 +89,7 @@ class ExtractGizmo(api.ContextPlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractLUT(api.ContextPlugin):
+class ExtractLUT(api.InstancePlugin):
     """Sets the data for Ftrack lut component."""
 
     order = inventory.get_order(__file__, "ExtractLUT")
@@ -107,7 +107,7 @@ class ExtractLUT(api.ContextPlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractMovie(api.ContextPlugin):
+class ExtractMovie(api.InstancePlugin):
     """Sets the data for Ftrack mov component."""
 
     order = inventory.get_order(__file__, "ExtractMovie")
@@ -121,7 +121,7 @@ class ExtractMovie(api.ContextPlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractScene(api.ContextPlugin):
+class ExtractScene(api.InstancePlugin):
     """Sets the data for Ftrack scene component."""
 
     order = inventory.get_order(__file__, "ExtractScene")
@@ -135,7 +135,7 @@ class ExtractScene(api.ContextPlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractImg(api.ContextPlugin):
+class ExtractImg(api.InstancePlugin):
     """Sets the data for Ftrack img component."""
 
     order = inventory.get_order(__file__, "ExtractImg")
@@ -149,7 +149,7 @@ class ExtractImg(api.ContextPlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractCache(api.ContextPlugin):
+class ExtractCache(api.InstancePlugin):
     """Sets the data for Ftrack cache component."""
 
     order = inventory.get_order(__file__, "ExtractCache")
@@ -163,7 +163,7 @@ class ExtractCache(api.ContextPlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractCamera(api.ContextPlugin):
+class ExtractCamera(api.InstancePlugin):
     """Sets the data for Ftrack camera component."""
 
     order = inventory.get_order(__file__, "ExtractCamera")
@@ -177,7 +177,7 @@ class ExtractCamera(api.ContextPlugin):
         instance.data["assettype_data"] = data
 
 
-class ExtractGeometry(api.ContextPlugin):
+class ExtractGeometry(api.InstancePlugin):
     """Sets the data for Ftrack camera component."""
 
     order = inventory.get_order(__file__, "ExtractGeometry")

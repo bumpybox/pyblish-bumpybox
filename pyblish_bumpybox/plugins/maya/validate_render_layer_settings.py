@@ -53,7 +53,7 @@ class RepairRenderLayerSettings(api.Action):
         pymel.core.mel.eval("setProject \"{0}\"".format(expected))
 
 
-class ValidateRenderLayerSettings(api.ContextPlugin):
+class ValidateRenderLayerSettings(api.InstancePlugin):
     """ Validates render layer settings. """
 
     order = inventory.get_order(__file__, "ValidateRenderLayerSettings")

@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ValidateTrackItem(api.ContextPlugin):
+class ValidateTrackItem(api.InstancePlugin):
     """Validate the track item to the sequence.
 
     Exact matching to optimize processing.

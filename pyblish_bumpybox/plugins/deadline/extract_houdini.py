@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractHoudini(api.ContextPlugin):
+class ExtractHoudini(api.InstancePlugin):
     """ Appending Deadline data to deadline instances. """
 
     families = ["deadline"]

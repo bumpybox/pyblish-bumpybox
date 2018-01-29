@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractReview(api.ContextPlugin):
+class ExtractReview(api.InstancePlugin):
     """Extracts movie for review"""
 
     order = inventory.get_order(__file__, "ExtractReview")

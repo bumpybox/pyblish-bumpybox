@@ -23,7 +23,7 @@ class RepairVraySettingsAction(api.Action):
         settings.fileNamePadding.set(4)
 
 
-class ValidateVraySettings(api.ContextPlugin):
+class ValidateVraySettings(api.InstancePlugin):
     """ Validates render layer settings. """
 
     order = inventory.get_order(__file__, "ValidateVraySettings")

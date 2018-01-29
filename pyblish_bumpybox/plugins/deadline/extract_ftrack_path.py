@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractFtrackPath(api.ContextPlugin):
+class ExtractFtrackPath(api.InstancePlugin):
     """ Extract Ftrack path for Deadline """
 
     order = inventory.get_order(__file__, "ExtractFtrackPath")

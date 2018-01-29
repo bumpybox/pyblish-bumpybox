@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractJobName(api.ContextPlugin):
+class ExtractJobName(api.InstancePlugin):
     """ Appending Deadline job name to all instances. """
 
     families = ["deadline"]

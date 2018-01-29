@@ -35,7 +35,7 @@ class RepairOutputPathAction(api.Action):
                                                  data.format(path)))
 
 
-class ValidateOutputPath(api.ContextPlugin):
+class ValidateOutputPath(api.InstancePlugin):
 
     order = inventory.get_order(__file__, "ValidateOutputPath")
     label = "Output Path"

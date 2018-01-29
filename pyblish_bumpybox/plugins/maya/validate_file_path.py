@@ -40,7 +40,7 @@ class RepairFilePathAction(api.Action):
                 instance[0].fileTextureName.set(expected)
 
 
-class ValidateFilePath(api.ContextPlugin):
+class ValidateFilePath(api.InstancePlugin):
     """ Validate file paths to be in the workspace directory. """
 
     order = inventory.get_order(__file__, "ValidateFilePath")

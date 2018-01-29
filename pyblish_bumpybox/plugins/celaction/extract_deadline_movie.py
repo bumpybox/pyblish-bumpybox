@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractDeadlineMovie(api.ContextPlugin):
+class ExtractDeadlineMovie(api.InstancePlugin):
 
     hosts = ["celaction"]
     label = "Movie"

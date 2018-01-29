@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class IntegrateLocal(api.ContextPlugin):
+class IntegrateLocal(api.InstancePlugin):
 
     label = "Local"
     families = ["img.local.*", "mov.local.*"]

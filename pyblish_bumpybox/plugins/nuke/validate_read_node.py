@@ -38,7 +38,7 @@ class RepairReadNodeAction(api.Action):
             instance[0]["origlast"].setValue(list(collection.indexes)[0])
 
 
-class ValidateReadNode(api.ContextPlugin):
+class ValidateReadNode(api.InstancePlugin):
     """Validate Read node is setup correctly."""
 
     order = inventory.get_order(__file__, "ValidateReadNode")

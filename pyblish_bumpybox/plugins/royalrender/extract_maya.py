@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractMaya(api.ContextPlugin):
+class ExtractMaya(api.InstancePlugin):
     """ Appending RoyalRender data to instances. """
 
     families = ["img"]

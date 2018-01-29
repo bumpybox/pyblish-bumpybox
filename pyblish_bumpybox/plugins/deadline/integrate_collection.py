@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class IntegrateCollection(api.ContextPlugin):
+class IntegrateCollection(api.InstancePlugin):
     """ Convert clique collection to string.
 
     Negative offset to come before Deadine submission.

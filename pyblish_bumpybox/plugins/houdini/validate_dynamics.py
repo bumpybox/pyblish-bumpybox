@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ValidateDynamics(api.ContextPlugin):
+class ValidateDynamics(api.InstancePlugin):
     """ Validates that the DOP path is set. """
 
     families = ["dynamics"]

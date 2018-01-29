@@ -31,7 +31,7 @@ class RepairScenePathAction(api.Action):
         pyblish_aftereffects.send(cmd)
 
 
-class ValidateScenePath(api.ContextPlugin):
+class ValidateScenePath(api.InstancePlugin):
     """ Validates the path of the hiero file """
 
     order = inventory.get_order(__file__, "ValidateScenePath")

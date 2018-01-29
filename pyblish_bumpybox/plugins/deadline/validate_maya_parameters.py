@@ -61,7 +61,7 @@ class RepairParametersAction(api.Action):
                 pymel.core.setAttr(attr, channelBox=True)
 
 
-class ValidateMayaParameters(api.ContextPlugin):
+class ValidateMayaParameters(api.InstancePlugin):
     """ Validates the existence of deadline parameters on node. """
 
     order = inventory.get_order(__file__, "ValidateMayaParameters")

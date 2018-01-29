@@ -25,7 +25,7 @@ class RepairSmoothDisplay(api.Action):
                 node.displaySmoothMesh.set(False)
 
 
-class ValidateSmoothDisplay(api.ContextPlugin):
+class ValidateSmoothDisplay(api.InstancePlugin):
     """ Ensures all meshes are not smoothed """
 
     order = inventory.get_order(__file__, "ValidateSmoothDisplay")

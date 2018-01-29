@@ -14,7 +14,7 @@ class RepairArnoldSettings(api.Action):
         node.mergeAOVs.set(True)
 
 
-class ValidateArnoldSettings(api.ContextPlugin):
+class ValidateArnoldSettings(api.InstancePlugin):
     """ Validates render layer settings. """
 
     order = inventory.get_order(__file__, "ValidateArnoldSettings")

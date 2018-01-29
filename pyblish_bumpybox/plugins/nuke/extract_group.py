@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractGroup(api.ContextPlugin):
+class ExtractGroup(api.InstancePlugin):
     """ Extract gizmos from group nodes. """
 
     order = inventory.get_order(__file__, "ExtractGroup")

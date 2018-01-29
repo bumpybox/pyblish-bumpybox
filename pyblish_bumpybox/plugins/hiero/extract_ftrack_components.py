@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractFtrackComponents(api.ContextPlugin):
+class ExtractFtrackComponents(api.InstancePlugin):
     """ Extracting data to ftrack components.
 
     Offset to get shot data from "extract_ftrack_shot"

@@ -21,7 +21,7 @@ class AppendFtrackAudio(api.ContextPlugin):
             self.log.warning("Couldn't find any audio file on Ftrack.")
 
 
-class AppendFtrackData(api.ContextPlugin):
+class AppendFtrackData(api.InstancePlugin):
     """ Appending ftrack component and asset type data """
 
     families = ["img.*", "mov.*"]

@@ -1,6 +1,8 @@
 import os
 import logging
+import inspect
 
+from pyblish import api
 import lib
 
 
@@ -22,3 +24,24 @@ def test_plugins_load():
     os.remove(log_file)
 
     assert not logs
+
+
+def test_argument_signature():
+
+    failed_plugins = []
+    for plugin in lib.get_all_plugins():
+        args = inspect.getargspec(plugin.process).args
+
+        if (isinstance(plugin(), api.InstancePlugin) and
+           args != ["self", "instance"]):
+            failed_plugins.append(plugin)
+
+        if (isinstance(plugin(), api.ContextPlugin) and
+           args != ["self", "context"]):
+            failed_plugins.append(plugin)
+
+    print ("Failed plugins:")
+    for plugin in failed_plugins:
+        print plugin
+
+    assert not failed_plugins

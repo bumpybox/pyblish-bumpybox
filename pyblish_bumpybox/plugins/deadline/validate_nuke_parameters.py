@@ -49,7 +49,7 @@ class RepairNukeParametersAction(api.Action):
             node.addKnob(knob)
 
 
-class ValidateNukeParameters(api.ContextPlugin):
+class ValidateNukeParameters(api.InstancePlugin):
     """ Validates the existence of deadline parameters on node. """
 
     order = inventory.get_order(__file__, "ValidateNukeParameters")

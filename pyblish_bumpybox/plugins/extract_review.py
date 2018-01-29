@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractReview(api.ContextPlugin):
+class ExtractReview(api.InstancePlugin):
     """Extract review hash value."""
 
     order = inventory.get_order(__file__, "ExtractReview")
@@ -32,7 +32,7 @@ class ExtractReview(api.ContextPlugin):
             the_file.write(hash_value)
 
 
-class ExtractReviewTranscode(api.ContextPlugin):
+class ExtractReviewTranscode(api.InstancePlugin):
     """Extracts review movie from image sequence or movie.
 
     Offset:

@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractFtrackThumbnail(api.ContextPlugin):
+class ExtractFtrackThumbnail(api.InstancePlugin):
     """ Creates thumbnails for ftrack shots and uploads them.
 
     Offset to get shot from "extract_ftrack_shot"

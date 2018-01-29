@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractNukeScript(api.ContextPlugin):
+class ExtractNukeScript(api.InstancePlugin):
     """ Extract Nuke script """
 
     families = ["nuke"]

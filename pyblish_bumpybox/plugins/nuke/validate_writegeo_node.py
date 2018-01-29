@@ -31,7 +31,7 @@ class RepairWriteGeoNodeAction(api.Action):
             instance[0]["file_type"].setValue(ext[1:])
 
 
-class ValidateWriteGeoNode(api.ContextPlugin):
+class ValidateWriteGeoNode(api.InstancePlugin):
     """ Validates file output. """
 
     order = inventory.get_order(__file__, "ValidateWriteGeoNode")

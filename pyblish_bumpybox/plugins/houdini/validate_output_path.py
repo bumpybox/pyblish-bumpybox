@@ -32,7 +32,7 @@ class RepairOutputPathAction(api.Action):
                     parm.set(expected)
 
 
-class ValidateOutputPath(api.ContextPlugin):
+class ValidateOutputPath(api.InstancePlugin):
     """ Validates parameter for output """
 
     families = ["alembic", "mantra", "geometry", "dynamics"]

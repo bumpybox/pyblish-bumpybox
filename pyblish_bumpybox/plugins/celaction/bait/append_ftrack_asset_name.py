@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class AppendFtrackAssetName(api.ContextPlugin):
+class AppendFtrackAssetName(api.InstancePlugin):
     """ Appending "ftrackAssetName" """
 
     label = "Ftrack Asset Name"

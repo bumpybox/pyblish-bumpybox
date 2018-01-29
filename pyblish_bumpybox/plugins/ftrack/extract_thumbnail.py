@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractThumbnailImg(api.ContextPlugin):
+class ExtractThumbnailImg(api.InstancePlugin):
     """Extracts thumbnail from review.
 
     Offset to get extraction data from studio plugins.

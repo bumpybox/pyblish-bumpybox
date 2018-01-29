@@ -33,6 +33,6 @@ class ValidateFFmpeg(api.ContextPlugin):
 
         raise IOError("\"{0}\" executable not found.".format(executable))
 
-    def process(self, instance):
+    def process(self, context):
 
         self.get_executable("ffmpeg")

@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractRenderLayer(api.ContextPlugin):
+class ExtractRenderLayer(api.InstancePlugin):
     """ Extracts the renderlayer to image output. """
 
     order = inventory.get_order(__file__, "ExtractRenderLayer")

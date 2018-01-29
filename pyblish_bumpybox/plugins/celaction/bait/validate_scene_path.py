@@ -47,7 +47,7 @@ class RepairScenePath(api.Action):
         self.log.info("Saved to \"%s\"" % file_path)
 
 
-class ValidateScenePath(api.ContextPlugin):
+class ValidateScenePath(api.InstancePlugin):
     """ Validates the path of the hiero file """
 
     order = inventory.get_order(__file__, "ValidateScenePath")

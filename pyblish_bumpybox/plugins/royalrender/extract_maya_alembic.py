@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractMovie(api.ContextPlugin):
+class ExtractMovie(api.InstancePlugin):
     """Appending RoyalRender movie job data."""
 
     families = ["alembic"]

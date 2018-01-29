@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractTasks(api.ContextPlugin):
+class ExtractTasks(api.InstancePlugin):
     """Extract tasks."""
 
     order = inventory.get_order(__file__, "ExtractTasks")

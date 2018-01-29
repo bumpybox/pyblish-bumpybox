@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ValidateGeometry(api.ContextPlugin):
+class ValidateGeometry(api.InstancePlugin):
     """ Validates that the SOP path is set. """
 
     families = ["geometry"]

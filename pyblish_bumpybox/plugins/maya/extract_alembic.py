@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractAlembic(api.ContextPlugin):
+class ExtractAlembic(api.InstancePlugin):
     """Superclass for exporting alembic files."""
 
     order = inventory.get_order(__file__, "ExtractAlembic")

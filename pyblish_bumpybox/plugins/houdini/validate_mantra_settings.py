@@ -32,7 +32,7 @@ class RepairMantraSettings(api.Action):
             instance[0].setParms({"soho_foreground": soho_foreground})
 
 
-class ValidateMantraSettings(api.ContextPlugin):
+class ValidateMantraSettings(api.InstancePlugin):
     """ Validates mantra settings """
 
     families = ["mantra"]

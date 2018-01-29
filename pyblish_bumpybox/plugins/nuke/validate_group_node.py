@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ValidateGroupNode(api.ContextPlugin):
+class ValidateGroupNode(api.InstancePlugin):
     """Validates group node.
 
     Ensures none of the groups content is locally stored.

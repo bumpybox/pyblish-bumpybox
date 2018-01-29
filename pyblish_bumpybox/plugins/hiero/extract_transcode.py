@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractTranscode(api.ContextPlugin):
+class ExtractTranscode(api.InstancePlugin):
     """ Transcode shots. """
 
     order = inventory.get_order(__file__, "ExtractTranscode")
@@ -166,7 +166,7 @@ class ExtractTranscode(api.ContextPlugin):
         return collection
 
 
-class BumpyboxExtractTranscodeJPEG(api.ContextPlugin):
+class BumpyboxExtractTranscodeJPEG(api.InstancePlugin):
     """ Enable/Disable JPEG transcoding. """
 
     order = inventory.get_order(__file__, "BumpyboxExtractTranscodeJPEG")
@@ -181,7 +181,7 @@ class BumpyboxExtractTranscodeJPEG(api.ContextPlugin):
         instance.data["transcodeTags"] = data
 
 
-class BumpyboxExtractTranscodeH264(api.ContextPlugin):
+class BumpyboxExtractTranscodeH264(api.InstancePlugin):
     """ Enable/Disable h264 transcoding. """
 
     order = inventory.get_order(__file__, "BumpyboxExtractTranscodeH264")

@@ -25,7 +25,7 @@ class RepairPointsAction(api.Action):
                 pm.delete(pm.cluster(node))
 
 
-class ValidatePoints(api.ContextPlugin):
+class ValidatePoints(api.InstancePlugin):
     """ Ensures all points in mesh are zero"ed out """
 
     families = ["mayaAscii", "mayaBinary", "alembic"]

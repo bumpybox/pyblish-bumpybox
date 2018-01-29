@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class AppendDeadlineData(api.ContextPlugin):
+class AppendDeadlineData(api.InstancePlugin):
     """ Appending Deadline data to farm related instances """
 
     families = ["img.farm.*"]

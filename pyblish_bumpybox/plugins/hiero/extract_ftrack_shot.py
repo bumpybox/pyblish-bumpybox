@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractFtrackShot(api.ContextPlugin):
+class ExtractFtrackShot(api.InstancePlugin):
     """ Creates ftrack shots by the name of the shot. """
 
     order = inventory.get_order(__file__, "ExtractFtrackShot")

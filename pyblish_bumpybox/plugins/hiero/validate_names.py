@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ValidateNames(api.ContextPlugin):
+class ValidateNames(api.InstancePlugin):
     """ Validate sequence, video track and track item names.
 
     When creating output directories with the name of an item, ending with a

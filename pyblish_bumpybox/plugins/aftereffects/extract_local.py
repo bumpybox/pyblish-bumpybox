@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractLocal(api.ContextPlugin):
+class ExtractLocal(api.InstancePlugin):
     """ Renders all publishable items locally. """
 
     order = inventory.get_order(__file__, "ExtractLocal")

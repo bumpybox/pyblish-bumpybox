@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractSuspended(api.ContextPlugin):
+class ExtractSuspended(api.InstancePlugin):
     """ Option to suspend Deadline job on submission """
 
     order = inventory.get_order(__file__, "ExtractSuspended")
