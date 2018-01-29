@@ -22,7 +22,7 @@ class CollectWriteGeo(api.ContextPlugin):
                 continue
 
             # Create cache instance
-            instance = plugin.Instance(node.name())
+            instance = api.Instance(node.name())
             instance.data["family"] = "cache"
             instance.data["families"] = ["writegeo"]
             instance.add(node)
@@ -32,7 +32,7 @@ class CollectWriteGeo(api.ContextPlugin):
             instances.append(instance)
 
             # Create camera instance
-            instance = plugin.Instance(node.name())
+            instance = api.Instance(node.name())
             instance.data["family"] = "camera"
             instance.data["families"] = ["writegeo"]
             instance.add(node)
@@ -43,7 +43,7 @@ class CollectWriteGeo(api.ContextPlugin):
             instances.append(instance)
 
             # Create geometry instance
-            instance = plugin.Instance(node.name())
+            instance = api.Instance(node.name())
             instance.data["family"] = "geometry"
             instance.data["families"] = ["writegeo"]
             instance.add(node)

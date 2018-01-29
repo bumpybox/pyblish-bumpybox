@@ -27,7 +27,7 @@ class CollectWrites(api.ContextPlugin):
                 output_type = "mov"
 
             # Create instance
-            instance = plugin.Instance(node.name())
+            instance = api.Instance(node.name())
             instance.data["family"] = output_type
             instance.add(node)
 

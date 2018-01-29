@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class Extract(api.ContextPlugin):
+class Extract(api.InstancePlugin):
     """Super class for write and writegeo extractors."""
 
     order = inventory.get_order(__file__, "Extract")

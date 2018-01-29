@@ -3,8 +3,7 @@ import os
 from pyblish import api
 
 
-# ----Collection
-copy_to_clipboard_action_Report = api.CollectorOrder - 1
+# Collection
 collect_json_CollectJSON = api.CollectorOrder + 0.1
 collect_source_CollectScene = api.CollectorOrder + 0.1
 collect_scene_version_CollectSceneVersion = api.CollectorOrder + 0.1
@@ -12,28 +11,23 @@ collect_existing_files_CollectExistingFiles = api.CollectorOrder + 0.25
 collect_reviews_CollectReviews = api.CollectorOrder + 0.3
 collect_sorting_CollectSorting = api.CollectorOrder + 0.49
 
-# ----Validation
+# Validation
 persist_publish_state_PersistPublishState = api.ValidatorOrder
-validate_executables_ValidateFFmpeg = (
-    api.ValidatorOrder
-)
-validate_processing_ValidateProcessing = (
-    api.ValidatorOrder
-)
-validate_scene_version_ValidateSceneVersion = (
-    api.ValidatorOrder
-)
-validate_review_ValidateReview = (
-    api.ValidatorOrder
-)
+validate_executables_ValidateFFmpeg = api.ValidatorOrder
+validate_processing_ValidateProcessing = api.ValidatorOrder
+validate_scene_version_ValidateSceneVersion = api.ValidatorOrder
+validate_review_ValidateReview = api.ValidatorOrder
 
-# ----Extraction
+# Extraction
 extract_review_ExtractReview = api.ExtractorOrder
 extract_review_ExtractReviewTranscode = api.ExtractorOrder + 0.02
 extract_review_ExtractReviewTranscodeNukeStudio = (
     api.ExtractorOrder + 0.02
 )
+
+# Integration
 extract_json_ExtractJSON = api.IntegratorOrder + 1
+copy_to_clipboard_action_Report = api.IntegratorOrder + 1
 
 # AfterEffects
 aftereffects_collect_render_items_CollectRenderItems = api.CollectorOrder
@@ -136,16 +130,32 @@ ftrack_extract_components_ExtractImg = api.ExtractorOrder
 ftrack_extract_components_ExtractLUT = api.ExtractorOrder
 ftrack_extract_components_ExtractMovie = api.ExtractorOrder
 ftrack_extract_components_ExtractScene = api.ExtractorOrder
-ftrack_extract_entities_ExtractProject = api.ExtractorOrder
 ftrack_extract_nukestudio_ExtractThumbnail = api.ExtractorOrder
-ftrack_extract_entities_ExtractEpisode = api.ExtractorOrder + 0.01
-ftrack_extract_entities_ExtractSequence = api.ExtractorOrder + 0.02
-ftrack_extract_entities_ExtractShot = api.ExtractorOrder + 0.03
-ftrack_extract_entities_ExtractLinkAssetbuilds = api.ExtractorOrder + 0.04
-ftrack_extract_entities_ExtractAssetDataNukeStudio = api.ExtractorOrder + 0.04
-ftrack_extract_entities_ExtractTasks = api.ExtractorOrder + 0.04
-ftrack_extract_entities_ExtractCommit = api.ExtractorOrder + 0.05
-ftrack_extract_entities_ExtractNukeStudio = api.ExtractorOrder + 0.05
+ftrack_extract_entities_ExtractProject = api.ExtractorOrder
+ftrack_extract_entities_ExtractEpisode = (
+    ftrack_extract_entities_ExtractProject + 0.01
+)
+ftrack_extract_entities_ExtractSequence = (
+    ftrack_extract_entities_ExtractEpisode + 0.01
+)
+ftrack_extract_entities_ExtractShot = (
+    ftrack_extract_entities_ExtractSequence + 0.01
+)
+ftrack_extract_entities_ExtractLinkAssetbuilds = (
+    ftrack_extract_entities_ExtractShot + 0.01
+)
+ftrack_extract_entities_ExtractAssetDataNukeStudio = (
+    ftrack_extract_entities_ExtractShot + 0.01
+)
+ftrack_extract_entities_ExtractTasks = (
+    ftrack_extract_entities_ExtractShot + 0.01
+)
+ftrack_extract_entities_ExtractCommit = (
+    ftrack_extract_entities_ExtractTasks + 0.01
+)
+ftrack_extract_entities_ExtractNukeStudio = (
+    ftrack_extract_entities_ExtractTasks + 0.01
+)
 ftrack_extract_thumbnail_ExtractThumbnailImg = api.ExtractorOrder + 0.1
 ftrack_extract_review_ExtractReview = api.ExtractorOrder + 0.2
 ftrack_extract_components_ExtractComponents = api.ExtractorOrder + 0.4

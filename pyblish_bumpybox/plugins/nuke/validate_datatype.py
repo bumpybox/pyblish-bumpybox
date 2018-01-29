@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ValidateDatatype(api.ContextPlugin):
+class ValidateDatatype(api.InstancePlugin):
     """Validate output datatype matches with input."""
 
     order = inventory.get_order(__file__, "ValidateDatatype")

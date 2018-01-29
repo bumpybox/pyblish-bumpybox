@@ -34,7 +34,7 @@ class RepairWriteNodeAction(api.Action):
                 instance[0]["metadata"].setValue("all metadata")
 
 
-class ValidateWriteNode(api.ContextPlugin):
+class ValidateWriteNode(api.InstancePlugin):
     """ Validates file output. """
 
     order = inventory.get_order(__file__, "ValidateWriteNode")

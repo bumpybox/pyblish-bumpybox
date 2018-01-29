@@ -2,7 +2,7 @@ from pyblish import api
 from pyblish_bumpybox import inventory
 
 
-class ExtractReview(api.ContextPlugin):
+class ExtractReview(api.InstancePlugin):
     """Extracts image sequence with baked in luts
 
     Offset from:
