@@ -196,6 +196,10 @@ class ExtractNuke(api.ContextPlugin):
             ]
 
             batch_file = review_files.replace("%04d.jpeg", "bat")
+
+            if not os.path.exists(os.path.dirname(batch_file)):
+                os.makedirs(os.path.dirname(batch_file))
+
             with open(batch_file, "w") as the_file:
                 the_file.write(subprocess.list2cmdline(args))
 
