@@ -18,7 +18,7 @@ class ViewPlayblastsAction(api.Action):
             all_instances.append(result["instance"])
 
         # Apply pyblish.logic to get the instances for the plug-in
-        instances = plugin.instances_by_plugin(context, plugin)
+        instances = api.instances_by_plugin(context, plugin)
 
         for instance in instances:
 

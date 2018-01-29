@@ -18,7 +18,7 @@ class RepairPointsAction(api.Action):
                 failed.append(result["instance"])
 
         # Apply pyblish.logic to get the instances for the plug-in
-        instances = plugin.instances_by_plugin(failed, plugin)
+        instances = api.instances_by_plugin(failed, plugin)
 
         for instance in instances:
             for node in instance[0].members():
