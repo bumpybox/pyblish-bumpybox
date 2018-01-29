@@ -274,6 +274,7 @@ nuke_validate_group_node_ValidateGroupNode = api.ValidatorOrder
 nuke_validate_proxy_mode_ValidateProxyMode = api.ValidatorOrder
 nuke_validate_read_node_ValidateReadNode = api.ValidatorOrder
 nuke_validate_write_node_ValidateWriteNode = api.ValidatorOrder
+nuke_validate_write_node_ValidateReviewNodeDuplicate = api.ValidatorOrder
 nuke_validate_writegeo_node_ValidateWriteGeoNode = api.ValidatorOrder
 
 nuke_extract_scene_save_ExtractSceneSave = api.ExtractorOrder - 0.49

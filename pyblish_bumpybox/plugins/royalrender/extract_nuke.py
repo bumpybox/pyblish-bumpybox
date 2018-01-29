@@ -114,6 +114,18 @@ class ExtractNuke(api.ContextPlugin):
             )
             temporary_nodes.append(node)
 
+            # Reformat for pixelaspect ratio
+            node = previous_node = nuke.createNode("Reformat")
+
+            node["type"].setValue(2)
+            nuke.selectedNode()["scale"].setValue(
+                [1, 1.0 / instance[0].pixelAspect()]
+            )
+            node["resize"].setValue(5)
+
+            temporary_nodes.append(node)
+
+            # Viewer process node
             viewer_process_node = nuke.ViewerProcess.node()
             dag_node = None
             if viewer_process_node:

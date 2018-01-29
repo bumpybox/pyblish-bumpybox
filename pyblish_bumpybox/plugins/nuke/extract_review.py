@@ -61,6 +61,18 @@ class ExtractReview(api.InstancePlugin):
 
         temporary_nodes.append(node)
 
+        # Reformat for pixelaspect ratio
+        node = previous_node = nuke.createNode("Reformat")
+
+        node["type"].setValue(2)
+        nuke.selectedNode()["scale"].setValue(
+            [1, 1.0 / instance[0].pixelAspect()]
+        )
+        node["resize"].setValue(5)
+
+        temporary_nodes.append(node)
+
+        # Baked viewer node
         viewer_process_node = nuke.ViewerProcess.node()
 
         dag_node = None

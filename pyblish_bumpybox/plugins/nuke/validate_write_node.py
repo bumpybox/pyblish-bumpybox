@@ -48,6 +48,8 @@ class ValidateWriteNode(api.InstancePlugin):
     def process(self, instance):
         import os
 
+        import nuke
+
         current = instance[0]["file"].getValue()
         expected = self.get_expected_value(instance)
 
@@ -69,6 +71,11 @@ class ValidateWriteNode(api.InstancePlugin):
             int(instance[0]["file_type"].getValue())
         )
         assert file_type == ext, msg.format(file_type, ext)
+
+        # Validate no other node is called ""{instance name}_review"
+        node_name = "{0}_review".format(instance.data["name"])
+        for node in nuke.allNodes():
+            assert node.name() != node_name
 
     def get_current_value(self, instance):
         import nuke
@@ -110,3 +117,22 @@ class ValidateWriteNode(api.InstancePlugin):
             ext
         )
         return expected
+
+
+class ValidateReviewNodeDuplicate(api.InstancePlugin):
+    """Validates there are no review nodes in the script."""
+
+    order = inventory.get_order(__file__, "ValidateReviewNodeDuplicate")
+    optional = True
+    families = ["write"]
+    label = "Review Node"
+    hosts = ["nuke"]
+    targets = ["process"]
+
+    def process(self, instance):
+        import nuke
+        # Validate no other node is called ""{instance name}_review"
+        node_name = "{0}_review".format(instance.data["name"])
+        msg = "Can not have a node called \"{0}\".".format(node_name)
+        for node in nuke.allNodes():
+            assert node.name() != node_name, msg
