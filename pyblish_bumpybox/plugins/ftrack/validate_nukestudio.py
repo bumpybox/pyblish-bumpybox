@@ -49,3 +49,22 @@ class ValidateNukeStudioProjectData(api.ContextPlugin):
         msg += "sequence called \"ftrack.project\" and add a key called "
         msg += "\"disk_id\" with your chosen projects disk id."
         assert disk, msg
+
+
+class ValidateAssetbuilds(api.InstancePlugin):
+    """Validate AssetBuild exists."""
+
+    order = inventory.get_order(__file__, "ValidateAssetbuilds")
+    families = ["trackItem.ftrackEntity.assetbuild"]
+    label = "Ftrack Assetbuilds"
+    optional = True
+    hosts = ["nukestudio"]
+
+    def process(self, instance):
+        session = instance.context.data["ftrackSession"]
+        assetbuild = session.get("AssetBuild", instance.data["id"])
+
+        msg = "AssetBuild tag on {0} is invalid.".format(
+            instance.data["shot"].data["item"].name()
+        )
+        assert assetbuild is not None, msg

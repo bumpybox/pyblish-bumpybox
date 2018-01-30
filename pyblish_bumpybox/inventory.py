@@ -121,6 +121,7 @@ ftrack_validate_assets_ValidateAssets = api.ValidatorOrder
 ftrack_validate_nuke_settings_ValidateNukeSettings = api.ValidatorOrder
 ftrack_validate_nukestudio_ValidateNukeStudioProjectData = api.ValidatorOrder
 ftrack_validate_nukestudio_tasks_ValidateNukeStudioTasks = api.ValidatorOrder
+ftrack_validate_nukestudio_ValidateAssetbuilds = api.ValidatorOrder
 
 ftrack_extract_components_ExtractCache = api.ExtractorOrder
 ftrack_extract_components_ExtractCamera = api.ExtractorOrder
