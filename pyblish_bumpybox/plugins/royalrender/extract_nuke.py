@@ -11,6 +11,48 @@ class ExtractNuke(api.ContextPlugin):
     families = ["royalrender"]
     targets = ["process.royalrender"]
 
+    def duplicate_node(self, node, to_file=None):
+        """Slightly convoluted but reliable(?) way duplicate a node, using
+        the same functionality as the regular copy and paste.
+        Could almost be done tidily by doing:
+        for knobname in src_node.knobs():
+            value = src_node[knobname].toScript()
+            new_node[knobname].fromScript(value)
+        ..but this lacks some subtly like handling custom knobs
+        to_file can be set to a string, and the node will be written to a
+        file instead of duplicated in the tree
+        """
+        import nuke
+
+        # Store selection
+        orig_selection = nuke.selectedNodes()
+
+        # Select only the target node
+        [n.setSelected(False) for n in nuke.selectedNodes()]
+        node.setSelected(True)
+
+        # If writing to a file, do that, restore the selection and return
+        if to_file is not None:
+            nuke.nodeCopy(to_file)
+            [n.setSelected(False) for n in orig_selection]
+            return
+
+        # Copy the selected node and clear selection again
+        nuke.nodeCopy("%clipboard%")
+        node.setSelected(False)
+
+        if to_file is None:
+            # If not writing to a file, call paste function, and the new node
+            # becomes the selected
+            nuke.nodePaste("%clipboard%")
+            new_node = nuke.selectedNode()
+
+        # Restore original selection
+        [n.setSelected(False) for n in nuke.selectedNodes()]
+        [n.setSelected(True) for n in orig_selection]
+
+        return new_node
+
     def process(self, context):
         import platform
         import os
@@ -143,6 +185,17 @@ class ExtractNuke(api.ContextPlugin):
             else:
                 self.log.warning("No viewer node found.")
 
+            viewer_nodes = nuke.allNodes(filter="Viewer")
+            if viewer_nodes:
+                viewer_node = nuke.allNodes(filter="Viewer")[0]
+                if viewer_node["input_process"].value():
+                    input_process_node = self.duplicate_node(
+                        nuke.toNode(viewer_node["input_process_node"].value())
+                    )
+                    input_process_node.setInput(0, previous_node)
+                    previous_node = input_process_node
+                    temporary_nodes.append(input_process_node)
+
             write_node = nuke.createNode("Write")
             write_node["name"].setValue(
                 instance[0]["name"].value() + "_review"
@@ -239,6 +292,7 @@ class ExtractNuke(api.ContextPlugin):
             submit_params = data.get("SubmitterParameter", [])
             submit_params.append("OverwriteExistingFiles=1~1")
             submit_params.append("AllowLocalSceneCopy=0~0")
+            submit_params.append("Priority=1~75")
             data["SubmitterParameter"] = submit_params
 
             jobs.append(data)
