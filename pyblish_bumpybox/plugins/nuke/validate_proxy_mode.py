@@ -1,7 +1,8 @@
-import pyblish.api
+from pyblish import api
+from pyblish_bumpybox import inventory
 
 
-class RepairNukeProxyModeAction(pyblish.api.Action):
+class RepairProxyModeAction(api.Action):
 
     label = "Repair"
     icon = "wrench"
@@ -12,13 +13,13 @@ class RepairNukeProxyModeAction(pyblish.api.Action):
         nuke.root()["proxy"].setValue(0)
 
 
-class ValidateNukeProxyMode(pyblish.api.ContextPlugin):
+class ValidateProxyMode(api.ContextPlugin):
     """Validates against having proxy mode on."""
 
-    order = pyblish.api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateProxyMode")
     optional = True
     label = "Proxy Mode"
-    actions = [RepairNukeProxyModeAction]
+    actions = [RepairProxyModeAction]
     hosts = ["nuke", "nukeassist"]
     targets = ["default", "process"]
 

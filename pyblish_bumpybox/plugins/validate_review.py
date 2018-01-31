@@ -1,13 +1,16 @@
-import pyblish.api
+from pyblish import api
+from pyblish_bumpybox import inventory
 
 
-class ValidateReview(pyblish.api.InstancePlugin):
+class ValidateReview(api.InstancePlugin):
     """Validate all review files exists."""
 
-    order = pyblish.api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateReview")
     label = "Review"
     optional = True
     families = ["review"]
+    # NukeStudio needs a processing workflow to enable this plugin.
+    hosts = ["nuke", "maya"]
 
     def md5(self, fname):
         import hashlib

@@ -1,10 +1,11 @@
-import pyblish.api
+from pyblish import api
+from pyblish_bumpybox import inventory
 
 
-class BumpyboxDeadlineOnJobSubmittedCollectRender(pyblish.api.ContextPlugin):
+class CollectRender(api.ContextPlugin):
     """ Integrates render """
 
-    order = pyblish.api.CollectorOrder
+    order = inventory.get_order(__file__, "CollectRender")
 
     def process(self, context):
         import json

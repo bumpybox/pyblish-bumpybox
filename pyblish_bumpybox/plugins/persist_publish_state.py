@@ -1,4 +1,5 @@
 from pyblish import api
+from pyblish_bumpybox import inventory
 
 
 class PersistPublishState(api.ContextPlugin):
@@ -7,7 +8,7 @@ class PersistPublishState(api.ContextPlugin):
     Instances needs to have a "instanceToggled" method stored as data member.
     """
 
-    order = api.ValidatorOrder
+    order = inventory.get_order(__file__, "PersistPublishState")
     targets = ["default", "process"]
     label = "Publish State"
 
@@ -16,8 +17,6 @@ class PersistPublishState(api.ContextPlugin):
         for instance in context:
             if "instanceToggled" not in instance.data.keys():
                 continue
-            self.log.info(instance)
-            self.log.info(instance.data)
             instance.data["instanceToggled"](
                 instance, instance.data["publish"]
             )

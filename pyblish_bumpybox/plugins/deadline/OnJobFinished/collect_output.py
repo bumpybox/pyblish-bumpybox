@@ -1,10 +1,11 @@
-import pyblish.api
+from pyblish import api
+from pyblish_bumpybox import inventory
 
 
-class BumpyboxDeadlineOnJobFinishedCollectOutput(pyblish.api.ContextPlugin):
+class CollectOutput(api.ContextPlugin):
     """ Collects output """
 
-    order = pyblish.api.CollectorOrder
+    order = inventory.get_order(__file__, "CollectOutput")
 
     def process(self, context):
         import os

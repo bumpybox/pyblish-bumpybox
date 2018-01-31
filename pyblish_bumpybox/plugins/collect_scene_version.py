@@ -1,12 +1,13 @@
-import pyblish.api
+from pyblish import api
+from pyblish_bumpybox import inventory
 
 
-class CollectSceneVersion(pyblish.api.ContextPlugin):
+class CollectSceneVersion(api.ContextPlugin):
     """ Collects scene version from filename or passes the one found in
     the context.
     """
     # offset to get the latest currentFile update
-    order = pyblish.api.CollectorOrder + 0.1
+    order = inventory.get_order(__file__, "CollectSceneVersion")
     label = "Scene Version"
 
     def process(self, context):

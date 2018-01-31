@@ -1,13 +1,14 @@
-import pyblish.api
+from pyblish import api
+from pyblish_bumpybox import inventory
 
 
-class ValidateFFmpeg(pyblish.api.ContextPlugin):
+class ValidateFFmpeg(api.ContextPlugin):
     """Validate FFMPEG is available.
 
     FFMPEG is being used in various plugins for image and video processing.
     """
 
-    order = pyblish.api.ValidatorOrder
+    order = inventory.get_order(__file__, "ValidateFFmpeg")
     label = "FFMPEG"
     optional = True
 
@@ -32,6 +33,6 @@ class ValidateFFmpeg(pyblish.api.ContextPlugin):
 
         raise IOError("\"{0}\" executable not found.".format(executable))
 
-    def process(self, instance):
+    def process(self, context):
 
         self.get_executable("ffmpeg")

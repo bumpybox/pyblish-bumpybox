@@ -1,11 +1,12 @@
-import pyblish.api
+from pyblish import api
+from pyblish_bumpybox import inventory
 
 
-class CollectJSON(pyblish.api.ContextPlugin):
+class CollectJSON(api.ContextPlugin):
     """ Collecting the json files in current directory. """
 
     label = "JSON"
-    order = pyblish.api.CollectorOrder + 0.1
+    order = inventory.get_order(__file__, "CollectJSON")
     hosts = ["ftrack"]
 
     def version_get(self, string, prefix):
