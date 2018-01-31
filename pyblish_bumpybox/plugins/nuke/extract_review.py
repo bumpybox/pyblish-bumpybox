@@ -32,18 +32,18 @@ class ExtractReview(api.InstancePlugin):
         orig_selection = nuke.selectedNodes()
 
         # Select only the target node
-        [n.setSelected(False) for n in nuke.selectedNodes()]
-        node.setSelected(True)
+        [n["selected"].setValue(False) for n in nuke.selectedNodes()]
+        node["selected"].setValue(True)
 
         # If writing to a file, do that, restore the selection and return
         if to_file is not None:
             nuke.nodeCopy(to_file)
-            [n.setSelected(False) for n in orig_selection]
+            [n["selected"].setValue(False) for n in orig_selection]
             return
 
         # Copy the selected node and clear selection again
         nuke.nodeCopy("%clipboard%")
-        node.setSelected(False)
+        node["selected"].setValue(False)
 
         if to_file is None:
             # If not writing to a file, call paste function, and the new node
@@ -52,8 +52,8 @@ class ExtractReview(api.InstancePlugin):
             new_node = nuke.selectedNode()
 
         # Restore original selection
-        [n.setSelected(False) for n in nuke.selectedNodes()]
-        [n.setSelected(True) for n in orig_selection]
+        [n["selected"].setValue(False) for n in nuke.selectedNodes()]
+        [n["selected"].setValue(True) for n in orig_selection]
 
         return new_node
 
@@ -136,7 +136,10 @@ class ExtractReview(api.InstancePlugin):
         viewer_nodes = nuke.allNodes(filter="Viewer")
         if viewer_nodes:
             viewer_node = nuke.allNodes(filter="Viewer")[0]
-            if viewer_node["input_process"].value():
+            input_process_node = nuke.toNode(
+                viewer_node["input_process_node"].value()
+            )
+            if viewer_node["input_process"].value() and input_process_node:
                 input_process_node = self.duplicate_node(
                     nuke.toNode(viewer_node["input_process_node"].value())
                 )
