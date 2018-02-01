@@ -85,8 +85,7 @@ class ExtractReviewTranscode(api.InstancePlugin):
             "-timecode", "00:00:00:01",
             "-vframes",
             str(max(collection.indexes) - min(collection.indexes) + 1),
-            "-vf",
-            "scale=trunc(iw/2)*2:trunc(ih/2)*2",
+            "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2",
         ]
 
         if collection.format("{head}").endswith("."):
@@ -126,6 +125,7 @@ class ExtractReviewTranscode(api.InstancePlugin):
             "-pix_fmt", "yuv420p",
             "-crf", "18",
             "-timecode", "00:00:00:01",
+            "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2",
         ]
 
         split = os.path.splitext(instance.data["output_path"])
