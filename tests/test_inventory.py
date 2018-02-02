@@ -28,13 +28,6 @@ def test_inventory_order_match():
                 plugin.__module__, plugin.__name__
             )
             assert plugin.order == inventory.__dict__[name]
-        except KeyError:
-            name = inventory.get_variable_name(
-                plugin.__module__, plugin.__name__
-            )
-            errors.append(
-                KeyError("\"{0}\" not found in inventory.".format(name))
-            )
         except Exception as e:
             errors.append(e)
 
