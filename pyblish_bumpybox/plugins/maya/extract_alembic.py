@@ -22,6 +22,7 @@ class ExtractAlembic(api.InstancePlugin):
         # Validate whether we can strip namespaces.
         stripNamespaces = 0
         root_names = []
+        export_nodes = []
         for node in instance.data["nodes"]:
             if node.name().split(":")[-1] not in root_names:
                 root_names.append(node.name().split(":")[-1])
@@ -31,6 +32,7 @@ class ExtractAlembic(api.InstancePlugin):
                     "names. Nodes will be renamed."
                 )
                 stripNamespaces = -1
+            export_nodes.append(node.name())
 
         # Get frame range
         frame_start = int(pymel.core.playbackOptions(q=True, min=True))
@@ -47,7 +49,7 @@ class ExtractAlembic(api.InstancePlugin):
             alembic_export.export(
                 instance.data["output_path"],
                 frameRange=[[frame_start, frame_end]],
-                root=root_names,
+                root=export_nodes,
                 stripNamespaces=stripNamespaces,
                 uvWrite=True,
                 worldSpace=True,
