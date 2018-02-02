@@ -8,8 +8,8 @@ import lib
 
 def test_plugins_load():
 
-    logging.basicConfig(level=logging.DEBUG)
     logger = logging.getLogger("pyblish")
+    logger.setLevel(logging.DEBUG)
     log_file = __file__.replace(".py", ".log")
     handler = logging.FileHandler(log_file)
     logger.addHandler(handler)
@@ -21,7 +21,9 @@ def test_plugins_load():
         logs.extend(the_file.readlines())
 
     handler.close()
+    logger.removeHandler(handler)
     os.remove(log_file)
+    logger.setLevel(logging.INFO)
 
     assert not logs
 
