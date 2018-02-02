@@ -141,6 +141,9 @@ ftrack_extract_entities_ExtractSequence = (
 ftrack_extract_entities_ExtractShot = (
     ftrack_extract_entities_ExtractSequence + 0.01
 )
+ftrack_extract_nukestudio_ExtractNukeStudio = (
+    ftrack_extract_entities_ExtractShot + 0.01
+)
 ftrack_extract_entities_ExtractLinkAssetbuilds = (
     ftrack_extract_entities_ExtractShot + 0.01
 )
