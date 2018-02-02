@@ -331,6 +331,10 @@ tvpaint_extract_hobsoft_scene_ExtractHobsoftScene = api.ExtractorOrder
 
 def get_order(module, name):
     path = get_variable_name(module, name)
+
+    if path not in globals().keys():
+        raise KeyError("\"{0}\" could not be found in inventory.".format(path))
+
     return globals()[path]
 
 
