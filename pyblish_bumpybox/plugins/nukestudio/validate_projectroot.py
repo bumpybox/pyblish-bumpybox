@@ -35,7 +35,6 @@ class ValidateProjectRoot(api.ContextPlugin):
     order = inventory.get_order(__file__, "ValidateProjectRoot")
     label = "Project Root"
     hosts = ["nukestudio"]
-    actions = [RepairProjectRoot]
 
     def process(self, context):
         import os
