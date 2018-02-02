@@ -40,7 +40,6 @@ class ExtractReview(api.InstancePlugin):
         server_location = instance.context.data["ftrackSession"].query(
             "Location where name is \"ftrack.server\""
         ).one()
-        self.log.info(instance.data.get("asset_data"))
         data = {
             "assettype_data": {"short": instance.data["review_family"]},
             "asset_data": instance.data.get("asset_data"),
