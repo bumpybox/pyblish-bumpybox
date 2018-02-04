@@ -9,6 +9,7 @@ class CollectSets(api.ContextPlugin):
     label = "Sets"
     hosts = ["maya"]
     targets = ["default", "process"]
+    optional = True
 
     def validate_set(self, object_set):
 
@@ -136,7 +137,10 @@ class CollectSets(api.ContextPlugin):
                     attr_list = list(set(attrs) & set(families))
 
                     if attr_list:
-                        node.attr(attr_list[0]).set(value)
+                        try:
+                            node.attr(attr_list[0]).set(value)
+                        except:
+                            pass
                 instance.data["instanceToggled"] = instance_toggled
 
                 instances.append(instance)
