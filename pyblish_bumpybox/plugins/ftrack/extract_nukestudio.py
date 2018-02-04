@@ -28,6 +28,12 @@ class ExtractNukeStudio(api.InstancePlugin):
                 file_path = path
                 item = track_item
 
+        if item is None:
+            self.log.warning(
+                "Could not find exr source footage to publish to Ftrack."
+            )
+            return
+
         component_path = "{0} [{1}-{2}]".format(
             file_path,
             int(item.mapTimelineToSource(item.timelineIn())),
