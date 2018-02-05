@@ -189,3 +189,17 @@ class ExtractGeometry(api.InstancePlugin):
         data = instance.data.get("assettype_data", {})
         data.update({"short": "geometry"})
         instance.data["assettype_data"] = data
+
+
+class ExtractAudio(api.InstancePlugin):
+    """Sets the data for Ftrack camera component."""
+
+    order = inventory.get_order(__file__, "ExtractAudio")
+    label = "Ftrack Audio"
+    families = ["audio"]
+
+    def process(self, instance):
+
+        data = instance.data.get("assettype_data", {})
+        data.update({"short": "audio"})
+        instance.data["assettype_data"] = data
