@@ -131,7 +131,6 @@ ftrack_extract_components_ExtractLUT = api.ExtractorOrder
 ftrack_extract_components_ExtractMovie = api.ExtractorOrder
 ftrack_extract_components_ExtractAudio = api.ExtractorOrder
 ftrack_extract_components_ExtractScene = api.ExtractorOrder
-ftrack_extract_nukestudio_ExtractThumbnail = api.ExtractorOrder
 ftrack_extract_entities_ExtractProject = api.ExtractorOrder
 ftrack_extract_entities_ExtractEpisode = (
     ftrack_extract_entities_ExtractProject + 0.01
@@ -141,9 +140,6 @@ ftrack_extract_entities_ExtractSequence = (
 )
 ftrack_extract_entities_ExtractShot = (
     ftrack_extract_entities_ExtractSequence + 0.01
-)
-ftrack_extract_nukestudio_ExtractNukeStudio = (
-    ftrack_extract_entities_ExtractShot + 0.01
 )
 ftrack_extract_entities_ExtractLinkAssetbuilds = (
     ftrack_extract_entities_ExtractShot + 0.01
