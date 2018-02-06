@@ -235,15 +235,6 @@ maya_modeling_validate_display_layer_ValidateDisplayLayer = (
 maya_modeling_validate_smooth_display_ValidateSmoothDisplay = (
     api.ValidatorOrder
 )
-maya_validate_display_layer_ValidateDisplayLayer = api.ValidatorOrder
-maya_validate_hierarchy_ValidateHierarchy = api.ValidatorOrder
-maya_validate_intermediate_shapes_ValidateIntermediateShapes = (
-    api.ValidatorOrder
-)
-maya_validate_points_ValidatePoints = api.ValidatorOrder
-maya_validate_shape_name_ValidateShapeName = api.ValidatorOrder
-maya_validate_smooth_display_ValidateSmoothDisplay = api.ValidatorOrder
-maya_validate_transforms_ValidateTransforms = api.ValidatorOrder
 maya_validate_arnold_setings_ValidateArnoldSettings = api.ValidatorOrder
 maya_validate_file_path_ValidateFilePath = api.ValidatorOrder
 maya_validate_render_camera_ValidateRenderCamera = api.ValidatorOrder
