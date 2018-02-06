@@ -23,7 +23,8 @@ def get_all_plugins():
         "nukestudio",
         "hiero",
         "houdini",
-        "celaction"
+        "celaction",
+        "ftrack"
     ]
     for host in hosts:
         api.register_host(host)
