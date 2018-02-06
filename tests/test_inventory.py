@@ -35,3 +35,25 @@ def test_inventory_order_match():
         print e
 
     assert not errors
+
+
+def test_inventory_excess():
+
+    variables = []
+    for plugin in lib.get_all_plugins():
+        variables.append(
+            inventory.get_variable_name(
+                plugin.__module__, plugin.__name__
+            )
+        )
+
+    variables.extend(
+        [
+            "__builtins__", "__file__", "__doc__", "get_order",
+            "api", "__name__", "__package__", "os", "get_variable_name"
+        ]
+    )
+
+    excess_variables = list(set(dir(inventory)) - set(variables))
+
+    assert not excess_variables, excess_variables
