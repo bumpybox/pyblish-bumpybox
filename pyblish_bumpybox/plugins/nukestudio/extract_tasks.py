@@ -9,6 +9,7 @@ class ExtractTasks(api.InstancePlugin):
     label = "Tasks"
     hosts = ["nukestudio"]
     families = ["trackItem.task"]
+    optional = True
 
     def filelink(self, src, dst):
         import filecmp
