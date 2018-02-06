@@ -14,7 +14,9 @@ class ExtractReview(api.InstancePlugin):
     def process(self, instance):
         import os
         import time
+
         import hiero.core
+        from hiero.exporters.FnExportUtil import writeSequenceAudioWithHandles
 
         nukeWriter = hiero.core.nuke.ScriptWriter()
 
@@ -22,11 +24,33 @@ class ExtractReview(api.InstancePlugin):
 
         handles = instance.data["handles"]
 
-        seq = item.parent().parent()
+        sequence = item.parent().parent()
+
+        output_path = os.path.abspath(
+            os.path.join(
+                instance.context.data["currentFile"], "..", "workspace"
+            )
+        )
+
+        # Generate audio
+        audio_file = os.path.join(
+            output_path, "{0}.wav".format(instance.data["name"])
+        )
+
+        writeSequenceAudioWithHandles(
+            audio_file,
+            sequence,
+            item.timelineIn(),
+            item.timelineOut(),
+            handles,
+            handles
+        )
+
+        # Generate Nuke script
         root_node = hiero.core.nuke.RootNode(
             item.timelineIn() - handles,
             item.timelineOut() + handles,
-            fps=seq.framerate()
+            fps=sequence.framerate()
         )
         nukeWriter.addNode(root_node)
 
@@ -38,17 +62,13 @@ class ExtractReview(api.InstancePlugin):
             endHandle=handles
         )
 
-        output_path = os.path.abspath(
-            os.path.join(
-                instance.context.data["currentFile"], "..", "workspace"
-            )
-        )
         movie_path = os.path.join(
             output_path, "{0}.mov".format(instance.data["name"])
         )
         write_node = hiero.core.nuke.WriteNode(movie_path.replace("\\", "/"))
         write_node.setKnob("file_type", "mov")
-        write_node.setKnob("mov32_fps", seq.framerate())
+        write_node.setKnob("mov32_audiofile", audio_file.replace("\\", "/"))
+        write_node.setKnob("mov32_fps", sequence.framerate())
         nukeWriter.addNode(write_node)
 
         nukescript_path = movie_path.replace(".mov", ".nk")
