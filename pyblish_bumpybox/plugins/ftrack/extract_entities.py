@@ -106,8 +106,16 @@ class ExtractShot(api.InstancePlugin):
     optional = True
 
     def process(self, instance):
-        entity = ensure_entity(instance, "Shot")
+        entity = None
+
+        # If parent of task is a shot, we'll grab that.
+        if instance.context.data["ftrackTask"]["parent"].entity_type == "Shot":
+            entity = instance.context.data["ftrackTask"]["parent"]
+        else:
+            entity = ensure_entity(instance, "Shot")
+
         instance.data["entity"] = entity
+
         instance.data["item"] = instance.data["parent"].data["item"]
 
         # Assign attributes to shot
