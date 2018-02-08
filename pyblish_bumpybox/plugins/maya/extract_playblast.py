@@ -63,7 +63,7 @@ class ExtractPlayblast(api.InstancePlugin):
                 "rendererName": "vp2Renderer", "motionTrails": False
             },
             viewport2_options={
-                "multiSampleEnable": True, "multiSampleCount": 8
+                "multiSampleEnable": True, "multiSampleCount": 1
             },
             camera_options={"panZoomEnabled": False},
         )
