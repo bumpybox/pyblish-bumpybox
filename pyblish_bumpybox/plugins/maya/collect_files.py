@@ -7,6 +7,7 @@ class CollectFiles(api.ContextPlugin):
 
     order = inventory.get_order(__file__, "CollectFiles")
     label = "Files"
+    targets = ["process.local"]
 
     def process(self, context):
         import os
@@ -25,11 +26,11 @@ class CollectFiles(api.ContextPlugin):
                 continue
 
             # Create instance
-            name = os.path.basename(node.fileTextureName.get())
+            name = node.name()
             instance = context.create_instance(name=name)
             instance.add(node)
-            instance.data["families"] = ["local", "img", "file"]
-            instance.data["family"] = "img"
+            instance.data["families"] = ["local", "img_file", "file"]
+            instance.data["family"] = "file"
             label = "{0} - {1} - {2}".format(name, "file", "local")
             instance.data["label"] = label
 
