@@ -10,6 +10,7 @@ class ExtractConstructionHistory(api.InstancePlugin):
     optional = True
     label = "Remove Construction History"
     hosts = ["maya"]
+    targets = ["process.local"]
 
     def process(self, instance):
 

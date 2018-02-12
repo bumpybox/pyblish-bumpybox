@@ -34,6 +34,7 @@ class ValidateIntermediateShapes(api.InstancePlugin):
     order = inventory.get_order(__file__, "ValidateIntermediateShapes")
     actions = [RepairIntermediateShapes]
     optional = True
+    targets = ["process.local"]
 
     def process(self, instance):
         import pymel.core as pm

@@ -26,6 +26,7 @@ class ValidateShapeName(api.ContextPlugin):
     label = "Shape Name"
     actions = [RepairShapeName]
     optional = True
+    targets = ["process.local"]
 
     def process(self, context):
         import pymel.core

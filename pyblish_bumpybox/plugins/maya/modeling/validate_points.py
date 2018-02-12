@@ -33,6 +33,7 @@ class ValidatePoints(api.InstancePlugin):
     order = inventory.get_order(__file__, "ValidatePoints")
     actions = [RepairPointsAction]
     optional = True
+    targets = ["process.local"]
 
     def process(self, instance):
 

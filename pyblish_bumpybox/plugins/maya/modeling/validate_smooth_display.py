@@ -33,6 +33,7 @@ class ValidateSmoothDisplay(api.InstancePlugin):
     optional = True
     label = "Smooth Display"
     actions = [RepairSmoothDisplay]
+    targets = ["process.local"]
 
     def process(self, instance):
 

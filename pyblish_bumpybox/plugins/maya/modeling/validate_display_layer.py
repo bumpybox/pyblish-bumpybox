@@ -25,6 +25,7 @@ class ValidateDisplayLayer(api.ContextPlugin):
     optional = True
     label = 'Display Layers'
     actions = [RepairDisplayLayerAction]
+    targets = ["process.local"]
 
     def process(self, context):
         """Process all the nodes in the instance """

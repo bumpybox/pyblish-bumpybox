@@ -9,6 +9,7 @@ class ValidateHierarchy(api.InstancePlugin):
     families = ["mayaAscii", "mayaBinary", "alembic"]
     label = "Hierarchy"
     optional = True
+    targets = ["process.local"]
 
     def process(self, instance):
 

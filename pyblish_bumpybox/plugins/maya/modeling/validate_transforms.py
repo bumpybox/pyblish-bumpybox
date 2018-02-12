@@ -13,6 +13,7 @@ class ValidateTransforms(api.InstancePlugin):
     families = ["mayaAscii", "mayaBinary", "alembic"]
     label = "Transforms"
     optional = True
+    targets = ["process.local"]
 
     def process(self, instance):
         import pymel.core as pm
