@@ -238,15 +238,18 @@ maya_validate_render_layer_settings_ValidateRenderLayerSettings = (
 )
 maya_validate_vray_settings_ValidateVraySettings = api.ValidatorOrder
 
-maya_modeling_extract_construction_history_ExtractConstructionHistory = (
-    api.ExtractorOrder - 0.1
-)
-maya_rigging_extract_disconnect_animation_ExtractDisconnectAnimation = (
-    api.ExtractorOrder - 0.1
-)
 maya_validate_scene_modified_ValidateSceneModified = api.ExtractorOrder - 0.49
 maya_extract_alembic_ExtractAlembic = api.ExtractorOrder
 maya_extract_formats_ExtractFormats = api.ExtractorOrder
+maya_lookdev_extract_construction_history_ExtractConstructionHistory = (
+    maya_extract_formats_ExtractFormats - 0.01
+)
+maya_modeling_extract_construction_history_ExtractConstructionHistory = (
+    maya_extract_formats_ExtractFormats - 0.01
+)
+maya_rigging_extract_disconnect_animation_ExtractDisconnectAnimation = (
+    maya_extract_formats_ExtractFormats - 0.01
+)
 maya_extract_playblast_ExtractPlayblast = api.ExtractorOrder
 maya_extract_render_layer_ExtractRenderLayer = api.ExtractorOrder
 
