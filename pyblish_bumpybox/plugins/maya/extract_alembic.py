@@ -56,7 +56,8 @@ class ExtractAlembic(api.InstancePlugin):
                 wholeFrameGeo=True,
                 eulerFilter=True,
                 writeVisibility=True,
-                preRollStartFrame=frame_start
+                preRollStartFrame=frame_start,
+                attr=["uuid"]
             )
         except Exception as e:
             raise e
