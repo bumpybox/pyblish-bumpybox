@@ -154,13 +154,14 @@ class ExtractAssetDataNukeStudio(api.ContextPlugin):
             families = [instance.data["family"]]
             families += instance.data.get("families", [])
 
-            instance_data = data.get(instance.data["name"], {})
+            name = instance.data["name"].split("--")[-1]
+            instance_data = data.get(name, {})
             if "review" in families:
                 instance_data["review"] = instance
             if "trackItem.ftrackEntity.shot" in families:
                 instance_data["shot"] = instance
 
-            data[instance.data["name"]] = instance_data
+            data[name] = instance_data
 
         for name, instance_data in data.iteritems():
             if not instance_data:
