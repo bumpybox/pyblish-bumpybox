@@ -130,6 +130,7 @@ ftrack_extract_components_ExtractImg = api.ExtractorOrder
 ftrack_extract_components_ExtractLUT = api.ExtractorOrder
 ftrack_extract_components_ExtractMovie = api.ExtractorOrder
 ftrack_extract_components_ExtractAudio = api.ExtractorOrder
+ftrack_extract_components_ExtractReview = api.ExtractorOrder
 ftrack_extract_components_ExtractScene = api.ExtractorOrder
 ftrack_extract_entities_ExtractProject = api.ExtractorOrder
 ftrack_extract_entities_ExtractEpisode = (

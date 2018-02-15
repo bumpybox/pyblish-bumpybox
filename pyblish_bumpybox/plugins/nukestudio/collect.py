@@ -82,6 +82,7 @@ class CollectTrackItems(api.ContextPlugin):
                 name=key,
                 item=value["item"],
                 family="review",
+                families=["output"],
                 handles=handles,
                 output_path=os.path.abspath(
                     os.path.join(

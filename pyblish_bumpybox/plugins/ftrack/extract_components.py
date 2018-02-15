@@ -1,5 +1,6 @@
 from pyblish import api
 from pyblish_bumpybox import inventory
+reload(inventory)
 
 
 class ExtractComponents(api.InstancePlugin):
@@ -202,4 +203,18 @@ class ExtractAudio(api.InstancePlugin):
 
         data = instance.data.get("assettype_data", {})
         data.update({"short": "audio"})
+        instance.data["assettype_data"] = data
+
+
+class ExtractReview(api.InstancePlugin):
+    """Sets the data for Ftrack camera component."""
+
+    order = inventory.get_order(__file__, "ExtractReview")
+    label = "Ftrack Review"
+    families = ["review"]
+
+    def process(self, instance):
+
+        data = instance.data.get("assettype_data", {})
+        data.update({"short": "mov"})
         instance.data["assettype_data"] = data
