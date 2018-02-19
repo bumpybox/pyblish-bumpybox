@@ -233,6 +233,7 @@ maya_modeling_validate_smooth_display_ValidateSmoothDisplay = (
     api.ValidatorOrder
 )
 maya_validate_arnold_setings_ValidateArnoldSettings = api.ValidatorOrder
+maya_validate_name_ValidateName = api.ValidatorOrder
 maya_validate_render_camera_ValidateRenderCamera = api.ValidatorOrder
 maya_validate_render_layer_settings_ValidateRenderLayerSettings = (
     api.ValidatorOrder
