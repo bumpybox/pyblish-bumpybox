@@ -11,6 +11,7 @@ class IntegrateCollection(api.InstancePlugin):
     order = inventory.get_order(__file__, "IntegrateCollection")
     label = "Collection"
     families = ["deadline"]
+    targets = ["process.deadline"]
 
     def process(self, instance):
 

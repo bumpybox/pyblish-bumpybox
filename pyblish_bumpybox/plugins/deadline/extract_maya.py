@@ -9,6 +9,7 @@ class ExtractMaya(api.InstancePlugin):
     order = inventory.get_order(__file__, "ExtractMaya")
     label = "Deadline"
     hosts = ["maya"]
+    targets = ["process.deadline"]
 
     def process(self, instance):
         import math
@@ -26,9 +27,9 @@ class ExtractMaya(api.InstancePlugin):
         # Setting job data.
         data["job"]["Plugin"] = "MayaBatch"
 
-        # Replace houdini frame padding with Deadline padding
         fmt = "{head}" + "#" * collection.padding + "{tail}"
         data["job"]["OutputFilename0"] = collection.format(fmt)
+
         data["job"]["Priority"] = instance.data["deadlinePriority"]
         data["job"]["Pool"] = instance.data["deadlinePool"]
         value = instance.data["deadlineConcurrentTasks"]
@@ -57,10 +58,10 @@ class ExtractMaya(api.InstancePlugin):
 
         # Setting plugin data
         data["plugin"]["Renderer"] = "file"
+        data["plugin"]["UseLegacyRenderLayers"] = 0
         data["plugin"]["UsingRenderLayers"] = 1
         data["plugin"]["RenderLayer"] = instance[0].name()
         data["plugin"]["Version"] = versions.flavor()
-        data["plugin"]["UseLegacyRenderLayers"] = 1
         data["plugin"]["MaxProcessors"] = 0
 
         scene_file = instance.context.data["currentFile"]

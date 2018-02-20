@@ -69,6 +69,7 @@ class ValidateMayaParameters(api.InstancePlugin):
     families = ["deadline"]
     hosts = ["maya"]
     actions = [RepairParametersAction]
+    targets = ["process.deadline"]
 
     def process(self, instance):
 

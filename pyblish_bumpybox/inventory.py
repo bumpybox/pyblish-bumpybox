@@ -75,17 +75,17 @@ celaction_bait_integrate_local_render_IntegrateLocal = (
 deadline_OnJobFinished_collect_output_CollectOutput = api.CollectorOrder
 deadline_OnJobSubmitted_collect_movie_CollectMovie = api.CollectorOrder
 deadline_OnJobSubmitted_collect_render_CollectRender = api.CollectorOrder
+deadline_collect_family_CollectFamily = api.CollectorOrder + 0.1
 deadline_collect_houdini_parameters_CollectHoudiniParameters = (
-    api.CollectorOrder + 0.1
+    deadline_collect_family_CollectFamily + 0.01
 )
 deadline_collect_maya_parameters_CollectMayaParameters = (
-    api.CollectorOrder + 0.1
+    deadline_collect_family_CollectFamily + 0.01
 )
 deadline_collect_nuke_parameters_CollectNukeParameters = (
-    api.CollectorOrder + 0.2
+    deadline_collect_family_CollectFamily + 0.01
 )
 deadline_collect_houdini_render_CollectHoudiniRender = api.CollectorOrder + 0.4
-deadline_collect_family_CollectFamily = api.CollectorOrder + 0.4
 
 deadline_validate_houdini_parameters_ValidateHoudiniParameters = (
     api.ValidatorOrder
@@ -199,6 +199,7 @@ houdini_extract_local_ExtractLocal = api.ExtractorOrder
 # Maya
 maya_collect_framerate_CollectFramerate = api.CollectorOrder - 0.5
 maya_collect_files_CollectFiles = api.CollectorOrder
+maya_collect_render_setups_CollectRenderSetups = api.CollectorOrder
 maya_collect_render_layers_CollectRenderlayers = api.CollectorOrder
 maya_collect_sets_CollectSets = api.CollectorOrder
 maya_collect_sets_CollectSetsProcess = maya_collect_sets_CollectSets + 0.01

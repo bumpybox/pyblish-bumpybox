@@ -31,7 +31,7 @@ class CollectFiles(api.ContextPlugin):
             instance.add(node)
             instance.data["families"] = ["local", "img_file", "file"]
             instance.data["family"] = "file"
-            label = "{0} - {1} - {2}".format(name, "file", "local")
+            label = "{0} - {1}".format(name, "file")
             instance.data["label"] = label
 
             # Adding/Checking publish attribute

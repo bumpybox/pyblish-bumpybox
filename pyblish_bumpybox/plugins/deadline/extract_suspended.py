@@ -10,6 +10,7 @@ class ExtractSuspended(api.InstancePlugin):
     families = ["deadline"]
     active = False
     optional = True
+    targets = ["process.deadline"]
 
     def process(self, instance):
 

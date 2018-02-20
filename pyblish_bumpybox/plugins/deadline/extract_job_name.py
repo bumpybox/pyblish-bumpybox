@@ -8,6 +8,7 @@ class ExtractJobName(api.InstancePlugin):
     families = ["deadline"]
     order = inventory.get_order(__file__, "ExtractJobName")
     label = "Deadline Job Name"
+    targets = ["process.deadline"]
 
     def process(self, instance):
         import os
