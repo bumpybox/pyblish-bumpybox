@@ -225,24 +225,23 @@ class ExtractLinkAssetbuilds(api.InstancePlugin):
         assetbuild = session.get("AssetBuild", instance.data["id"])
         shot = instance.data["shot"].data["entity"]
 
-        existing_link = None
+        # Clear existing links
         for link in shot["incoming_links"]:
-            if link["from_id"] == assetbuild["id"]:
-                existing_link = link
+            session.delete(link)
+            session.commit()
 
-        if existing_link is None:
-            self.log.debug(
-                "Creating link from {0} to {1}".format(
-                    assetbuild["name"], shot["name"]
-                )
+        self.log.debug(
+            "Creating link from {0} to {1}".format(
+                assetbuild["name"], shot["name"]
             )
-            session.create(
-                "TypedContextLink",
-                {
-                    "from": session.get("AssetBuild", instance.data["id"]),
-                    "to": shot
-                }
-            )
+        )
+        session.create(
+            "TypedContextLink",
+            {
+                "from": session.get("AssetBuild", instance.data["id"]),
+                "to": shot
+            }
+        )
 
 
 class ExtractCommit(api.ContextPlugin):
