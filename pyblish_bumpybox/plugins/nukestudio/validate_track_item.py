@@ -41,7 +41,7 @@ class ValidateTrackItem(api.InstancePlugin):
         sequence = item.sequence()
         source_framerate = media_source.metadata()["foundry.source.framerate"]
         assert sequence.framerate() == source_framerate, msg.format(
-            "framerate", sequence.framerate(), source_framerate
+            "framerate", source_framerate, sequence.framerate()
         )
 
 
