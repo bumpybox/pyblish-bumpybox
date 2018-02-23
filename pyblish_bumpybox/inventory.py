@@ -19,6 +19,7 @@ validate_scene_version_ValidateSceneVersion = api.ValidatorOrder
 validate_review_ValidateReview = api.ValidatorOrder
 
 # Extraction
+extract_scene_save_ExtractSceneSave = api.ExtractorOrder - 0.49
 extract_review_ExtractReview = api.ExtractorOrder
 extract_review_ExtractReviewTranscode = api.ExtractorOrder + 0.02
 extract_review_ExtractReviewTranscodeNukeStudio = (
@@ -278,7 +279,6 @@ nuke_validate_write_node_ValidateWriteNode = api.ValidatorOrder
 nuke_validate_write_node_ValidateReviewNodeDuplicate = api.ValidatorOrder
 nuke_validate_writegeo_node_ValidateWriteGeoNode = api.ValidatorOrder
 
-nuke_extract_scene_save_ExtractSceneSave = api.ExtractorOrder - 0.49
 nuke_extract_output_directory_ExtractOutputDirectory = api.ExtractorOrder - 0.1
 nuke_extract_backdrop_ExtractBackdrop = api.ExtractorOrder
 nuke_extract_group_ExtractGroup = api.ExtractorOrder
