@@ -8,6 +8,7 @@ class CollectFamily(api.ContextPlugin):
     # Offset to get all instances
     order = inventory.get_order(__file__, "CollectFamily")
     label = "Ftrack Family"
+    targets = ["default", "process"]
 
     def process(self, context):
 
