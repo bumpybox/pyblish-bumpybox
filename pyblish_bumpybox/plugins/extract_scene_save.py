@@ -18,7 +18,7 @@ class ExtractSceneSave(api.InstancePlugin):
         import pymel
         pymel.core.saveFile(force=True)
 
-    def nukestudio_save(self, path):
+    def nukestudio_save(self):
         import hiero
         hiero.ui.activeSequence().project().save()
 
