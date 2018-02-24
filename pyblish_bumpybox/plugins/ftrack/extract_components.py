@@ -245,12 +245,22 @@ class ExtractMain(api.ContextPlugin):
             if review_data is None:
                 continue
 
-            instance.data["ftrackComponentsList"].append({
-                "assettype_data": review_data["assettype_data"],
-                "asset_data": review_data["asset_data"],
+            data = {
+                "assettype_data": instance.data.get("assettype_data", {}),
+                "asset_data": instance.data.get("asset_data", {}),
                 "assetversion_data": instance.data.get(
-                    "assetversion_data", review_data["assetversion_data"]
+                    "assetversion_data", {}
                 ),
-                "component_path": review_data["component_path"],
-                "component_overwrite": True
-            })
+                "component_path": instance.data.get("component_path", ""),
+                "component_overwrite": instance.data.get(
+                    "component_overwrite", True
+                ),
+            }
+
+            data["assettype_data"].update(review_data["assettype_data"])
+            data["asset_data"].update(review_data["asset_data"])
+            data["assetversion_data"].update(review_data["assetversion_data"])
+            data["component_path"] = review_data["component_path"]
+            data["component_overwrite"] = review_data["component_overwrite"]
+
+            instance.data["ftrackComponentsList"].append(data)
