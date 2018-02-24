@@ -218,3 +218,37 @@ class ExtractReview(api.InstancePlugin):
         data = instance.data.get("assettype_data", {})
         data.update({"short": "mov"})
         instance.data["assettype_data"] = data
+
+
+class ExtractMain(api.ContextPlugin):
+    """Use review for "main" component if it does not exist."""
+
+    order = inventory.get_order(__file__, "ExtractMain")
+    label = "Main"
+
+    def process(self, context):
+
+        for instance in context:
+            review_data = None
+            main_data = None
+            for data in instance.data.get("ftrackComponentsList", []):
+
+                if data["component_data"]["name"] == "main":
+                    main_data = data
+
+                if data["component_data"]["name"] == "ftrackreview-mp4":
+                    review_data = data
+
+            if main_data is not None:
+                continue
+
+            if review_data is None:
+                continue
+
+            instance.data["ftrackComponentsList"].append({
+                "assettype_data": review_data["assettype_data"],
+                "asset_data": review_data["asset_data"],
+                "assetversion_data": review_data["assetversion_data"],
+                "component_path": review_data["component_path"],
+                "component_overwrite": True
+            })
