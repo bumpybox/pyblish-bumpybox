@@ -248,7 +248,9 @@ class ExtractMain(api.ContextPlugin):
             instance.data["ftrackComponentsList"].append({
                 "assettype_data": review_data["assettype_data"],
                 "asset_data": review_data["asset_data"],
-                "assetversion_data": review_data["assetversion_data"],
+                "assetversion_data": instance.data.get(
+                    "assetversion_data", review_data["assetversion_data"]
+                ),
                 "component_path": review_data["component_path"],
                 "component_overwrite": True
             })
