@@ -225,6 +225,7 @@ class ExtractMain(api.ContextPlugin):
 
     order = inventory.get_order(__file__, "ExtractMain")
     label = "Main"
+    active = False
 
     def process(self, context):
 
