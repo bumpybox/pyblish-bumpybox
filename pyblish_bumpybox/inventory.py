@@ -161,9 +161,6 @@ ftrack_extract_entities_ExtractNukeStudio = (
 ftrack_extract_thumbnail_ExtractThumbnailImg = api.ExtractorOrder + 0.1
 ftrack_extract_review_ExtractReview = api.ExtractorOrder + 0.2
 ftrack_extract_components_ExtractComponents = api.ExtractorOrder + 0.4
-ftrack_extract_components_ExtractMain = (
-    ftrack_extract_components_ExtractComponents + 0.01
-)
 
 ftrack_integrate_status_IntegrateStatus = api.IntegratorOrder
 

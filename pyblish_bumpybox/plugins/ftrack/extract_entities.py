@@ -211,7 +211,7 @@ class ExtractTasks(api.InstancePlugin):
         instance.data["entity"] = task
 
 
-class ExtractLinkAssetbuilds(api.InstancePlugin):
+class ExtractLinkAssetbuilds(api.ContextPlugin):
     """Link Assetbuilds to shot."""
 
     order = inventory.get_order(__file__, "ExtractLinkAssetbuilds")
@@ -219,29 +219,37 @@ class ExtractLinkAssetbuilds(api.InstancePlugin):
     label = "Ftrack Link Assetbuilds"
     optional = True
 
-    def process(self, instance):
-        session = instance.context.data["ftrackSession"]
+    def process(self, context):
 
-        assetbuild = session.get("AssetBuild", instance.data["id"])
-        shot = instance.data["shot"].data["entity"]
+        instances = []
+        shot = None
+        for instance in context:
+            families = [instance.data["family"]]
+            families += instance.data.get("families", [])
+            if "trackItem.ftrackEntity.assetbuild" not in families:
+                continue
+
+            instances.append(instance)
+            shot = instance.data["shot"].data["entity"]
+
+        session = instance.context.data["ftrackSession"]
 
         # Clear existing links
         for link in shot["incoming_links"]:
             session.delete(link)
             session.commit()
 
-        self.log.debug(
-            "Creating link from {0} to {1}".format(
-                assetbuild["name"], shot["name"]
+        # Create new links
+        for instance in instances:
+            assetbuild = session.get("AssetBuild", instance.data["id"])
+            self.log.debug(
+                "Creating link from {0} to {1}".format(
+                    assetbuild["name"], shot["name"]
+                )
             )
-        )
-        session.create(
-            "TypedContextLink",
-            {
-                "from": session.get("AssetBuild", instance.data["id"]),
-                "to": shot
-            }
-        )
+            session.create(
+                "TypedContextLink", {"from": assetbuild, "to": shot}
+            )
 
 
 class ExtractCommit(api.ContextPlugin):
