@@ -218,6 +218,7 @@ class ExtractLinkAssetbuilds(api.ContextPlugin):
     families = ["trackItem.ftrackEntity.assetbuild"]
     label = "Ftrack Link Assetbuilds"
     optional = True
+    hosts = ["nukestudio"]
 
     def process(self, context):
 
