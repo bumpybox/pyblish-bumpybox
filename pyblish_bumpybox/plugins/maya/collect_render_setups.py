@@ -18,6 +18,8 @@ class CollectRenderSetups(api.ContextPlugin):
         drg = pymel.core.PyNode("defaultRenderGlobals")
 
         for node in pymel.core.ls(type="renderLayer"):
+            if node.name().startswith("defaultRenderLayer"):
+                continue
 
             instance = context.create_instance(name=node.name())
             instance.data["families"] = ["rendersetup"]
