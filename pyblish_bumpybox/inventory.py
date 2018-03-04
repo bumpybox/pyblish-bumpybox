@@ -202,7 +202,6 @@ houdini_extract_local_ExtractLocal = api.ExtractorOrder
 maya_collect_framerate_CollectFramerate = api.CollectorOrder - 0.5
 maya_collect_files_CollectFiles = api.CollectorOrder
 maya_collect_render_setups_CollectRenderSetups = api.CollectorOrder
-maya_collect_render_layers_CollectRenderlayers = api.CollectorOrder
 maya_collect_sets_CollectSets = api.CollectorOrder
 maya_collect_sets_CollectSetsProcess = maya_collect_sets_CollectSets + 0.01
 maya_collect_sets_CollectSetsPublish = maya_collect_sets_CollectSets + 0.01
