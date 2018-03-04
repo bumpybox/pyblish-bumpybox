@@ -7,7 +7,7 @@ class CollectFiles(api.ContextPlugin):
 
     order = inventory.get_order(__file__, "CollectFiles")
     label = "Files"
-    targets = ["process.local"]
+    targets = ["process"]
 
     def process(self, context):
         import os
