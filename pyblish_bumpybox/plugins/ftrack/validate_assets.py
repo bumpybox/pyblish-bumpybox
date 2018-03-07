@@ -25,6 +25,7 @@ class ValidateAssets(api.ContextPlugin):
     label = "Assets"
     actions = [RepairAssetsAction]
     hosts = ["maya"]
+    targets = ["default", "process"]
 
     def process(self, context):
         import pymel.core as pc
