@@ -233,6 +233,9 @@ class ExtractLinkAssetbuilds(api.ContextPlugin):
             instances.append(instance)
             shot = instance.data["shot"].data["entity"]
 
+        if shot is None:
+            return
+
         session = instance.context.data["ftrackSession"]
 
         # Clear existing links
