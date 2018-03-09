@@ -223,7 +223,7 @@ class ExtractLinkAssetbuilds(api.ContextPlugin):
     def process(self, context):
 
         instances = []
-        shot = None
+        shots = []
         for instance in context:
             families = [instance.data["family"]]
             families += instance.data.get("families", [])
@@ -231,21 +231,26 @@ class ExtractLinkAssetbuilds(api.ContextPlugin):
                 continue
 
             instances.append(instance)
-            shot = instance.data["shot"].data["entity"]
 
-        if shot is None:
+            shot = instance.data["shot"].data["entity"]
+            if shot not in shots:
+                shots.append(shot)
+
+        if not instances:
             return
 
         session = instance.context.data["ftrackSession"]
 
         # Clear existing links
-        for link in shot["incoming_links"]:
-            session.delete(link)
-            session.commit()
+        for shot in shots:
+            for link in shot["incoming_links"]:
+                session.delete(link)
+                session.commit()
 
         # Create new links
         for instance in instances:
             assetbuild = session.get("AssetBuild", instance.data["id"])
+            shot = instance.data["shot"].data["entity"]
             self.log.debug(
                 "Creating link from {0} to {1}".format(
                     assetbuild["name"], shot["name"]
